@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Project;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -37,5 +38,17 @@ class ProjectRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findByUser(User $user): array
+    {
+        return $this->findBy([
+            'user' => $user,
+        ]);
+    }
+
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
     }
 }
