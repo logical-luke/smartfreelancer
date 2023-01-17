@@ -91,7 +91,7 @@
               <span>Discover</span>
               <span
                 class="flex justify-center items-center ml-auto bg-indigo-500 w-6 h-6 text-xs rounded-full"
-                >4</span
+              >4</span
               >
             </a>
           </li>
@@ -368,7 +368,7 @@
 
 <script>
 export default {
-  name: "Sidebar",
+  name: "Sidebar"
 };
 </script>
 

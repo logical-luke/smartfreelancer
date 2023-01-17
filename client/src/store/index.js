@@ -13,25 +13,25 @@ export default createStore({
   },
   mutations: {
     setToken(state, token) {
-      VueCookies.set('token', token, '1d', '/', null, true, 'Strict');
+      VueCookies.set("token", token, "1d", "/", null, true, "Strict");
       state.token = token;
     },
   },
   getters: {
     isLoggedIn(state) {
-      if (VueCookies.isKey('token')) {
+      if (VueCookies.isKey("token")) {
         return true;
       }
 
       return !!state.token;
     },
     getToken(state) {
-      if (VueCookies.isKey('token')) {
-        return VueCookies.get('token');
+      if (VueCookies.isKey("token")) {
+        return VueCookies.get("token");
       }
 
       return state.token;
-    }
+    },
   },
   strict: debug,
   plugins: debug ? [createLogger()] : [],
