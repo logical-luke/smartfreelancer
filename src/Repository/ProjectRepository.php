@@ -43,7 +43,7 @@ class ProjectRepository extends ServiceEntityRepository
     public function findByUser(User $user): array
     {
         return $this->findBy([
-            'user' => $user,
+            'owner' => $user,
         ]);
     }
 
