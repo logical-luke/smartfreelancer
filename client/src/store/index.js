@@ -16,9 +16,9 @@ export default createStore({
   actions: {
     logout({ commit }) {
       VueCookies.set("token", null, "1d", "/", null, true, "Strict");
-      VueCookies.remove("token");
+      VueCookies.remove("token", "1d", "/", null, true, "Strict");
       VueCookies.set("refresh_token", null, "1d", "/", null, true, "Strict");
-      VueCookies.remove("refresh_token");
+      VueCookies.remove("refresh_token", "1d", "/", null, true, "Strict");
 
       commit('setToken', null);
       commit('setRefreshToken', null);
