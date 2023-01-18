@@ -1,6 +1,6 @@
 <template>
   <form action="#" method="post">
-    <div class="container px-4 mx-auto">
+    <div class="container px-4 py-16 sm:px-72 sm:py-72 mx-auto">
       <form @submit.prevent="login">
         <div class="mb-6">
           <label class="block text-sm font-medium mb-2" for="email">
@@ -12,6 +12,7 @@
             v-model="email"
             name="email"
             placeholder="username@email.com"
+            autocomplete="email"
           />
         </div>
 
@@ -24,19 +25,8 @@
             v-model="password"
             type="password"
             name="password"
+            autocomplete="password"
           />
-        </div>
-
-        <div class="mb-6">
-          <label>
-            <input
-              type="checkbox"
-              name="field-name"
-              value="example value"
-              checked
-            />
-            <span class="ml-2">Remember me</span>
-          </label>
         </div>
 
         <button
@@ -52,6 +42,7 @@
 
 <script>
 import { mapMutations } from "vuex";
+import api from "@/api/api";
 
 export default {
   name: "Login",
@@ -62,21 +53,16 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setUser", "setToken"]),
+    ...mapMutations(["setRefreshToken", "setToken"]),
     async login(e) {
       e.preventDefault();
-      const response = await fetch("http://localhost:8000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          email: this.email,
-          password: this.password
-        })
-      });
-      const { token } = await response.json();
+      // try {
+      const { token, refreshToken } = await api.login(this.email, this.password);
+      // } catch (err) {
+
+      // }
       this.setToken(token);
+      this.setRefreshToken(refreshToken);
       this.$router.push("/");
     }
   }
