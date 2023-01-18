@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Exception\InvalidPayloadException;
+
 class CreateProjectPayload
 {
     protected function __construct(
@@ -15,7 +17,13 @@ class CreateProjectPayload
 
     public static function from(array $payload): self
     {
-        // todo Implement validation of params
+        if (!isset($payload['owner_id'])) {
+            throw new InvalidPayloadException('Missing owner_id');
+        }
+
+        if (!isset($payload['name'])) {
+            throw new InvalidPayloadException('Missing name');
+        }
 
         $payload = array_merge([
             'name' => null,

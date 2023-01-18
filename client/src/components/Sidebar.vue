@@ -38,7 +38,7 @@
         <ul class="mb-8 text-sm font-medium">
           <li>
             <router-link
-              class="flex items-center pl-3 py-3 pr-4 text-gray-50 rounded"
+              class="flex items-center pl-3 py-3 pr-4 hover:bg-gray-900 text-gray-50 rounded"
               to="/"
               active-class="bg-indigo-500"
               exact
@@ -74,7 +74,7 @@
                          active-class="bg-indigo-500">
               <span class="inline-block mr-3">
                 <svg
-                  class="text-gray-600 w-5 h-5"
+                  class="text-indigo-100 w-5 h-5"
                   viewbox="0 0 18 18"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -98,14 +98,14 @@
             </router-link>
           </li>
         </ul>
-        <div class="pt-8">
+        <div class="pt-8 text-sm font-medium">
           <a
             class="flex cursor-pointer items-center pl-3 py-3 pr-2 text-gray-50 hover:bg-gray-900 rounded"
             @click="logout"
           >
             <span class="inline-block mr-4">
               <svg
-                class="text-gray-600 w-5 h-5"
+                class="text-indigo-100 w-5 h-5"
                 viewbox="0 0 14 18"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -127,6 +127,7 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import router from "@/router";
+import store from "@/store";
 
 export default {
   name: "Sidebar",
@@ -134,10 +135,7 @@ export default {
     ...mapState(['routeName'])
   },
   methods: {
-    ...mapActions(['logout']),
-    goToProjects() {
-      router.push({ name: 'Projects' });
-    }
+    ...mapActions(['logout'])
   }
 };
 </script>

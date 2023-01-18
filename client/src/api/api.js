@@ -3,7 +3,7 @@ import axios from "axios";
 import store from "../store";
 
 
-const get = async function (url, data, headers) {
+const getRequest = async function (url, data, headers) {
   const response = await axios.get(process.env.API_BASE_URL + url, {
     headers: {
       Authorization: `Bearer ${store.getters.getToken}`,
@@ -13,13 +13,13 @@ const get = async function (url, data, headers) {
   if (response.status === 401) {
     await refreshToken();
 
-    return get(url, data, headers);
+    return getRequest(url, data, headers);
   }
 
   return response;
 }
 
-const post =  async function (url, data, headers) {
+const postRequest =  async function (url, data, headers) {
   const response = axios.post(process.env.API_BASE_URL + url, {
     headers: {
       Authorization: `Bearer ${store.getters.getToken}`,
@@ -29,7 +29,23 @@ const post =  async function (url, data, headers) {
   if (response.status === 401) {
     await refreshToken();
 
-    return get(url, data, headers);
+    return postRequest(url, data, headers);
+  }
+
+  return response;
+}
+
+const deleteRequest =  async function (url, data, headers) {
+  const response = axios.delete(process.env.API_BASE_URL + url, {
+    headers: {
+      Authorization: `Bearer ${store.getters.getToken}`,
+    },
+  });
+
+  if (response.status === 401) {
+    await refreshToken();
+
+    return deleteRequest(url, data, headers);
   }
 
   return response;
@@ -48,9 +64,21 @@ const refreshToken = async function () {
 
 export default {
   async getProjects() {
-      const response = await get('/project');
+      const response = await getRequest('/project/');
 
       return response.data;
+  },
+
+  async getProject(id) {
+    const response = await getRequest('/project/' + id);
+
+    return response.data;
+  },
+
+  async deleteProject(id) {
+    const response = await deleteRequest('/project/delete/' + id);
+
+    return response.data;
   },
 
   async login(email, password) {

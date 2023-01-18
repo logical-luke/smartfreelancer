@@ -15,39 +15,33 @@ export default createStore({
   },
   actions: {
     logout({ commit }) {
-      VueCookies.set("token", null, "1d", "/", null, true, "Strict");
-      VueCookies.remove("token", "1d", "/", null, true, "Strict");
-      VueCookies.set("refresh_token", null, "1d", "/", null, true, "Strict");
-      VueCookies.remove("refresh_token", "1d", "/", null, true, "Strict");
-
-      commit('setToken', null);
-      commit('setRefreshToken', null);
-
+      commit("setToken", '');
+      commit("setRefreshToken", '');
       router.push("/login");
-    }
+    },
   },
   mutations: {
     setToken(state, token) {
-      VueCookies.set("token", token, "1d", "/", null, true, "Strict");
+      VueCookies.set("api_token", token, "1d", "/", null, true, "Strict");
 
       state.token = token;
     },
-    setRefreshToken(state, token) {
-      VueCookies.set("refresh_token", token, "1d", "/", null, true, "Strict");
+    setRefreshToken(state, refreshToken) {
+      VueCookies.set("refresh_token", refreshToken, "1d", "/", null, true, "Strict");
 
-      state.refreshToken = token;
+      state.refreshToken = refreshToken;
     },
   },
   getters: {
-    isLoggedIn(state, getters) {
-      return getters.getToken !== null;
+    isAuthorized(state, getters) {
+        return getters.getToken !== null;
     },
     getToken(state) {
       let token = state.token;
       if (!token) {
-        token = VueCookies.get("token");
+        token = VueCookies.get("api_token");
       }
-      if (token === 'null') {
+      if (token === "null" || token === '') {
         token = null;
       }
 
@@ -58,7 +52,7 @@ export default createStore({
       if (!token) {
         token = VueCookies.get("refresh_token");
       }
-      if (token === 'null') {
+      if (token === "null" || token === '') {
         token = null;
       }
 

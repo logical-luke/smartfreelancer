@@ -53,7 +53,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setRefreshToken", "setToken"]),
+    ...mapMutations(["setRefreshToken", "setToken", "setAuthorized"]),
     async login(e) {
       e.preventDefault();
       // try {

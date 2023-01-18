@@ -8,7 +8,12 @@ use App\Entity\Project;
 
 class ProjectDTO
 {
-    protected function __construct(public readonly int $id, public readonly ?string $name, public readonly int $ownerId)
+    protected function __construct(
+        public readonly int $id,
+        public readonly ?string $name,
+        public readonly int $ownerId,
+        public readonly ?string $description,
+    )
     {
     }
 
@@ -17,7 +22,8 @@ class ProjectDTO
         return new self(
             $project->getId(),
             $project->getName(),
-            $project->getOwner()->getId()
+            $project->getOwner()->getId(),
+            $project->getDescription(),
         );
     }
 
@@ -36,12 +42,8 @@ class ProjectDTO
         return $this->ownerId;
     }
 
-    public function __serialize(): array
+    public function getDescription(): ?string
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'ownerId' => $this->ownerId,
-        ];
+        return $this->description;
     }
 }
