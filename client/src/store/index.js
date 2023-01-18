@@ -1,6 +1,7 @@
 import { createStore, createLogger } from "vuex";
 import projects from "./modules/projects";
 import VueCookies from "vue-cookies";
+import router from "../router";
 
 const debug = import.meta.env.NODE_ENV !== "production";
 
@@ -11,6 +12,13 @@ export default createStore({
   modules: {
     projects,
   },
+  actions: {
+    logout({ commit }) {
+      VueCookies.remove("token");
+      commit('setToken', null);
+      router.push("/login");
+    }
+  },
   mutations: {
     setToken(state, token) {
       VueCookies.set("token", token, "1d", "/", null, true, "Strict");
@@ -18,19 +26,19 @@ export default createStore({
     },
   },
   getters: {
-    isLoggedIn(state) {
-      if (VueCookies.isKey("token")) {
-        return true;
-      }
-
-      return !!state.token;
+    isLoggedIn(state, getters) {
+      return getters.getToken !== null;
     },
     getToken(state) {
-      if (VueCookies.isKey("token")) {
-        return VueCookies.get("token");
+      let token = state.token;
+      if (!token) {
+        token = VueCookies.get("token");
+      }
+      if (token === 'null') {
+        token = null;
       }
 
-      return state.token;
+      return token;
     },
   },
   strict: debug,

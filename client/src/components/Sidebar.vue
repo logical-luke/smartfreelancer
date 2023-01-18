@@ -343,7 +343,7 @@
           </a>
           <a
             class="flex items-center pl-3 py-3 pr-2 text-gray-50 hover:bg-gray-900 rounded"
-            href="#"
+            @click="logout"
           >
             <span class="inline-block mr-4">
               <svg
@@ -367,8 +367,14 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import store from '../store'
 export default {
-  name: "Sidebar"
+  name: "Sidebar",
+  store,
+  methods: {
+    ...mapActions(['logout'])
+  }
 };
 </script>
 

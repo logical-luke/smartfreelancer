@@ -32,21 +32,21 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log(to);
+  console.log(store.getters.isLoggedIn);
   if (to.name === 'Login' && store.getters.isLoggedIn) {
     next({ name: "Dashboard" });
-  }
-
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    // this route requires auth, check if logged in
-    // if not, redirect to login page.
-    if (!store.getters.isLoggedIn) {
-      next({ name: "Login" });
-    } else {
-      next(); // go to wherever I'm going
-    }
   } else {
-    next(); // does not require auth, make sure to always call next()!
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
+      // this route requires auth, check if logged in
+      // if not, redirect to login page.
+      if (!store.getters.isLoggedIn) {
+        next({ name: "Login" });
+      } else {
+        next(); // go to wherever I'm going
+      }
+    } else {
+      next(); // does not require auth, make sure to always call next()!
+    }
   }
 });
 
