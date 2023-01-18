@@ -1,6 +1,6 @@
 <template>
   <form action="#" method="post">
-    <div class="container px-4 py-16 sm:px-72 sm:py-72 mx-auto">
+    <div class="container px-4 py-16 md:px-72 md:py-72 mx-auto">
       <form @submit.prevent="login">
         <div class="mb-6">
           <label class="block text-sm font-medium mb-2" for="email">
@@ -33,7 +33,7 @@
           class="inline-block w-full md:w-auto px-6 py-3 font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
           type="submit"
         >
-          Submit
+          Log in
         </button>
       </form>
     </div>

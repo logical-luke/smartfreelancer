@@ -48,7 +48,9 @@ const refreshToken = async function () {
 
 export default {
   async getProjects() {
-      return get('/project');
+      const response = await get('/project');
+
+      return response.data;
   },
 
   async login(email, password) {
