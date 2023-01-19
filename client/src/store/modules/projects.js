@@ -5,14 +5,16 @@ const state = () => ({
   all: [],
 });
 
-// getters
 const getters = {};
 
-// actions
 const actions = {
   async getAllProjects({ commit }) {
     const projects = await api.getProjects();
     commit("setProjects", projects);
+  },
+  async getProject({ commit }, projectId) {
+      const project = await api.getProject(projectId);
+      commit("setProject", project);
   },
   async deleteProject({ commit }, id) {
     await api.deleteProject(id);
@@ -20,7 +22,6 @@ const actions = {
   }
 };
 
-// mutations
 const mutations = {
   setProjects(state, projects) {
     state.all = projects;

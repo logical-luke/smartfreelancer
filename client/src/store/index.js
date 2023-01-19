@@ -1,7 +1,9 @@
 import { createStore, createLogger } from "vuex";
-import projects from "./modules/projects";
 import VueCookies from "vue-cookies";
 import router from "../router";
+
+import projects from "./modules/projects";
+import project from "@/store/modules/project";
 
 const debug = import.meta.env.NODE_ENV !== "production";
 
@@ -12,6 +14,7 @@ export default createStore({
   },
   modules: {
     projects,
+    project,
   },
   actions: {
     logout({ commit }) {

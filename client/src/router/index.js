@@ -3,6 +3,7 @@ import Projects from "../components/Projects.vue";
 import Login from "../components/Login.vue";
 import Dashboard from "../components/Dashboard.vue";
 import store from "../store";
+import ProjectEdit from "@/components/ProjectEdit.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -28,6 +29,14 @@ const router = createRouter({
       },
       component: Projects,
     },
+    {
+      path: "/project/edit/:id",
+      name: "ProjectEdit",
+      meta: {
+        requiresAuth: true,
+      },
+      component: ProjectEdit,
+    }
   ],
 });
 
