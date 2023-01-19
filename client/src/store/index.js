@@ -12,6 +12,7 @@ export default createStore({
     token: null,
     refreshToken: null,
     authorized: false,
+    isLogin: true,
     user: {},
   },
   modules: {
@@ -58,7 +59,7 @@ export default createStore({
     },
     getUserId(state) {
       return state.user.id;
-    }
+    },
   },
   strict: debug,
   plugins: debug ? [createLogger()] : [],

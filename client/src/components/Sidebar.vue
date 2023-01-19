@@ -1,47 +1,49 @@
 <template>
-  <nav class="lg:hidden py-6 px-6 bg-gray-800">
-    <div class="flex items-center justify-between">
-      <a class="text-2xl text-white font-semibold" href="#">
-        <img class="h-10" src="artemis-assets/logos/artemis-logo.svg" alt="" width="auto">
-      </a>
-      <button
-        class="navbar-burger flex items-center rounded focus:outline-none"
-      >
-        <svg
-          class="text-white bg-indigo-500 hover:bg-indigo-600 block h-8 w-8 p-2 rounded"
-          viewbox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="currentColor"
-        >
-          <title>Mobile menu</title>
-          <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
-        </svg>
-      </button>
-    </div>
-  </nav>
-  <div class="hidden lg:block navbar-menu relative z-50">
-    <div
-      class="navbar-backdrop fixed lg:hidden inset-0 bg-gray-800 opacity-10"
-    ></div>
-    <nav
-      class="fixed top-0 left-0 bottom-0 flex flex-col w-3/4 lg:w-80 sm:max-w-xs pt-6 pb-8 bg-gray-800 overflow-y-auto"
-    >
-      <div
-        class="flex w-full items-center px-6 pb-6 mb-6 lg:border-b border-gray-700"
-      >
-        <a class="text-xl text-white font-semibold" href="#">
-          <img class="h-8" src="artemis-assets/logos/artemis-logo.svg" alt="" width="auto">
-        </a>
-      </div>
-      <div class="px-4 pb-6">
-        <ul class="mb-8 text-sm font-medium">
-          <li>
-            <router-link
-              class="flex items-center pl-3 py-3 pr-4 hover:bg-gray-900 text-gray-50 rounded"
-              to="/"
-              active-class="bg-indigo-500"
-              exact
+  <transition name="fade" mode="out-in">
+    <div v-if='isAuthorized'>
+      <nav class="lg:hidden py-6 px-6 bg-gray-800">
+        <div class="flex items-center justify-between">
+          <a class="text-2xl text-white font-semibold" href="#">
+            <img class="h-10" src="artemis-assets/logos/artemis-logo.svg" alt="" width="auto">
+          </a>
+          <button
+            class="navbar-burger flex items-center rounded focus:outline-none"
+          >
+            <svg
+              class="text-white bg-indigo-500 hover:bg-indigo-600 block h-8 w-8 p-2 rounded"
+              viewbox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
             >
+              <title>Mobile menu</title>
+              <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+            </svg>
+          </button>
+        </div>
+      </nav>
+      <div class="hidden lg:block navbar-menu relative z-50">
+        <div
+          class="navbar-backdrop fixed lg:hidden inset-0 bg-gray-800 opacity-10"
+        ></div>
+        <nav
+          class="fixed top-0 left-0 bottom-0 flex flex-col w-3/4 lg:w-80 sm:max-w-xs pt-6 pb-8 bg-gray-800 overflow-y-auto"
+        >
+          <div
+            class="flex w-full items-center px-6 pb-6 mb-6 lg:border-b border-gray-700"
+          >
+            <a class="text-xl text-white font-semibold" href="#">
+              <img class="h-8" src="artemis-assets/logos/artemis-logo.svg" alt="" width="auto">
+            </a>
+          </div>
+          <div class="px-4 pb-6">
+            <ul class="mb-8 text-sm font-medium">
+              <li>
+                <router-link
+                  class="flex items-center pl-3 py-3 pr-4 hover:bg-gray-900 text-gray-50 rounded"
+                  to="/"
+                  active-class="bg-indigo-500"
+                  exact
+                >
               <span class="inline-block mr-3">
                 <svg
                   class="text-indigo-100 w-5 h-5"
@@ -55,8 +57,8 @@
                   ></path>
                 </svg>
               </span>
-              <span>Dashboard</span>
-              <span class="inline-block ml-auto">
+                  <span>Dashboard</span>
+                  <span class="inline-block ml-auto">
                 <svg
                   class="text-gray-400 w-3 h-3"
                   viewbox="0 0 10 6"
@@ -65,12 +67,12 @@
                 >
                 </svg>
               </span>
-            </router-link>
-          </li>
-          <li>
-            <router-link class="flex items-center pl-3 py-3 pr-4 text-gray-50 hover:bg-gray-900 rounded"
-                         to="/projects"
-                         active-class="bg-indigo-500">
+                </router-link>
+              </li>
+              <li>
+                <router-link class="flex items-center pl-3 py-3 pr-4 text-gray-50 hover:bg-gray-900 rounded"
+                             to="/projects"
+                             active-class="bg-indigo-500">
               <span class="inline-block mr-3">
                 <svg
                   class="text-indigo-100 w-5 h-5"
@@ -84,8 +86,8 @@
                   ></path>
                 </svg>
               </span>
-              <span>Projects</span>
-              <span class="inline-block ml-auto">
+                  <span>Projects</span>
+                  <span class="inline-block ml-auto">
                 <svg
                   class="text-gray-400 w-3 h-3"
                   viewbox="0 0 10 6"
@@ -94,14 +96,14 @@
                 >
                 </svg>
               </span>
-            </router-link>
-          </li>
-        </ul>
-        <div class="pt-8 text-sm font-medium">
-          <a
-            class="flex cursor-pointer items-center pl-3 py-3 pr-2 text-gray-50 hover:bg-gray-900 rounded"
-            @click="logout"
-          >
+                </router-link>
+              </li>
+            </ul>
+            <div class="pt-8 text-sm font-medium">
+              <a
+                class="flex cursor-pointer items-center pl-3 py-3 pr-2 text-gray-50 hover:bg-gray-900 rounded"
+                @click="logout"
+              >
             <span class="inline-block mr-4">
               <svg
                 class="text-indigo-100 w-5 h-5"
@@ -115,28 +117,30 @@
                 ></path>
               </svg>
             </span>
-            <span>Log Out</span>
-          </a>
-        </div>
+                <span>Log Out</span>
+              </a>
+            </div>
+          </div>
+        </nav>
       </div>
-    </nav>
-  </div>
+    </div>
+  </transition>
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import router from "@/router";
 import store from "@/store";
+import { useRoute } from "vue-router";
+import { computed } from "vue";
 
 export default {
   name: "Sidebar",
   computed: {
-    ...mapState(["routeName"])
+    ...mapGetters(["isAuthorized"])
   },
   methods: {
     ...mapActions(["logout"])
   }
 };
 </script>
-
-<style scoped></style>

@@ -79,8 +79,12 @@ class ProjectController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show')]
-    public function show(Project $project): Response
+    public function show(int $id, ProjectRepository $projectRepository): Response
     {
+        if (!$project = $projectRepository->find($id)) {
+            return $this->json([], Response::HTTP_NOT_FOUND);
+        }
+
         return $this->json(ProjectDTO::fromProject($project));
     }
 }

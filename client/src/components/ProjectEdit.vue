@@ -1,19 +1,17 @@
 <template>
-  <section class="py-8">
-    <div class="container px-4 mx-auto"><h1 class="mb-2 text-5xl font-bold font-heading">Edit project</h1>
-      <form @submit.prevent="submitForm">
-        <ProjectForm />
-        <div class="flex flex-wrap space-x-4">
-          <button
-            :disabled="this.project === null"
-            class="inline-block w-full md:w-auto px-6 py-3 font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
-            type="submit">Save
-          </button>
-          <BackButton />
-        </div>
-      </form>
-    </div>
-  </section>
+  <div class="mx-auto lg:ml-80">
+    <section class="py-8">
+      <div class="container px-4 mx-auto"><h1 class="mb-2 text-5xl font-bold font-heading">Edit project</h1>
+        <form @submit.prevent="submitForm">
+          <ProjectForm />
+          <div class="flex flex-wrap space-x-4">
+            <SubmitButton :disabled="this.project === null" :title="buttonTitle" />
+            <BackButton />
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
 </template>
 
 <script>
@@ -22,10 +20,16 @@ import { mapGetters, mapState } from "vuex";
 import api from "@/api/api";
 import store from "@/store";
 import BackButton from "@/components/ui/BackButton.vue";
+import SubmitButton from "@/components/ui/SubmitButton.vue";
 
 export default {
   name: "ProjectEdit",
-  components: { BackButton, ProjectForm },
+  components: { SubmitButton, BackButton, ProjectForm },
+  data() {
+    return {
+      buttonTitle: "Save",
+    };
+  },
   computed: mapState({
     project: (state) => state.project.current
   }),
