@@ -2,10 +2,10 @@
   <div class="mx-auto lg:ml-80">
     <div class="container pt-8 px-4">
       <router-link to="/project/create/">
-        <a class="flex mr-4 items-center text-sm">
+        <a class="flex mr-4 items-center">
           <button
             type="button"
-            class="inline-flex text-center items-center w-full md:w-auto px-6 py-3 font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200">
+            class="inline-flex text-center items-center w-full md:w-auto px-6 py-3 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200">
             New Project
           </button>
         </a>
@@ -32,8 +32,8 @@
                       <EditButton />
                     </a>
                   </router-link>
-                  <a class="flex mr-4 items-center text-sm" @click="deleteProject(project.id)">
-                    <DeleteButton />
+                  <a class="flex mr-4 items-center text-sm">
+                    <DeleteButton @onConfirm="deleteProject(project.id)" :subject="project.name" />
                   </a>
                 </div>
               </div>
@@ -47,7 +47,6 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
-import Sidebar from "@/components/Sidebar.vue";
 import DeleteButton from "@/components/ui/DeleteButton.vue";
 import EditButton from "@/components/ui/EditButton.vue";
 
