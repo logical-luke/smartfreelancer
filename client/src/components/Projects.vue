@@ -13,6 +13,20 @@
 
           </div>
           <div class="flex">
+            <router-link :to="`/project/edit/${project.id}`">
+              <a class="flex mr-4 items-center text-xs text-gray-500">
+                <button
+                  class="inline-block w-full md:w-auto px-6 py-3 font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                       fill="currentColor"
+                       class="h-4 w-4 text-white">
+
+                    <path
+                      d="m14.06 9.02.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83a.996.996 0 0 0 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"></path>
+                  </svg>
+                </button>
+              </a>
+            </router-link>
             <a class="flex mr-4 items-center text-xs text-gray-500" @click="deleteProject(project.id)">
               <button
                 class="inline-block w-full md:w-auto px-6 py-3 font-medium text-white bg-red-400 hover:bg-red-600 rounded transition duration-200">
@@ -41,7 +55,7 @@ let projects = {};
 export default {
   name: "Projects",
   computed: mapState({
-    projects: (state) => state.projects.all,
+    projects: (state) => state.projects.all
   }),
   methods: {
     ...mapActions("projects",
