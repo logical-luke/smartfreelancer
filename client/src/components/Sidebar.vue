@@ -2,7 +2,7 @@
   <nav class="lg:hidden py-6 px-6 bg-gray-800">
     <div class="flex items-center justify-between">
       <a class="text-2xl text-white font-semibold" href="#">
-                <img class="h-10" src="artemis-assets/logos/artemis-logo.svg" alt="" width="auto">
+        <img class="h-10" src="artemis-assets/logos/artemis-logo.svg" alt="" width="auto">
       </a>
       <button
         class="navbar-burger flex items-center rounded focus:outline-none"
@@ -30,11 +30,10 @@
         class="flex w-full items-center px-6 pb-6 mb-6 lg:border-b border-gray-700"
       >
         <a class="text-xl text-white font-semibold" href="#">
-                    <img class="h-8" src="artemis-assets/logos/artemis-logo.svg" alt="" width="auto">
+          <img class="h-8" src="artemis-assets/logos/artemis-logo.svg" alt="" width="auto">
         </a>
       </div>
       <div class="px-4 pb-6">
-        <h3 class="mb-2 text-xs uppercase text-gray-500 font-medium">Main</h3>
         <ul class="mb-8 text-sm font-medium">
           <li>
             <router-link
@@ -132,10 +131,10 @@ import store from "@/store";
 export default {
   name: "Sidebar",
   computed: {
-    ...mapState(['routeName'])
+    ...mapState(["routeName"])
   },
   methods: {
-    ...mapActions(['logout'])
+    ...mapActions(["logout"])
   }
 };
 </script>
