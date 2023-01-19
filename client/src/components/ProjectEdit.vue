@@ -3,6 +3,11 @@
     <div class="container px-4 mx-auto"><h1 class="mb-2 text-5xl font-bold font-heading">Edit project</h1>
       <form @submit.prevent="submitForm">
         <ProjectForm />
+        <button
+          :disabled="this.project === null"
+          class="inline-block w-full md:w-auto px-6 py-3 font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
+          type="submit">Save
+        </button>
       </form>
     </div>
   </section>
@@ -17,6 +22,9 @@ import store from "@/store";
 export default {
   name: "ProjectEdit",
   components: { ProjectForm },
+  computed: mapState({
+    project: (state) => state.project.current
+  }),
   async created() {
     const project = await api.getProject(this.$route.params.id);
     this.$store.commit("project/setProject", project);

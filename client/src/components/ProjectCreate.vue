@@ -3,6 +3,10 @@
     <div class="container px-4 mx-auto"><h1 class="mb-2 text-5xl font-bold font-heading">Add project</h1>
       <form @submit.prevent="submitForm">
         <ProjectForm />
+        <button
+          class="inline-block w-full md:w-auto px-6 py-3 font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
+          type="submit">Add
+        </button>
       </form>
     </div>
   </section>

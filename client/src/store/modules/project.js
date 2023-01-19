@@ -1,7 +1,7 @@
 import api from "../../api/api";
 
 const state = () => ({
-  current: {},
+  current: null,
 });
 
 const getters = {};
@@ -21,7 +21,7 @@ const mutations = {
     state.current = project;
   },
   clearProject(state) {
-    state.current = {};
+    state.current = null;
   },
   updateName(state, name) {
     state.current.name = name;

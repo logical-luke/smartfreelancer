@@ -18,10 +18,6 @@
               @input="updateDescription"
               rows="5" placeholder="Write something..."></textarea>
   </div>
-  <button
-    class="inline-block w-full md:w-auto px-6 py-3 font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
-    type="submit">Save
-  </button>
 </template>
 
 <script>
