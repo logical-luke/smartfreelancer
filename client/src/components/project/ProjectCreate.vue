@@ -1,11 +1,11 @@
 <template>
   <div class="mx-auto lg:ml-80">
     <section class="py-8">
-      <div class="container px-4 mx-auto"><h1 class="mb-2 text-5xl font-bold font-heading">Edit project</h1>
+      <div class="container px-4 mx-auto"><h1 class="mb-2 text-5xl font-bold font-heading">Add project</h1>
         <form @submit.prevent="submitForm">
           <ProjectForm />
           <div class="flex flex-wrap space-x-4">
-            <SubmitButton :disabled="this.project === null" :title="buttonTitle" />
+            <SubmitButton :title="buttonTitle" />
             <BackButton />
           </div>
         </form>
@@ -15,32 +15,34 @@
 </template>
 
 <script>
-import ProjectForm from "@/components/ProjectForm.vue";
-import { mapGetters, mapState } from "vuex";
+import ProjectForm from "@/components/project/ProjectForm.vue";
+import { mapState } from "vuex";
 import api from "@/api/api";
-import store from "@/store";
 import BackButton from "@/components/ui/BackButton.vue";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
 
 export default {
-  name: "ProjectEdit",
+  name: "ProjectCreate",
   components: { SubmitButton, BackButton, ProjectForm },
   data() {
     return {
-      buttonTitle: "Save",
-    };
+      buttonTitle: 'Add'
+    }
   },
   computed: mapState({
-    project: (state) => state.project.current
+    project: (state) => state.project.current,
+    userId: (state) => state.user.id
   }),
-  async created() {
-    const project = await api.getProject(this.$route.params.id);
-    this.$store.commit("project/setProject", project);
+  created() {
+    this.$store.commit("project/setProject", {
+      name: null,
+      description: null
+    });
   },
   methods: {
     async submitForm() {
-      await api.updateProject(store.state.project.current);
-      this.$store.commit("project/clearProject");
+      await api.createProject(this.project);
+
       this.$router.push("/projects");
     }
   }

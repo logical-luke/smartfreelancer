@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Projects from "../components/Projects.vue";
+import Projects from "../components/project/Projects.vue";
 import Login from "../components/Login.vue";
-import Dashboard from "../components/Dashboard.vue";
+import Dashboard from "../components/Dashboard/Dashboard.vue";
 import store from "../store";
-import ProjectEdit from "@/components/ProjectEdit.vue";
-import ProjectCreate from "@/components/ProjectCreate.vue";
+import ProjectEdit from "@/components/project/ProjectEdit.vue";
+import ProjectCreate from "@/components/project/ProjectCreate.vue";
+import Tasks from "@/components/task/Tasks.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -45,6 +46,14 @@ const router = createRouter({
         requiresAuth: true,
       },
       component: ProjectCreate,
+    },
+    {
+      path: "/tasks",
+      name: "Tasks",
+      meta: {
+        requiresAuth: true,
+      },
+      component: Tasks,
     }
   ],
 });

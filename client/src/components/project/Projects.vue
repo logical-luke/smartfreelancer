@@ -1,16 +1,6 @@
 <template>
   <div class="mx-auto lg:ml-80">
-    <div class="container pt-8 px-4">
-      <router-link to="/project/create/">
-        <a class="flex mr-4 items-center">
-          <button
-            type="button"
-            class="inline-flex text-center items-center w-full md:w-auto px-6 py-3 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200">
-            New Project
-          </button>
-        </a>
-      </router-link>
-    </div>
+    <NewButton go-to="/project/create/">Project</NewButton>
     <transition name="fade">
       <div>
         <section class="py-8" v-for="project in projects" :key="project.id">
@@ -49,12 +39,13 @@
 import { mapActions, mapGetters, mapState } from "vuex";
 import DeleteButton from "@/components/ui/DeleteButton.vue";
 import EditButton from "@/components/ui/EditButton.vue";
+import NewButton from "@/components/ui/NewButton.vue";
 
 let projects = {};
 
 export default {
   name: "Projects",
-  components: { EditButton, DeleteButton },
+  components: { NewButton, EditButton, DeleteButton },
   computed: mapState({
     projects: (state) => state.projects.all
   }),

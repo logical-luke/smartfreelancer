@@ -1,5 +1,5 @@
 <script setup>
-import Sidebar from "@/components/Sidebar.vue";
+import Sidebar from "@/components/ui/Sidebar.vue";
 import { onMounted } from "vue";
 import VueCookies from "vue-cookies";
 import store from "@/store";
