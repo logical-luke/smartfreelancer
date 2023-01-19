@@ -28,10 +28,10 @@ class CreateProjectPayload
         $payload = array_merge([
             'name' => null,
             'description' => null,
-            'ownerId' => null,
+            'owner_id' => null,
         ], $payload);
 
-        return new self($payload['ownerId'], $payload['name'], $payload['description']);
+        return new self($payload['owner_id'], $payload['name'], $payload['description']);
     }
 
     public function getOwnerId(): int

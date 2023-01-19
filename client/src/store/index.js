@@ -11,6 +11,8 @@ export default createStore({
   state: {
     token: null,
     refreshToken: null,
+    authorized: false,
+    user: {},
   },
   modules: {
     projects,
@@ -20,6 +22,9 @@ export default createStore({
     logout({ commit }) {
       commit("setToken", '');
       commit("setRefreshToken", '');
+      commit("setAuthorized", false);
+      commit("setUser", {});
+      VueCookies.remove("token");
       router.push("/login");
     },
   },
@@ -34,33 +39,26 @@ export default createStore({
 
       state.refreshToken = refreshToken;
     },
+    setAuthorized(state, authorized) {
+      state.authorized = authorized;
+    },
+    setUser(state, user) {
+      state.user = user;
+    }
   },
   getters: {
     isAuthorized(state, getters) {
-        return getters.getToken !== null;
+        return state.authorized;
     },
     getToken(state) {
-      let token = state.token;
-      if (!token) {
-        token = VueCookies.get("api_token");
-      }
-      if (token === "null" || token === '') {
-        token = null;
-      }
-
-      return token;
+      return state.token;
     },
     getRefreshToken(state) {
-      let token = state.refreshToken;
-      if (!token) {
-        token = VueCookies.get("refresh_token");
-      }
-      if (token === "null" || token === '') {
-        token = null;
-      }
-
-      return token;
+      return state.refreshToken;
     },
+    getUserId(state) {
+      return state.user.id;
+    }
   },
   strict: debug,
   plugins: debug ? [createLogger()] : [],

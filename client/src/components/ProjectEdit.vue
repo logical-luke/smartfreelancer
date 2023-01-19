@@ -1,7 +1,9 @@
 <template>
   <section class="py-8">
     <div class="container px-4 mx-auto"><h1 class="mb-2 text-5xl font-bold font-heading">Edit project</h1>
-      <ProjectForm />
+      <form @submit.prevent="submitForm">
+        <ProjectForm />
+      </form>
     </div>
   </section>
 </template>
@@ -9,15 +11,22 @@
 <script>
 import ProjectForm from "@/components/ProjectForm.vue";
 import { mapGetters, mapState } from "vuex";
+import api from "@/api/api";
+import store from "@/store";
 
 export default {
   name: "ProjectEdit",
   components: { ProjectForm },
-  computed: mapState({
-    project: (state) => state.project.current
-  }),
-  created() {
-    this.$store.dispatch("project/getProject", this.$route.params.id);
+  async created() {
+    const project = await api.getProject(this.$route.params.id);
+    this.$store.commit("project/setProject", project);
+  },
+  methods: {
+    async submitForm() {
+      await api.updateProject(store.state.project.current);
+      this.$store.commit("project/clearProject")
+      this.$router.push("/projects");
+    },
   }
 };
 </script>

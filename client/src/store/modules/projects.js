@@ -10,7 +10,11 @@ const getters = {};
 const actions = {
   async getAllProjects({ commit }) {
     const projects = await api.getProjects();
-    commit("setProjects", projects);
+    let orderedProjects = {};
+    for (const project of projects) {
+      orderedProjects[project.id] = project;
+    }
+    commit("setProjects", orderedProjects);
   },
   async getProject({ commit }, projectId) {
       const project = await api.getProject(projectId);
@@ -33,11 +37,7 @@ const mutations = {
   },
 
   deleteProject(state, id) {
-    const index = state.all.findIndex(project => project.id === id);
-
-    if (index > -1) {
-      state.all.splice(index, 1);
-    }
+    delete state.all[id];
   }
 };
 

@@ -30,18 +30,12 @@ class ProjectController extends AbstractController
         }, $projectRepository->findByUser($this->getUser())));
     }
 
-    #[Route('/{id}', name: 'show')]
-    public function show(Project $project): Response
-    {
-        return $this->json(ProjectDTO::fromProject($project));
-    }
-
     #[Route('/create', name: 'create', methods: 'POST')]
     public function create(ProjectCreator $projectCreator, Request $request): JsonResponse
     {
         try {
             $payload = array_merge([
-                'ownerId' => $this->getUser()->getId(),
+                'owner_id' => $this->getUser()->getId(),
             ], json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR));
         } catch (JsonException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
@@ -82,5 +76,11 @@ class ProjectController extends AbstractController
         return $this->json(
             ProjectDTO::fromProject($project)
         );
+    }
+
+    #[Route('/{id}', name: 'show')]
+    public function show(Project $project): Response
+    {
+        return $this->json(ProjectDTO::fromProject($project));
     }
 }

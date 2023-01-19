@@ -20,6 +20,9 @@ const mutations = {
   setProject(state, project) {
     state.current = project;
   },
+  clearProject(state) {
+    state.current = {};
+  },
   updateName(state, name) {
     state.current.name = name;
   },

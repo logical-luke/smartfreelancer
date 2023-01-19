@@ -101,7 +101,6 @@ export default {
   },
 
   async updateProject(project) {
-    console.log(project);
     const response = await postRequest('/project/update/' + project.id, project);
 
     if (response.status !== 200) {
@@ -109,5 +108,21 @@ export default {
     }
 
     return response.data
+  },
+
+  async createProject(project) {
+    const response = await postRequest('/project/create', project);
+
+    if (response.status !== 200) {
+      throw new Error(response.data.message);
+    }
+
+    return response.data
+  },
+
+  async getUser() {
+     const response = await getRequest('/user/');
+
+      return response.data;
   }
 };

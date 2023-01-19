@@ -63,6 +63,7 @@ export default {
       // }
       this.setToken(token);
       this.setRefreshToken(refreshToken);
+      this.setAuthorized(true);
       this.$router.push("/");
     }
   }
