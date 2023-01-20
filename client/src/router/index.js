@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Projects from "../components/project/Projects.vue";
 import Login from "../components/Login.vue";
-import Dashboard from "../components/Dashboard/Dashboard.vue";
+import Dashboard from "../components/dashboard/Dashboard.vue";
 import store from "../store";
 import ProjectEdit from "@/components/project/ProjectEdit.vue";
 import ProjectCreate from "@/components/project/ProjectCreate.vue";

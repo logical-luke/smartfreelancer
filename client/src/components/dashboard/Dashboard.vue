@@ -11,7 +11,7 @@
 
 <script>
 import { mapState } from "vuex";
-import Income from "@/components/Dashboard/Income.vue";
+import Income from "@/components/dashboard/Income.vue";
 
 export default {
   name: "Dashboard",

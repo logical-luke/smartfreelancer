@@ -46,7 +46,10 @@
           />
         </div>
 
-        <SubmitButton :title="buttonTitle" />
+        <SubmitButton>
+          <template v-slot:title>Log in</template>
+          <template v-slot:icon><login-icon /></template>
+        </SubmitButton>
       </form>
     </div>
   </form>
@@ -56,10 +59,11 @@
 import { mapMutations } from "vuex";
 import api from "@/api/api";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
+import LoginIcon from "vue-tabler-icons/icons/LoginIcon";
 
 export default {
   name: "Login",
-  components: { SubmitButton },
+  components: { LoginIcon, SubmitButton },
   data: () => {
     return {
       email: "",

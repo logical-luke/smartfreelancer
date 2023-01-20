@@ -5,7 +5,10 @@
         <form @submit.prevent="submitForm">
           <ProjectForm />
           <div class="flex flex-wrap space-x-4">
-            <SubmitButton :title="buttonTitle" />
+            <SubmitButton>
+              <template v-slot:title>Add</template>
+              <template v-slot:icon><square-plus-icon /></template>
+            </SubmitButton>
             <BackButton />
           </div>
         </form>
@@ -20,15 +23,11 @@ import { mapState } from "vuex";
 import api from "@/api/api";
 import BackButton from "@/components/ui/BackButton.vue";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
+import SquarePlusIcon from "vue-tabler-icons/icons/SquarePlusIcon";
 
 export default {
   name: "ProjectCreate",
-  components: { SubmitButton, BackButton, ProjectForm },
-  data() {
-    return {
-      buttonTitle: 'Add'
-    }
-  },
+  components: { SquarePlusIcon, SubmitButton, BackButton, ProjectForm },
   computed: mapState({
     project: (state) => state.project.current,
     userId: (state) => state.user.id

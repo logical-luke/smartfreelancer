@@ -1,19 +1,14 @@
 <template>
   <button
-    class="inline-block w-full md:w-auto px-6 py-3 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
-    type="submit">{{ title }}
+    class="flex justify-center items-center w-full md:w-auto px-6 py-3 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
+    type="submit">
+      <slot name="icon"></slot>
+      <slot name="title"></slot>
   </button>
 </template>
 
 <script>
 export default {
   name: "SubmitButton",
-  props: {
-    title: String
-  }
 };
 </script>
-
-<style scoped>
-
-</style>

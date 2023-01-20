@@ -68,14 +68,17 @@
   <button
     @click="deleteModalOpen = true"
     class="inline-flex text-center items-center w-full md:w-auto font-medium text-sm px-6 py-3 bg-red-400 hover:bg-red-600 rounded transition duration-200">
-    {{ title ? title : "Delete" }}
+    <trash-icon />{{ title ? title : "Delete" }}
   </button>
 </template>
 
 <script>
 
+import TrashIcon from "vue-tabler-icons/icons/TrashIcon";
+
 export default {
   name: "DeleteButton",
+  components: { TrashIcon },
   data() {
     return {
       deleteModalOpen: false,
