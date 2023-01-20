@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProjectRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
@@ -29,9 +31,13 @@ class Project
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Timer::class)]
+    private Collection $timers;
+
     protected function __construct(User $user)
     {
         $this->owner = $user;
+        $this->timers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,6 +106,36 @@ class Project
     public function setOwner(?User $owner): self
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Timer>
+     */
+    public function getTimers(): Collection
+    {
+        return $this->timers;
+    }
+
+    public function addTimer(Timer $timer): self
+    {
+        if (!$this->timers->contains($timer)) {
+            $this->timers->add($timer);
+            $timer->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTimer(Timer $timer): self
+    {
+        if ($this->timers->removeElement($timer)) {
+            // set the owning side to null (unless already changed)
+            if ($timer->getProject() === $this) {
+                $timer->setProject(null);
+            }
+        }
 
         return $this;
     }

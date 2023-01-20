@@ -35,6 +35,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
+    #[ORM\OneToOne(mappedBy: 'owner', cascade: ['persist', 'remove'])]
+    private ?Timer $timer = null;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
@@ -148,6 +151,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setName(?string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getTimer(): ?Timer
+    {
+        return $this->timer;
+    }
+
+    public function setTimer(Timer $timer): self
+    {
+        // set the owning side of the relation if necessary
+        if ($timer->getOwner() !== $this) {
+            $timer->setOwner($this);
+        }
+
+        $this->timer = $timer;
 
         return $this;
     }
