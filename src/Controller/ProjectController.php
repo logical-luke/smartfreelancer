@@ -35,7 +35,7 @@ class ProjectController extends AbstractController
     {
         try {
             $payload = array_merge([
-                'owner_id' => $this->getUser()->getId(),
+                'ownerId' => $this->getUser()->getId(),
             ], json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR));
         } catch (JsonException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);

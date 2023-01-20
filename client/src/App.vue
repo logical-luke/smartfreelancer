@@ -21,6 +21,10 @@ onMounted(async () => {
     store.commit('setRefreshToken', refreshToken);
     const user = await api.getUser();
     store.commit('setUser', user);
+    const timer = await api.getTimer();
+    if (timer) {
+      store.commit('timer/setTimer', timer);
+    }
   }
 });
 </script>

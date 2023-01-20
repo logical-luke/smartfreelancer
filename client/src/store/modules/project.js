@@ -10,7 +10,7 @@ const state = () => ({
 const getters = {};
 
 const actions = {
-  async getProject({ commit }, projectId) {
+  async fetchProject({ commit }, projectId) {
     const project = await api.getProject(projectId);
     commit("setProject", project);
   },

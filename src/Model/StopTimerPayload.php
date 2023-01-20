@@ -16,12 +16,12 @@ class StopTimerPayload
 
     public static function from(array $array): self
     {
-        if (!isset($array['timer_id'])) {
+        if (!isset($array['timerId'])) {
             throw new InvalidPayloadException('Missing timer id');
         }
 
         return new self(
-            $array['timer_id'],
+            $array['timerId'],
         );
     }
 

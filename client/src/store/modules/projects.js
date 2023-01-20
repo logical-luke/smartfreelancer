@@ -8,7 +8,7 @@ const state = () => ({
 const getters = {};
 
 const actions = {
-  async getAllProjects({ commit }) {
+  async fetchAllProjects({ commit }) {
     const projects = await api.getProjects();
     let orderedProjects = {};
     for (const project of projects) {
@@ -16,7 +16,7 @@ const actions = {
     }
     commit("setProjects", orderedProjects);
   },
-  async getProject({ commit }, projectId) {
+  async fetchProject({ commit }, projectId) {
       const project = await api.getProject(projectId);
       commit("setProject", project);
   },
@@ -29,11 +29,6 @@ const actions = {
 const mutations = {
   setProjects(state, projects) {
     state.all = projects;
-  },
-
-  decrementProjectInventory(state, { id }) {
-    const project = state.all.find((project) => project.id === id);
-    project.inventory--;
   },
 
   deleteProject(state, id) {

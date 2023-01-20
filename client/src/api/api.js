@@ -131,4 +131,28 @@ export default {
 
     return response.data;
   },
+
+
+  async getTimer() {
+    const response = await getRequest("/timer/");
+
+    if (response.code === 404) {
+      return null;
+    }
+
+    return response.data;
+  },
+
+  async createTimer(timerPayload) {
+    console.log(timerPayload);
+    const response = await postRequest('/timer/create', timerPayload)
+
+    return response.data;
+  },
+
+  async stopTimer(newTimer) {
+    const response = await postRequest('/timer/stop')
+
+    return response.data;
+  }
 };

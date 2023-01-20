@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Projects from "../components/project/Projects.vue";
-import Login from "../components/Login.vue";
-import Dashboard from "../components/dashboard/Dashboard.vue";
+import Projects from "../components/project/ProjectsPage.vue";
+import Login from "../components/LoginPage.vue";
+import Dashboard from "../components/dashboard/DashboardPage.vue";
 import store from "../store";
-import ProjectEdit from "@/components/project/ProjectEdit.vue";
-import ProjectCreate from "@/components/project/ProjectCreate.vue";
-import Tasks from "@/components/task/Tasks.vue";
+import ProjectEdit from "@/components/project/ProjectEditPage.vue";
+import ProjectCreate from "@/components/project/ProjectCreatePage.vue";
+import Tasks from "@/components/task/TasksPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),

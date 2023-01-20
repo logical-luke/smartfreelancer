@@ -46,4 +46,14 @@ class TimerRepository extends ServiceEntityRepository
             'owner' => $user,
         ]);
     }
+
+    public function persist(Timer $timer): void
+    {
+        $this->getEntityManager()->persist($timer);
+    }
+
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
 }

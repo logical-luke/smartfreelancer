@@ -16,7 +16,7 @@ class Timer
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'timer', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'timer', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 
@@ -26,18 +26,16 @@ class Timer
     #[ORM\ManyToOne(inversedBy: 'timers')]
     private ?Project $project = null;
 
-    protected function __construct(User $owner, ?DateTimeInterface $startTime = null)
+    protected function __construct(User $owner)
     {
         $this->owner = $owner;
 
-        if (!$startTime) {
-            $this->startTime = new DateTimeImmutable();
-        }
+        $this->startTime = new DateTimeImmutable();
     }
 
-    public static function fromUser(User $owner, ?DateTimeInterface $startTime = null): self
+    public static function fromUser(User $owner): self
     {
-        return new self($owner, $startTime);
+        return new self($owner);
     }
 
     public function getId(): ?int

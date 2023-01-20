@@ -17,8 +17,8 @@ class CreateProjectPayload
 
     public static function from(array $payload): self
     {
-        if (!isset($payload['owner_id'])) {
-            throw new InvalidPayloadException('Missing owner_id');
+        if (!isset($payload['ownerId'])) {
+            throw new InvalidPayloadException('Missing owner id');
         }
 
         if (!isset($payload['name'])) {
@@ -28,10 +28,10 @@ class CreateProjectPayload
         $payload = array_merge([
             'name' => null,
             'description' => null,
-            'owner_id' => null,
+            'ownerId' => null,
         ], $payload);
 
-        return new self($payload['owner_id'], $payload['name'], $payload['description']);
+        return new self($payload['ownerId'], $payload['name'], $payload['description']);
     }
 
     public function getOwnerId(): int

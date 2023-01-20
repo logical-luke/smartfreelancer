@@ -4,6 +4,7 @@ import router from "../router";
 
 import projects from "./modules/projects";
 import project from "@/store/modules/project";
+import timer from "@/store/modules/timer";
 
 const debug = import.meta.env.NODE_ENV !== "production";
 
@@ -18,6 +19,7 @@ export default createStore({
   modules: {
     projects,
     project,
+    timer,
   },
   actions: {
     logout({ commit }) {
