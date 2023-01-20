@@ -22,6 +22,9 @@ export default {
       projectId: {
           type: Number,
       },
+      global: {
+          type: Boolean,
+      }
   },
   data() {
     return {
@@ -35,7 +38,7 @@ export default {
   },
   watch: {
     timer() {
-      this.isRunning = this.timer.projectId === this.projectId;
+      this.isRunning = this.checkCurrentTimer();
     }
   },
   methods: {
@@ -49,6 +52,10 @@ export default {
       } else {
         await this.startTimer();
       }
+    },
+    checkCurrentTimer() {
+      return (this.timer.projectId === this.projectId)
+      || (this.timer.id && this.global);
     },
     async startTimer() {
       const timerPayload = {
@@ -66,7 +73,7 @@ export default {
     }
   },
   mounted() {
-    this.isRunning = this.timer.projectId === this.projectId;
+    this.isRunning = this.checkCurrentTimer();
   }
 };
 </script>
