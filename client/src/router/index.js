@@ -6,10 +6,16 @@ import store from "../store";
 import ProjectEdit from "@/components/project/ProjectEditPage.vue";
 import ProjectCreate from "@/components/project/ProjectCreatePage.vue";
 import Tasks from "@/components/task/TasksPage.vue";
+import ClientsPage from "@/components/client/ClientsPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+    {
+      path: "/login",
+      name: "Login",
+      component: Login,
+    },
     {
       path: "/",
       name: "Dashboard",
@@ -19,9 +25,12 @@ const router = createRouter({
       },
     },
     {
-      path: "/login",
-      name: "Login",
-      component: Login,
+      path: "/clients",
+      name: "Clients",
+      meta: {
+        requiresAuth: true,
+      },
+      component: ClientsPage,
     },
     {
       path: "/projects",

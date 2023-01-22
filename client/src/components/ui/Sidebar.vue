@@ -43,6 +43,12 @@
                   <dashboard-icon />
                 </template>
               </SidebarItem>
+              <SidebarItem go-to="/clients">
+                <template v-slot:title>Clients</template>
+                <template v-slot:icon>
+                  <users-icon />
+                </template>
+              </SidebarItem>
               <SidebarItem go-to="/projects">
                 <template v-slot:title>Projects</template>
                 <template v-slot:icon>
@@ -73,10 +79,11 @@ import ListIcon from "vue-tabler-icons/icons/ListIcon";
 import BriefcaseIcon from "vue-tabler-icons/icons/BriefcaseIcon";
 import DashboardIcon from "vue-tabler-icons/icons/DashboardIcon";
 import SidebarLogout from "@/components/ui/SidebarLogout.vue";
+import UsersIcon from "vue-tabler-icons/icons/UsersIcon";
 
 export default {
   name: "Sidebar",
-  components: { SidebarLogout, DashboardIcon, BriefcaseIcon, ListIcon, SidebarItem },
+  components: { UsersIcon, SidebarLogout, DashboardIcon, BriefcaseIcon, ListIcon, SidebarItem },
   computed: {
     ...mapGetters(["isAuthorized"])
   }
