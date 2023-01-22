@@ -5,6 +5,7 @@ import router from "../router";
 import projects from "./modules/projects";
 import project from "@/store/modules/project";
 import timer from "@/store/modules/timer";
+import api from "@/api/api";
 
 const debug = import.meta.env.NODE_ENV !== "production";
 
@@ -23,12 +24,20 @@ export default createStore({
   },
   actions: {
     logout({ commit }) {
-      commit("setToken", '');
-      commit("setRefreshToken", '');
+      commit("setToken", "");
+      commit("setRefreshToken", "");
       commit("setAuthorized", false);
       commit("setUser", {});
       VueCookies.remove("token");
       router.push("/login");
+    },
+    async loadInitial({ commit }) {
+      const user = await api.getUser();
+      commit("setUser", user);
+      const timer = await api.getTimer();
+      if (timer) {
+        commit("timer/setTimer", timer);
+      }
     },
   },
   mutations: {
@@ -38,7 +47,15 @@ export default createStore({
       state.token = token;
     },
     setRefreshToken(state, refreshToken) {
-      VueCookies.set("refresh_token", refreshToken, "1d", "/", null, true, "Strict");
+      VueCookies.set(
+        "refresh_token",
+        refreshToken,
+        "1d",
+        "/",
+        null,
+        true,
+        "Strict"
+      );
 
       state.refreshToken = refreshToken;
     },
@@ -47,11 +64,11 @@ export default createStore({
     },
     setUser(state, user) {
       state.user = user;
-    }
+    },
   },
   getters: {
     isAuthorized(state, getters) {
-        return state.authorized;
+      return state.authorized;
     },
     getToken(state) {
       return state.token;

@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     async toggleTimer() {
-      if (!this.isRunning && this.timer.id) {
+      if (!this.isRunning && this.timer && this.timer.id) {
         await this.stopTimer();
       }
 
@@ -54,14 +54,14 @@ export default {
       }
     },
     checkCurrentTimer() {
-      return (this.timer.projectId === this.projectId)
-      || (this.timer.id && this.global);
+      return this.timer &&
+        (this.timer.projectId === this.projectId)
+        || (this.timer.id && this.global);
     },
     async startTimer() {
       const timerPayload = {
         projectId: this.projectId
       };
-      console.log(timerPayload);
       const timer = await api.createTimer(timerPayload);
 
       this.$store.commit("timer/setTimer", timer)

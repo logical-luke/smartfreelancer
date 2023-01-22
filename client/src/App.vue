@@ -22,12 +22,7 @@ onMounted(async () => {
     store.commit("setToken", token);
     store.commit("setAuthorized", true);
     store.commit("setRefreshToken", refreshToken);
-    const user = await api.getUser();
-    store.commit("setUser", user);
-    const timer = await api.getTimer();
-    if (timer) {
-      store.commit("timer/setTimer", timer);
-    }
+    await store.dispatch('loadInitial');
   }
 });
 </script>

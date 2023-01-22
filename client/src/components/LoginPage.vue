@@ -60,6 +60,7 @@ import { mapMutations } from "vuex";
 import api from "@/api/api";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
 import LoginIcon from "vue-tabler-icons/icons/LoginIcon";
+import store from "@/store";
 
 export default {
   name: "Login",
@@ -83,6 +84,7 @@ export default {
         this.setToken(token);
         this.setRefreshToken(refreshToken);
         this.setAuthorized(true);
+        await store.dispatch('loadInitial');
         this.$router.push("/");
       } catch (err) {
         console.log(err);

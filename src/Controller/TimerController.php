@@ -25,7 +25,7 @@ class TimerController extends AbstractController
     public function index(TimerRepository $timerRepository): JsonResponse
     {
         if (!$timer = $timerRepository->findOneByUser($this->getUser())) {
-            return $this->json([], Response::HTTP_NOT_FOUND);
+            return $this->json([], Response::HTTP_OK);
         }
 
         return $this->json(TimerDTO::fromTimer($timer));

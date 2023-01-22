@@ -31,6 +31,7 @@ const mutations = {
     state.all = projects;
   },
 
+
   deleteProject(state, id) {
     delete state.all[id];
   }

@@ -2,19 +2,27 @@ import axios from "axios";
 import store from "../store";
 
 const getRequest = async function (url, headers) {
-  const response = await axios.get(process.env.API_BASE_URL + url, {
-    headers: {
-      Authorization: `Bearer ${store.getters.getToken}`,
-    },
-  });
+  try {
+    const response = await axios.get(process.env.API_BASE_URL + url, {
+      headers: {
+        Authorization: `Bearer ${store.getters.getToken}`,
+      },
+    });
 
-  if (response.status === 401) {
-    await refreshToken();
+    if (response.status === 404) {
+      return null;
+    }
 
-    return getRequest(url, headers);
+    return response;
+  } catch (err) {
+    if (err.response.status === 401) {
+      await refreshToken();
+
+      return getRequest(url, headers);
+    }
   }
 
-  return response;
+  return null;
 };
 
 const postRequest = async function (url, data, headers) {
@@ -134,17 +142,10 @@ export default {
 
 
   async getTimer() {
-    const response = await getRequest("/timer/");
-
-    if (response.code === 404) {
-      return null;
-    }
-
-    return response.data;
+    return await getRequest("/timer/");
   },
 
   async createTimer(timerPayload) {
-    console.log(timerPayload);
     const response = await postRequest('/timer/create', timerPayload)
 
     return response.data;

@@ -1,0 +1,109 @@
+<template>
+  <p class="text-gray-300" v-if="getRelativeElapsedTime < 1">00:00:00</p>
+  <p v-else>{{ hours }}:{{ minutes }}:{{ seconds }}</p>
+  <p v-if="subjectName !== null">|</p>
+</template>
+
+<script>
+import { mapState } from "vuex";
+
+const units = {
+  hour: 60 * 60 * 1000,
+  minute: 60 * 1000,
+  second: 1000
+};
+
+export default {
+  name: "TimerTime",
+  data() {
+    return {
+      isRunning: false,
+      hours: '00',
+      minutes: '00',
+      seconds: '00',
+    };
+  },
+  computed: {
+    ...mapState({
+      timer: (state) => state.timer.current,
+      subjectName: (state) => state.timer.current.subjectName
+    })
+  },
+  watch: {
+    timer() {
+      this.isRunning = this.checkCurrentTimer();
+    }
+  },
+  methods: {
+    checkCurrentTimer() {
+      return this.timer && this.timer.id;
+    },
+    getRelativeElapsedTime() {
+      if (this.timer.id) {
+        return Math.abs(new Date(this.timer.startTime * 1000) - new Date());
+
+      }
+      return 0;
+    },
+    getRelativeTime(unit) {
+      let elapsed = this.getRelativeElapsedTime();
+      let relativeTime = {
+        hours: '00',
+        minutes: '00',
+        seconds: '00',
+      };
+      if (elapsed < 1) {
+        return relativeTime;
+      }
+
+      if (elapsed > units['hour']) {
+        const hours = Math.abs(Math.floor(elapsed / units['hour']));
+        relativeTime.hours = hours.toLocaleString("en-US", {
+          minimumIntegerDigits: 2,
+          useGrouping: false
+        });
+        elapsed -= hours * units['hour'];
+      }
+
+      if (elapsed > units['minute']) {
+        const minutes = Math.abs(Math.floor(elapsed / units['minute']));
+        relativeTime.minutes = minutes.toLocaleString("en-US", {
+          minimumIntegerDigits: 2,
+          useGrouping: false
+        });
+        elapsed -= minutes * units['minute'];
+      }
+
+      const seconds = Math.abs(Math.floor(elapsed / units['second']));
+      relativeTime.seconds = seconds.toLocaleString("en-US", {
+        minimumIntegerDigits: 2,
+        useGrouping: false
+      });
+      elapsed -= seconds * units['second'];
+
+      return relativeTime;
+    },
+    updateClock() {
+      let time = this;
+      setInterval(function() {
+        if (time.timer.id) {
+          const { hours, minutes, seconds } = time.getRelativeTime();
+          time.hours = hours;
+          time.minutes = minutes;
+          time.seconds = seconds;
+        } else {
+          time.hours = '00';
+          time.minutes = '00';
+          time.seconds = '00';
+        }
+      }, 1000);
+    }
+  },
+  mounted() {
+    this.isRunning = this.checkCurrentTimer();
+
+    this.updateClock();
+  }
+};
+</script>
+
