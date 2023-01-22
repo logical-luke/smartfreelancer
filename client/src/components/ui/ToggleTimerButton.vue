@@ -56,7 +56,7 @@ export default {
     checkCurrentTimer() {
       return this.timer &&
         (this.timer.projectId === this.projectId)
-        || (this.timer.id && this.global);
+        || (this.timer.id > 0 && this.global);
     },
     async startTimer() {
       const timerPayload = {

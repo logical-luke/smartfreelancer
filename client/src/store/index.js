@@ -35,7 +35,7 @@ export default createStore({
       const user = await api.getUser();
       commit("setUser", user);
       const timer = await api.getTimer();
-      if (timer) {
+      if (timer && timer.id) {
         commit("timer/setTimer", timer);
       }
     },

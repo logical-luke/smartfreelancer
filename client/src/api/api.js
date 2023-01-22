@@ -15,6 +15,10 @@ const getRequest = async function (url, headers) {
 
     return response;
   } catch (err) {
+    if (err.response.status === 404) {
+      return null;
+    }
+
     if (err.response.status === 401) {
       await refreshToken();
 
@@ -142,7 +146,13 @@ export default {
 
 
   async getTimer() {
-    return await getRequest("/timer/");
+    const response = await getRequest("/timer/");
+
+    if (response) {
+      return response.data;
+    }
+
+    return null;
   },
 
   async createTimer(timerPayload) {

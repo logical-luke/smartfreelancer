@@ -1,7 +1,6 @@
 <template>
-  <p class="text-gray-300" v-if="getRelativeElapsedTime < 1">00:00:00</p>
+  <p class="text-gray-300" v-if="!isRunning" >00:00:00</p>
   <p v-else>{{ hours }}:{{ minutes }}:{{ seconds }}</p>
-  <p v-if="subjectName !== null">|</p>
 </template>
 
 <script>
@@ -40,9 +39,10 @@ export default {
     },
     getRelativeElapsedTime() {
       if (this.timer.id) {
+          console.log(Math.abs(new Date(this.timer.startTime * 1000) - new Date()));
         return Math.abs(new Date(this.timer.startTime * 1000) - new Date());
-
       }
+
       return 0;
     },
     getRelativeTime(unit) {

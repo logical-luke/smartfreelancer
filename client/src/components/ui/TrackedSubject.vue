@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <p v-if="subject">{{ subject }}</p>
+    <p v-if="subject">| {{ subject }}</p>
   </transition>
 </template>
 
