@@ -38,9 +38,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'owner', cascade: ['persist', 'remove'])]
     private ?Timer $timer = null;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Client::class, orphanRemoval: true)]
+    private Collection $clients;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
+        $this->clients = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -168,6 +172,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->timer = $timer;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Client>
+     */
+    public function getClients(): Collection
+    {
+        return $this->clients;
+    }
+
+    public function addClient(Client $client): self
+    {
+        if (!$this->clients->contains($client)) {
+            $this->clients->add($client);
+            $client->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClient(Client $client): self
+    {
+        if ($this->clients->removeElement($client)) {
+            // set the owning side to null (unless already changed)
+            if ($client->getOwner() === $this) {
+                $client->setOwner(null);
+            }
+        }
 
         return $this;
     }
