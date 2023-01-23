@@ -24,9 +24,6 @@ export default {
   computed: mapState({
     projects: (state) => state.projects.all
   }),
-  created() {
-    this.$store.dispatch("projects/fetchAllProjects");
-  },
   mounted() {
     this.$store.commit("project/clearProject");
   }

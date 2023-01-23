@@ -23,6 +23,16 @@ class Client
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
+    protected function __construct(User $user)
+    {
+        $this->owner = $user;
+    }
+
+    public static function fromUser(User $user): self
+    {
+        return new self($user);
+    }
+
     public function getId(): ?int
     {
         return $this->id;

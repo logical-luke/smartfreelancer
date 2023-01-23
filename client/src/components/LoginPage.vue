@@ -80,6 +80,7 @@ export default {
     },
     async login(e) {
       try {
+        store.commit('setInitialLoaded', false)
         const { token, refreshToken } = await api.login(this.email, this.password);
         this.setToken(token);
         this.setRefreshToken(refreshToken);

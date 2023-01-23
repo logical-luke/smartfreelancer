@@ -39,7 +39,6 @@ export default {
     },
     getRelativeElapsedTime() {
       if (this.timer.id) {
-          console.log(Math.abs(new Date(this.timer.startTime * 1000) - new Date()));
         return Math.abs(new Date(this.timer.startTime * 1000) - new Date());
       }
 

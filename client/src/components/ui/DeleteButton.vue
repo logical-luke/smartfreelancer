@@ -88,14 +88,15 @@ export default {
     title: String,
     subject: String
   },
+  emits: ['confirm'],
   methods: {
     confirm() {
-      this.$emit('onConfirm');
+      this.$emit('confirm');
       this.dismiss();
     },
     dismiss() {
       this.deleteModalOpen = false;
-    }
+    },
   }
 };
 </script>

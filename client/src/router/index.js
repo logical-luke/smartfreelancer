@@ -1,32 +1,34 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Projects from "../components/project/ProjectsPage.vue";
-import Login from "../components/LoginPage.vue";
-import Dashboard from "../components/dashboard/DashboardPage.vue";
+import ProjectsPage from "../components/project/ProjectsPage.vue";
+import LoginPage from "../components/LoginPage.vue";
+import DashboardPage from "../components/dashboard/DashboardPage.vue";
 import store from "../store";
-import ProjectEdit from "@/components/project/ProjectEditPage.vue";
-import ProjectCreate from "@/components/project/ProjectCreatePage.vue";
-import Tasks from "@/components/task/TasksPage.vue";
+import ProjectEditPage from "@/components/project/ProjectEditPage.vue";
+import ProjectCreatePage from "@/components/project/ProjectCreatePage.vue";
+import TasksPage from "@/components/task/TasksPage.vue";
 import ClientsPage from "@/components/client/ClientsPage.vue";
+import ClientCreatePage from "@/components/client/ClientCreatePage.vue";
+import ClientEditPage from "@/components/client/ClientEditPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
       path: "/login",
-      name: "Login",
-      component: Login,
+      name: "LoginPage",
+      component: LoginPage,
     },
     {
       path: "/",
-      name: "Dashboard",
-      component: Dashboard,
+      name: "DashboardPage",
+      component: DashboardPage,
       meta: {
         requiresAuth: true,
       },
     },
     {
       path: "/clients",
-      name: "Clients",
+      name: "ClientsPage",
       meta: {
         requiresAuth: true,
       },
@@ -34,41 +36,57 @@ const router = createRouter({
     },
     {
       path: "/projects",
-      name: "Projects",
+      name: "ProjectsPage",
       meta: {
         requiresAuth: true,
       },
-      component: Projects,
+      component: ProjectsPage,
     },
     {
       path: "/project/edit/:id",
-      name: "ProjectEdit",
+      name: "ProjectEditPage",
       meta: {
         requiresAuth: true,
       },
-      component: ProjectEdit,
+      component: ProjectEditPage,
     },
     {
       path: "/project/create",
-      name: "ProjectCreate",
+      name: "ProjectCreatePage",
       meta: {
         requiresAuth: true,
       },
-      component: ProjectCreate,
+      component: ProjectCreatePage,
+    },
+    {
+      path: "/client/create",
+      name: "ClientCreatePage",
+      meta: {
+        requiresAuth: true,
+      },
+      component: ClientCreatePage,
+    },
+    {
+      path: "/client/edit/:id",
+      name: "ClientEditPage",
+      meta: {
+        requiresAuth: true,
+      },
+      component: ClientEditPage,
     },
     {
       path: "/tasks",
-      name: "Tasks",
+      name: "TasksPage",
       meta: {
         requiresAuth: true,
       },
-      component: Tasks,
+      component: TasksPage,
     }
   ],
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.name === 'Login' && store.getters.isAuthorized) {
+  if (to.name === 'LoginPage' && store.getters.isAuthorized) {
     next({ name: "Dashboard" });
   } else {
     if (to.matched.some((record) => record.meta.requiresAuth)) {

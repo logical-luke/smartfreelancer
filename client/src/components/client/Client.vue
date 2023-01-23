@@ -10,16 +10,16 @@
         </div>
         <div class="flex justify-between">
           <div class="flex items-center">
-            <ToggleTimerButton :project-id="id" />
+            <ToggleTimerButton :client-id="id" />
           </div>
           <div class="flex text-white">
-            <router-link :to="`/project/edit/${id}`">
+            <router-link :to="`/client/edit/${id}`">
               <a class="flex mr-4 items-center text-sm">
                 <EditButton />
               </a>
             </router-link>
             <a class="flex mr-4 items-center text-sm">
-              <DeleteButton @confirm="deleteProject(id)" :subject="name" />
+              <DeleteButton @onConfirm="deleteClient(id)" :subject="name" />
             </a>
           </div>
         </div>
@@ -35,7 +35,7 @@ import { mapActions } from "vuex";
 import ToggleTimerButton from "@/components/ui/ToggleTimerButton.vue";
 
 export default {
-  name: "Project",
+  name: "Client",
   components: { ToggleTimerButton, EditButton, DeleteButton },
   props: {
     name: {
@@ -51,8 +51,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions("projects",
-      ["deleteProject"]
+    ...mapActions("clients",
+      ["deleteClient"]
     )
   }
 };

@@ -97,26 +97,6 @@ export default {
     return response.data;
   },
 
-  async login(email, password) {
-    try {
-      const response = await axios.post(process.env.API_BASE_URL + "/login", {
-        email: email,
-        password: password,
-      });
-
-      return {
-        token: response.data.token,
-        refreshToken: response.data.refresh_token,
-      };
-    } catch (e) {
-      if (e.response.status === 401) {
-        throw new Error("Invalid username or password.");
-      }
-    }
-
-    throw new Error("Unable to log in. Please try again later.");
-  },
-
   async updateProject(project) {
     const response = await postRequest(
       "/project/update/" + project.id,
@@ -136,6 +116,26 @@ export default {
     if (response.status !== 200) {
       throw new Error(response.data.message);
     }
+  },
+
+  async login(email, password) {
+    try {
+      const response = await axios.post(process.env.API_BASE_URL + "/login", {
+        email: email,
+        password: password,
+      });
+
+      return {
+        token: response.data.token,
+        refreshToken: response.data.refresh_token,
+      };
+    } catch (e) {
+      if (e.response.status === 401) {
+        throw new Error("Invalid username or password.");
+      }
+    }
+
+    throw new Error("Unable to log in. Please try again later.");
   },
 
   async getUser() {
@@ -165,5 +165,44 @@ export default {
     const response = await postRequest('/timer/stop')
 
     return response.data;
-  }
+  },
+
+  async getClients() {
+    const response = await getRequest("/client/");
+
+    return response.data;
+  },
+
+  async getClient(id) {
+    const response = await getRequest("/client/" + id);
+
+    return response.data;
+  },
+
+  async deleteClient(id) {
+    const response = await deleteRequest("/client/delete/" + id);
+
+    return response.data;
+  },
+
+  async updateClient(client) {
+    const response = await postRequest(
+      "/client/update/" + client.id,
+      client
+    );
+
+    if (response.status !== 200) {
+      throw new Error(response.data.message);
+    }
+
+    return response.data;
+  },
+
+  async createClient(client) {
+    const response = await postRequest("/client/create", client);
+
+    if (response.status !== 200) {
+      throw new Error(response.data.message);
+    }
+  },
 };

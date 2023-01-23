@@ -2,7 +2,6 @@ const emptyTimer = {
   id: null,
   startTime: null,
   projectId: null,
-  subjectName: null,
 };
 
 const state = () => ({
@@ -12,6 +11,9 @@ const state = () => ({
 const mutations = {
   setTimer(state, timer) {
     state.current = timer;
+  },
+  updateProjectId(state, projectId) {
+    state.current.projectId = projectId;
   },
   clearTimer(state) {
     state.current = emptyTimer;

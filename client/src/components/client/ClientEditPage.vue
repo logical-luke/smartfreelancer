@@ -1,9 +1,9 @@
 <template>
   <div class="mx-auto lg:ml-80">
     <section class="py-8">
-      <div class="container px-4 mx-auto"><h1 class="mb-2 text-5xl font-bold font-heading">Edit project</h1>
+      <div class="container px-4 mx-auto"><h1 class="mb-2 text-5xl font-bold font-heading">Edit client</h1>
         <form @submit.prevent="submitForm">
-          <ProjectForm :wait-for-current="true" />
+          <ClientForm :wait-for-current="true" />
           <div class="flex flex-wrap space-x-4">
             <SubmitButton>
               <template v-slot:title>Save</template>
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import ProjectForm from "@/components/project/ProjectForm.vue";
+import ClientForm from "@/components/client/ClientForm.vue";
 import { mapGetters, mapState } from "vuex";
 import api from "@/api/api";
 import store from "@/store";
@@ -27,25 +27,25 @@ import SubmitButton from "@/components/ui/SubmitButton.vue";
 import DeviceFloppyIcon from "vue-tabler-icons/icons/DeviceFloppyIcon";
 
 export default {
-  name: "ProjectEditPage",
-  components: { DeviceFloppyIcon, SubmitButton, BackButton, ProjectForm },
+  name: "ClientEdit",
+  components: { DeviceFloppyIcon, SubmitButton, BackButton, ClientForm },
   data() {
     return {
       buttonTitle: "Save",
     };
   },
   computed: mapState({
-    project: (state) => state.project.current
+    client: (state) => state.client.current
   }),
   async created() {
-    const project = await api.getProject(this.$route.params.id);
-    this.$store.commit("project/setProject", project);
+    const client = await api.getClient(this.$route.params.id);
+    this.$store.commit("client/setClient", client);
   },
   methods: {
     async submitForm() {
-      await api.updateProject(store.state.project.current);
-      this.$store.commit("project/clearProject");
-      this.$router.push("/projects");
+      await api.updateClient(store.state.client.current);
+      this.$store.commit("client/clearClient");
+      this.$router.push("/clients");
     }
   }
 };

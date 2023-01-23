@@ -5,7 +5,16 @@ const state = () => ({
   all: [],
 });
 
-const getters = {};
+const getters = {
+  getProjectsNamesWithIds(state) {
+    return Object.keys(state.all).map((key) => {
+      return {
+        id: state.all[key].id,
+        name: state.all[key].name
+      }
+    });
+  }
+}
 
 const actions = {
   async fetchAllProjects({ commit }) {
@@ -15,10 +24,6 @@ const actions = {
       orderedProjects[project.id] = project;
     }
     commit("setProjects", orderedProjects);
-  },
-  async fetchProject({ commit }, projectId) {
-      const project = await api.getProject(projectId);
-      commit("setProject", project);
   },
   async deleteProject({ commit }, id) {
     await api.deleteProject(id);
@@ -40,7 +45,7 @@ const mutations = {
 export default {
   namespaced: true,
   state,
-  getters,
   actions,
   mutations,
+  getters,
 };

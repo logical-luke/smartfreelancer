@@ -6,6 +6,8 @@ import projects from "./modules/projects";
 import project from "@/store/modules/project";
 import timer from "@/store/modules/timer";
 import api from "@/api/api";
+import clients from "@/store/modules/clients";
+import client from "@/store/modules/client";
 
 const debug = import.meta.env.NODE_ENV !== "production";
 
@@ -16,11 +18,14 @@ export default createStore({
     authorized: false,
     isLogin: true,
     user: {},
+    initialLoaded: false,
   },
   modules: {
     projects,
     project,
     timer,
+    clients,
+    client
   },
   actions: {
     logout({ commit }) {
@@ -38,6 +43,8 @@ export default createStore({
       if (timer && timer.id) {
         commit("timer/setTimer", timer);
       }
+      await this.dispatch("projects/fetchAllProjects");
+      commit("setInitialLoaded", true);
     },
   },
   mutations: {
@@ -45,6 +52,9 @@ export default createStore({
       VueCookies.set("api_token", token, "1d", "/", null, true, "Strict");
 
       state.token = token;
+    },
+    setInitialLoaded(state, loaded) {
+      state.initialLoaded = loaded;
     },
     setRefreshToken(state, refreshToken) {
       VueCookies.set(
@@ -79,6 +89,9 @@ export default createStore({
     getUserId(state) {
       return state.user.id;
     },
+    isInitialLoaded(state) {
+      return state.initialLoaded;
+    }
   },
   strict: debug,
   plugins: debug ? [createLogger()] : [],
