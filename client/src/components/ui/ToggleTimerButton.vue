@@ -34,10 +34,14 @@ export default {
   computed: {
     ...mapState({
       timer: (state) => state.timer.current,
+      timerProjectId: (state) => state.timer.current.projectId,
     })
   },
   watch: {
     timer() {
+      this.isRunning = this.checkCurrentTimer();
+    },
+    timerProjectId() {
       this.isRunning = this.checkCurrentTimer();
     }
   },
@@ -55,7 +59,7 @@ export default {
     },
     checkCurrentTimer() {
       return this.timer &&
-        (this.timer.projectId === this.projectId)
+        (this.timer.startTime && this.timerProjectId === this.projectId)
         || (this.timer.id > 0 && this.global);
     },
     async startTimer() {

@@ -31,8 +31,8 @@
 <script>
 import DeleteButton from "@/components/ui/DeleteButton.vue";
 import EditButton from "@/components/ui/EditButton.vue";
-import { mapActions } from "vuex";
 import ToggleTimerButton from "@/components/ui/ToggleTimerButton.vue";
+import { mapActions } from "vuex";
 
 export default {
   name: "Project",

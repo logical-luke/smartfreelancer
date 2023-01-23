@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 import NewButton from "@/components/ui/NewButton.vue";
 import Project from "@/components/project/Project.vue";
 
