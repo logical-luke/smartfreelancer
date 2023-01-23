@@ -205,4 +205,11 @@ export default {
       throw new Error(response.data.message);
     }
   },
+  async updateTimer(timer) {
+    const response = await postRequest('/timer/update/' + timer.id, timer)
+
+    if (response.status !== 200) {
+      throw new Error(response.data.message);
+    }
+  }
 };

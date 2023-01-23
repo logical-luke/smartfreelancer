@@ -44,6 +44,7 @@ export default createStore({
         commit("timer/setTimer", timer);
       }
       await this.dispatch("projects/fetchAllProjects");
+      await this.dispatch("clients/fetchAllClients");
       commit("setInitialLoaded", true);
     },
   },

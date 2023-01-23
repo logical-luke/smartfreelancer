@@ -24,9 +24,6 @@ export default {
   computed: mapState({
     clients: (state) => state.clients.all
   }),
-  created() {
-    this.$store.dispatch("clients/fetchAllClients");
-  },
   mounted() {
     this.$store.commit("client/clearClient");
   }

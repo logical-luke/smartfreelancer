@@ -1,6 +1,6 @@
 <template>
   <users-icon />
-  <div class="w-28">
+  <div class="w-60">
     <v-select
       :options="[]"
       placeholder="Client"

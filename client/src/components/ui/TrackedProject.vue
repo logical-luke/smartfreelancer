@@ -1,6 +1,6 @@
 <template>
   <briefcase-icon />
-  <div class="w-32">
+  <div class="w-60">
     <v-select
       :options="getProjectsNames"
       placeholder="Project"
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import store from "@/store";
@@ -25,6 +25,7 @@ export default {
   data() {
     return {
       projectName: null,
+      timerChanged: false,
     }
   },
   watch: {
@@ -40,12 +41,12 @@ export default {
       }
     },
     projectName() {
-      if (this.timer && !this.projectName) {
-        store.commit('timer/updateProjectId', null);
+      if (this.projectName && this.timer.projectId !== this.projectName.id) {
+        store.dispatch('timer/updateProjectId', this.projectName.id)
       }
 
-      if (this.projectName && this.timer.projectId !== this.projectName.id) {
-        store.commit('timer/updateProjectId', this.projectName.id);
+      if (this.timer && this.timer.projectId && !this.projectName) {
+        store.dispatch('timer/updateProjectId', null)
       }
     }
   },
@@ -55,7 +56,7 @@ export default {
       projects: (state) => state.projects.all,
       subject: (state) => state.timer.current.subjectName
     }),
-    ...mapGetters({ getProjectsNames: "projects/getProjectsNamesWithIds" })
+    ...mapGetters({ getProjectsNames: "projects/getProjectsNamesWithIds" }),
   },
   mounted() {
     if (
@@ -63,7 +64,10 @@ export default {
       && this.timer.projectId
       && this.projects[this.timer.projectId]
     ) {
-      this.projectName = this.projects[this.timer.projectId].name;
+      this.projectName = {
+        name: this.projects[this.timer.projectId].name,
+        id: this.timer.projectId
+      }
     }
   }
 };

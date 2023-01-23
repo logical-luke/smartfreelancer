@@ -1,6 +1,6 @@
 <template>
   <list-icon />
-  <div class="w-24">
+  <div class="w-60">
     <v-select
       :options="[]"
       placeholder="Task"

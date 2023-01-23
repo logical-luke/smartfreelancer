@@ -7,7 +7,7 @@
             <ToggleTimerButton :global="true" />
             <TimerTime />
           </div>
-          <div class="flex flex-col md:flex-row md:space-x-3 mt-4 md:mt-0 w-full md:w-96 content-start">
+          <div class="flex flex-col lg:flex-row lg:space-x-3 mt-4 md:mt-0 w-full md:w-96 content-start">
             <div class="flex items-center space-x-3">
               <TrackedTask />
             </div>
@@ -15,7 +15,6 @@
               <TrackedProject />
             </div>
             <div class="flex items-center space-x-3">
-
               <TrackedClient />
             </div>
           </div>

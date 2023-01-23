@@ -14,7 +14,7 @@ onMounted(async () => {
     token = null;
   }
   if (!token) {
-    store.commit('setInitialLoaded', true)
+    store.commit("setInitialLoaded", true);
   }
   let refreshToken = VueCookies.get("refresh_token");
   if (refreshToken === "null" || refreshToken === "") {
@@ -30,7 +30,6 @@ onMounted(async () => {
 </script>
 
 <template>
-
   <transition name="fade" mode="out-in">
     <div v-if="!store.getters.isInitialLoaded" class="flex justify-center pt-32 md:pt-96 items-center">
       <div>
@@ -51,13 +50,15 @@ onMounted(async () => {
             <Navbar />
           </div>
         </transition>
-        <router-view v-slot="{ Component }">
-          <transition name="fade" mode="out-in">
-            <div class="" :key="this.$route.name">
-              <component :is="Component"></component>
-            </div>
-          </transition>
-        </router-view>
+        <div v-if="store.getters.isInitialLoaded">
+          <router-view v-slot="{ Component }">
+            <transition name="fade" mode="out-in">
+              <div class="" :key="this.$route.name">
+                <component :is="Component"></component>
+              </div>
+            </transition>
+          </router-view>
+        </div>
       </div>
     </div>
   </transition>
