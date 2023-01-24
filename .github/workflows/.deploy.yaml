@@ -93,7 +93,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_APP }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_APP }}
-          script: rm -rf /home/smartfreelancer-app/tmp/build_old_* && mv /home/smartfreelancer-app/htdocs/app.smartfreelancer.io/ /home/smartfreelancer-api/tmp/build_old_$(date +%s) && mv /home/smartfreelancer-app/tmp/build/client/dist /home/smartfreelancer-app/htdocs/app.smartfreelancer.io/
+          script: rm -rf /home/smartfreelancer-app/tmp/build_old_* && mv /home/smartfreelancer-app/htdocs/app.smartfreelancer.io/public /home/smartfreelancer-api/tmp/build_old_$(date +%s) && mv /home/smartfreelancer-app/tmp/build/client/dist /home/smartfreelancer-app/htdocs/app.smartfreelancer.io/public
 
       - name: Remove temporary api build directory
         if: always()
