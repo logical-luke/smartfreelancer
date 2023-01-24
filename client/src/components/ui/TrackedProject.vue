@@ -3,6 +3,7 @@
   <div class="w-60">
     <v-select
       :options="getProjectsNames"
+      @update:modelValue="updateProjectName"
       placeholder="Project"
       label="name"
       v-model="projectName"
@@ -25,48 +26,40 @@ export default {
   data() {
     return {
       projectName: null,
-      timerChanged: false,
     }
   },
   watch: {
-    timer() {
-      if (
-        this.timer
-        && this.timer.projectId
-        && this.projects[this.timer.projectId]
-      ) {
-        this.projectName = this.projects[this.timer.projectId].name;
+    timerProjectId() {
+      if (this.timerProjectId && this.projects[this.timerProjectId]) {
+        this.projectName = this.projects[this.timerProjectId].name;
       } else {
         this.projectName = null;
       }
     },
-    projectName() {
-      if (this.projectName && this.timer.projectId !== this.projectName.id) {
-        store.dispatch('timer/updateProjectId', this.projectName.id)
-      }
+  },
+  methods: {
+    async updateProjectName(projectName) {
+        if (projectName && this.timerProjectId !== projectName.id) {
+          await store.dispatch('timer/setProjectId', projectName.id)
+        }
 
-      if (this.timer && this.timer.projectId && !this.projectName) {
-        store.dispatch('timer/updateProjectId', null)
-      }
+        if (this.timerProjectId && !projectName) {
+          await store.dispatch('timer/setProjectId', null)
+        }
     }
   },
   computed: {
     ...mapState({
-      timer: (state) => state.timer.current,
+      timerProjectId: (state) => state.timer.current.projectId,
       projects: (state) => state.projects.all,
-      subject: (state) => state.timer.current.subjectName
     }),
     ...mapGetters({ getProjectsNames: "projects/getProjectsNamesWithIds" }),
   },
   mounted() {
-    if (
-      this.timer
-      && this.timer.projectId
-      && this.projects[this.timer.projectId]
-    ) {
+    if (this.timerProjectId && this.projects[this.timerProjectId]) {
       this.projectName = {
-        name: this.projects[this.timer.projectId].name,
-        id: this.timer.projectId
+        name: this.projects[this.timerProjectId].name,
+        id: this.timerProjectId
       }
     }
   }

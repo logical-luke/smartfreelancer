@@ -7,13 +7,24 @@ const emptyTimer = {
 };
 
 const state = () => ({
-  current: emptyTimer,
+  current: JSON.parse(JSON.stringify(emptyTimer)),
 });
 
 const actions = {
-  async updateProjectId({ commit, state }, projectId) {
+  async startTimer({ commit, state }) {
+    const timer = await api.createTimer(state.current);
+
+    commit("setTimer", timer);
+  },
+  async stopTimer({ commit, state }) {
+    const timer = await api.stopTimer();
+
+    commit('setProjectId', null);
+    commit('setTimer', JSON.parse(JSON.stringify(emptyTimer)));
+  },
+  async setProjectId({ commit, state }, projectId) {
     if (state.current.projectId !== projectId) {
-      commit("updateProjectId", projectId);
+      commit("setProjectId", projectId);
       if (state.current.id) {
         await api.updateTimer(state.current);
       }
@@ -25,11 +36,8 @@ const mutations = {
   setTimer(state, timer) {
     state.current = timer;
   },
-  updateProjectId(state, projectId) {
+  setProjectId(state, projectId) {
     state.current.projectId = projectId;
-  },
-  clearTimer(state) {
-    state.current = emptyTimer;
   },
 };
 

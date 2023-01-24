@@ -52,7 +52,7 @@ export default {
       }
 
       if (this.isRunning) {
-        await this.stopTimer();
+        await this.$store.dispatch("timer/stopTimer");
       } else {
         await this.startTimer();
       }
@@ -63,18 +63,12 @@ export default {
         || (this.timer.id > 0 && this.global);
     },
     async startTimer() {
-      const timerPayload = {
-        projectId: this.projectId
-      };
-      const timer = await api.createTimer(timerPayload);
+      if (this.projectId && this.timer.projectId !== this.projectId) {
+        await this.$store.commit('timer/setProjectId', this.projectId);
+      }
 
-      this.$store.commit("timer/setTimer", timer)
+      await this.$store.dispatch("timer/startTimer")
     },
-    async stopTimer() {
-      const timer = await api.stopTimer();
-
-      this.$store.commit("timer/clearTimer")
-    }
   },
   mounted() {
     this.isRunning = this.checkCurrentTimer();
