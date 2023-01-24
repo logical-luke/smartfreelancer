@@ -59,7 +59,7 @@ onMounted(async () => {
         <div v-if="store.getters.isInitialLoaded">
           <router-view v-slot="{ Component }">
             <transition name="fade" mode="out-in">
-              <div :key="this.path">
+              <div :key="path">
                 <component :is="Component"></component>
               </div>
             </transition>
