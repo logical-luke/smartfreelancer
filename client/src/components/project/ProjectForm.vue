@@ -31,10 +31,10 @@ export default {
   }),
   methods: {
     updateName(event) {
-      this.$store.commit('project/updateName', event.target.value);
+      this.$store.commit('project/setName', event.target.value);
     },
     updateDescription(event) {
-      this.$store.commit('project/updateDescription', event.target.value);
+      this.$store.commit('project/setDescription', event.target.value);
     }
   }
 };

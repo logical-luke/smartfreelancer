@@ -36,6 +36,18 @@ export default {
         this.projectName = null;
       }
     },
+    projects() {
+      if (
+        this.timerProjectId
+        && this.projects[this.timerProjectId]
+        && this.projectName.name !== this.projects[this.timerProjectId].name
+      ) {
+        this.projectName = {
+          name: this.projects[this.timerProjectId].name,
+          id: this.timerProjectId
+        }
+      }
+    }
   },
   methods: {
     async updateProjectName(projectName) {

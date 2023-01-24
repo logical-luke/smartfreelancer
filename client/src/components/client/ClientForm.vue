@@ -21,8 +21,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
-import api from "@/api/api";
+import { mapState } from "vuex";
 
 export default {
   name: "ClientForm",
@@ -31,10 +30,10 @@ export default {
   }),
   methods: {
     updateName(event) {
-      this.$store.commit('client/updateName', event.target.value);
+      this.$store.dispatch('project/setName', event.target.value);
     },
     updateDescription(event) {
-      this.$store.commit('client/updateDescription', event.target.value);
+      this.$store.dispatch('project/updateDescription', event.target.value);
     }
   }
 };

@@ -43,8 +43,8 @@ export default {
   },
   methods: {
     async submitForm() {
-      await api.updateProject(store.state.project.current);
-      this.$store.commit("project/clearProject");
+      await this.$store.dispatch("project/updateProject");
+      this.$store.dispatch("project/clearProject");
       this.$router.push("/projects");
     }
   }

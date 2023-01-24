@@ -25,7 +25,7 @@ export default {
     projects: (state) => state.projects.all
   }),
   mounted() {
-    this.$store.commit("project/clearProject");
+    this.$store.dispatch("project/clearProject");
   }
 };
 </script>
