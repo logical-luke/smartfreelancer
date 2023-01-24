@@ -7,6 +7,9 @@ import VueCookies from "vue-cookies";
 import SidebarNav from "@/components/ui/SidebarNav.vue";
 import HeaderNavbar from "@/components/ui/HeaderNavbar.vue";
 import { MoonLoader } from "vue3-spinner";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 
 onMounted(async () => {
   let token = VueCookies.get("api_token");
@@ -59,7 +62,7 @@ onMounted(async () => {
         <div v-if="store.getters.isInitialLoaded">
           <router-view v-slot="{ Component }">
             <transition name="fade" mode="out-in">
-              <div class="" :key="this.$route.name">
+              <div class="" :key="route.name">
                 <component :is="Component"></component>
               </div>
             </transition>
@@ -81,7 +84,7 @@ export default {
   },
   computed: {
     isLogin() {
-      return this.$route.name === "LoginPage";
+      return route.name === "LoginPage";
     },
   },
 };

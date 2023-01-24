@@ -26,6 +26,9 @@ import store from "@/store";
 import BackButton from "@/components/ui/BackButton.vue";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
 import DeviceFloppyIcon from "vue-tabler-icons/icons/DeviceFloppyIcon";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 
 export default {
   name: "ClientEdit",
@@ -39,7 +42,7 @@ export default {
     client: (state) => state.client.current,
   }),
   async created() {
-    const client = await api.getClient(this.$route.params.id);
+    const client = await api.getClient(route.params.id);
     this.$store.commit("client/setClient", client);
   },
   methods: {
