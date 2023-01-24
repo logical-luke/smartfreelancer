@@ -84,7 +84,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_APP }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_APP }}
-          script: cd /home/smartfreelancer-api/tmp/build && echo $'API_BASE_URL={{ secrets.API_BASE_URL }}'>.env.local
+          script: cd /home/smartfreelancer-app/tmp/build/client && echo $'API_BASE_URL={{ secrets.API_BASE_URL }}'>.env.local
 
 
       - name: Build app
