@@ -77,6 +77,16 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD_APP }}
           script: cd /home/smartfreelancer-app/tmp/build/client && npm install
 
+      - name: Configure app local env files
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME_APP }}
+          PORT: ${{ secrets.PORT }}
+          PASSWORD: ${{ secrets.PASSWORD_APP }}
+          script: cd /home/smartfreelancer-api/tmp/build && echo $'API_BASE_URL={{ secrets.API_BASE_URL }}'>.env.local
+
+
       - name: Build app
         uses: appleboy/ssh-action@master
         with:
