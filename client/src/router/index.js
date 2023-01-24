@@ -93,7 +93,7 @@ router.beforeEach((to, from, next) => {
       // this route requires auth, check if logged in
       // if not, redirect to login page.
       if (!store.getters.isAuthorized) {
-        next({ name: "Login" });
+        next({ name: "LoginPage" });
       } else {
         next(); // go to wherever I'm going
       }
