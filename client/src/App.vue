@@ -74,8 +74,6 @@ onMounted(async () => {
 
 import { useRoute } from "vue-router";
 
-const route = useRoute();
-
 export default {
   name: "App",
   data() {
@@ -84,11 +82,18 @@ export default {
       spinnerColor: "#382CDD",
     };
   },
+  setup() {
+
+  },
   computed: {
     path() {
+        const route = useRoute();
+
         return route.name;
     },
     isLogin() {
+      const route = useRoute();
+
       return route.name === "LoginPage";
     },
   },
