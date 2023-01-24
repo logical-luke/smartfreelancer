@@ -75,7 +75,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_APP }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_APP }}
-          script: cd /home/smartfreelancer-app/tmp/build && npm install
+          script: cd /home/smartfreelancer-app/tmp/build/client && npm install
 
       - name: Build app
         uses: appleboy/ssh-action@master
@@ -84,7 +84,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_APP }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_APP }}
-          script: cd /home/smartfreelancer-app/tmp/build && npm run build
+          script: cd /home/smartfreelancer-app/tmp/build/client && npm run build
 
       - name: Copy new version to app directory
         uses: appleboy/ssh-action@master
@@ -93,7 +93,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_APP }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_APP }}
-          script: rm -rf /home/smartfreelancer-app/tmp/build_old_* && mv /home/smartfreelancer-app/htdocs/app.smartfreelancer.io/dist /home/smartfreelancer-api/tmp/build_old_$(date +%s) && mv /home/smartfreelancer-app/tmp/build /home/smartfreelancer-app/htdocs/app.smartfreelancer.io/
+          script: rm -rf /home/smartfreelancer-app/tmp/build_old_* && mv /home/smartfreelancer-app/htdocs/app.smartfreelancer.io/ /home/smartfreelancer-api/tmp/build_old_$(date +%s) && mv /home/smartfreelancer-app/tmp/build/client/dist /home/smartfreelancer-app/htdocs/app.smartfreelancer.io/
 
       - name: Remove temporary api build directory
         if: always()
