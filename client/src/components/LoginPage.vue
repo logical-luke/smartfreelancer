@@ -89,16 +89,18 @@ export default {
     },
     async login() {
       try {
-        store.commit("setInitialLoaded", false);
         const { token, refreshToken } = await api.login(
           this.email,
           this.password
         );
-        this.setToken(token);
-        this.setRefreshToken(refreshToken);
-        this.setAuthorized(true);
-        await store.dispatch("loadInitial");
-        this.$router.push("/");
+        if (token && refreshToken) {
+          this.setToken(token);
+          this.setRefreshToken(refreshToken);
+          this.setAuthorized(true);
+          store.commit("setInitialLoaded", false);
+          await store.dispatch("loadInitial");
+          this.$router.push("/");
+        }
       } catch (err) {
         console.log(err);
         this.email = "";
