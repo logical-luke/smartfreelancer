@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
-import ProjectsPage from "../components/project/ProjectsPage.vue";
-import LoginPage from "../components/LoginPage.vue";
-import DashboardPage from "../components/dashboard/DashboardPage.vue";
+import ProjectsPage from "@/components/project/ProjectsPage.vue";
+import LoginPage from "@/components/LoginPage.vue";
+import DashboardPage from "@/components/dashboard/DashboardPage.vue";
 import store from "../store";
 import ProjectEditPage from "@/components/project/ProjectEditPage.vue";
 import ProjectCreatePage from "@/components/project/ProjectCreatePage.vue";
