@@ -81,12 +81,12 @@ const router = createRouter({
         requiresAuth: true,
       },
       component: TasksPage,
-    }
+    },
   ],
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.name === 'LoginPage' && store.getters.isAuthorized) {
+  if (to.name === "LoginPage" && store.getters.isAuthorized) {
     next({ name: "Dashboard" });
   } else {
     if (to.matched.some((record) => record.meta.requiresAuth)) {

@@ -2,8 +2,8 @@ import api from "../../api/api";
 
 const state = () => ({
   current: {
-    name: '',
-    description: ''
+    name: "",
+    description: "",
   },
 });
 
@@ -16,7 +16,7 @@ const actions = {
   },
   async updateName({ commit }, name) {
     commit("updateName", name);
-  }
+  },
 };
 
 const mutations = {
@@ -25,8 +25,8 @@ const mutations = {
   },
   clearClient(state) {
     state.current = {
-      name: '',
-      description: ''
+      name: "",
+      description: "",
     };
   },
   updateName(state, name) {
@@ -34,7 +34,7 @@ const mutations = {
   },
   updateDescription(state, description) {
     state.current.description = description;
-  }
+  },
 };
 
 export default {

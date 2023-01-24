@@ -4,7 +4,11 @@
     <transition name="fade">
       <div>
         <template v-for="client in clients" :key="client.id">
-          <Client :id="client.id" :description="client.description" :name="client.name"></Client>
+          <Client
+            :id="client.id"
+            :description="client.description"
+            :name="client.name"
+          ></Client>
         </template>
       </div>
     </transition>
@@ -22,11 +26,11 @@ export default {
   name: "Clients",
   components: { Client, NewButton },
   computed: mapState({
-    clients: (state) => state.clients.all
+    clients: (state) => state.clients.all,
   }),
   mounted() {
     this.$store.commit("client/clearClient");
-  }
+  },
 };
 </script>
 

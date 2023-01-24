@@ -18,7 +18,7 @@ export default {
   name: "SidebarLogout",
   components: { LogoutIcon },
   methods: {
-    ...mapActions(["logout"])
-  }
+    ...mapActions(["logout"]),
+  },
 };
 </script>

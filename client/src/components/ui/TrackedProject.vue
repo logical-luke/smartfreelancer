@@ -26,7 +26,7 @@ export default {
   data() {
     return {
       projectName: null,
-    }
+    };
   },
   watch: {
     timerProjectId() {
@@ -38,27 +38,27 @@ export default {
     },
     projects() {
       if (
-        this.timerProjectId
-        && this.projects[this.timerProjectId]
-        && this.projectName.name !== this.projects[this.timerProjectId].name
+        this.timerProjectId &&
+        this.projects[this.timerProjectId] &&
+        this.projectName.name !== this.projects[this.timerProjectId].name
       ) {
         this.projectName = {
           name: this.projects[this.timerProjectId].name,
-          id: this.timerProjectId
-        }
+          id: this.timerProjectId,
+        };
       }
-    }
+    },
   },
   methods: {
     async updateProjectName(projectName) {
-        if (projectName && this.timerProjectId !== projectName.id) {
-          await store.dispatch('timer/setProjectId', projectName.id)
-        }
+      if (projectName && this.timerProjectId !== projectName.id) {
+        await store.dispatch("timer/setProjectId", projectName.id);
+      }
 
-        if (this.timerProjectId && !projectName) {
-          await store.dispatch('timer/setProjectId', null)
-        }
-    }
+      if (this.timerProjectId && !projectName) {
+        await store.dispatch("timer/setProjectId", null);
+      }
+    },
   },
   computed: {
     ...mapState({
@@ -71,10 +71,9 @@ export default {
     if (this.timerProjectId && this.projects[this.timerProjectId]) {
       this.projectName = {
         name: this.projects[this.timerProjectId].name,
-        id: this.timerProjectId
-      }
+        id: this.timerProjectId,
+      };
     }
-  }
+  },
 };
 </script>
-

@@ -1,11 +1,7 @@
 <template>
   <users-icon />
   <div class="w-60">
-    <v-select
-      :options="[]"
-      placeholder="Client"
-    >
-    </v-select>
+    <v-select :options="[]" placeholder="Client"> </v-select>
   </div>
 </template>
 
@@ -22,20 +18,18 @@ export default {
   data() {
     return {
       value: null,
-      options: ["Project", "list", "of", "options"]
+      options: ["Project", "list", "of", "options"],
     };
   },
   computed: {
     ...mapState({
       timer: (state) => state.timer.current,
       projects: (state) => state.projects.all,
-      subject: (state) => state.timer.current.subjectName
+      subject: (state) => state.timer.current.subjectName,
     }),
-    ...mapGetters({ getProjectsNames: "projects/getProjectsNames" })
-  }
+    ...mapGetters({ getProjectsNames: "projects/getProjectsNames" }),
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

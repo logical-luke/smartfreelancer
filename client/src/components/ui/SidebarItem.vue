@@ -20,8 +20,8 @@ export default {
   props: {
     goTo: {
       type: String,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 };
 </script>

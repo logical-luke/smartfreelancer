@@ -19,8 +19,8 @@ const actions = {
   async stopTimer({ commit, state }) {
     const timer = await api.stopTimer();
 
-    commit('setProjectId', null);
-    commit('setTimer', JSON.parse(JSON.stringify(emptyTimer)));
+    commit("setProjectId", null);
+    commit("setTimer", JSON.parse(JSON.stringify(emptyTimer)));
   },
   async setProjectId({ commit, state }, projectId) {
     if (state.current.projectId !== projectId) {

@@ -17,13 +17,13 @@ const actions = {
     commit("setClients", orderedClients);
   },
   async fetchClient({ commit }, clientId) {
-      const client = await api.getClient(clientId);
-      commit("setClient", client);
+    const client = await api.getClient(clientId);
+    commit("setClient", client);
   },
   async deleteClient({ commit }, id) {
     await api.deleteClient(id);
     commit("deleteClient", id);
-  }
+  },
 };
 
 const mutations = {
@@ -31,10 +31,9 @@ const mutations = {
     state.all = clients;
   },
 
-
   deleteClient(state, id) {
     delete state.all[id];
-  }
+  },
 };
 
 export default {

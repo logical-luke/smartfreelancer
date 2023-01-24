@@ -31,7 +31,10 @@ onMounted(async () => {
 
 <template>
   <transition name="fade" mode="out-in">
-    <div v-if="!store.getters.isInitialLoaded" class="flex justify-center pt-32 md:pt-96 items-center">
+    <div
+      v-if="!store.getters.isInitialLoaded"
+      class="flex justify-center pt-32 md:pt-96 items-center"
+    >
       <div>
         <MoonLoader
           :size="spinnerSize"
@@ -46,7 +49,10 @@ onMounted(async () => {
       </div>
       <div class="min-h-screen">
         <transition name="fade" mode="out-in">
-          <div v-if="!isLogin" class="sticky top-0 z-50 mx-auto w-full lg:ml-80">
+          <div
+            v-if="!isLogin"
+            class="sticky top-0 z-50 mx-auto w-full lg:ml-80"
+          >
             <Navbar />
           </div>
         </transition>
@@ -70,16 +76,15 @@ export default {
   data() {
     return {
       spinnerSize: "96 px",
-      spinnerColor: "#382CDD"
+      spinnerColor: "#382CDD",
     };
   },
   computed: {
     isLogin() {
       return this.$route.name === "LoginPage";
-    }
-  }
+    },
+  },
 };
-
 </script>
 
 <style>
@@ -88,7 +93,8 @@ export default {
   transition: opacity 0.3s ease;
 }
 
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 </style>

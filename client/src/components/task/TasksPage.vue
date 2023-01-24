@@ -9,10 +9,8 @@ import NewButton from "@/components/ui/NewButton.vue";
 
 export default {
   name: "Tasks",
-  components: { NewButton }
+  components: { NewButton },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

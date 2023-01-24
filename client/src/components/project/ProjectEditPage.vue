@@ -1,7 +1,8 @@
 <template>
   <div class="mx-auto lg:ml-80">
     <section class="py-8">
-      <div class="container px-4 mx-auto"><h1 class="mb-2 text-5xl font-bold font-heading">Edit project</h1>
+      <div class="container px-4 mx-auto">
+        <h1 class="mb-2 text-5xl font-bold font-heading">Edit project</h1>
         <form @submit.prevent="submitForm">
           <ProjectForm :wait-for-current="true" />
           <div class="flex flex-wrap space-x-4">
@@ -35,7 +36,7 @@ export default {
     };
   },
   computed: mapState({
-    project: (state) => state.project.current
+    project: (state) => state.project.current,
   }),
   async created() {
     const project = await api.getProject(this.$route.params.id);
@@ -46,11 +47,9 @@ export default {
       await this.$store.dispatch("project/updateProject");
       this.$store.dispatch("project/clearProject");
       this.$router.push("/projects");
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

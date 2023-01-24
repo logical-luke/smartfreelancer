@@ -1,7 +1,8 @@
 <template>
   <div class="mx-auto lg:ml-80">
     <section class="py-8">
-      <div class="container px-4 mx-auto"><h1 class="mb-2 text-5xl font-bold font-heading">Edit client</h1>
+      <div class="container px-4 mx-auto">
+        <h1 class="mb-2 text-5xl font-bold font-heading">Edit client</h1>
         <form @submit.prevent="submitForm">
           <ClientForm :wait-for-current="true" />
           <div class="flex flex-wrap space-x-4">
@@ -35,7 +36,7 @@ export default {
     };
   },
   computed: mapState({
-    client: (state) => state.client.current
+    client: (state) => state.client.current,
   }),
   async created() {
     const client = await api.getClient(this.$route.params.id);
@@ -46,11 +47,9 @@ export default {
       await api.updateClient(store.state.client.current);
       this.$store.commit("client/clearClient");
       this.$router.push("/clients");
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

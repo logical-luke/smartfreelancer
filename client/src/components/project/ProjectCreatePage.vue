@@ -1,7 +1,8 @@
 <template>
   <div class="mx-auto lg:ml-80">
     <section class="py-8">
-      <div class="container px-4 mx-auto"><h1 class="mb-2 text-5xl font-bold font-heading">Add project</h1>
+      <div class="container px-4 mx-auto">
+        <h1 class="mb-2 text-5xl font-bold font-heading">Add project</h1>
         <form @submit.prevent="submitForm">
           <ProjectForm />
           <div class="flex flex-wrap space-x-4">
@@ -30,12 +31,12 @@ export default {
   components: { SquarePlusIcon, SubmitButton, BackButton, ProjectForm },
   computed: mapState({
     project: (state) => state.project.current,
-    userId: (state) => state.user.id
+    userId: (state) => state.user.id,
   }),
   created() {
     this.$store.commit("project/setProject", {
       name: null,
-      description: null
+      description: null,
     });
   },
   methods: {
@@ -43,11 +44,9 @@ export default {
       await api.createProject(this.project);
 
       this.$router.push("/projects");
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

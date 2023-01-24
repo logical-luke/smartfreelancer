@@ -1,12 +1,7 @@
 <template>
   <list-icon />
   <div class="w-60">
-    <v-select
-      :options="[]"
-      placeholder="Task"
-      :value="projectName"
-    >
-    </v-select>
+    <v-select :options="[]" placeholder="Task" :value="projectName"> </v-select>
   </div>
 </template>
 
@@ -21,26 +16,24 @@ export default {
   components: { ListIcon, vSelect },
   data() {
     return {
-      projectName: null
+      projectName: null,
     };
   },
   watch: {
     timer() {
       if (this.timer && this.timer.projectId) {
       }
-    }
+    },
   },
   computed: {
     ...mapState({
       timer: (state) => state.timer.current,
       projects: (state) => state.projects.all,
-      subject: (state) => state.timer.current.subjectName
+      subject: (state) => state.timer.current.subjectName,
     }),
-    ...mapGetters({ getProjectsNames: "projects/getProjectsNames" })
-  }
+    ...mapGetters({ getProjectsNames: "projects/getProjectsNames" }),
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

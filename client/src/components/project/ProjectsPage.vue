@@ -4,7 +4,11 @@
     <transition name="fade">
       <div>
         <template v-for="project in projects" :key="project.id">
-          <Project :id="project.id" :description="project.description" :name="project.name"></Project>
+          <Project
+            :id="project.id"
+            :description="project.description"
+            :name="project.name"
+          ></Project>
         </template>
       </div>
     </transition>
@@ -22,11 +26,11 @@ export default {
   name: "Projects",
   components: { Project, NewButton },
   computed: mapState({
-    projects: (state) => state.projects.all
+    projects: (state) => state.projects.all,
   }),
   mounted() {
     this.$store.dispatch("project/clearProject");
-  }
+  },
 };
 </script>
 

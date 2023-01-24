@@ -144,7 +144,6 @@ export default {
     return response.data;
   },
 
-
   async getTimer() {
     const response = await getRequest("/timer/");
 
@@ -156,13 +155,13 @@ export default {
   },
 
   async createTimer(timerPayload) {
-    const response = await postRequest('/timer/create', timerPayload)
+    const response = await postRequest("/timer/create", timerPayload);
 
     return response.data;
   },
 
   async stopTimer(newTimer) {
-    const response = await postRequest('/timer/stop')
+    const response = await postRequest("/timer/stop");
 
     return response.data;
   },
@@ -186,10 +185,7 @@ export default {
   },
 
   async updateClient(client) {
-    const response = await postRequest(
-      "/client/update/" + client.id,
-      client
-    );
+    const response = await postRequest("/client/update/" + client.id, client);
 
     if (response.status !== 200) {
       throw new Error(response.data.message);
@@ -206,10 +202,10 @@ export default {
     }
   },
   async updateTimer(timer) {
-    const response = await postRequest('/timer/update/' + timer.id, timer)
+    const response = await postRequest("/timer/update/" + timer.id, timer);
 
     if (response.status !== 200) {
       throw new Error(response.data.message);
     }
-  }
+  },
 };

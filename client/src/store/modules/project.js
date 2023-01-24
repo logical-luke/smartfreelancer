@@ -25,7 +25,9 @@ const actions = {
   },
   async updateProject({ commit, state, rootGetters }) {
     await api.updateProject(state.current);
-    let projects = JSON.parse(JSON.stringify(rootGetters['projects/getProjects']));
+    let projects = JSON.parse(
+      JSON.stringify(rootGetters["projects/getProjects"])
+    );
     projects[state.current.id] = state.current;
     commit("projects/setProjects", projects, {
       root: true,

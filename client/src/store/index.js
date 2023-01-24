@@ -25,7 +25,7 @@ export default createStore({
     project,
     timer,
     clients,
-    client
+    client,
   },
   actions: {
     logout({ commit }) {
@@ -92,7 +92,7 @@ export default createStore({
     },
     isInitialLoaded(state) {
       return state.initialLoaded;
-    }
+    },
   },
   strict: debug,
   plugins: debug ? [createLogger()] : [],
