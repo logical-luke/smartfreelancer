@@ -4,8 +4,8 @@ import store from "@/store";
 
 import VueCookies from "vue-cookies";
 
-import Sidebar from "@/components/ui/Sidebar.vue";
-import Navbar from "@/components/ui/Navbar.vue";
+import SidebarNav from "@/components/ui/SidebarNav.vue";
+import HeaderNavbar from "@/components/ui/HeaderNavbar.vue";
 import { MoonLoader } from "vue3-spinner";
 
 onMounted(async () => {
@@ -45,7 +45,7 @@ onMounted(async () => {
     </div>
     <div v-else>
       <div>
-        <Sidebar v-if="!isLogin" />
+        <SidebarNav v-if="!isLogin" />
       </div>
       <div class="min-h-screen">
         <transition name="fade" mode="out-in">
@@ -53,7 +53,7 @@ onMounted(async () => {
             v-if="!isLogin"
             class="sticky top-0 z-50 mx-auto w-full lg:ml-80"
           >
-            <Navbar />
+            <HeaderNavbar />
           </div>
         </transition>
         <div v-if="store.getters.isInitialLoaded">

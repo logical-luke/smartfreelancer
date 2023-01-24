@@ -1,14 +1,14 @@
 <template>
   <div class="mx-auto lg:ml-80">
-    <NewButton go-to="/client/create/">Client</NewButton>
+    <NewButton go-to="/client/create/">ClientPage</NewButton>
     <transition name="fade">
       <div>
         <template v-for="client in clients" :key="client.id">
-          <Client
+          <ClientPage
             :id="client.id"
             :description="client.description"
             :name="client.name"
-          ></Client>
+          ></ClientPage>
         </template>
       </div>
     </transition>
@@ -16,15 +16,13 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 import NewButton from "@/components/ui/NewButton.vue";
-import Client from "@/components/client/Client.vue";
-
-let clients = {};
+import ClientPage from "@/components/client/ClientPage.vue";
 
 export default {
-  name: "Clients",
-  components: { Client, NewButton },
+  name: "ClientsPage",
+  components: { ClientPage, NewButton },
   computed: mapState({
     clients: (state) => state.clients.all,
   }),

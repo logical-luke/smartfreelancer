@@ -78,7 +78,7 @@ export default createStore({
     },
   },
   getters: {
-    isAuthorized(state, getters) {
+    isAuthorized(state) {
       return state.authorized;
     },
     getToken(state) {

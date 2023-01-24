@@ -20,7 +20,7 @@
 
 <script>
 import ClientForm from "@/components/client/ClientForm.vue";
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 import api from "@/api/api";
 import store from "@/store";
 import BackButton from "@/components/ui/BackButton.vue";

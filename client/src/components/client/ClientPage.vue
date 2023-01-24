@@ -35,7 +35,7 @@ import { mapActions } from "vuex";
 import ToggleTimerButton from "@/components/ui/ToggleTimerButton.vue";
 
 export default {
-  name: "Client",
+  name: "ClientPage",
   components: { ToggleTimerButton, EditButton, DeleteButton },
   props: {
     name: {

@@ -72,7 +72,7 @@ import LoginIcon from "vue-tabler-icons/icons/LoginIcon";
 import store from "@/store";
 
 export default {
-  name: "Login",
+  name: "LoginPage",
   components: { LoginIcon, SubmitButton },
   data: () => {
     return {
@@ -87,7 +87,7 @@ export default {
     clearError() {
       this.error = false;
     },
-    async login(e) {
+    async login() {
       try {
         store.commit("setInitialLoaded", false);
         const { token, refreshToken } = await api.login(

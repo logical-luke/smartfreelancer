@@ -34,7 +34,7 @@ import TimerTime from "@/components/ui/TimerTime.vue";
 import TrackedClient from "@/components/ui/TrackedClient.vue";
 
 export default {
-  name: "Navbar",
+  name: "HeaderNavbar",
   components: {
     TrackedClient,
     TimerTime,

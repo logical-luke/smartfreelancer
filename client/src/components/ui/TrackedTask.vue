@@ -19,12 +19,6 @@ export default {
       projectName: null,
     };
   },
-  watch: {
-    timer() {
-      if (this.timer && this.timer.projectId) {
-      }
-    },
-  },
   computed: {
     ...mapState({
       timer: (state) => state.timer.current,

@@ -4,7 +4,7 @@
     <v-select
       :options="getProjectsNames"
       @update:modelValue="updateProjectName"
-      placeholder="Project"
+      placeholder="ProjectPage"
       label="name"
       v-model="projectName"
       class="project-selector"
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import store from "@/store";

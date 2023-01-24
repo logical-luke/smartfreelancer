@@ -20,9 +20,8 @@
 
 <script>
 import ProjectForm from "@/components/project/ProjectForm.vue";
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 import api from "@/api/api";
-import store from "@/store";
 import BackButton from "@/components/ui/BackButton.vue";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
 import DeviceFloppyIcon from "vue-tabler-icons/icons/DeviceFloppyIcon";

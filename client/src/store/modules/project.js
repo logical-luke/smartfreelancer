@@ -1,5 +1,4 @@
 import api from "../../api/api";
-import store from "@/store";
 
 const emptyProject = {
   name: "",
@@ -17,7 +16,7 @@ const actions = {
     const project = await api.getProject(projectId);
     commit("setProject", project);
   },
-  setName({ commit, state }, name) {
+  setName({ commit }, name) {
     commit("setName", name);
   },
   clearProject({ commit }) {

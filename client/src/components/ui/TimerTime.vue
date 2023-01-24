@@ -44,7 +44,7 @@ export default {
 
       return 0;
     },
-    getRelativeTime(unit) {
+    getRelativeTime() {
       let elapsed = this.getRelativeElapsedTime();
       let relativeTime = {
         hours: "00",

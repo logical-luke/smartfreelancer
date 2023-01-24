@@ -1,14 +1,14 @@
 <template>
   <div class="mx-auto lg:ml-80">
-    <NewButton go-to="/project/create/">Project</NewButton>
+    <NewButton go-to="/project/create/">ProjectPage</NewButton>
     <transition name="fade">
       <div>
         <template v-for="project in projects" :key="project.id">
-          <Project
+          <ProjectPage
             :id="project.id"
             :description="project.description"
             :name="project.name"
-          ></Project>
+          ></ProjectPage>
         </template>
       </div>
     </transition>
@@ -18,13 +18,11 @@
 <script>
 import { mapState } from "vuex";
 import NewButton from "@/components/ui/NewButton.vue";
-import Project from "@/components/project/Project.vue";
-
-let projects = {};
+import ProjectPage from "@/components/project/Project.vue";
 
 export default {
-  name: "Projects",
-  components: { Project, NewButton },
+  name: "ProjectsPage",
+  components: { ProjectPage, NewButton },
   computed: mapState({
     projects: (state) => state.projects.all,
   }),

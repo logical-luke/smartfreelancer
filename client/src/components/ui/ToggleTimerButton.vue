@@ -13,7 +13,6 @@
 import PlayerPlayIcon from "vue-tabler-icons/icons/PlayerPlayIcon";
 import { mapState } from "vuex";
 import PlayerStopIcon from "vue-tabler-icons/icons/PlayerStopIcon";
-import api from "@/api/api";
 
 export default {
   name: "ToggleTimerButton",

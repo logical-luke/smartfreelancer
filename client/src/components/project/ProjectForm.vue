@@ -26,8 +26,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
-import api from "@/api/api";
+import { mapState } from "vuex";
 
 export default {
   name: "ProjectForm",

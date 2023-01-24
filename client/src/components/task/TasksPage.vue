@@ -8,7 +8,7 @@
 import NewButton from "@/components/ui/NewButton.vue";
 
 export default {
-  name: "Tasks",
+  name: "TasksPage",
   components: { NewButton },
 };
 </script>

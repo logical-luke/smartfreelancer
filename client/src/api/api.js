@@ -160,7 +160,7 @@ export default {
     return response.data;
   },
 
-  async stopTimer(newTimer) {
+  async stopTimer() {
     const response = await postRequest("/timer/stop");
 
     return response.data;

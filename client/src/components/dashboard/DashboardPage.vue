@@ -6,18 +6,18 @@
           Welcome<template v-if="name">, {{ name }}</template> 👋
         </h2>
       </div>
-      <Income />
+      <IncomeChart />
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import Income from "@/components/dashboard/Income.vue";
+import IncomeChart from "@/components/dashboard/IncomeChart.vue";
 
 export default {
-  name: "Dashboard",
-  components: { Income },
+  name: "DashboardPage",
+  components: { IncomeChart },
   computed: mapState({
     name: (state) => state.user.name,
   }),
