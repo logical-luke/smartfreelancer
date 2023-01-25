@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted } from "vue";
+import { onMounted } from "vue";
 import store from "@/store";
 
 import VueCookies from "vue-cookies";
@@ -51,7 +51,7 @@ onMounted(async () => {
         <transition name="fade" mode="out-in">
           <div
             v-if="!isLogin"
-            class="sticky top-0 z-50 mx-auto w-full lg:ml-80"
+            class="sticky top-0 z-10 mx-auto w-full lg:ml-80"
           >
             <HeaderNavbar />
           </div>
@@ -71,7 +71,6 @@ onMounted(async () => {
 </template>
 
 <script>
-
 import { useRoute } from "vue-router";
 
 export default {
@@ -82,14 +81,12 @@ export default {
       spinnerColor: "#382CDD",
     };
   },
-  setup() {
-
-  },
+  setup() {},
   computed: {
     path() {
-        const route = useRoute();
+      const route = useRoute();
 
-        return route.name;
+      return route.name;
     },
     isLogin() {
       const route = useRoute();

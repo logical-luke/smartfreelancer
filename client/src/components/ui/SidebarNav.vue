@@ -7,59 +7,66 @@
             <!--            <img class="h-10" src="artemis-assets/logos/artemis-logo.svg" alt="" width="auto">-->
           </a>
           <button
+            @click="toggle"
             class="navbar-burger p-1 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
           >
             <Menu2Icon />
           </button>
         </div>
       </nav>
-      <div class="hidden lg:block navbar-menu relative z-50">
-        <div
-          class="navbar-backdrop fixed lg:hidden inset-0 bg-gray-800 opacity-10"
-        ></div>
-        <nav
-          class="fixed top-0 left-0 bottom-0 flex flex-col w-3/4 lg:w-80 sm:max-w-xs pt-6 pb-8 bg-gray-800 overflow-y-auto"
+      <div
+          :class="{ hidden: !open }"
+          class="lg:block navbar-menu relative z-50"
         >
           <div
-            class="flex w-full items-center px-6 pb-6 mb-6 lg:border-b border-gray-700"
+            class="navbar-backdrop fixed lg:hidden inset-0 bg-gray-800 opacity-10"
+          ></div>
+          <nav
+            class="fixed top-0 left-0 bottom-0 flex flex-col w-full md:max-w-full lg:max-w-xs lg:w-3/4 sm:max-w-xs pt-6 pb-8 bg-gray-800 overflow-y-auto"
           >
-            <a class="text-xl text-white font-semibold" href="#">
-              <!--              <img class="h-8" src="artemis-assets/logos/artemis-logo.svg" alt="" width="auto">-->
-            </a>
-          </div>
-          <div class="px-4 pb-6">
-            <ul class="mb-8 text-sm font-medium">
-              <SidebarItem go-to="/">
-                <template v-slot:title>Dashboard</template>
-                <template v-slot:icon>
-                  <dashboard-icon />
-                </template>
-              </SidebarItem>
-              <SidebarItem go-to="/clients">
-                <template v-slot:title>Clients</template>
-                <template v-slot:icon>
-                  <users-icon />
-                </template>
-              </SidebarItem>
-              <SidebarItem go-to="/projects">
-                <template v-slot:title>Projects</template>
-                <template v-slot:icon>
-                  <briefcase-icon />
-                </template>
-              </SidebarItem>
-              <SidebarItem go-to="/tasks">
-                <template v-slot:title>Tasks</template>
-                <template v-slot:icon>
-                  <list-icon />
-                </template>
-              </SidebarItem>
-            </ul>
-            <div class="pt-8 text-sm font-medium">
-              <SidebarLogout />
+            <div
+              class="flex flex-row-reverse px-6 pb-6 mb-6 lg:border-b border-gray-700"
+            >
+              <button
+                @click="toggle"
+                class="lg:hidden navbar-burger p-1 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
+              >
+                <XIcon />
+              </button>
             </div>
-          </div>
-        </nav>
-      </div>
+            <div class="px-4 pb-6">
+              <ul class="mb-8 text-sm font-medium">
+                <SidebarItem go-to="/">
+                  <template v-slot:title>Dashboard</template>
+                  <template v-slot:icon>
+                    <dashboard-icon />
+                  </template>
+                </SidebarItem>
+                <SidebarItem go-to="/clients">
+                  <template v-slot:title>Clients</template>
+                  <template v-slot:icon>
+                    <users-icon />
+                  </template>
+                </SidebarItem>
+                <SidebarItem go-to="/projects">
+                  <template v-slot:title>Projects</template>
+                  <template v-slot:icon>
+                    <briefcase-icon />
+                  </template>
+                </SidebarItem>
+                <SidebarItem go-to="/tasks">
+                  <template v-slot:title>Tasks</template>
+                  <template v-slot:icon>
+                    <list-icon />
+                  </template>
+                </SidebarItem>
+              </ul>
+              <div class="pt-8 text-sm font-medium">
+                <SidebarLogout />
+              </div>
+            </div>
+          </nav>
+        </div>
     </div>
   </transition>
 </template>
@@ -73,20 +80,32 @@ import DashboardIcon from "vue-tabler-icons/icons/DashboardIcon";
 import SidebarLogout from "@/components/ui/SidebarLogout.vue";
 import UsersIcon from "vue-tabler-icons/icons/UsersIcon";
 import Menu2Icon from "vue-tabler-icons/icons/Menu2Icon";
+import XIcon from "vue-tabler-icons/icons/XIcon";
 
 export default {
   name: "SidebarNav",
   components: {
+    XIcon,
     Menu2Icon,
     UsersIcon,
     SidebarLogout,
     DashboardIcon,
     BriefcaseIcon,
     ListIcon,
-    SidebarItem,
+    SidebarItem
+  },
+  data() {
+    return {
+      open: false
+    };
   },
   computed: {
-    ...mapGetters(["isAuthorized"]),
+    ...mapGetters(["isAuthorized"])
   },
+  methods: {
+    toggle() {
+      this.open = !this.open;
+    }
+  }
 };
 </script>
