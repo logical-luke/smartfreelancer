@@ -33,6 +33,7 @@ onMounted(async () => {
   <transition name="fade" mode="out-in">
     <div
       class="grid h-screen place-items-center"
+      v-if="!store.getters.isInitialLoaded"
     >
       <div>
         <MoonLoader
