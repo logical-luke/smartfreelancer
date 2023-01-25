@@ -8,7 +8,7 @@
             <TimerTime />
           </div>
           <div
-            class="flex flex-col lg:flex-row lg:space-x-3 mt-4 md:mt-0 w-full md:w-96 content-start"
+            class="flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:space-x-3 mt-4 md:mt-0 w-full md:w-96 content-start"
           >
             <div class="flex items-center space-x-3">
               <TrackedTask />
