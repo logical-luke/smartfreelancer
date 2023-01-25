@@ -99,6 +99,11 @@ export default {
       open: false
     };
   },
+  watch: {
+    $route(to, from) {
+      this.open = false;
+    }
+  },
   computed: {
     ...mapGetters(["isAuthorized"])
   },
