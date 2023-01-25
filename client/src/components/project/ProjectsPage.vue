@@ -1,6 +1,6 @@
 <template>
   <div class="mx-auto lg:ml-80">
-    <NewButton go-to="/project/create/">ProjectPage</NewButton>
+    <NewButton go-to="/project/create/">Project</NewButton>
     <transition name="fade">
       <div>
         <template v-for="project in projects" :key="project.id">

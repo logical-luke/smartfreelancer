@@ -1,6 +1,6 @@
 <template>
   <div class="mx-auto lg:ml-80">
-    <NewButton go-to="/client/create/">ClientPage</NewButton>
+    <NewButton go-to="/client/create/">Client</NewButton>
     <transition name="fade">
       <div>
         <template v-for="client in clients" :key="client.id">

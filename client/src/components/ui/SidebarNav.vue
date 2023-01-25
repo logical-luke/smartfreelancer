@@ -38,25 +38,25 @@
           <div class="px-4 pb-6">
             <ul class="mb-8 text-sm font-medium">
               <SidebarItem go-to="/">
-                <template v-slot:title>DashboardPage</template>
+                <template v-slot:title>Dashboard</template>
                 <template v-slot:icon>
                   <dashboard-icon />
                 </template>
               </SidebarItem>
               <SidebarItem go-to="/clients">
-                <template v-slot:title>ClientsPage</template>
+                <template v-slot:title>Clients</template>
                 <template v-slot:icon>
                   <users-icon />
                 </template>
               </SidebarItem>
               <SidebarItem go-to="/projects">
-                <template v-slot:title>ProjectsPage</template>
+                <template v-slot:title>Projects</template>
                 <template v-slot:icon>
                   <briefcase-icon />
                 </template>
               </SidebarItem>
               <SidebarItem go-to="/tasks">
-                <template v-slot:title>TasksList</template>
+                <template v-slot:title>Tasks</template>
                 <template v-slot:icon>
                   <list-icon />
                 </template>
