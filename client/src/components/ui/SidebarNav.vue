@@ -15,58 +15,58 @@
         </div>
       </nav>
       <div
-          :class="{ hidden: !open }"
-          class="lg:block navbar-menu relative z-50"
+        :class="{ hidden: !open }"
+        class="lg:block navbar-menu relative z-50"
+      >
+        <div
+          class="navbar-backdrop fixed lg:hidden inset-0 bg-gray-800 opacity-10"
+        ></div>
+        <nav
+          class="fixed top-0 left-0 bottom-0 flex flex-col w-full md:max-w-full lg:max-w-xs lg:w-3/4 sm:max-w-xs pt-6 pb-8 bg-gray-800 overflow-y-auto"
         >
           <div
-            class="navbar-backdrop fixed lg:hidden inset-0 bg-gray-800 opacity-10"
-          ></div>
-          <nav
-            class="fixed top-0 left-0 bottom-0 flex flex-col w-full md:max-w-full lg:max-w-xs lg:w-3/4 sm:max-w-xs pt-6 pb-8 bg-gray-800 overflow-y-auto"
+            class="flex flex-row-reverse px-6 pb-6 mb-6 lg:border-b border-gray-700"
           >
-            <div
-              class="flex flex-row-reverse px-6 pb-6 mb-6 lg:border-b border-gray-700"
+            <button
+              @click="toggle"
+              class="lg:hidden navbar-burger p-1 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
             >
-              <button
-                @click="toggle"
-                class="lg:hidden navbar-burger p-1 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
-              >
-                <XIcon />
-              </button>
+              <XIcon />
+            </button>
+          </div>
+          <div class="px-4 pb-6">
+            <ul class="mb-8 text-sm font-medium">
+              <SidebarItem go-to="/">
+                <template v-slot:title>Dashboard</template>
+                <template v-slot:icon>
+                  <dashboard-icon />
+                </template>
+              </SidebarItem>
+              <SidebarItem go-to="/clients">
+                <template v-slot:title>Clients</template>
+                <template v-slot:icon>
+                  <users-icon />
+                </template>
+              </SidebarItem>
+              <SidebarItem go-to="/projects">
+                <template v-slot:title>Projects</template>
+                <template v-slot:icon>
+                  <briefcase-icon />
+                </template>
+              </SidebarItem>
+              <SidebarItem go-to="/tasks">
+                <template v-slot:title>Tasks</template>
+                <template v-slot:icon>
+                  <list-icon />
+                </template>
+              </SidebarItem>
+            </ul>
+            <div class="pt-8 text-sm font-medium">
+              <SidebarLogout />
             </div>
-            <div class="px-4 pb-6">
-              <ul class="mb-8 text-sm font-medium">
-                <SidebarItem go-to="/">
-                  <template v-slot:title>Dashboard</template>
-                  <template v-slot:icon>
-                    <dashboard-icon />
-                  </template>
-                </SidebarItem>
-                <SidebarItem go-to="/clients">
-                  <template v-slot:title>Clients</template>
-                  <template v-slot:icon>
-                    <users-icon />
-                  </template>
-                </SidebarItem>
-                <SidebarItem go-to="/projects">
-                  <template v-slot:title>Projects</template>
-                  <template v-slot:icon>
-                    <briefcase-icon />
-                  </template>
-                </SidebarItem>
-                <SidebarItem go-to="/tasks">
-                  <template v-slot:title>Tasks</template>
-                  <template v-slot:icon>
-                    <list-icon />
-                  </template>
-                </SidebarItem>
-              </ul>
-              <div class="pt-8 text-sm font-medium">
-                <SidebarLogout />
-              </div>
-            </div>
-          </nav>
-        </div>
+          </div>
+        </nav>
+      </div>
     </div>
   </transition>
 </template>
@@ -92,25 +92,25 @@ export default {
     DashboardIcon,
     BriefcaseIcon,
     ListIcon,
-    SidebarItem
+    SidebarItem,
   },
   data() {
     return {
-      open: false
+      open: false,
     };
   },
   watch: {
-    $route(to, from) {
+    $route() {
       this.open = false;
-    }
+    },
   },
   computed: {
-    ...mapGetters(["isAuthorized"])
+    ...mapGetters(["isAuthorized"]),
   },
   methods: {
     toggle() {
       this.open = !this.open;
-    }
-  }
+    },
+  },
 };
 </script>
