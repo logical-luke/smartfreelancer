@@ -1,7 +1,7 @@
 <template>
   <users-icon />
   <div class="w-60">
-    <v-select :options="[]" placeholder="ClientPage"> </v-select>
+    <v-select :options="[]" placeholder="Client"> </v-select>
   </div>
 </template>
 

@@ -4,7 +4,7 @@
     <v-select
       :options="getProjectsNames"
       @update:modelValue="updateProjectName"
-      placeholder="ProjectPage"
+      placeholder="Project"
       label="name"
       v-model="projectName"
       class="project-selector"
