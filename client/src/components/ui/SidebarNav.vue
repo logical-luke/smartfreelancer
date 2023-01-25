@@ -7,17 +7,9 @@
             <!--            <img class="h-10" src="artemis-assets/logos/artemis-logo.svg" alt="" width="auto">-->
           </a>
           <button
-            class="navbar-burger flex items-center rounded focus:outline-none"
+            class="navbar-burger p-1 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
           >
-            <svg
-              class="text-white bg-indigo-500 hover:bg-indigo-600 block h-8 w-8 p-2 rounded"
-              viewbox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-            >
-              <title>Mobile menu</title>
-              <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
-            </svg>
+            <Menu2Icon />
           </button>
         </div>
       </nav>
@@ -80,10 +72,12 @@ import BriefcaseIcon from "vue-tabler-icons/icons/BriefcaseIcon";
 import DashboardIcon from "vue-tabler-icons/icons/DashboardIcon";
 import SidebarLogout from "@/components/ui/SidebarLogout.vue";
 import UsersIcon from "vue-tabler-icons/icons/UsersIcon";
+import Menu2Icon from "vue-tabler-icons/icons/Menu2Icon";
 
 export default {
   name: "SidebarNav",
   components: {
+    Menu2Icon,
     UsersIcon,
     SidebarLogout,
     DashboardIcon,
