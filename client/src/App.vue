@@ -32,8 +32,7 @@ onMounted(async () => {
 <template>
   <transition name="fade" mode="out-in">
     <div
-      v-if="!store.getters.isInitialLoaded"
-      class="flex justify-center pt-32 md:pt-96 items-center"
+      class="grid h-screen place-items-center"
     >
       <div>
         <MoonLoader
