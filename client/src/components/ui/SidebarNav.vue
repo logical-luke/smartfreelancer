@@ -21,7 +21,7 @@
         >
         </div>
         <nav
-          class="fixed top-0 left-0 bottom-0 flex flex-col w-full md:max-w-full lg:max-w-xs lg:w-3/4 sm:max-w-xs pt-6 pb-8 bg-gray-800 overflow-y-auto"
+          class="flex fixed top-0 left-0 bottom-0 flex-col w-full lg:max-w-xs lg:w-3/4 pt-6 pb-8 bg-gray-800 overflow-y-auto"
         >
           <div
             class="flex justify-between px-6 pb-6 mb-6 lg:border-b border-gray-700"
