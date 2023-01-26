@@ -3,9 +3,7 @@
     <div v-if="isAuthorized">
       <nav class="lg:hidden py-6 px-6 bg-gray-800">
         <div class="flex items-center justify-between">
-          <a class="text-2xl text-white font-semibold" href="#">
-            <!--            <img class="h-10" src="artemis-assets/logos/artemis-logo.svg" alt="" width="auto">-->
-          </a>
+          <TransparentLogoWide />
           <button
             @click="toggle"
             class="navbar-burger p-1 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
@@ -20,19 +18,25 @@
       >
         <div
           class="navbar-backdrop fixed lg:hidden inset-0 bg-gray-800 opacity-10"
-        ></div>
+        >
+        </div>
         <nav
           class="fixed top-0 left-0 bottom-0 flex flex-col w-full md:max-w-full lg:max-w-xs lg:w-3/4 sm:max-w-xs pt-6 pb-8 bg-gray-800 overflow-y-auto"
         >
           <div
-            class="flex flex-row-reverse px-6 pb-6 mb-6 lg:border-b border-gray-700"
+            class="flex justify-between px-6 pb-6 mb-6 lg:border-b border-gray-700"
           >
-            <button
-              @click="toggle"
-              class="lg:hidden navbar-burger p-1 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
-            >
-              <XIcon />
-            </button>
+            <div>
+              <TransparentLogoWide />
+            </div>
+            <div class="flex content-center items-center">
+              <button
+                @click="toggle"
+                class="lg:hidden navbar-burger p-1 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
+              >
+                <XIcon />
+              </button>
+            </div>
           </div>
           <div class="px-4 pb-6">
             <ul class="mb-8 text-sm font-medium">
@@ -81,10 +85,12 @@ import SidebarLogout from "@/components/ui/SidebarLogout.vue";
 import UsersIcon from "vue-tabler-icons/icons/UsersIcon";
 import Menu2Icon from "vue-tabler-icons/icons/Menu2Icon";
 import XIcon from "vue-tabler-icons/icons/XIcon";
+import TransparentLogoWide from "@/components/ui/TransparentLogoWide.vue";
 
 export default {
   name: "SidebarNav",
   components: {
+    TransparentLogoWide,
     XIcon,
     Menu2Icon,
     UsersIcon,
@@ -92,25 +98,25 @@ export default {
     DashboardIcon,
     BriefcaseIcon,
     ListIcon,
-    SidebarItem,
+    SidebarItem
   },
   data() {
     return {
-      open: false,
+      open: false
     };
   },
   watch: {
     $route() {
       this.open = false;
-    },
+    }
   },
   computed: {
-    ...mapGetters(["isAuthorized"]),
+    ...mapGetters(["isAuthorized"])
   },
   methods: {
     toggle() {
       this.open = !this.open;
-    },
-  },
+    }
+  }
 };
 </script>
