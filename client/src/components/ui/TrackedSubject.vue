@@ -1,31 +1,54 @@
 <template>
   <briefcase-icon />
   <div class="w-60">
-    <v-select
-      :options="getProjectsNames"
-      @update:modelValue="updateProjectName"
-      placeholder="Project"
-      label="name"
-      v-model="projectName"
-      class="project-selector"
-    >
-    </v-select>
+    <treeselect
+      v-model="subject"
+      :multiple="false"
+      :options="options"
+      placeholder="Select Task/Project/Client"
+    />
+<!--    <v-select-->
+<!--      :options="getProjectsNames"-->
+<!--      @update:modelValue="updateProjectName"-->
+<!--      placeholder="Project"-->
+<!--      label="name"-->
+<!--      v-model="projectName"-->
+<!--      class="project-selector"-->
+<!--    >-->
+<!--    </v-select>-->
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import vSelect from "vue-select";
-import "vue-select/dist/vue-select.css";
 import store from "@/store";
-import BriefcaseIcon from "vue-tabler-icons/icons/BriefcaseIcon";
+import Treeselect from 'vue3-treeselect'
+import 'vue3-treeselect/dist/vue3-treeselect.css'
 
 export default {
-  name: "TrackedProject",
-  components: { BriefcaseIcon, vSelect },
+  name: "TrackedSubject",
+  components: { Treeselect },
   data() {
     return {
-      projectName: null,
+      subject: null,
+      // define options
+      options: [ {
+        id: 'a',
+        label: 'a',
+        children: [ {
+          id: 'aa',
+          label: 'aa',
+        }, {
+          id: 'ab',
+          label: 'ab',
+        } ],
+      }, {
+        id: 'b',
+        label: 'b',
+      }, {
+        id: 'c',
+        label: 'c',
+      } ],
     };
   },
   watch: {
@@ -59,11 +82,13 @@ export default {
         await store.dispatch("timer/setProjectId", null);
       }
     },
+    
   },
   computed: {
     ...mapState({
       timerProjectId: (state) => state.timer.current.projectId,
       projects: (state) => state.projects.all,
+      clients: (state) => state.clients.all,
     }),
     ...mapGetters({ getProjectsNames: "projects/getProjectsNamesWithIds" }),
   },

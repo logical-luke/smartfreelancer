@@ -11,13 +11,7 @@
             class="flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:space-x-3 mt-4 md:mt-0 w-full md:w-96 content-start"
           >
             <div class="flex items-center space-x-3">
-              <TrackedTask />
-            </div>
-            <div class="flex items-center space-x-3">
-              <TrackedProject />
-            </div>
-            <div class="flex items-center space-x-3">
-              <TrackedClient />
+              <TrackedSubject />
             </div>
           </div>
         </div>
@@ -28,18 +22,14 @@
 
 <script>
 import ToggleTimerButton from "@/components/ui/ToggleTimerButton.vue";
-import TrackedProject from "@/components/ui/TrackedProject.vue";
-import TrackedTask from "@/components/ui/TrackedTask.vue";
+import TrackedSubject from "@/components/ui/TrackedSubject.vue";
 import TimerTime from "@/components/ui/TimerTime.vue";
-import TrackedClient from "@/components/ui/TrackedClient.vue";
 
 export default {
   name: "HeaderNavbar",
   components: {
-    TrackedClient,
     TimerTime,
-    TrackedTask,
-    TrackedProject,
+    TrackedSubject,
     ToggleTimerButton,
   },
 };
