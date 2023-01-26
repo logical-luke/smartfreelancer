@@ -5,7 +5,7 @@
         <div class="w-full lg:w-1/2 p-4">
           <div class="p-6 mb-8 bg-white shadow rounded">
             <div class="flex mb-3 items-center justify-between">
-              <h3 class="text-gray-500">Total IncomeChart</h3>
+              <h3 class="text-gray-500">Total Income</h3>
               <button class="focus:outline-none">
                 <svg
                   class="h-4 w-4 text-gray-200"
