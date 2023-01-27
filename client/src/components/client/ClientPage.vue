@@ -19,7 +19,7 @@
               </a>
             </router-link>
             <a class="flex mr-4 items-center text-sm">
-              <DeleteButton @onConfirm="deleteClient(id)" :subject="name" />
+              <DeleteButton @confirm="deleteClient(id)" :subject="name" />
             </a>
           </div>
         </div>

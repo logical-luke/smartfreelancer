@@ -22,7 +22,7 @@ const actions = {
     await api.deleteProject(id);
 
     let projects = JSON.parse(JSON.stringify(state.all));
-    projects = projects.filter((project) => project.id!== id);
+    projects = projects.filter((project) => project.id !== id);
     commit("setProjects", projects);
   },
 
@@ -45,7 +45,7 @@ const actions = {
     let projects = JSON.parse(JSON.stringify(state.all));
     projects.push(project);
     commit("setProjects", projects);
-  }
+  },
 };
 
 const mutations = {

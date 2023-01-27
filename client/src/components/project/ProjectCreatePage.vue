@@ -21,7 +21,6 @@
 <script>
 import ProjectForm from "@/components/project/ProjectForm.vue";
 import { mapState } from "vuex";
-import api from "@/api/api";
 import BackButton from "@/components/ui/BackButton.vue";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
 import SquarePlusIcon from "vue-tabler-icons/icons/SquarePlusIcon";
@@ -34,11 +33,11 @@ export default {
     userId: (state) => state.user.id,
   }),
   created() {
-    this.$store.dispatch('project/clearProject');
+    this.$store.dispatch("project/clearProject");
   },
   methods: {
     async submitForm() {
-      await this.$store.dispatch('projects/createProject', this.project);
+      await this.$store.dispatch("projects/createProject", this.project);
 
       this.$router.push("/projects");
     },
