@@ -34,14 +34,11 @@ export default {
     userId: (state) => state.user.id,
   }),
   created() {
-    this.$store.commit("project/setProject", {
-      name: null,
-      description: null,
-    });
+    this.$store.dispatch('project/clearProject');
   },
   methods: {
     async submitForm() {
-      await api.createProject(this.project);
+      await this.$store.dispatch('projects/createProject', this.project);
 
       this.$router.push("/projects");
     },

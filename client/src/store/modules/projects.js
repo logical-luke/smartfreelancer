@@ -18,9 +18,12 @@ const actions = {
     commit("setProjects", projects);
   },
 
-  async deleteProject({ commit }, id) {
+  async deleteProject({ commit, state }, id) {
     await api.deleteProject(id);
-    commit("deleteProject", id);
+
+    let projects = JSON.parse(JSON.stringify(state.all));
+    projects = projects.filter((project) => project.id!== id);
+    commit("setProjects", projects);
   },
 
   async updateProject({ commit, state }, updatedProject) {
@@ -35,15 +38,19 @@ const actions = {
     });
     commit("setProjects", projects);
   },
+
+  async createProject({ commit, state }, project) {
+    await api.createProject(project);
+
+    let projects = JSON.parse(JSON.stringify(state.all));
+    projects.push(project);
+    commit("setProjects", projects);
+  }
 };
 
 const mutations = {
   setProjects(state, projects) {
     state.all = projects;
-  },
-
-  deleteProject(state, id) {
-    delete state.all[id];
   },
 };
 
