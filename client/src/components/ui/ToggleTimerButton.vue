@@ -35,7 +35,7 @@ export default {
       timer: (state) => state.timer.current,
       timerProjectId: (state) => state.timer.current.projectId,
     }),
-    ...mapActions('timer', ['stopTimer']),
+    ...mapActions("timer", ["stopTimer"]),
   },
   watch: {
     timer() {

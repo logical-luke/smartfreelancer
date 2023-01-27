@@ -26,15 +26,15 @@ const actions = {
   async updateProject({ commit, state }, updatedProject) {
     await api.updateProject(updatedProject);
     let projects = JSON.parse(JSON.stringify(state.all));
-    projects = projects.map(project => {
+    projects = projects.map((project) => {
       if (project.id === updatedProject.id) {
         return updatedProject;
       }
 
       return project;
-    })
+    });
     commit("setProjects", projects);
-  }
+  },
 };
 
 const mutations = {

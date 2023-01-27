@@ -18,8 +18,7 @@
       >
         <div
           class="navbar-backdrop fixed lg:hidden inset-0 bg-gray-800 opacity-10"
-        >
-        </div>
+        ></div>
         <nav
           class="flex fixed top-0 left-0 bottom-0 flex-col w-full lg:max-w-xs lg:w-3/4 pt-6 pb-8 bg-gray-800 overflow-y-auto"
         >
@@ -98,25 +97,25 @@ export default {
     DashboardIcon,
     BriefcaseIcon,
     ListIcon,
-    SidebarItem
+    SidebarItem,
   },
   data() {
     return {
-      open: false
+      open: false,
     };
   },
   watch: {
     $route() {
       this.open = false;
-    }
+    },
   },
   computed: {
-    ...mapGetters(["isAuthorized"])
+    ...mapGetters(["isAuthorized"]),
   },
   methods: {
     toggle() {
       this.open = !this.open;
-    }
-  }
+    },
+  },
 };
 </script>

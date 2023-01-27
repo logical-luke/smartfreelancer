@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       subject: null,
-      options: []
+      options: [],
     };
   },
   watch: {
@@ -31,7 +31,7 @@ export default {
     },
     projects() {
       this.updateSubjectOptions();
-    }
+    },
   },
   methods: {
     updateSubject() {
@@ -45,42 +45,42 @@ export default {
     },
     async setSubject(value) {
       if (value == null) {
-        await store.dispatch('timer/setProjectId', null);
+        await store.dispatch("timer/setProjectId", null);
 
         return;
       }
 
-      let id = Number(value.split('-')[1]);
-      if (value.startsWith('p-')) {
-        await store.dispatch('timer/setProjectId', id);
+      let id = Number(value.split("-")[1]);
+      if (value.startsWith("p-")) {
+        await store.dispatch("timer/setProjectId", id);
       }
     },
     updateSubjectOptions() {
       let options = [];
 
       if (this.projects) {
-        this.projects.forEach(project => {
+        this.projects.forEach((project) => {
           options.push({
             id: "p-" + project.id,
-            label: project.name
+            label: project.name,
           });
         });
       }
 
       this.options = options;
-    }
+    },
   },
   computed: {
     ...mapState({
       timerProjectId: (state) => state.timer.current.projectId,
       projects: (state) => state.projects.all,
-      clients: (state) => state.clients.all
+      clients: (state) => state.clients.all,
     }),
-    ...mapGetters({ getProjectsNames: "projects/getProjectsNamesWithIds" })
+    ...mapGetters({ getProjectsNames: "projects/getProjectsNamesWithIds" }),
   },
   mounted() {
     this.updateSubjectOptions();
     this.updateSubject();
-  }
+  },
 };
 </script>
