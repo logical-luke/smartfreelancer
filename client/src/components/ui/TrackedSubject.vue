@@ -1,29 +1,20 @@
 <template>
-  <briefcase-icon />
   <div class="w-60">
     <treeselect
       v-model="subject"
       :multiple="false"
       :options="options"
+      @update:modelValue="setSubject"
       placeholder="Select Task/Project/Client"
     />
-<!--    <v-select-->
-<!--      :options="getProjectsNames"-->
-<!--      @update:modelValue="updateProjectName"-->
-<!--      placeholder="Project"-->
-<!--      label="name"-->
-<!--      v-model="projectName"-->
-<!--      class="project-selector"-->
-<!--    >-->
-<!--    </v-select>-->
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
+import Treeselect from "vue3-acies-treeselect";
+import "vue3-acies-treeselect/dist/vue3-treeselect.css";
 import store from "@/store";
-import Treeselect from 'vue3-treeselect'
-import 'vue3-treeselect/dist/vue3-treeselect.css'
 
 export default {
   name: "TrackedSubject",
@@ -31,74 +22,65 @@ export default {
   data() {
     return {
       subject: null,
-      // define options
-      options: [ {
-        id: 'a',
-        label: 'a',
-        children: [ {
-          id: 'aa',
-          label: 'aa',
-        }, {
-          id: 'ab',
-          label: 'ab',
-        } ],
-      }, {
-        id: 'b',
-        label: 'b',
-      }, {
-        id: 'c',
-        label: 'c',
-      } ],
+      options: []
     };
   },
   watch: {
     timerProjectId() {
-      if (this.timerProjectId && this.projects[this.timerProjectId]) {
-        this.projectName = this.projects[this.timerProjectId].name;
-      } else {
-        this.projectName = null;
-      }
+      this.updateSubject();
     },
     projects() {
-      if (
-        this.timerProjectId &&
-        this.projects[this.timerProjectId] &&
-        this.projectName.name !== this.projects[this.timerProjectId].name
-      ) {
-        this.projectName = {
-          name: this.projects[this.timerProjectId].name,
-          id: this.timerProjectId,
-        };
-      }
-    },
+      this.updateSubjectOptions();
+    }
   },
   methods: {
-    async updateProjectName(projectName) {
-      if (projectName && this.timerProjectId !== projectName.id) {
-        await store.dispatch("timer/setProjectId", projectName.id);
+    updateSubject() {
+      if (this.timerProjectId !== null) {
+        this.subject = "p-" + this.timerProjectId;
+
+        return;
       }
 
-      if (this.timerProjectId && !projectName) {
-        await store.dispatch("timer/setProjectId", null);
+      this.subject = null;
+    },
+    async setSubject(value) {
+      if (value == null) {
+        await store.dispatch('timer/setProjectId', null);
+
+        return;
+      }
+
+      let id = Number(value.split('-')[1]);
+      if (value.startsWith('p-')) {
+        await store.dispatch('timer/setProjectId', id);
       }
     },
-    
+    updateSubjectOptions() {
+      let options = [];
+
+      if (this.projects) {
+        this.projects.forEach(project => {
+          options.push({
+            id: "p-" + project.id,
+            label: project.name
+          });
+        });
+      }
+
+      this.options = options;
+    }
   },
   computed: {
     ...mapState({
       timerProjectId: (state) => state.timer.current.projectId,
       projects: (state) => state.projects.all,
-      clients: (state) => state.clients.all,
+      clients: (state) => state.clients.all
     }),
-    ...mapGetters({ getProjectsNames: "projects/getProjectsNamesWithIds" }),
+    ...mapGetters({ getProjectsNames: "projects/getProjectsNamesWithIds" })
   },
   mounted() {
-    if (this.timerProjectId && this.projects[this.timerProjectId]) {
-      this.projectName = {
-        name: this.projects[this.timerProjectId].name,
-        id: this.timerProjectId,
-      };
-    }
-  },
+    this.updateSubjectOptions();
+    this.updateSubject();
+  }
 };
 </script>

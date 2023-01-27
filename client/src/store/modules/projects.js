@@ -6,15 +6,6 @@ const state = () => ({
 });
 
 const getters = {
-  getProjectsNamesWithIds(state) {
-    return Object.keys(state.all).map((key) => {
-      return {
-        id: state.all[key].id,
-        name: state.all[key].name,
-      };
-    });
-  },
-
   getProjects(state) {
     return state.all;
   },
@@ -23,17 +14,27 @@ const getters = {
 const actions = {
   async getProjects({ commit }) {
     const projects = await api.getProjects();
-    let orderedProjects = {};
-    for (const project of projects) {
-      orderedProjects[project.id] = project;
-    }
-    commit("setProjects", orderedProjects);
+
+    commit("setProjects", projects);
   },
 
   async deleteProject({ commit }, id) {
     await api.deleteProject(id);
     commit("deleteProject", id);
   },
+
+  async updateProject({ commit, state }, updatedProject) {
+    await api.updateProject(updatedProject);
+    let projects = JSON.parse(JSON.stringify(state.all));
+    projects = projects.map(project => {
+      if (project.id === updatedProject.id) {
+        return updatedProject;
+      }
+
+      return project;
+    })
+    commit("setProjects", projects);
+  }
 };
 
 const mutations = {

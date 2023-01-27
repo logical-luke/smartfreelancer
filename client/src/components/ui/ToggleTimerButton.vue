@@ -11,7 +11,7 @@
 
 <script>
 import PlayerPlayIcon from "vue-tabler-icons/icons/PlayerPlayIcon";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import PlayerStopIcon from "vue-tabler-icons/icons/PlayerStopIcon";
 
 export default {
@@ -35,6 +35,7 @@ export default {
       timer: (state) => state.timer.current,
       timerProjectId: (state) => state.timer.current.projectId,
     }),
+    ...mapActions('timer', ['stopTimer']),
   },
   watch: {
     timer() {

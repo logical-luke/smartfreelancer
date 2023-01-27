@@ -22,16 +22,6 @@ const actions = {
   clearProject({ commit }) {
     commit("setProject", JSON.parse(JSON.stringify(emptyProject)));
   },
-  async updateProject({ commit, state, rootGetters }) {
-    await api.updateProject(state.current);
-    let projects = JSON.parse(
-      JSON.stringify(rootGetters["projects/getProjects"])
-    );
-    projects[state.current.id] = state.current;
-    commit("projects/setProjects", projects, {
-      root: true,
-    });
-  },
 };
 
 const mutations = {

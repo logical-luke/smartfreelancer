@@ -137,7 +137,7 @@ export default {
   name: "TransparentLogoWide",
   props: {
     size: {
-      type: Number,
+      type: String,
       default: "w-40"
     },
     textColor: {

@@ -4,7 +4,7 @@
       <div class="container px-4 mx-auto">
         <h1 class="mb-2 text-5xl font-bold font-heading">Edit project</h1>
         <form @submit.prevent="submitForm">
-          <ProjectForm :wait-for-current="true" />
+          <ProjectForm />
           <div class="flex flex-wrap space-x-4">
             <SubmitButton>
               <template v-slot:title>Save</template>
@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     async submitForm() {
-      await this.$store.dispatch("project/updateProject");
+      await this.$store.dispatch("projects/updateProject", this.project);
       this.$store.dispatch("project/clearProject");
       this.$router.push("/projects");
     },
