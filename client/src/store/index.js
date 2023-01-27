@@ -34,10 +34,15 @@ export default createStore({
       commit("setAuthorized", false);
       commit("setUser", {});
       VueCookies.remove("token");
+      VueCookies.remove("refresh_token");
       router.push("/login");
     },
-    async loadInitial({ commit }) {
+    async loadInitial({ commit, dispatch }) {
       const user = await api.getUser();
+      if (!user) {
+        return dispatch("logout");
+      }
+
       commit("setUser", user);
       const timer = await api.getTimer();
       if (timer && timer.id) {
