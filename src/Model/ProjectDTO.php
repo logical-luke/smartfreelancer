@@ -13,6 +13,7 @@ class ProjectDTO
         public readonly ?string $name,
         public readonly int $ownerId,
         public readonly ?string $description,
+        public readonly ?int $clientId,
     )
     {
     }
@@ -24,6 +25,7 @@ class ProjectDTO
             $project->getName(),
             $project->getOwner()->getId(),
             $project->getDescription(),
+            $project->getClient()?->getId(),
         );
     }
 }

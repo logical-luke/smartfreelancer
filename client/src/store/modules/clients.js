@@ -5,24 +5,54 @@ const state = () => ({
   all: [],
 });
 
-const getters = {};
+const getters = {
+  getClients(state) {
+    return state.all;
+  },
+  getClientsOptions(state) {
+    return state.all.map((client) => {
+      return {
+        id: client.id,
+        label: client.name,
+      };
+    });
+  }
+};
 
 const actions = {
-  async fetchAllClients({ commit }) {
+  async getClients({ commit }) {
     const clients = await api.getClients();
-    let orderedClients = {};
-    for (const client of clients) {
-      orderedClients[client.id] = client;
-    }
-    commit("setClients", orderedClients);
+
+    commit("setClients", clients);
   },
-  async fetchClient({ commit }, clientId) {
-    const client = await api.getClient(clientId);
-    commit("setClient", client);
-  },
-  async deleteClient({ commit }, id) {
+
+  async deleteClient({ commit, state }, id) {
     await api.deleteClient(id);
-    commit("deleteClient", id);
+
+    let clients = JSON.parse(JSON.stringify(state.all));
+    clients = clients.filter((client) => client.id !== id);
+    commit("setClients", clients);
+  },
+
+  async updateClient({ commit, state }, updatedClient) {
+    await api.updateClient(updatedClient);
+    let clients = JSON.parse(JSON.stringify(state.all));
+    clients = clients.map((client) => {
+      if (client.id === updatedClient.id) {
+        return updatedClient;
+      }
+
+      return client;
+    });
+    commit("setClients", clients);
+  },
+
+  async createClient({ commit, state }, client) {
+    await api.createClient(client);
+
+    let clients = JSON.parse(JSON.stringify(state.all));
+    clients.push(client);
+    commit("setClients", clients);
   },
 };
 
@@ -30,16 +60,12 @@ const mutations = {
   setClients(state, clients) {
     state.all = clients;
   },
-
-  deleteClient(state, id) {
-    delete state.all[id];
-  },
 };
 
 export default {
   namespaced: true,
   state,
-  getters,
   actions,
   mutations,
+  getters,
 };

@@ -29,10 +29,13 @@ class Project
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $owner = null;
+    private User $owner;
 
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: Timer::class)]
     private Collection $timers;
+
+    #[ORM\ManyToOne(inversedBy: 'projects')]
+    private ?Client $client = null;
 
     protected function __construct(User $user)
     {
@@ -98,16 +101,9 @@ class Project
         return new self($user);
     }
 
-    public function getOwner(): ?User
+    public function getOwner(): User
     {
         return $this->owner;
-    }
-
-    public function setOwner(?User $owner): self
-    {
-        $this->owner = $owner;
-
-        return $this;
     }
 
     /**
@@ -136,6 +132,18 @@ class Project
                 $timer->setProject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
 
         return $this;
     }

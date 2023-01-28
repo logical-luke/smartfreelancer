@@ -49,7 +49,7 @@ export default createStore({
         commit("timer/setTimer", timer);
       }
       await this.dispatch("projects/getProjects");
-      await this.dispatch("clients/fetchAllClients");
+      await this.dispatch("clients/getClients");
       commit("setInitialLoaded", true);
     },
   },

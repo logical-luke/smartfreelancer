@@ -23,13 +23,20 @@
       placeholder="Write something..."
     ></textarea>
   </div>
+  <div class="mb-6">
+    <label class="block text-sm font-medium mb-2" for="">Client:</label>
+    <SelectClient :selected="project.clientId" @updated="updateClientId" />
+  </div>
+
 </template>
 
 <script>
 import { mapState } from "vuex";
+import SelectClient from "@/components/ui/SelectClient.vue";
 
 export default {
   name: "ProjectForm",
+  components: { SelectClient },
   computed: mapState({
     project: (state) => state.project.current,
   }),
@@ -40,6 +47,9 @@ export default {
     updateDescription(event) {
       this.$store.commit("project/setDescription", event.target.value);
     },
+    updateClientId(clientId) {
+      this.$store.dispatch("project/setClientId", clientId);
+    }
   },
 };
 </script>

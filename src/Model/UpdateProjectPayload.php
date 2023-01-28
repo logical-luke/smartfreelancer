@@ -10,6 +10,7 @@ class UpdateProjectPayload
         private readonly int $id,
         private readonly ?string $name,
         private readonly ?string $description,
+        private readonly ?int $clientId,
     ) {
     }
 
@@ -21,6 +22,7 @@ class UpdateProjectPayload
             $payload['id'],
             $payload['name'] ?? null,
             $payload['description'] ?? null,
+            $payload['clientId'] ?? null,
         );
     }
 
@@ -37,5 +39,10 @@ class UpdateProjectPayload
     public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    public function getClientId(): ?int
+    {
+        return $this->clientId;
     }
 }

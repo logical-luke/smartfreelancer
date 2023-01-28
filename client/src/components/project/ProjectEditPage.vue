@@ -4,13 +4,19 @@
       <div class="container px-4 mx-auto">
         <h1 class="mb-2 text-5xl font-bold font-heading">Edit project</h1>
         <form @submit.prevent="submitForm">
-          <ProjectForm />
+          <ProjectForm v-if="project.id" />
           <div class="flex flex-wrap space-x-4">
-            <SubmitButton>
-              <template v-slot:title>Save</template>
-              <template v-slot:icon><device-floppy-icon /></template>
-            </SubmitButton>
-            <BackButton />
+            <div>
+              <SubmitButton>
+                <template v-slot:title>Save</template>
+                <template v-slot:icon>
+                  <device-floppy-icon />
+                </template>
+              </SubmitButton>
+            </div>
+            <div>
+              <BackButton />
+            </div>
           </div>
         </form>
       </div>
@@ -31,11 +37,11 @@ export default {
   components: { DeviceFloppyIcon, SubmitButton, BackButton, ProjectForm },
   data() {
     return {
-      buttonTitle: "Save",
+      buttonTitle: "Save"
     };
   },
   computed: mapState({
-    project: (state) => state.project.current,
+    project: (state) => state.project.current
   }),
   async created() {
     const project = await api.getProject(this.$route.params.id);
@@ -46,8 +52,8 @@ export default {
       await this.$store.dispatch("projects/updateProject", this.project);
       this.$store.dispatch("project/clearProject");
       this.$router.push("/projects");
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -4,7 +4,7 @@
       <div class="container px-4 mx-auto">
         <h1 class="mb-2 text-5xl font-bold font-heading">Edit client</h1>
         <form @submit.prevent="submitForm">
-          <ClientForm :wait-for-current="true" />
+          <ClientForm />
           <div class="flex flex-wrap space-x-4">
             <SubmitButton>
               <template v-slot:title>Save</template>

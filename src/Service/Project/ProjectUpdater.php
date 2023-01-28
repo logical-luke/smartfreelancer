@@ -6,12 +6,14 @@ namespace App\Service\Project;
 
 use App\Entity\Project;
 use App\Model\UpdateProjectPayload;
+use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
 
 class ProjectUpdater
 {
     public function __construct(
         private readonly ProjectRepository $projectRepository,
+        private readonly ClientRepository $clientRepository,
     ) {
     }
 
@@ -21,14 +23,17 @@ class ProjectUpdater
             throw new \RuntimeException('Project not found');
         }
 
+
         // todo Add check if user is eligible to update project
+        // if ($project->getOwner()->getId() !==) {
+        //
+        // }
 
-        if ($name = $payload->getName()) {
-            $project->setName($name);
-        }
-
-        if ($description = $payload->getDescription()) {
-            $project->setDescription($description);
+        $project->setName($payload->getName());
+        $project->setDescription($payload->getDescription());
+        $project->setClient(null);
+        if ($clientId = $payload->getClientId()) {
+            $project->setClient($this->clientRepository->find($clientId));
         }
 
         $this->projectRepository->flush();

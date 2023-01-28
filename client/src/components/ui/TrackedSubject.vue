@@ -1,9 +1,10 @@
 <template>
-  <div class="w-60">
+  <div class="w-92">
     <treeselect
       v-model="subject"
       :multiple="false"
       :options="options"
+      :show-count="true"
       @update:modelValue="setSubject"
       placeholder="Select Task/Project/Client"
     />
@@ -58,12 +59,33 @@ export default {
     updateSubjectOptions() {
       let options = [];
 
+      // Tasks emoji 📝
+
       if (this.projects) {
-        this.projects.forEach((project) => {
+        this.projects.filter(project => !project.clientId).forEach((project) => {
           options.push({
             id: "p-" + project.id,
-            label: project.name,
+            label: "💼 " + project.name,
           });
+        });
+      }
+
+      if (this.clients) {
+        this.clients.forEach((client) => {
+          const clientOption = {
+            id: "c-" + client.id,
+            label: "👤 " + client.name,
+          };
+          const children = this.projects.filter(project => project.clientId === client.id).map((project) => {
+            return {
+              id: "p-" + project.id,
+              label: "💼 " + project.name,
+            }
+          });
+          if (children.length > 0) {
+            clientOption.children = children;
+          }
+          options.push(clientOption);
         });
       }
 

@@ -3,6 +3,7 @@ import api from "../../api/api";
 const emptyProject = {
   name: "",
   description: "",
+  clientId: null,
 };
 
 const state = () => ({
@@ -16,8 +17,14 @@ const actions = {
     const project = await api.getProject(projectId);
     commit("setProject", project);
   },
+  setProject({commit}, project) {
+    commit("setProject", project);
+  },
   setName({ commit }, name) {
     commit("setName", name);
+  },
+  setClientId({ commit }, clientId) {
+    commit("setClientId", clientId);
   },
   clearProject({ commit }) {
     commit("setProject", JSON.parse(JSON.stringify(emptyProject)));
@@ -30,6 +37,9 @@ const mutations = {
   },
   setName(state, name) {
     state.current.name = name;
+  },
+  setClientId(state, clientId) {
+    state.current.clientId = clientId;
   },
   setDescription(state, description) {
     state.current.description = description;
