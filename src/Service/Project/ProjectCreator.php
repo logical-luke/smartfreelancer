@@ -6,6 +6,7 @@ namespace App\Service\Project;
 
 use App\Entity\Project;
 use App\Model\CreateProjectPayload;
+use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\UserRepository;
 
@@ -14,6 +15,7 @@ class ProjectCreator
     public function __construct(
         private readonly ProjectRepository $projectRepository,
         private readonly UserRepository $userRepository,
+        private readonly ClientRepository $clientRepository,
     ) {
     }
 
@@ -25,8 +27,11 @@ class ProjectCreator
 
         $project = Project::fromUser($user);
 
-        if ($payload->getName()) {
-            $project->setName($payload->getName());
+        $project->setName($payload->getName());
+        $project->setDescription($payload->getDescription());
+
+        if ($payload->getClientId() && $client = $this->clientRepository->find($payload->getClientId())) {
+            $project->setClient($client);
         }
 
         $this->projectRepository->save($project, true);

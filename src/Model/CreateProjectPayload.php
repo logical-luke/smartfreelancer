@@ -11,7 +11,8 @@ class CreateProjectPayload
     protected function __construct(
         private readonly int $ownerId,
         private readonly ?string $name,
-        private readonly ?string $description
+        private readonly ?string $description,
+        private readonly ?int $clientId,
     ) {
     }
 
@@ -29,9 +30,10 @@ class CreateProjectPayload
             'name' => null,
             'description' => null,
             'ownerId' => null,
+            'clientId' => null,
         ], $payload);
 
-        return new self($payload['ownerId'], $payload['name'], $payload['description']);
+        return new self($payload['ownerId'], $payload['name'], $payload['description'], $payload['clientId']);
     }
 
     public function getOwnerId(): int
@@ -47,5 +49,10 @@ class CreateProjectPayload
     public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    public function getClientId()
+    {
+        return $this->clientId;
     }
 }
