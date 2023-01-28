@@ -54,6 +54,7 @@ export default {
       if (this.isRunning) {
         await this.$store.dispatch("timer/stopTimer");
       } else {
+        console.log(this.projectId);
         if (this.projectId && this.timer.projectId !== this.projectId) {
           await this.$store.dispatch("timer/setProjectId", this.projectId);
         }

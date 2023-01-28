@@ -112,10 +112,11 @@ export default {
 
   async createProject(project) {
     const response = await postRequest("/project/create", project);
-
     if (response.status !== 200) {
       throw new Error(response.data.message);
     }
+
+    return response.data;
   },
 
   async login(email, password) {

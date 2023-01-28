@@ -23,8 +23,14 @@ class Timer
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $startTime = null;
 
-    #[ORM\ManyToOne(inversedBy: 'timers')]
+    #[ORM\OneToOne(inversedBy: 'timer', cascade: ['persist'])]
     private ?Project $project = null;
+
+    #[ORM\OneToOne(inversedBy: 'timer', cascade: ['persist'])]
+    private ?Client $client = null;
+
+    #[ORM\OneToOne(inversedBy: 'timer', cascade: ['persist'])]
+    private ?Task $task = null;
 
     protected function __construct(User $owner)
     {
@@ -68,6 +74,30 @@ class Timer
     public function setProject(?Project $project): self
     {
         $this->project = $project;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    public function getTask(): ?Task
+    {
+        return $this->task;
+    }
+
+    public function setTask(?Task $task): self
+    {
+        $this->task = $task;
 
         return $this;
     }

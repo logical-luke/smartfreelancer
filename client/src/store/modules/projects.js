@@ -10,7 +10,7 @@ const getters = {
     return state.all;
   },
   getProjectById: (state) => (id) => {
-    return state.all.filter((project) => project.id === id);
+    return state.all.filter((project) => project.id === id).pop();
   },
 };
 
@@ -21,12 +21,17 @@ const actions = {
     commit("setProjects", projects);
   },
 
-  async deleteProject({ commit, state }, id) {
+  async deleteProject({ commit, state, rootState, rootGetters }, id) {
     await api.deleteProject(id);
 
     let projects = JSON.parse(JSON.stringify(state.all));
     projects = projects.filter((project) => project.id !== id);
     commit("setProjects", projects);
+    const timer = JSON.parse(JSON.stringify(rootGetters["timer/getTimer"]));
+    if (timer.projectId === id) {
+      timer.projectId = null;
+      commit("timer/setTimer", timer, { root: true });
+    }
   },
 
   async updateProject({ commit, state }, updatedProject) {
@@ -43,10 +48,10 @@ const actions = {
   },
 
   async createProject({ commit, state }, project) {
-    await api.createProject(project);
+    const createdProject = await api.createProject(project);
 
     let projects = JSON.parse(JSON.stringify(state.all));
-    projects.push(project);
+    projects.push(createdProject);
     commit("setProjects", projects);
   },
 };

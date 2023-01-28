@@ -2,20 +2,18 @@
 
 namespace App\Entity;
 
-use App\Repository\ClientRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\TaskRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ClientRepository::class)]
-class Client
+#[ORM\Entity(repositoryClass: TaskRepository::class)]
+class Task
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'clients')]
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 
@@ -25,22 +23,8 @@ class Client
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Project::class)]
-    private Collection $projects;
-
-    #[ORM\OneToOne(mappedBy: 'client', cascade: ['persist'])]
+    #[ORM\OneToOne(mappedBy: 'task', cascade: ['persist'])]
     private ?Timer $timer = null;
-
-    protected function __construct(User $user)
-    {
-        $this->owner = $user;
-        $this->projects = new ArrayCollection();
-    }
-
-    public static function fromUser(User $user): self
-    {
-        return new self($user);
-    }
 
     public function getId(): ?int
     {
@@ -83,36 +67,6 @@ class Client
         return $this;
     }
 
-    /**
-     * @return Collection<int, Project>
-     */
-    public function getProjects(): Collection
-    {
-        return $this->projects;
-    }
-
-    public function addProject(Project $project): self
-    {
-        if (!$this->projects->contains($project)) {
-            $this->projects->add($project);
-            $project->setClient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProject(Project $project): self
-    {
-        if ($this->projects->removeElement($project)) {
-            // set the owning side to null (unless already changed)
-            if ($project->getClient() === $this) {
-                $project->setClient(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getTimer(): ?Timer
     {
         return $this->timer;
@@ -122,12 +76,12 @@ class Client
     {
         // unset the owning side of the relation if necessary
         if ($timer === null && $this->timer !== null) {
-            $this->timer->setClient(null);
+            $this->timer->setTask(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($timer !== null && $timer->getClient() !== $this) {
-            $timer->setClient($this);
+        if ($timer !== null && $timer->getTask() !== $this) {
+            $timer->setTask($this);
         }
 
         $this->timer = $timer;

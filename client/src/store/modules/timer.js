@@ -12,6 +12,7 @@ const state = () => ({
 
 const actions = {
   async startTimer({ commit, state }) {
+    console.log(state.current);
     const timer = await api.createTimer(state.current);
 
     commit("setTimer", timer);
@@ -30,10 +31,11 @@ const actions = {
       }
     }
   },
-  clearTimer({ commit }) {
-    commit("setTimer", JSON.parse(JSON.stringify(emptyTimer)));
-  },
 };
+
+const getters = {
+  getTimer: (state) => state.current,
+}
 
 const mutations = {
   setTimer(state, timer) {
@@ -49,4 +51,5 @@ export default {
   state,
   actions,
   mutations,
+  getters,
 };

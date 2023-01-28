@@ -37,6 +37,9 @@ class Project
     #[ORM\ManyToOne(inversedBy: 'projects')]
     private ?Client $client = null;
 
+    #[ORM\OneToOne(mappedBy: 'project', cascade: ['persist'])]
+    private ?Timer $timer = null;
+
     protected function __construct(User $user)
     {
         $this->owner = $user;
@@ -109,33 +112,6 @@ class Project
     /**
      * @return Collection<int, Timer>
      */
-    public function getTimers(): Collection
-    {
-        return $this->timers;
-    }
-
-    public function addTimer(Timer $timer): self
-    {
-        if (!$this->timers->contains($timer)) {
-            $this->timers->add($timer);
-            $timer->setProject($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTimer(Timer $timer): self
-    {
-        if ($this->timers->removeElement($timer)) {
-            // set the owning side to null (unless already changed)
-            if ($timer->getProject() === $this) {
-                $timer->setProject(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getClient(): ?Client
     {
         return $this->client;
@@ -144,6 +120,28 @@ class Project
     public function setClient(?Client $client): self
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getTimer(): ?Timer
+    {
+        return $this->timer;
+    }
+
+    public function setTimer(?Timer $timer): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($timer === null && $this->timer !== null) {
+            $this->timer->setProject(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($timer !== null && $timer->getProject() !== $this) {
+            $timer->setProject($this);
+        }
+
+        $this->timer = $timer;
 
         return $this;
     }

@@ -21,7 +21,9 @@ class ProjectDeleter
             throw new \RuntimeException('Project not found');
         }
 
-        // todo Add check if user is eligible to delete project
+        if ($timer = $project->getTimer()) {
+            $timer->setProject(null);
+        }
 
         $this->projectRepository->remove($project, true);
     }

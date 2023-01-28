@@ -55,6 +55,8 @@ class ProjectController extends AbstractController
     #[Route('/delete/{id}', name: 'delete', methods: 'DELETE')]
     public function delete(int $id, ProjectDeleter $projectDeleter): JsonResponse
     {
+        // todo Add check if user is eligible to delete project
+
         $projectDeleter(DeleteProjectPayload::from(['id' => $id]));
 
         return $this->json([]);

@@ -44,6 +44,8 @@ class ProjectRepository extends ServiceEntityRepository
     {
         return $this->findBy([
             'owner' => $user,
+        ], [
+            'id' => 'ASC',
         ]);
     }
 

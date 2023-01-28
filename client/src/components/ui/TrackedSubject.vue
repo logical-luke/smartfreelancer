@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       subject: null,
-      options: [],
+      options: []
     };
   },
   watch: {
@@ -35,12 +35,18 @@ export default {
     },
     clients() {
       this.updateSubjectOptions();
-    },
+    }
   },
   methods: {
     updateSubject() {
       if (this.timerProjectId !== null) {
         this.subject = "p-" + this.timerProjectId;
+
+        const project = store.getters["projects/getProjectById"](this.timerProjectId);
+        if (project.clientId) {
+          const clientOption = this.options.find(option => Number(option.id.split("-")[1]) === project.clientId);
+          clientOption.isDefaultExpanded = true;
+        }
 
         return;
       }
@@ -70,7 +76,7 @@ export default {
           .forEach((project) => {
             options.push({
               id: "p-" + project.id,
-              label: "💼 " + project.name,
+              label: "💼 " + project.name
             });
           });
       }
@@ -79,14 +85,14 @@ export default {
         this.clients.forEach((client) => {
           const clientOption = {
             id: "c-" + client.id,
-            label: "👤 " + client.name,
+            label: "👤 " + client.name
           };
           const children = this.projects
             .filter((project) => project.clientId === client.id)
             .map((project) => {
               return {
                 id: "p-" + project.id,
-                label: "💼 " + project.name,
+                label: "💼 " + project.name
               };
             });
           if (children.length > 0) {
@@ -97,19 +103,19 @@ export default {
       }
 
       this.options = options;
-    },
+    }
   },
   computed: {
     ...mapState({
       timerProjectId: (state) => state.timer.current.projectId,
       projects: (state) => state.projects.all,
-      clients: (state) => state.clients.all,
+      clients: (state) => state.clients.all
     }),
-    ...mapGetters({ getProjectsNames: "projects/getProjectsNamesWithIds" }),
+    ...mapGetters({ getProjectsNames: "projects/getProjectsNamesWithIds" })
   },
   mounted() {
     this.updateSubjectOptions();
     this.updateSubject();
-  },
+  }
 };
 </script>
