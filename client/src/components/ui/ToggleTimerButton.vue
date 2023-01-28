@@ -72,6 +72,9 @@ export default {
 
       await this.$store.dispatch("timer/startTimer");
     },
+    async stopTimer() {
+      await this.$store.dispatch("timer/stopTimer");
+    },
   },
   mounted() {
     this.isRunning = this.checkCurrentTimer();
