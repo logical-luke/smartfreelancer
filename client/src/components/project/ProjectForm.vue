@@ -27,7 +27,6 @@
     <label class="block text-sm font-medium mb-2" for="">Client:</label>
     <SelectClient :selected="project.clientId" @updated="updateClientId" />
   </div>
-
 </template>
 
 <script>
@@ -49,7 +48,7 @@ export default {
     },
     updateClientId(clientId) {
       this.$store.dispatch("project/setClientId", clientId);
-    }
+    },
   },
 };
 </script>

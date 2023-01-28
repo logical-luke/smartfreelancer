@@ -30,6 +30,9 @@ const actions = {
       }
     }
   },
+  clearTimer({ commit }) {
+    commit("setTimer", JSON.parse(JSON.stringify(emptyTimer)));
+  },
 };
 
 const mutations = {

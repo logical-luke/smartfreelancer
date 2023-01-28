@@ -48,13 +48,17 @@ export default {
   methods: {
     async toggleTimer() {
       if (!this.isRunning && this.timer && this.timer.id) {
-        await this.stopTimer();
+        await this.$store.dispatch("timer/stopTimer");
       }
 
       if (this.isRunning) {
         await this.$store.dispatch("timer/stopTimer");
       } else {
-        await this.startTimer();
+        if (this.projectId && this.timer.projectId !== this.projectId) {
+          await this.$store.dispatch("timer/setProjectId", this.projectId);
+        }
+
+        await this.$store.dispatch("timer/startTimer");
       }
     },
     checkCurrentTimer() {
@@ -64,16 +68,6 @@ export default {
           this.timerProjectId === this.projectId) ||
         (this.timer.id > 0 && this.global)
       );
-    },
-    async startTimer() {
-      if (this.projectId && this.timer.projectId !== this.projectId) {
-        await this.$store.commit("timer/setProjectId", this.projectId);
-      }
-
-      await this.$store.dispatch("timer/startTimer");
-    },
-    async stopTimer() {
-      await this.$store.dispatch("timer/stopTimer");
     },
   },
   mounted() {

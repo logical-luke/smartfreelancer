@@ -16,7 +16,7 @@ const getters = {
         label: client.name,
       };
     });
-  }
+  },
 };
 
 const actions = {

@@ -15,7 +15,7 @@
           <div class="flex text-white">
             <router-link :to="`/project/edit/${id}`">
               <a class="flex mr-4 items-center text-sm">
-                <EditButton @click="goToEdit(id)"/>
+                <EditButton @click="goToEdit(id)" />
               </a>
             </router-link>
             <a class="flex mr-4 items-center text-sm">

@@ -37,11 +37,11 @@ export default {
   components: { DeviceFloppyIcon, SubmitButton, BackButton, ProjectForm },
   data() {
     return {
-      buttonTitle: "Save"
+      buttonTitle: "Save",
     };
   },
   computed: mapState({
-    project: (state) => state.project.current
+    project: (state) => state.project.current,
   }),
   async created() {
     const project = await api.getProject(this.$route.params.id);
@@ -52,8 +52,8 @@ export default {
       await this.$store.dispatch("projects/updateProject", this.project);
       this.$store.dispatch("project/clearProject");
       this.$router.push("/projects");
-    }
-  }
+    },
+  },
 };
 </script>
 

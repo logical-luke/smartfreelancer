@@ -36,7 +36,7 @@ export default {
   components: { SquarePlusIcon, SubmitButton, BackButton, ClientForm },
   computed: mapState({
     client: (state) => state.client.current,
-    userId: (state) => state.user.id
+    userId: (state) => state.user.id,
   }),
   created() {
     this.$store.dispatch("client/clearClient");
@@ -46,8 +46,8 @@ export default {
       await this.$store.dispatch("clients/createClient", this.client);
 
       this.$router.push("/clients");
-    }
-  }
+    },
+  },
 };
 </script>
 

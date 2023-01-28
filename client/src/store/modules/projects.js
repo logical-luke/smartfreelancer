@@ -10,8 +10,8 @@ const getters = {
     return state.all;
   },
   getProjectById: (state) => (id) => {
-    return state.all.filter(project => project.id === id);
-  }
+    return state.all.filter((project) => project.id === id);
+  },
 };
 
 const actions = {

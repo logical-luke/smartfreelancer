@@ -65,12 +65,14 @@ export default {
       // Tasks emoji 📝
 
       if (this.projects) {
-        this.projects.filter(project => !project.clientId).forEach((project) => {
-          options.push({
-            id: "p-" + project.id,
-            label: "💼 " + project.name,
+        this.projects
+          .filter((project) => !project.clientId)
+          .forEach((project) => {
+            options.push({
+              id: "p-" + project.id,
+              label: "💼 " + project.name,
+            });
           });
-        });
       }
 
       if (this.clients) {
@@ -79,12 +81,14 @@ export default {
             id: "c-" + client.id,
             label: "👤 " + client.name,
           };
-          const children = this.projects.filter(project => project.clientId === client.id).map((project) => {
-            return {
-              id: "p-" + project.id,
-              label: "💼 " + project.name,
-            }
-          });
+          const children = this.projects
+            .filter((project) => project.clientId === client.id)
+            .map((project) => {
+              return {
+                id: "p-" + project.id,
+                label: "💼 " + project.name,
+              };
+            });
           if (children.length > 0) {
             clientOption.children = children;
           }

@@ -17,7 +17,7 @@ const actions = {
     const project = await api.getProject(projectId);
     commit("setProject", project);
   },
-  setProject({commit}, project) {
+  setProject({ commit }, project) {
     commit("setProject", project);
   },
   setName({ commit }, name) {
