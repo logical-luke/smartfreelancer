@@ -25,9 +25,8 @@ class ClientCreator
 
         $client = Client::fromUser($user);
 
-        if ($payload->getName()) {
-            $client->setName($payload->getName());
-        }
+        $client->setName($payload->getName());
+        $client->setDescription($payload->getDescription());
 
         $this->clientRepository->save($client, true);
 

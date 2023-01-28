@@ -6,11 +6,17 @@
         <form @submit.prevent="submitForm">
           <ClientForm />
           <div class="flex flex-wrap space-x-4">
-            <SubmitButton>
-              <template v-slot:title>Add</template>
-              <template v-slot:icon><square-plus-icon /></template>
-            </SubmitButton>
-            <BackButton />
+            <div>
+              <SubmitButton>
+                <template v-slot:title>Add</template>
+                <template v-slot:icon>
+                  <square-plus-icon />
+                </template>
+              </SubmitButton>
+            </div>
+            <div>
+              <BackButton />
+            </div>
           </div>
         </form>
       </div>
@@ -21,7 +27,6 @@
 <script>
 import ClientForm from "@/components/client/ClientForm.vue";
 import { mapState } from "vuex";
-import api from "@/api/api";
 import BackButton from "@/components/ui/BackButton.vue";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
 import SquarePlusIcon from "vue-tabler-icons/icons/SquarePlusIcon";
@@ -31,21 +36,18 @@ export default {
   components: { SquarePlusIcon, SubmitButton, BackButton, ClientForm },
   computed: mapState({
     client: (state) => state.client.current,
-    userId: (state) => state.user.id,
+    userId: (state) => state.user.id
   }),
   created() {
-    this.$store.commit("client/setClient", {
-      name: null,
-      description: null,
-    });
+    this.$store.dispatch("client/clearClient");
   },
   methods: {
     async submitForm() {
-      await api.createClient(this.client);
+      await this.$store.dispatch("clients/createClient", this.client);
 
       this.$router.push("/clients");
-    },
-  },
+    }
+  }
 };
 </script>
 

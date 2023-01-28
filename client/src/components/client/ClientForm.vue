@@ -35,10 +35,10 @@ export default {
   }),
   methods: {
     updateName(event) {
-      this.$store.dispatch("project/setName", event.target.value);
+      this.$store.dispatch("client/setName", event.target.value);
     },
     updateDescription(event) {
-      this.$store.dispatch("project/updateDescription", event.target.value);
+      this.$store.dispatch("client/setDescription", event.target.value);
     },
   },
 };

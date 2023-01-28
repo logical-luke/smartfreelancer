@@ -10,12 +10,18 @@ const state = () => ({
 const getters = {};
 
 const actions = {
-  async fetchClient({ commit }, clientId) {
+  async getClient({ commit }, clientId) {
     const client = await api.getClient(clientId);
     commit("setClient", client);
   },
-  async updateName({ commit }, name) {
-    commit("updateName", name);
+  async setName({ commit }, name) {
+    commit("setName", name);
+  },
+  async setDescription({ commit }, description) {
+    commit("setDescription", description);
+  },
+  clearClient({ commit }) {
+    commit("clearClient");
   },
 };
 
@@ -29,10 +35,10 @@ const mutations = {
       description: "",
     };
   },
-  updateName(state, name) {
+  setName(state, name) {
     state.current.name = name;
   },
-  updateDescription(state, description) {
+  setDescription(state, description) {
     state.current.description = description;
   },
 };

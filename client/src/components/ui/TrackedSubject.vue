@@ -33,6 +33,9 @@ export default {
     projects() {
       this.updateSubjectOptions();
     },
+    clients() {
+      this.updateSubjectOptions();
+    },
   },
   methods: {
     updateSubject() {
