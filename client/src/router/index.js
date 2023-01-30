@@ -87,7 +87,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.name === "LoginPage" && store.getters.isAuthorized) {
-    next({ name: "Dashboard" });
+    next({ name: "DashboardPage" });
   } else {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       // this route requires auth, check if logged in
