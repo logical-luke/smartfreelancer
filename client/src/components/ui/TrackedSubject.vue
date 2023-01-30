@@ -105,7 +105,7 @@ export default {
           .forEach((task) => {
             options.push({
               id: "t-" + task.id,
-              label: "📝 " + task.name
+              label: "📋 " + task.name
             });
           });
       }
@@ -123,7 +123,7 @@ export default {
               .map((task) => {
                 return {
                   id: "t-" + task.id,
-                  label: "📝 " + task.name
+                  label: "📋 " + task.name
                 };
               });
             if (children.length > 0) {
