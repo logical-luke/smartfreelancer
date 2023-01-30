@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import ProjectsPage from "@/components/project/ProjectsPage.vue";
 import LoginPage from "@/components/LoginPage.vue";
-import DashboardPage from "@/components/dashboard/DashboardPage.vue";
 import store from "../store";
 import ProjectEditPage from "@/components/project/ProjectEditPage.vue";
 import ProjectCreatePage from "@/components/project/ProjectCreatePage.vue";
@@ -9,6 +8,10 @@ import TasksPage from "@/components/task/TasksPage.vue";
 import ClientsPage from "@/components/client/ClientsPage.vue";
 import ClientCreatePage from "@/components/client/ClientCreatePage.vue";
 import ClientEditPage from "@/components/client/ClientEditPage.vue";
+import TaskEditPage from "@/components/task/TaskEditPage.vue";
+import TaskCreatePage from "@/components/task/TaskCreatePage.vue";
+import TodayPage from "@/components/today/TodayPage.vue";
+import ReportsPage from "@/components/report/ReportsPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -20,8 +23,16 @@ const router = createRouter({
     },
     {
       path: "/",
-      name: "DashboardPage",
-      component: DashboardPage,
+      name: "TodayPage",
+      component: TodayPage,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: "/reports",
+      name: "ReportsPage",
+      component: ReportsPage,
       meta: {
         requiresAuth: true,
       },
@@ -82,12 +93,28 @@ const router = createRouter({
       },
       component: TasksPage,
     },
+    {
+      path: "/task/edit/:id",
+      name: "TaskEditPage",
+      meta: {
+        requiresAuth: true,
+      },
+      component: TaskEditPage,
+    },
+    {
+      path: "/task/create",
+      name: "TaskCreatePage",
+      meta: {
+        requiresAuth: true,
+      },
+      component: TaskCreatePage,
+    },
   ],
 });
 
 router.beforeEach((to, from, next) => {
   if (to.name === "LoginPage" && store.getters.isAuthorized) {
-    next({ name: "DashboardPage" });
+    next({ name: "TodayPage" });
   } else {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       // this route requires auth, check if logged in

@@ -40,9 +40,9 @@
           <div class="px-4 pb-6">
             <ul class="mb-8 text-sm font-medium">
               <SidebarItem go-to="/">
-                <template v-slot:title>Dashboard</template>
+                <template v-slot:title>Today</template>
                 <template v-slot:icon>
-                  <dashboard-icon />
+                  <sun-high-icon />
                 </template>
               </SidebarItem>
               <SidebarItem go-to="/clients">
@@ -63,6 +63,12 @@
                   <list-icon />
                 </template>
               </SidebarItem>
+              <SidebarItem go-to="/reports">
+                <template v-slot:title>Reports</template>
+                <template v-slot:icon>
+                  <report-money-icon />
+                </template>
+              </SidebarItem>
             </ul>
             <div class="pt-8 text-sm font-medium">
               <SidebarLogout />
@@ -79,22 +85,24 @@ import { mapGetters } from "vuex";
 import SidebarItem from "@/components/ui/SidebarItem.vue";
 import ListIcon from "vue-tabler-icons/icons/ListIcon";
 import BriefcaseIcon from "vue-tabler-icons/icons/BriefcaseIcon";
-import DashboardIcon from "vue-tabler-icons/icons/DashboardIcon";
 import SidebarLogout from "@/components/ui/SidebarLogout.vue";
 import UsersIcon from "vue-tabler-icons/icons/UsersIcon";
 import Menu2Icon from "vue-tabler-icons/icons/Menu2Icon";
 import XIcon from "vue-tabler-icons/icons/XIcon";
 import TransparentLogoWide from "@/components/ui/TransparentLogoWide.vue";
+import SunHighIcon from "vue-tabler-icons/icons/SunHighIcon";
+import ReportMoneyIcon from "vue-tabler-icons/icons/ReportMoneyIcon";
 
 export default {
   name: "SidebarNav",
   components: {
+    ReportMoneyIcon,
+    SunHighIcon,
     TransparentLogoWide,
     XIcon,
     Menu2Icon,
     UsersIcon,
     SidebarLogout,
-    DashboardIcon,
     BriefcaseIcon,
     ListIcon,
     SidebarItem,

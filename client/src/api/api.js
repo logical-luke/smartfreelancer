@@ -79,46 +79,6 @@ const refreshToken = async function () {
 };
 
 export default {
-  async getProjects() {
-    const response = await getRequest("/project/");
-
-    return response.data;
-  },
-
-  async getProject(id) {
-    const response = await getRequest("/project/" + id);
-
-    return response.data;
-  },
-
-  async deleteProject(id) {
-    const response = await deleteRequest("/project/delete/" + id);
-
-    return response.data;
-  },
-
-  async updateProject(project) {
-    const response = await postRequest(
-      "/project/update/" + project.id,
-      project
-    );
-
-    if (response.status !== 200) {
-      throw new Error(response.data.message);
-    }
-
-    return response.data;
-  },
-
-  async createProject(project) {
-    const response = await postRequest("/project/create", project);
-    if (response.status !== 200) {
-      throw new Error(response.data.message);
-    }
-
-    return response.data;
-  },
-
   async login(email, password) {
     try {
       const response = await axios.post(process.env.API_BASE_URL + "/login", {
@@ -163,6 +123,86 @@ export default {
 
   async stopTimer() {
     const response = await postRequest("/timer/stop");
+
+    return response.data;
+  },
+
+  async getProjects() {
+    const response = await getRequest("/project/");
+
+    return response.data;
+  },
+
+  async getProject(id) {
+    const response = await getRequest("/project/" + id);
+
+    return response.data;
+  },
+
+  async deleteProject(id) {
+    const response = await deleteRequest("/project/delete/" + id);
+
+    return response.data;
+  },
+
+  async updateProject(project) {
+    const response = await postRequest(
+      "/project/update/" + project.id,
+      project
+    );
+
+    if (response.status !== 200) {
+      throw new Error(response.data.message);
+    }
+
+    return response.data;
+  },
+
+  async createProject(project) {
+    const response = await postRequest("/project/create", project);
+    if (response.status !== 200) {
+      throw new Error(response.data.message);
+    }
+
+    return response.data;
+  },
+
+  async getTasks() {
+    const response = await getRequest("/task/");
+
+    return response.data;
+  },
+
+  async getTask(id) {
+    const response = await getRequest("/task/" + id);
+
+    return response.data;
+  },
+
+  async deleteTask(id) {
+    const response = await deleteRequest("/task/delete/" + id);
+
+    return response.data;
+  },
+
+  async updateTask(task) {
+    const response = await postRequest(
+      "/task/update/" + task.id,
+      task
+    );
+
+    if (response.status !== 200) {
+      throw new Error(response.data.message);
+    }
+
+    return response.data;
+  },
+
+  async createTask(task) {
+    const response = await postRequest("/task/create", task);
+    if (response.status !== 200) {
+      throw new Error(response.data.message);
+    }
 
     return response.data;
   },

@@ -5,6 +5,7 @@ const emptyTimer = {
   startTime: null,
   projectId: null,
   clientId: null,
+  taskId: null,
 };
 
 const state = () => ({
@@ -26,6 +27,17 @@ const actions = {
     if (state.current.projectId !== projectId) {
       const timer = JSON.parse(JSON.stringify(state.current));
       timer.projectId = projectId;
+      timer.clientId = null;
+      commit("setTimer", timer);
+      if (state.current.id) {
+        await api.updateTimer(state.current);
+      }
+    }
+  },
+  async setTaskId({ commit, state }, taskId) {
+    if (state.current.taskId !== taskId) {
+      const timer = JSON.parse(JSON.stringify(state.current));
+      timer.taskId = taskId;
       timer.clientId = null;
       commit("setTimer", timer);
       if (state.current.id) {

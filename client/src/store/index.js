@@ -8,6 +8,8 @@ import timer from "@/store/modules/timer";
 import api from "@/api/api";
 import clients from "@/store/modules/clients";
 import client from "@/store/modules/client";
+import tasks from "@/store/modules/tasks";
+import task from "@/store/modules/task";
 
 const debug = import.meta.env.NODE_ENV !== "production";
 
@@ -26,6 +28,8 @@ export default createStore({
     timer,
     clients,
     client,
+    tasks,
+    task
   },
   actions: {
     logout({ commit }) {
@@ -48,8 +52,9 @@ export default createStore({
       if (timer && timer.id) {
         commit("timer/setTimer", timer);
       }
-      await this.dispatch("projects/getProjects");
-      await this.dispatch("clients/getClients");
+      await dispatch("projects/getProjects");
+      await dispatch("clients/getClients");
+      await dispatch("tasks/getTasks");
       commit("setInitialLoaded", true);
     },
   },

@@ -10,6 +10,7 @@ class CreateTimerPayload
         private readonly int $ownerId,
         private readonly ?int $projectId,
         private readonly ?int $clientId,
+        private readonly ?int $taskId,
     ) {
     }
 
@@ -19,6 +20,7 @@ class CreateTimerPayload
             $payload['ownerId'],
             $payload['projectId'] ?? null,
             $payload['clientId'] ?? null,
+            $payload['taskId'] ?? null,
         );
     }
 
@@ -35,5 +37,10 @@ class CreateTimerPayload
     public function getClientId(): ?int
     {
         return $this->clientId;
+    }
+
+    public function getTaskId(): ?int
+    {
+        return $this->taskId;
     }
 }

@@ -9,6 +9,7 @@ use App\Exception\InvalidPayloadException;
 use App\Model\CreateTimerPayload;
 use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
+use App\Repository\TaskRepository;
 use App\Repository\TimerRepository;
 use App\Repository\UserRepository;
 use App\Validator\Timestamp;
@@ -22,6 +23,7 @@ class TimerCreator
         private readonly UserRepository $userRepository,
         private readonly ProjectRepository $projectRepository,
         private readonly ClientRepository $clientRepository,
+        private readonly TaskRepository $taskRepository,
     ) {
     }
 
@@ -47,7 +49,12 @@ class TimerCreator
             $timer->setClient($client);
         }
 
-
+        if ($taskId = $payload->getTaskId()) {
+            if (!$task = $this->taskRepository->find($taskId)) {
+                throw new InvalidPayloadException('Invalid task id');
+            }
+            $timer->setTask($task);
+        }
 
         $this->timerRepository->persist($timer);
         $this->timerRepository->flush();

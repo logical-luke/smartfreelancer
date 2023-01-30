@@ -13,6 +13,7 @@ class TimerDTO
         public ?int $projectId,
         public int $startTime,
         public ?int $clientId,
+        public ?int $taskId,
     )
     {
     }
@@ -24,6 +25,7 @@ class TimerDTO
             $timer->getProject()?->getId(),
             $timer->getStartTime()->getTimestamp(),
             $timer->getClient()?->getId(),
+            $timer->getTask()?->getId(),
         );
     }
 }

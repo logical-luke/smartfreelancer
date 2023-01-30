@@ -43,11 +43,20 @@ class Project
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: TimeEntry::class)]
     private Collection $timeEntries;
 
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Task::class)]
+    private Collection $tasks;
+
     protected function __construct(User $user)
     {
         $this->owner = $user;
         $this->timers = new ArrayCollection();
         $this->timeEntries = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
+    }
+
+    public static function fromUser(User $user): self
+    {
+        return new self($user);
     }
 
     public function getId(): ?int
@@ -101,11 +110,6 @@ class Project
         $this->endTime = $endTime;
 
         return $this;
-    }
-
-    public static function fromUser(User $user): self
-    {
-        return new self($user);
     }
 
     public function getOwner(): User
@@ -174,6 +178,36 @@ class Project
             // set the owning side to null (unless already changed)
             if ($timeEntry->getProject() === $this) {
                 $timeEntry->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks->add($task);
+            $task->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): self
+    {
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getProject() === $this) {
+                $task->setProject(null);
             }
         }
 

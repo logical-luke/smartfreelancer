@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-class UpdateTimerPayload
+class UpdateTaskPayload
 {
     protected function __construct(
         private readonly int $id,
-        private readonly ?int $projectId,
-        private readonly ?int $startTime,
-        private readonly ?int $clientId,
+        private readonly ?string $name,
+        private readonly ?string $description,
         private readonly ?int $taskId,
     ) {
     }
@@ -21,9 +20,8 @@ class UpdateTimerPayload
 
         return new self(
             $payload['id'],
-            $payload['projectId'] ?? null,
-            $payload['startTime'] ?? null,
-            $payload['clientId'] ?? null,
+            $payload['name'] ?? null,
+            $payload['description'] ?? null,
             $payload['taskId'] ?? null,
         );
     }
@@ -33,19 +31,14 @@ class UpdateTimerPayload
         return $this->id;
     }
 
-    public function getProjectId(): ?int
+    public function getName(): ?string
     {
-        return $this->projectId;
+        return $this->name;
     }
 
-    public function getStartTime(): ?int
+    public function getDescription(): ?string
     {
-        return $this->startTime;
-    }
-
-    public function getClientId(): ?int
-    {
-        return $this->clientId;
+        return $this->description;
     }
 
     public function getTaskId(): ?int

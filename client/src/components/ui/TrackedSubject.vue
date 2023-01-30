@@ -35,6 +35,9 @@ export default {
     },
     clients() {
       this.updateSubjectOptions();
+    },
+    tasks() {
+      this.updateSubjectOptions();
     }
   },
   methods: {
@@ -46,16 +49,29 @@ export default {
       }
 
       if (this.timer.projectId) {
-
         this.subject = "p-" + this.timer.projectId;
         const project = store.getters["projects/getProjectById"](this.timer.projectId);
         if (project.clientId) {
           const clientOption = this.options.find(option => Number(option.id.split("-")[1]) === project.clientId);
-          clientOption.isDefaultExpanded = true;
-
+          if (clientOption) {
+            clientOption.isDefaultExpanded = true;
+          }
         }
-        return;
 
+        return;
+      }
+
+      if (this.timer.taskId) {
+        this.subject = "t-" + this.timer.taskId;
+        const task = store.getters["tasks/getTaskById"](this.timer.taskId);
+        if (task.projectId) {
+          const projectOption = this.options.find(option => Number(option.id.split("-")[1]) === task.projectId);
+          if (projectOption) {
+            projectOption.isDefaultExpanded = true;
+          }
+        }
+
+        return;
       }
 
       this.subject = null;
@@ -64,6 +80,7 @@ export default {
       if (value == null) {
         await store.dispatch("timer/setProjectId", null);
         await store.dispatch("timer/setClientId", null);
+        await store.dispatch("timer/setTaskId", null);
 
         return;
       }
@@ -75,20 +92,44 @@ export default {
       if (value.startsWith("c-")) {
         await store.dispatch("timer/setClientId", id);
       }
+      if (value.startsWith("t-")) {
+        await store.dispatch("timer/setTaskId", id);
+      }
     },
     updateSubjectOptions() {
       let options = [];
 
-      // Tasks emoji 📝
+      if (this.tasks) {
+        this.tasks
+          .filter((task) => !task.projectId)
+          .forEach((task) => {
+            options.push({
+              id: "t-" + task.id,
+              label: "📝 " + task.name
+            });
+          });
+      }
 
       if (this.projects) {
         this.projects
           .filter((project) => !project.clientId)
           .forEach((project) => {
-            options.push({
+            const projectOption = {
               id: "p-" + project.id,
               label: "💼 " + project.name
-            });
+            };
+            const children = this.tasks
+              .filter((task) => task.projectId === project.id)
+              .map((task) => {
+                return {
+                  id: "t-" + task.id,
+                  label: "📝 " + task.name
+                };
+              });
+            if (children.length > 0) {
+              projectOption.children = children;
+            }
+            options.push(projectOption);
           });
       }
 
@@ -101,10 +142,23 @@ export default {
           const children = this.projects
             .filter((project) => project.clientId === client.id)
             .map((project) => {
-              return {
+              const projectOption = {
                 id: "p-" + project.id,
                 label: "💼 " + project.name
               };
+              const children = this.tasks
+                .filter((task) => task.projectId === project.id)
+                .map((task) => {
+                  return {
+                    id: "t-" + task.id,
+                    label: "📝 " + task.name
+                  };
+                });
+              if (children.length > 0) {
+                projectOption.children = children;
+              }
+
+              return projectOption;
             });
           if (children.length > 0) {
             clientOption.children = children;
@@ -120,9 +174,9 @@ export default {
     ...mapState({
       timer: (state) => state.timer.current,
       projects: (state) => state.projects.all,
-      clients: (state) => state.clients.all
+      clients: (state) => state.clients.all,
+      tasks: (state) => state.tasks.all
     }),
-    ...mapGetters({ getProjectsNames: "projects/getProjectsNamesWithIds" })
   },
   mounted() {
     this.updateSubjectOptions();

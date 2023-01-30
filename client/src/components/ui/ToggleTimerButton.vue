@@ -24,6 +24,9 @@ export default {
     clientId: {
       type: Number,
     },
+    taskId: {
+      type: Number,
+    },
     global: {
       type: Boolean,
     },
@@ -62,6 +65,10 @@ export default {
         if (this.clientId && this.timer.clientId !== this.clientId) {
           await this.$store.dispatch("timer/setClientId", this.clientId);
         }
+
+        if (this.taskId && this.timer.taskId !== this.taskId) {
+          await this.$store.dispatch("timer/setTaskId", this.taskId);
+        }
       }
     },
     checkCurrentTimer() {
@@ -69,6 +76,7 @@ export default {
         (this.timer &&
           this.timer.startTime &&
           (this.projectId && this.timer.projectId === this.projectId)  ||
+          (this.taskId && this.timer.taskId === this.taskId)  ||
           (this.clientId && this.timer.clientId === this.clientId)
         ) || (this.timer.id > 0 && this.global)
       );

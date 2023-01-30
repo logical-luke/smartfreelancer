@@ -31,9 +31,18 @@ class Task
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: TimeEntry::class)]
     private Collection $timeEntries;
 
-    public function __construct()
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    private ?Project $project = null;
+
+    protected function __construct(User $user)
     {
+        $this->owner = $user;
         $this->timeEntries = new ArrayCollection();
+    }
+
+    public static function fromUser(User $user): self
+    {
+        return new self($user);
     }
 
     public function getId(): ?int
@@ -125,6 +134,18 @@ class Task
                 $timeEntry->setTask(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
 
         return $this;
     }

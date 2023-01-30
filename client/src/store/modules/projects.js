@@ -6,11 +6,16 @@ const state = () => ({
 });
 
 const getters = {
-  getProjects(state) {
-    return state.all;
-  },
   getProjectById: (state) => (id) => {
     return state.all.filter((project) => project.id === id).pop();
+  },
+  getProjectsOptions(state) {
+    return state.all.map((project) => {
+      return {
+        id: project.id,
+        label: project.name,
+      };
+    });
   },
 };
 

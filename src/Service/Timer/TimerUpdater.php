@@ -8,6 +8,7 @@ use App\Entity\Timer;
 use App\Model\UpdateTimerPayload;
 use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
+use App\Repository\TaskRepository;
 use App\Repository\TimerRepository;
 
 class TimerUpdater
@@ -16,6 +17,7 @@ class TimerUpdater
         private readonly TimerRepository $timerRepository,
         private readonly ProjectRepository $projectRepository,
         private readonly ClientRepository $clientRepository,
+        private readonly TaskRepository $taskRepository,
     ) {
     }
 
@@ -42,6 +44,15 @@ class TimerUpdater
             && ($client = $this->clientRepository->find($clientId))
         ) {
             $timer->setClient($client);
+        }
+
+        $timer->setTask(null);
+
+        if (
+            ($taskId = $payload->getTaskId())
+            && ($task = $this->taskRepository->find($taskId))
+        ) {
+            $timer->setTask($task);
         }
 
         $this->timerRepository->flush();
