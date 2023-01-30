@@ -1,8 +1,8 @@
 <template>
   <div class="mx-auto lg:ml-80">
     <NewButton go-to="/task/create/">Task</NewButton>
-    <transition name="fade">
-      <div class="flex flex-wrap -mx-4 -mb-4 md:mb-0">
+    <div class="flex flex-wrap -mx-4 -mb-4 md:mb-0">
+      <TransitionGroup name="fade" class="transition-element">
         <template v-for="task in tasks" :key="task.id">
           <TaskPage
             :id="task.id"
@@ -10,8 +10,9 @@
             :name="task.name"
           ></TaskPage>
         </template>
-      </div>
-    </transition>
+      </TransitionGroup>
+    </div>
+
   </div>
 </template>
 
@@ -24,11 +25,11 @@ export default {
   name: "TasksPage",
   components: { TaskPage, NewButton },
   computed: mapState({
-    tasks: (state) => state.tasks.all,
+    tasks: (state) => state.tasks.all
   }),
   mounted() {
     this.$store.dispatch("task/clearTask");
-  },
+  }
 };
 </script>
 

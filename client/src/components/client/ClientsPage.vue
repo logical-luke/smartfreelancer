@@ -1,8 +1,8 @@
 <template>
   <div class="mx-auto lg:ml-80">
     <NewButton go-to="/client/create/">Client</NewButton>
-    <transition name="fade">
-      <div class="flex flex-wrap -mx-4 -mb-4 md:mb-0">
+    <div class="flex flex-wrap -mx-4 -mb-4 md:mb-0">
+      <TransitionGroup name="fade" class="list-element">
         <template v-for="client in clients" :key="client.id">
           <ClientPage
             :id="client.id"
@@ -10,8 +10,8 @@
             :name="client.name"
           ></ClientPage>
         </template>
-      </div>
-    </transition>
+      </TransitionGroup>
+    </div>
   </div>
 </template>
 
@@ -25,11 +25,11 @@ export default {
   name: "ClientsPage",
   components: { ClientPage, NewButton },
   computed: mapState({
-    clients: (state) => state.clients.all,
+    clients: (state) => state.clients.all
   }),
   mounted() {
     store.commit("client/clearClient");
-  },
+  }
 };
 </script>
 

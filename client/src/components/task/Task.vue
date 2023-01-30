@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full md:w-1/2 px-4 mb-4 md:mb-0">
+  <div class="w-full transition-element md:w-1/2 px-4 mb-4 md:mb-0">
     <section class="py-8">
       <div class="container px-4 mx-auto">
         <div class="p-6 bg-white rounded shadow">
