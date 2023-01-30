@@ -57,7 +57,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_API }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: ${{ secrets.DATABASE_MIGRATION_USER }}= ${{ secrets.DATABASE_MIGRATION_PASSWORD }}= /usr/bin/php8.1 /home/smartfreelancer-api/tmp/build/bin/console lexik:jwt:generate-keypair
+          script: ${{ secrets.DATABASE_MIGRATION_USER }}= ${{ secrets.DATABASE_MIGRATION_PASSWORD }}= /usr/bin/php8.1 /home/smartfreelancer-api/tmp/build/bin/console doctrine:migrations:migrate
 
       - name: Generate JWT certs
         uses: appleboy/ssh-action@master
@@ -66,7 +66,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_API }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: /usr/bin/php8.1 /home/smartfreelancer-api/tmp/build/bin/console doctrine:migrations:migrate
+          script: /usr/bin/php8.1 /home/smartfreelancer-api/tmp/build/bin/console lexik:jwt:generate-keypair
 
       - name: Copy new version to api directory
         uses: appleboy/ssh-action@master
