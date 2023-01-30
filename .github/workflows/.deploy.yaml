@@ -59,6 +59,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_API }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
+          envs: DATABASE_URL
           script: /usr/bin/php8.1 /home/smartfreelancer-api/tmp/build/bin/console doctrine:migrations:migrate
 
       - name: Generate JWT certs
