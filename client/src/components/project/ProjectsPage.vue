@@ -2,7 +2,7 @@
   <div class="mx-auto lg:ml-80">
     <NewButton go-to="/project/create/">Project</NewButton>
     <transition name="fade">
-      <div>
+      <div class="flex flex-wrap -mx-4 -mb-4 md:mb-0">
         <template v-for="project in projects" :key="project.id">
           <ProjectPage
             :id="project.id"

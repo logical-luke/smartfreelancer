@@ -1,31 +1,33 @@
 <template>
-  <section class="py-8">
-    <div class="container px-4 mx-auto">
-      <div class="p-6 bg-white rounded shadow">
-        <div class="mb-4">
-          <h3 class="mb-2 font-medium">{{ name }}</h3>
-          <p class="text-sm text-gray-500">
-            {{ description }}
-          </p>
-        </div>
-        <div class="flex justify-between">
-          <div class="flex items-center">
-            <ToggleTimerButton :client-id="id" />
+  <div class="w-full md:w-1/2 px-4 mb-4 md:mb-0">
+    <section class="py-8">
+      <div class="container px-4 mx-auto">
+        <div class="p-6 bg-white rounded shadow">
+          <div class="mb-4">
+            <h3 class="mb-2 font-medium">{{ name }}</h3>
+            <p class="text-sm text-gray-500">
+              {{ description }}
+            </p>
           </div>
-          <div class="flex text-white">
-            <router-link :to="`/client/edit/${id}`">
+          <div class="flex justify-between">
+            <div class="flex items-center">
+              <ToggleTimerButton :client-id="id" />
+            </div>
+            <div class="flex text-white">
+              <router-link :to="`/client/edit/${id}`">
+                <a class="flex mr-4 items-center text-sm">
+                  <EditButton />
+                </a>
+              </router-link>
               <a class="flex mr-4 items-center text-sm">
-                <EditButton />
+                <DeleteButton @confirm="deleteClient(id)" :subject="name" />
               </a>
-            </router-link>
-            <a class="flex mr-4 items-center text-sm">
-              <DeleteButton @confirm="deleteClient(id)" :subject="name" />
-            </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </template>
 
 <script>
@@ -40,19 +42,19 @@ export default {
   props: {
     name: {
       type: String,
-      required: true,
+      required: true
     },
     description: {
-      type: String,
+      type: String
     },
     id: {
       type: Number,
-      required: true,
-    },
+      required: true
+    }
   },
   methods: {
-    ...mapActions("clients", ["deleteClient"]),
-  },
+    ...mapActions("clients", ["deleteClient"])
+  }
 };
 </script>
 

@@ -2,7 +2,7 @@
   <div class="mx-auto lg:ml-80">
     <NewButton go-to="/client/create/">Client</NewButton>
     <transition name="fade">
-      <div>
+      <div class="flex flex-wrap -mx-4 -mb-4 md:mb-0">
         <template v-for="client in clients" :key="client.id">
           <ClientPage
             :id="client.id"
