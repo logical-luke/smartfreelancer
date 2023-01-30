@@ -9,6 +9,7 @@ class CreateTimerPayload
     protected function __construct(
         private readonly int $ownerId,
         private readonly ?int $projectId,
+        private readonly ?int $clientId,
     ) {
     }
 
@@ -17,6 +18,7 @@ class CreateTimerPayload
         return new self(
             $payload['ownerId'],
             $payload['projectId'] ?? null,
+            $payload['clientId'] ?? null,
         );
     }
 
@@ -28,5 +30,10 @@ class CreateTimerPayload
     public function getProjectId(): ?int
     {
         return $this->projectId;
+    }
+
+    public function getClientId(): ?int
+    {
+        return $this->clientId;
     }
 }

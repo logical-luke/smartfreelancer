@@ -7,6 +7,7 @@ namespace App\Service\Timer;
 use App\Entity\Timer;
 use App\Exception\InvalidPayloadException;
 use App\Model\CreateTimerPayload;
+use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\TimerRepository;
 use App\Repository\UserRepository;
@@ -19,7 +20,8 @@ class TimerCreator
     public function __construct(
         private readonly TimerRepository $timerRepository,
         private readonly UserRepository $userRepository,
-        private readonly ProjectRepository $projectRepository
+        private readonly ProjectRepository $projectRepository,
+        private readonly ClientRepository $clientRepository,
     ) {
     }
 
@@ -37,6 +39,15 @@ class TimerCreator
             }
             $timer->setProject($project);
         }
+
+        if ($clientId = $payload->getClientId()) {
+            if (!$client = $this->clientRepository->find($clientId)) {
+                throw new InvalidPayloadException('Invalid client id');
+            }
+            $timer->setClient($client);
+        }
+
+
 
         $this->timerRepository->persist($timer);
         $this->timerRepository->flush();

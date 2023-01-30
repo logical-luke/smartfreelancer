@@ -21,6 +21,9 @@ export default {
     projectId: {
       type: Number,
     },
+    clientId: {
+      type: Number,
+    },
     global: {
       type: Boolean,
     },
@@ -33,15 +36,11 @@ export default {
   computed: {
     ...mapState({
       timer: (state) => state.timer.current,
-      timerProjectId: (state) => state.timer.current.projectId,
     }),
     ...mapActions("timer", ["stopTimer"]),
   },
   watch: {
     timer() {
-      this.isRunning = this.checkCurrentTimer();
-    },
-    timerProjectId() {
       this.isRunning = this.checkCurrentTimer();
     },
   },
@@ -54,20 +53,24 @@ export default {
       if (this.isRunning) {
         await this.$store.dispatch("timer/stopTimer");
       } else {
-        console.log(this.projectId);
+        await this.$store.dispatch("timer/startTimer");
+
         if (this.projectId && this.timer.projectId !== this.projectId) {
           await this.$store.dispatch("timer/setProjectId", this.projectId);
         }
 
-        await this.$store.dispatch("timer/startTimer");
+        if (this.clientId && this.timer.clientId !== this.clientId) {
+          await this.$store.dispatch("timer/setClientId", this.clientId);
+        }
       }
     },
     checkCurrentTimer() {
       return (
         (this.timer &&
           this.timer.startTime &&
-          this.timerProjectId === this.projectId) ||
-        (this.timer.id > 0 && this.global)
+          (this.projectId && this.timer.projectId === this.projectId)  ||
+          (this.clientId && this.timer.clientId === this.clientId)
+        ) || (this.timer.id > 0 && this.global)
       );
     },
   },

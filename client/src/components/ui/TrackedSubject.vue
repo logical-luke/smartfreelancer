@@ -6,7 +6,7 @@
       :options="options"
       :show-count="true"
       @update:modelValue="setSubject"
-      placeholder="Select Task/Project/Client"
+      placeholder="Select task/project/client..."
     />
   </div>
 </template>
@@ -27,7 +27,7 @@ export default {
     };
   },
   watch: {
-    timerProjectId() {
+    timer() {
       this.updateSubject();
     },
     projects() {
@@ -39,16 +39,23 @@ export default {
   },
   methods: {
     updateSubject() {
-      if (this.timerProjectId !== null) {
-        this.subject = "p-" + this.timerProjectId;
+      if (this.timer.clientId) {
+        this.subject = "c-" + this.timer.clientId;
 
-        const project = store.getters["projects/getProjectById"](this.timerProjectId);
+        return;
+      }
+
+      if (this.timer.projectId) {
+
+        this.subject = "p-" + this.timer.projectId;
+        const project = store.getters["projects/getProjectById"](this.timer.projectId);
         if (project.clientId) {
           const clientOption = this.options.find(option => Number(option.id.split("-")[1]) === project.clientId);
           clientOption.isDefaultExpanded = true;
-        }
 
+        }
         return;
+
       }
 
       this.subject = null;
@@ -56,6 +63,7 @@ export default {
     async setSubject(value) {
       if (value == null) {
         await store.dispatch("timer/setProjectId", null);
+        await store.dispatch("timer/setClientId", null);
 
         return;
       }
@@ -63,6 +71,9 @@ export default {
       let id = Number(value.split("-")[1]);
       if (value.startsWith("p-")) {
         await store.dispatch("timer/setProjectId", id);
+      }
+      if (value.startsWith("c-")) {
+        await store.dispatch("timer/setClientId", id);
       }
     },
     updateSubjectOptions() {
@@ -107,7 +118,7 @@ export default {
   },
   computed: {
     ...mapState({
-      timerProjectId: (state) => state.timer.current.projectId,
+      timer: (state) => state.timer.current,
       projects: (state) => state.projects.all,
       clients: (state) => state.clients.all
     }),

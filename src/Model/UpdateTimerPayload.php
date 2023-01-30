@@ -10,6 +10,7 @@ class UpdateTimerPayload
         private readonly int $id,
         private readonly ?int $projectId,
         private readonly ?int $startTime,
+        private readonly ?int $clientId,
     ) {
     }
 
@@ -21,6 +22,7 @@ class UpdateTimerPayload
             $payload['id'],
             $payload['projectId'] ?? null,
             $payload['startTime'] ?? null,
+            $payload['clientId'] ?? null,
         );
     }
 
@@ -37,5 +39,10 @@ class UpdateTimerPayload
     public function getStartTime(): ?int
     {
         return $this->startTime;
+    }
+
+    public function getClientId(): ?int
+    {
+        return $this->clientId;
     }
 }

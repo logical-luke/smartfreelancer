@@ -6,11 +6,17 @@
         <form @submit.prevent="submitForm">
           <ProjectForm />
           <div class="flex flex-wrap space-x-4">
-            <SubmitButton>
-              <template v-slot:title>Add</template>
-              <template v-slot:icon><square-plus-icon /></template>
-            </SubmitButton>
-            <BackButton />
+            <div>
+              <SubmitButton>
+                <template v-slot:title>Add</template>
+                <template v-slot:icon>
+                  <square-plus-icon />
+                </template>
+              </SubmitButton>
+            </div>
+            <div>
+              <BackButton />
+            </div>
           </div>
         </form>
       </div>
@@ -30,7 +36,7 @@ export default {
   components: { SquarePlusIcon, SubmitButton, BackButton, ProjectForm },
   computed: mapState({
     project: (state) => state.project.current,
-    userId: (state) => state.user.id,
+    userId: (state) => state.user.id
   }),
   created() {
     this.$store.dispatch("project/clearProject");
@@ -40,8 +46,8 @@ export default {
       await this.$store.dispatch("projects/createProject", this.project);
 
       this.$router.push("/projects");
-    },
-  },
+    }
+  }
 };
 </script>
 

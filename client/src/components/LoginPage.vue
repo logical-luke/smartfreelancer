@@ -108,7 +108,6 @@ export default {
           this.$router.push("/");
         }
       } catch (err) {
-        console.log(err);
         this.email = "";
         this.password = "";
         this.error = err.message;
