@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Service\Timer;
 
 use App\Exception\InvalidPayloadException;
-use App\Model\StopTimerPayload;
+use App\Model\Timer\StopTimerPayload;
 use App\Repository\TimerRepository;
 
 class TimerStopper

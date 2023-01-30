@@ -2,12 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Project;
 use App\Exception\InvalidPayloadException;
-use App\Model\CreateProjectPayload;
-use App\Model\DeleteProjectPayload;
-use App\Model\ProjectDTO;
-use App\Model\UpdateProjectPayload;
+use App\Model\Timer\CreateProjectPayload;
+use App\Model\Timer\DeleteProjectPayload;
+use App\Model\Timer\ProjectDTO;
+use App\Model\Timer\UpdateProjectPayload;
 use App\Repository\ProjectRepository;
 use App\Service\Project\ProjectCreator;
 use App\Service\Project\ProjectDeleter;

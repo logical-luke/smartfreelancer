@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Service\Client;
 
 use App\Entity\Client;
-use App\Model\CreateClientPayload;
+use App\Model\Client\CreateClientPayload;
 use App\Repository\ClientRepository;
 use App\Repository\UserRepository;
 

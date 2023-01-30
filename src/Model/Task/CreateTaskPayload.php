@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Model\Task;
 
 use App\Exception\InvalidPayloadException;
 
-class CreateProjectPayload
+class CreateTaskPayload
 {
     protected function __construct(
         private readonly int $ownerId,
         private readonly ?string $name,
         private readonly ?string $description,
-        private readonly ?int $clientId,
+        private readonly ?int $projectId,
     ) {
     }
 
@@ -30,10 +30,10 @@ class CreateProjectPayload
             'name' => null,
             'description' => null,
             'ownerId' => null,
-            'clientId' => null,
+            'projectId' => null,
         ], $payload);
 
-        return new self($payload['ownerId'], $payload['name'], $payload['description'], $payload['clientId']);
+        return new self($payload['ownerId'], $payload['name'], $payload['description'], $payload['projectId']);
     }
 
     public function getOwnerId(): int
@@ -51,8 +51,8 @@ class CreateProjectPayload
         return $this->description;
     }
 
-    public function getClientId()
+    public function getProjectId()
     {
-        return $this->clientId;
+        return $this->projectId;
     }
 }

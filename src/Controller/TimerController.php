@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Exception\InvalidPayloadException;
-use App\Model\CreateTimerPayload;
-use App\Model\StopTimerPayload;
-use App\Model\TimerDTO;
-use App\Model\UpdateTimerPayload;
+use App\Model\Timer\CreateTimerPayload;
+use App\Model\Timer\StopTimerPayload;
+use App\Model\Timer\TimerDTO;
+use App\Model\Timer\UpdateTimerPayload;
 use App\Repository\TimerRepository;
 use App\Service\Timer\TimerCreator;
 use App\Service\Timer\TimerStopper;

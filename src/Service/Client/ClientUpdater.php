@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Service\Client;
 
 use App\Entity\Client;
-use App\Model\UpdateClientPayload;
+use App\Model\Client\UpdateClientPayload;
 use App\Repository\ClientRepository;
 
 class ClientUpdater

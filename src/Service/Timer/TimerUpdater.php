@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Service\Timer;
 
 use App\Entity\Timer;
-use App\Model\UpdateTimerPayload;
+use App\Model\Timer\UpdateTimerPayload;
 use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;

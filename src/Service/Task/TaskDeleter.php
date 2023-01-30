@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Task;
 
-use App\Entity\Task;
-use App\Model\DeleteTaskPayload;
+use App\Model\Task\DeleteTaskPayload;
 use App\Repository\TaskRepository;
 
 class TaskDeleter

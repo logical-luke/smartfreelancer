@@ -6,15 +6,12 @@ namespace App\Service\Timer;
 
 use App\Entity\Timer;
 use App\Exception\InvalidPayloadException;
-use App\Model\CreateTimerPayload;
+use App\Model\Timer\CreateTimerPayload;
 use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
 use App\Repository\TimerRepository;
 use App\Repository\UserRepository;
-use App\Validator\Timestamp;
-use DateTime;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class TimerCreator
 {

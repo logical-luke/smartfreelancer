@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Service\Task;
 
 use App\Entity\Task;
-use App\Model\CreateTaskPayload;
+use App\Model\Task\CreateTaskPayload;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
 use App\Repository\UserRepository;

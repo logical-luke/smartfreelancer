@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Exception\InvalidPayloadException;
-use App\Model\CreateClientPayload;
-use App\Model\DeleteClientPayload;
-use App\Model\ClientDTO;
-use App\Model\UpdateClientPayload;
+use App\Model\Client\ClientDTO;
+use App\Model\Client\CreateClientPayload;
+use App\Model\Client\DeleteClientPayload;
+use App\Model\Client\UpdateClientPayload;
 use App\Repository\ClientRepository;
 use App\Service\Client\ClientCreator;
 use App\Service\Client\ClientDeleter;

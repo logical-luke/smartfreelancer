@@ -2,12 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Task;
 use App\Exception\InvalidPayloadException;
-use App\Model\CreateTaskPayload;
-use App\Model\DeleteTaskPayload;
-use App\Model\TaskDTO;
-use App\Model\UpdateTaskPayload;
+use App\Model\Task\CreateTaskPayload;
+use App\Model\Task\DeleteTaskPayload;
+use App\Model\Task\TaskDTO;
+use App\Model\Task\UpdateTaskPayload;
 use App\Repository\TaskRepository;
 use App\Service\Task\TaskCreator;
 use App\Service\Task\TaskDeleter;

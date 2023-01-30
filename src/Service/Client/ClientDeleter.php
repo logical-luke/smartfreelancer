@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Client;
 
-use App\Entity\Client;
-use App\Model\DeleteClientPayload;
+use App\Model\Client\DeleteClientPayload;
 use App\Repository\ClientRepository;
 
 class ClientDeleter
