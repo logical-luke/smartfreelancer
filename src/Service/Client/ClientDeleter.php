@@ -23,6 +23,10 @@ class ClientDeleter
 
         // todo Add check if user is eligible to delete client
 
+        if ($timer = $client->getTimer()) {
+            $timer->setClient(null);
+        }
+
         foreach ($client->getProjects() as $project) {
             $project->setClient(null);
         }

@@ -201,6 +201,8 @@ export default {
     if (response.status !== 200) {
       throw new Error(response.data.message);
     }
+
+    return response.data;
   },
   async updateTimer(timer) {
     const response = await postRequest("/timer/update/" + timer.id, timer);

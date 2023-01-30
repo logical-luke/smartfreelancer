@@ -26,12 +26,17 @@ const actions = {
     commit("setClients", clients);
   },
 
-  async deleteClient({ commit, state }, id) {
+  async deleteClient({ commit, state, rootSetters, rootGetters }, id) {
     await api.deleteClient(id);
 
     let clients = JSON.parse(JSON.stringify(state.all));
     clients = clients.filter((client) => client.id !== id);
     commit("setClients", clients);
+    const timer = JSON.parse(JSON.stringify(rootGetters["timer/getTimer"]));
+    if (timer.clientId === id) {
+      timer.clientId = null;
+      commit("timer/setTimer", timer, { root: true });
+    }
   },
 
   async updateClient({ commit, state }, updatedClient) {
@@ -47,9 +52,9 @@ const actions = {
     commit("setClients", clients);
   },
 
-  async createClient({ commit, state }, client) {
-    await api.createClient(client);
-
+  async createClient({ commit, state }, newClient) {
+    const client = await api.createClient(newClient);
+    console.log(client);
     let clients = JSON.parse(JSON.stringify(state.all));
     clients.push(client);
     commit("setClients", clients);
