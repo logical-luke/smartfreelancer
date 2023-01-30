@@ -23,6 +23,10 @@ class ClientDeleter
 
         // todo Add check if user is eligible to delete client
 
+        foreach ($client->getProjects() as $project) {
+            $project->setClient(null);
+        }
+
         $this->clientRepository->remove($client, true);
     }
 }
