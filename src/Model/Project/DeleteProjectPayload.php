@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Timer;
+namespace App\Model\Project;
+
+use Symfony\Component\Uid\Uuid;
 
 class DeleteProjectPayload
 {
-    protected function __construct(private readonly int $id)
+    protected function __construct(private readonly string $id)
     {
     }
 
@@ -17,8 +19,8 @@ class DeleteProjectPayload
         return new self($payload['id']);
     }
 
-    public function getId(): int
+    public function getId(): Uuid
     {
-        return $this->id;
+        return Uuid::fromString($this->id);
     }
 }

@@ -9,9 +9,9 @@ use App\Entity\Client;
 class ClientDTO
 {
     protected function __construct(
-        public readonly int $id,
+        public readonly string $id,
+        public readonly string $ownerId,
         public readonly ?string $name,
-        public readonly int $ownerId,
         public readonly ?string $description,
     )
     {
@@ -20,9 +20,9 @@ class ClientDTO
     public static function fromClient(Client $client): self
     {
         return new self(
-            $client->getId(),
+            $client->getId()?->toRfc4122(),
+            $client->getOwner()?->getId()?->toRfc4122(),
             $client->getName(),
-            $client->getOwner()->getId(),
             $client->getDescription(),
         );
     }

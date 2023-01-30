@@ -6,9 +6,6 @@ const state = () => ({
 });
 
 const getters = {
-  getClients(state) {
-    return state.all;
-  },
   getClientsOptions(state) {
     return state.all.map((client) => {
       return {
@@ -16,6 +13,9 @@ const getters = {
         label: client.name,
       };
     });
+  },
+  getClientById: (state) => (id) => {
+    return state.all.filter((client) => client.id === id).pop();
   },
 };
 
@@ -39,11 +39,11 @@ const actions = {
     }
   },
 
-  async updateClient({ commit, state }, updatedClient) {
-    await api.updateClient(updatedClient);
+  async updateClient({ commit, state }, clientToUpdate) {
+    const updatedClient = await api.updateClient(clientToUpdate);
     let clients = JSON.parse(JSON.stringify(state.all));
     clients = clients.map((client) => {
-      if (client.id === updatedClient.id) {
+      if (client.id === clientToUpdate.id) {
         return updatedClient;
       }
 

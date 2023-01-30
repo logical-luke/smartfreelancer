@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Service\Project;
 
 use App\Entity\Project;
-use App\Model\Timer\CreateProjectPayload;
+use App\Model\Project\CreateProjectPayload;
 use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\UserRepository;

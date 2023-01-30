@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Model\Client;
 
 use App\Exception\InvalidPayloadException;
+use Symfony\Component\Uid\Uuid;
 
 class CreateClientPayload
 {
     protected function __construct(
-        private readonly int $ownerId,
+        private readonly string $ownerId,
         private readonly ?string $name,
         private readonly ?string $description
     ) {
@@ -34,9 +35,9 @@ class CreateClientPayload
         return new self($payload['ownerId'], $payload['name'], $payload['description']);
     }
 
-    public function getOwnerId(): int
+    public function getOwnerId(): Uuid
     {
-        return $this->ownerId;
+        return Uuid::fromString($this->ownerId);
     }
 
     public function getName(): ?string

@@ -16,7 +16,7 @@ class TimerStopper
 
     public function __invoke(StopTimerPayload $payload): void
     {
-        if (!$timer = $this->timerRepository->find($payload->getTimerId())) {
+        if (!$timer = $this->timerRepository->find($payload->getId())) {
             throw new InvalidPayloadException('Invalid timer id');
         }
 

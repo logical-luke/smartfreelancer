@@ -78,7 +78,7 @@ export default {
           (this.projectId && this.timer.projectId === this.projectId)  ||
           (this.taskId && this.timer.taskId === this.taskId)  ||
           (this.clientId && this.timer.clientId === this.clientId)
-        ) || (this.timer.id > 0 && this.global)
+        ) || (this.timer.id && this.global)
       );
     },
   },

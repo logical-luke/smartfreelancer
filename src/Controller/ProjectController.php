@@ -2,11 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Exception\InvalidPayloadException;
-use App\Model\Timer\CreateProjectPayload;
-use App\Model\Timer\DeleteProjectPayload;
-use App\Model\Timer\ProjectDTO;
-use App\Model\Timer\UpdateProjectPayload;
+use App\Model\Project\CreateProjectPayload;
+use App\Model\Project\DeleteProjectPayload;
+use App\Model\Project\ProjectDTO;
+use App\Model\Project\UpdateProjectPayload;
 use App\Repository\ProjectRepository;
 use App\Service\Project\ProjectCreator;
 use App\Service\Project\ProjectDeleter;
@@ -24,17 +25,23 @@ class ProjectController extends AbstractController
     #[Route('/', name: 'all')]
     public function index(ProjectRepository $projectRepository): JsonResponse
     {
+        /** @var User $user */
+        $user = $this->getUser();
+
         return $this->json(array_map(static function ($project) {
             return (ProjectDTO::fromProject($project));
-        }, $projectRepository->findByUser($this->getUser())));
+        }, $projectRepository->findByUser($user)));
     }
 
     #[Route('/create', name: 'create', methods: 'POST')]
     public function create(ProjectCreator $projectCreator, Request $request): JsonResponse
     {
+        /** @var User $user */
+        $user = $this->getUser();
+
         try {
             $payload = array_merge([
-                'ownerId' => $this->getUser()->getId(),
+                'ownerId' => $user->getId()?->toRfc4122(),
             ], json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR));
         } catch (JsonException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
@@ -52,7 +59,7 @@ class ProjectController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: 'delete', methods: 'DELETE')]
-    public function delete(int $id, ProjectDeleter $projectDeleter): JsonResponse
+    public function delete(string $id, ProjectDeleter $projectDeleter): JsonResponse
     {
         // todo Add check if user is eligible to delete project
 
@@ -62,7 +69,7 @@ class ProjectController extends AbstractController
     }
 
     #[Route('/update/{id}', name: 'update', methods: 'POST')]
-    public function update(int $id, ProjectUpdater $projectUpdater, Request $request): JsonResponse
+    public function update(string $id, ProjectUpdater $projectUpdater, Request $request): JsonResponse
     {
         try {
             $payload = array_merge([
@@ -80,7 +87,7 @@ class ProjectController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show')]
-    public function show(int $id, ProjectRepository $projectRepository): Response
+    public function show(string $id, ProjectRepository $projectRepository): Response
     {
         if (!$project = $projectRepository->find($id)) {
             return $this->json([], Response::HTTP_NOT_FOUND);

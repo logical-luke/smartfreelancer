@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Model\Client;
 
+use Symfony\Component\Uid\Uuid;
+
 class UpdateClientPayload
 {
     protected function __construct(
-        private readonly int $id,
+        private readonly string $id,
         private readonly ?string $name,
         private readonly ?string $description,
     ) {
@@ -24,9 +26,9 @@ class UpdateClientPayload
         );
     }
 
-    public function getId(): int
+    public function getId(): Uuid
     {
-        return $this->id;
+        return Uuid::fromString($this->id);
     }
 
     public function getName(): ?string

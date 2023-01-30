@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Model\Task;
 
+use Symfony\Component\Uid\Uuid;
+
 class UpdateTaskPayload
 {
     protected function __construct(
-        private readonly int $id,
+        private readonly string $id,
         private readonly ?string $name,
         private readonly ?string $description,
-        private readonly ?int $taskId,
+        private readonly ?string $projectId,
     ) {
     }
 
@@ -22,13 +24,13 @@ class UpdateTaskPayload
             $payload['id'],
             $payload['name'] ?? null,
             $payload['description'] ?? null,
-            $payload['taskId'] ?? null,
+            $payload['projectId'] ?? null,
         );
     }
 
-    public function getId(): int
+    public function getId(): Uuid
     {
-        return $this->id;
+        return Uuid::fromString($this->id);
     }
 
     public function getName(): ?string
@@ -41,8 +43,8 @@ class UpdateTaskPayload
         return $this->description;
     }
 
-    public function getTaskId(): ?int
+    public function getProjectId(): ?Uuid
     {
-        return $this->taskId;
+        return $this->projectId ? Uuid::fromString($this->projectId) : null;
     }
 }

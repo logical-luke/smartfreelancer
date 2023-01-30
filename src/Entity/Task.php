@@ -6,18 +6,17 @@ use App\Repository\TaskRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\ManyToOne(inversedBy: 'tasks')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $owner = null;
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -25,14 +24,15 @@ class Task
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\OneToOne(mappedBy: 'task', cascade: ['persist'])]
-    private ?Timer $timer = null;
-
-    #[ORM\OneToMany(mappedBy: 'task', targetEntity: TimeEntry::class)]
-    private Collection $timeEntries;
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     private ?Project $project = null;
+
+    #[ORM\OneToOne(mappedBy: 'task', cascade: ['persist', 'remove'])]
+    private ?Timer $timer = null;
 
     protected function __construct(User $user)
     {
@@ -45,21 +45,9 @@ class Task
         return new self($user);
     }
 
-    public function getId(): ?int
+    public function getId(): ?Uuid
     {
         return $this->id;
-    }
-
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?User $owner): self
-    {
-        $this->owner = $owner;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -86,6 +74,30 @@ class Task
         return $this;
     }
 
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
     public function getTimer(): ?Timer
     {
         return $this->timer;
@@ -104,48 +116,6 @@ class Task
         }
 
         $this->timer = $timer;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, TimeEntry>
-     */
-    public function getTimeEntries(): Collection
-    {
-        return $this->timeEntries;
-    }
-
-    public function addTimeEntry(TimeEntry $timeEntry): self
-    {
-        if (!$this->timeEntries->contains($timeEntry)) {
-            $this->timeEntries->add($timeEntry);
-            $timeEntry->setTask($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTimeEntry(TimeEntry $timeEntry): self
-    {
-        if ($this->timeEntries->removeElement($timeEntry)) {
-            // set the owning side to null (unless already changed)
-            if ($timeEntry->getTask() === $this) {
-                $timeEntry->setTask(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getProject(): ?Project
-    {
-        return $this->project;
-    }
-
-    public function setProject(?Project $project): self
-    {
-        $this->project = $project;
 
         return $this;
     }

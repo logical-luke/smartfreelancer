@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Timer;
+namespace App\Model\Project;
 
 use App\Exception\InvalidPayloadException;
+use Symfony\Component\Uid\Uuid;
 
 class CreateProjectPayload
 {
     protected function __construct(
-        private readonly int $ownerId,
+        private readonly string $ownerId,
         private readonly ?string $name,
         private readonly ?string $description,
-        private readonly ?int $clientId,
+        private readonly ?string $clientId,
     ) {
     }
 
@@ -36,9 +37,9 @@ class CreateProjectPayload
         return new self($payload['ownerId'], $payload['name'], $payload['description'], $payload['clientId']);
     }
 
-    public function getOwnerId(): int
+    public function getOwnerId(): Uuid
     {
-        return $this->ownerId;
+        return Uuid::fromString($this->ownerId);
     }
 
     public function getName(): ?string
@@ -51,8 +52,8 @@ class CreateProjectPayload
         return $this->description;
     }
 
-    public function getClientId()
+    public function getClientId(): ?Uuid
     {
-        return $this->clientId;
+        return $this->clientId ? Uuid::fromString($this->clientId) : null;
     }
 }

@@ -4,7 +4,7 @@
       <div class="container px-4 mx-auto">
         <h1 class="mb-2 text-5xl font-bold font-heading">Edit client</h1>
         <form @submit.prevent="submitForm">
-          <ClientForm v-if="client.id" />
+          <ClientForm />
           <div class="flex flex-wrap space-x-4">
             <div>
               <SubmitButton>
@@ -31,6 +31,9 @@ import api from "@/api/api";
 import BackButton from "@/components/ui/BackButton.vue";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
 import DeviceFloppyIcon from "vue-tabler-icons/icons/DeviceFloppyIcon";
+import { useRoute } from "vue-router";
+import store from "@/store";
+import router from "@/router";
 
 export default {
   name: "ClientEditPage",
@@ -44,15 +47,19 @@ export default {
     client: (state) => state.client.current,
   }),
   async created() {
-    const client = await api.getClient(this.$route.params.id);
+    const client = await store.getters["clients/getClientById"](this.route.params.id);
     this.$store.commit("client/setClient", client);
   },
   methods: {
     async submitForm() {
-      await this.$store.dispatch("clients/updateClient", this.client);
-      this.$store.dispatch("client/clearClient");
-      this.$router.push("/clients");
+      await store.dispatch("clients/updateClient", this.client);
+      await router.push("/clients");
     },
+  },
+  setup() {
+    const route = useRoute()
+
+    return { route }
   },
 };
 </script>

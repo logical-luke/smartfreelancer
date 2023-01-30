@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Model\Timer;
 
+use Symfony\Component\Uid\Uuid;
+
 class UpdateTimerPayload
 {
     protected function __construct(
-        private readonly int $id,
-        private readonly ?int $projectId,
+        private readonly string $id,
         private readonly ?int $startTime,
-        private readonly ?int $clientId,
-        private readonly ?int $taskId,
+        private readonly ?string $clientId,
+        private readonly ?string $projectId,
+        private readonly ?string $taskId,
     ) {
     }
 
@@ -21,21 +23,16 @@ class UpdateTimerPayload
 
         return new self(
             $payload['id'],
-            $payload['projectId'] ?? null,
             $payload['startTime'] ?? null,
             $payload['clientId'] ?? null,
+            $payload['projectId'] ?? null,
             $payload['taskId'] ?? null,
         );
     }
 
-    public function getId(): int
+    public function getId(): Uuid
     {
-        return $this->id;
-    }
-
-    public function getProjectId(): ?int
-    {
-        return $this->projectId;
+        return Uuid::fromString($this->id);
     }
 
     public function getStartTime(): ?int
@@ -43,13 +40,18 @@ class UpdateTimerPayload
         return $this->startTime;
     }
 
-    public function getClientId(): ?int
+    public function getProjectId(): ?Uuid
     {
-        return $this->clientId;
+        return $this->projectId ? Uuid::fromString($this->projectId) : null;
     }
 
-    public function getTaskId(): ?int
+    public function getClientId(): ?Uuid
     {
-        return $this->taskId;
+        return $this->clientId ? Uuid::fromString($this->clientId) : null;
+    }
+
+    public function getTaskId(): ?Uuid
+    {
+        return $this->taskId ? Uuid::fromString($this->taskId) : null;
     }
 }

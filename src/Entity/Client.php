@@ -6,18 +6,17 @@ use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\ManyToOne(inversedBy: 'clients')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $owner = null;
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -25,14 +24,15 @@ class Client
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\ManyToOne(inversedBy: 'clients')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
+
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Project::class)]
     private Collection $projects;
 
-    #[ORM\OneToOne(mappedBy: 'client', cascade: ['persist'])]
+    #[ORM\OneToOne(mappedBy: 'client', cascade: ['persist', 'remove'])]
     private ?Timer $timer = null;
-
-    #[ORM\OneToMany(mappedBy: 'client', targetEntity: TimeEntry::class)]
-    private Collection $timeEntries;
 
     protected function __construct(User $user)
     {
@@ -46,21 +46,9 @@ class Client
         return new self($user);
     }
 
-    public function getId(): ?int
+    public function getId(): ?Uuid
     {
         return $this->id;
-    }
-
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?User $owner): self
-    {
-        $this->owner = $owner;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -83,6 +71,18 @@ class Client
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }
@@ -135,36 +135,6 @@ class Client
         }
 
         $this->timer = $timer;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, TimeEntry>
-     */
-    public function getTimeEntries(): Collection
-    {
-        return $this->timeEntries;
-    }
-
-    public function addTimeEntry(TimeEntry $timeEntry): self
-    {
-        if (!$this->timeEntries->contains($timeEntry)) {
-            $this->timeEntries->add($timeEntry);
-            $timeEntry->setClient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTimeEntry(TimeEntry $timeEntry): self
-    {
-        if ($this->timeEntries->removeElement($timeEntry)) {
-            // set the owning side to null (unless already changed)
-            if ($timeEntry->getClient() === $this) {
-                $timeEntry->setClient(null);
-            }
-        }
 
         return $this;
     }

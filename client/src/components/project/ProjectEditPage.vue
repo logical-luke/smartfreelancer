@@ -4,7 +4,7 @@
       <div class="container px-4 mx-auto">
         <h1 class="mb-2 text-5xl font-bold font-heading">Edit project</h1>
         <form @submit.prevent="submitForm">
-          <ProjectForm v-if="project.id" />
+          <ProjectForm />
           <div class="flex flex-wrap space-x-4">
             <div>
               <SubmitButton>
@@ -27,10 +27,12 @@
 <script>
 import ProjectForm from "@/components/project/ProjectForm.vue";
 import { mapState } from "vuex";
-import api from "@/api/api";
 import BackButton from "@/components/ui/BackButton.vue";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
 import DeviceFloppyIcon from "vue-tabler-icons/icons/DeviceFloppyIcon";
+import router from "@/router";
+import store from "@/store";
+import { useRoute } from "vue-router";
 
 export default {
   name: "ProjectEditPage",
@@ -44,15 +46,19 @@ export default {
     project: (state) => state.project.current,
   }),
   async created() {
-    const project = await api.getProject(this.$route.params.id);
-    this.$store.commit("project/setProject", project);
+    const project = store.getters["projects/getProjectById"](this.route.params.id);
+    store.commit("project/setProject", project);
   },
   methods: {
     async submitForm() {
-      await this.$store.dispatch("projects/updateProject", this.project);
-      this.$store.dispatch("project/clearProject");
-      this.$router.push("/projects");
+      await store.dispatch("projects/updateProject", this.project);
+      await router.push("/projects");
     },
+  },
+  setup() {
+    const route = useRoute()
+
+    return { route }
   },
 };
 </script>

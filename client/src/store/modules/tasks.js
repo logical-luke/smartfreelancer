@@ -6,9 +6,6 @@ const state = () => ({
 });
 
 const getters = {
-  getTasks(state) {
-    return state.all;
-  },
   getTaskById: (state) => (id) => {
     return state.all.filter((task) => task.id === id).pop();
   },
@@ -34,11 +31,11 @@ const actions = {
     }
   },
 
-  async updateTask({ commit, state }, updatedTask) {
-    await api.updateTask(updatedTask);
+  async updateTask({ commit, state }, taskToUpdate) {
+    const updatedTask = await api.updateTask(taskToUpdate);
     let tasks = JSON.parse(JSON.stringify(state.all));
     tasks = tasks.map((task) => {
-      if (task.id === updatedTask.id) {
+      if (task.id === taskToUpdate.id) {
         return updatedTask;
       }
 

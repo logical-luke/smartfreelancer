@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Model\Timer;
 
+use Symfony\Component\Uid\Uuid;
+
 class CreateTimerPayload
 {
     protected function __construct(
-        private readonly int $ownerId,
-        private readonly ?int $projectId,
-        private readonly ?int $clientId,
-        private readonly ?int $taskId,
+        private readonly string $ownerId,
+        private readonly ?string $projectId,
+        private readonly ?string $clientId,
+        private readonly ?string $taskId,
     ) {
     }
 
@@ -24,23 +26,23 @@ class CreateTimerPayload
         );
     }
 
-    public function getOwnerId(): int
+    public function getOwnerId(): Uuid
     {
-        return $this->ownerId;
+        return Uuid::fromString($this->ownerId);
     }
 
-    public function getProjectId(): ?int
+    public function getProjectId(): ?Uuid
     {
-        return $this->projectId;
+        return $this->projectId ? Uuid::fromString($this->projectId) : null;
     }
 
-    public function getClientId(): ?int
+    public function getClientId(): ?Uuid
     {
-        return $this->clientId;
+        return $this->clientId ? Uuid::fromString($this->clientId) : null;
     }
 
-    public function getTaskId(): ?int
+    public function getTaskId(): ?Uuid
     {
-        return $this->taskId;
+        return $this->taskId ? Uuid::fromString($this->taskId) : null;
     }
 }

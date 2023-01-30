@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Model\Timer;
 
 use App\Exception\InvalidPayloadException;
+use Symfony\Component\Uid\Uuid;
 
 class StopTimerPayload
 {
     protected function __construct(
-        private readonly int $timerId,
+        private readonly string $timerId,
     )
     {
     }
@@ -25,8 +26,8 @@ class StopTimerPayload
         );
     }
 
-    public function getTimerId(): int
+    public function getId(): Uuid
     {
-        return $this->timerId;
+        return Uuid::fromString($this->timerId);
     }
 }

@@ -9,11 +9,11 @@ use App\Entity\Timer;
 class TimerDTO
 {
     protected function __construct(
-        public int $id,
-        public ?int $projectId,
+        public ?string $id,
         public int $startTime,
-        public ?int $clientId,
-        public ?int $taskId,
+        public ?string $clientId,
+        public ?string $projectId,
+        public ?string $taskId,
     )
     {
     }
@@ -21,11 +21,11 @@ class TimerDTO
     public static function fromTimer(Timer $timer): self
     {
         return new self(
-            $timer->getId(),
-            $timer->getProject()?->getId(),
+            $timer->getId()?->toRfc4122(),
             $timer->getStartTime()->getTimestamp(),
-            $timer->getClient()?->getId(),
-            $timer->getTask()?->getId(),
+            $timer->getClient()?->getId()?->toRfc4122(),
+            $timer->getProject()?->getId()?->toRfc4122(),
+            $timer->getTask()?->getId()?->toRfc4122(),
         );
     }
 }

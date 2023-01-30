@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Timer;
+namespace App\Model\Project;
 
 use App\Entity\Project;
 
 class ProjectDTO
 {
     protected function __construct(
-        public readonly int $id,
+        public readonly string $id,
+        public readonly string $ownerId,
         public readonly ?string $name,
-        public readonly int $ownerId,
         public readonly ?string $description,
-        public readonly ?int $clientId,
+        public readonly ?string $clientId,
     )
     {
     }
@@ -21,11 +21,11 @@ class ProjectDTO
     public static function fromProject(Project $project): self
     {
         return new self(
-            $project->getId(),
+            $project->getId()?->toRfc4122(),
+            $project->getOwner()->getId()?->toRfc4122(),
             $project->getName(),
-            $project->getOwner()->getId(),
             $project->getDescription(),
-            $project->getClient()?->getId(),
+            $project->getClient()?->getId()?->toRfc4122(),
         );
     }
 }

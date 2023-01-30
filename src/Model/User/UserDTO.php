@@ -9,7 +9,7 @@ use App\Entity\User;
 class UserDTO
 {
     protected function __construct(
-        public int $id,
+        public string $id,
         public string $email,
         public ?string $name,
     ) {
@@ -17,6 +17,6 @@ class UserDTO
 
     public static function createFromUser(User $user): self
     {
-        return new self($user->getId(), $user->getEmail(), $user->getName());
+        return new self($user->getId()?->toRfc4122(), $user->getEmail(), $user->getName());
     }
 }

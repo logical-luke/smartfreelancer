@@ -11,13 +11,14 @@
 
 <script>
 import ArrowBackUpIcon from "vue-tabler-icons/icons/ArrowBackUpIcon";
+import router from "@/router";
 
 export default {
   name: "BackButton",
   components: { ArrowBackUpIcon },
   methods: {
     goBack() {
-      this.$router.go(-1);
+      router.go(-1);
     },
   },
 };

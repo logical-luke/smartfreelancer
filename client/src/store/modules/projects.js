@@ -39,11 +39,11 @@ const actions = {
     }
   },
 
-  async updateProject({ commit, state }, updatedProject) {
-    await api.updateProject(updatedProject);
+  async updateProject({ commit, state }, projectToUpdate) {
+    const updatedProject = await api.updateProject(projectToUpdate);
     let projects = JSON.parse(JSON.stringify(state.all));
     projects = projects.map((project) => {
-      if (project.id === updatedProject.id) {
+      if (project.id === projectToUpdate.id) {
         return updatedProject;
       }
 

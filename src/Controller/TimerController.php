@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Exception\InvalidPayloadException;
 use App\Model\Timer\CreateTimerPayload;
 use App\Model\Timer\StopTimerPayload;
@@ -26,7 +27,10 @@ class TimerController extends AbstractController
     #[Route('/', name: 'index')]
     public function index(TimerRepository $timerRepository): JsonResponse
     {
-        if (!$timer = $timerRepository->findOneByUser($this->getUser())) {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if (!$timer = $timerRepository->findOneByUser($user)) {
             return $this->json([], Response::HTTP_OK);
         }
 
@@ -36,13 +40,16 @@ class TimerController extends AbstractController
     #[Route('/create', name: 'create')]
     public function create(Request $request, TimerRepository $timerRepository, TimerCreator $timerCreator): JsonResponse
     {
-        if ($timer = $timerRepository->findOneByUser($this->getUser())) {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($timerRepository->findOneByUser($user)) {
             return $this->json([], Response::HTTP_CONFLICT);
         }
 
         try {
             $payload = array_merge([
-                'ownerId' => $this->getUser()->getId(),
+                'ownerId' => $user->getId()?->toRfc4122(),
             ], json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR));
         } catch (JsonException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
@@ -66,7 +73,7 @@ class TimerController extends AbstractController
 
         try {
             $timerStopper(StopTimerPayload::from([
-                'timerId' => $timer->getId(),
+                'timerId' => $timer->getId()?->toRfc4122(),
             ]));
         } catch (InvalidPayloadException $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
@@ -76,7 +83,7 @@ class TimerController extends AbstractController
     }
 
     #[Route('/update/{id}', name: 'update', methods: 'POST')]
-    public function update(int $id, TimerUpdater $timerUpdater, Request $request): JsonResponse
+    public function update(string $id, TimerUpdater $timerUpdater, Request $request): JsonResponse
     {
         try {
             $payload = array_merge([

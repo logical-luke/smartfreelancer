@@ -19,6 +19,7 @@
 import { mapState } from "vuex";
 import NewButton from "@/components/ui/NewButton.vue";
 import ClientPage from "@/components/client/ClientPage.vue";
+import store from "@/store";
 
 export default {
   name: "ClientsPage",
@@ -27,7 +28,7 @@ export default {
     clients: (state) => state.clients.all,
   }),
   mounted() {
-    this.$store.commit("client/clearClient");
+    store.commit("client/clearClient");
   },
 };
 </script>

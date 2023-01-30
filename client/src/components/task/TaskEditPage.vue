@@ -4,7 +4,7 @@
       <div class="container px-4 mx-auto">
         <h1 class="mb-2 text-5xl font-bold font-heading">Edit task</h1>
         <form @submit.prevent="submitForm">
-          <TaskForm v-if="task.id" />
+          <TaskForm />
           <div class="flex flex-wrap space-x-4">
             <div>
               <SubmitButton>
@@ -31,6 +31,9 @@ import api from "@/api/api";
 import BackButton from "@/components/ui/BackButton.vue";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
 import DeviceFloppyIcon from "vue-tabler-icons/icons/DeviceFloppyIcon";
+import store from "@/store";
+import router from "@/router";
+import { useRoute } from "vue-router";
 
 export default {
   name: "TaskEditPage",
@@ -44,15 +47,19 @@ export default {
     task: (state) => state.task.current,
   }),
   async created() {
-    const task = await api.getTask(this.$route.params.id);
-    this.$store.commit("task/setTask", task);
+    const task = await store.getters["tasks/getTaskById"](this.route.params.id);
+    store.commit("task/setTask", task);
   },
   methods: {
     async submitForm() {
-      await this.$store.dispatch("tasks/updateTask", this.task);
-      this.$store.dispatch("task/clearTask");
-      this.$router.push("/tasks");
+      await store.dispatch("tasks/updateTask", this.task);
+      await router.push("/tasks");
     },
+  },
+  setup() {
+    const route = useRoute()
+
+    return { route }
   },
 };
 </script>

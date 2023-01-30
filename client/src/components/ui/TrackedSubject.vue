@@ -52,7 +52,7 @@ export default {
         this.subject = "p-" + this.timer.projectId;
         const project = store.getters["projects/getProjectById"](this.timer.projectId);
         if (project.clientId) {
-          const clientOption = this.options.find(option => Number(option.id.split("-")[1]) === project.clientId);
+          const clientOption = this.options.find(option => option.id.slice(2) === project.clientId);
           if (clientOption) {
             clientOption.isDefaultExpanded = true;
           }
@@ -65,7 +65,7 @@ export default {
         this.subject = "t-" + this.timer.taskId;
         const task = store.getters["tasks/getTaskById"](this.timer.taskId);
         if (task.projectId) {
-          const projectOption = this.options.find(option => Number(option.id.split("-")[1]) === task.projectId);
+          const projectOption = this.options.find(option => option.id.slice(2) === task.projectId);
           if (projectOption) {
             projectOption.isDefaultExpanded = true;
           }
@@ -85,7 +85,7 @@ export default {
         return;
       }
 
-      let id = Number(value.split("-")[1]);
+      let id = value.slice(2);
       if (value.startsWith("p-")) {
         await store.dispatch("timer/setProjectId", id);
       }

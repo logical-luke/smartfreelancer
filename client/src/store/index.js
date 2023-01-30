@@ -42,7 +42,13 @@ export default createStore({
       router.push("/login");
     },
     async loadInitial({ commit, dispatch }) {
-      const user = await api.getUser();
+      let user = null;
+      try {
+        user = await api.getUser();
+      } catch (err) {
+        return dispatch("logout");
+      }
+
       if (!user) {
         return dispatch("logout");
       }

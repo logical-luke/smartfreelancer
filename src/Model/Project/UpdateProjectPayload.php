@@ -2,15 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Timer;
+namespace App\Model\Project;
+
+use Symfony\Component\Uid\Uuid;
 
 class UpdateProjectPayload
 {
     protected function __construct(
-        private readonly int $id,
+        private readonly string $id,
         private readonly ?string $name,
         private readonly ?string $description,
-        private readonly ?int $clientId,
+        private readonly ?string $clientId,
     ) {
     }
 
@@ -26,9 +28,9 @@ class UpdateProjectPayload
         );
     }
 
-    public function getId(): int
+    public function getId(): Uuid
     {
-        return $this->id;
+        return Uuid::fromString($this->id);
     }
 
     public function getName(): ?string
@@ -41,8 +43,8 @@ class UpdateProjectPayload
         return $this->description;
     }
 
-    public function getClientId(): ?int
+    public function getClientId(): ?Uuid
     {
-        return $this->clientId;
+        return $this->clientId ? Uuid::fromString($this->clientId) : null;
     }
 }

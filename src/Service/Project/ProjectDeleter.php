@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Project;
 
-use App\Model\Timer\DeleteProjectPayload;
+use App\Model\Project\DeleteProjectPayload;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
 

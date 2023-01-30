@@ -7,27 +7,30 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: TimerRepository::class)]
 class Timer
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\OneToOne(inversedBy: 'timer', cascade: ['persist'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $owner = null;
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    private ?Uuid $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $startTime = null;
 
     #[ORM\OneToOne(inversedBy: 'timer', cascade: ['persist'])]
-    private ?Project $project = null;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
 
     #[ORM\OneToOne(inversedBy: 'timer', cascade: ['persist'])]
     private ?Client $client = null;
+
+    #[ORM\OneToOne(inversedBy: 'timer', cascade: ['persist'])]
+    private ?Project $project = null;
 
     #[ORM\OneToOne(inversedBy: 'timer', cascade: ['persist'])]
     private ?Task $task = null;
@@ -44,7 +47,19 @@ class Timer
         return new self($owner);
     }
 
-    public function getId(): ?int
+    public function getStartTime(): ?DateTimeInterface
+    {
+        return $this->startTime;
+    }
+
+    public function setStartTime(?DateTimeInterface $startTime): Timer
+    {
+        $this->startTime = $startTime;
+
+        return $this;
+    }
+
+    public function getId(): ?Uuid
     {
         return $this->id;
     }
@@ -54,26 +69,9 @@ class Timer
         return $this->owner;
     }
 
-    public function getStartTime(): DateTimeInterface
+    public function setOwner(User $owner): self
     {
-        return $this->startTime;
-    }
-
-    public function setStartTime(DateTimeInterface $startTime): self
-    {
-        $this->startTime = $startTime;
-
-        return $this;
-    }
-
-    public function getProject(): ?Project
-    {
-        return $this->project;
-    }
-
-    public function setProject(?Project $project): self
-    {
-        $this->project = $project;
+        $this->owner = $owner;
 
         return $this;
     }
@@ -86,6 +84,18 @@ class Timer
     public function setClient(?Client $client): self
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
 
         return $this;
     }

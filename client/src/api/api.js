@@ -75,7 +75,11 @@ const refreshToken = async function () {
   if (response.status === 200) {
     store.commit("setToken", response.data.token);
     store.commit("setRefreshToken", response.data.refresh_token);
+
+    return;
   }
+
+  return store.dispatch("logout");
 };
 
 export default {

@@ -9,11 +9,11 @@ use App\Entity\Task;
 class TaskDTO
 {
     protected function __construct(
-        public readonly int $id,
+        public readonly string $id,
+        public readonly string $ownerId,
         public readonly ?string $name,
-        public readonly int $ownerId,
         public readonly ?string $description,
-        public readonly ?int $projectId,
+        public readonly ?string $projectId,
     )
     {
     }
@@ -21,11 +21,11 @@ class TaskDTO
     public static function fromTask(Task $task): self
     {
         return new self(
-            $task->getId(),
+            $task->getId()?->toRfc4122(),
+            $task->getOwner()?->getId()?->toRfc4122(),
             $task->getName(),
-            $task->getOwner()->getId(),
             $task->getDescription(),
-            $task->getProject()?->getId(),
+            $task->getProject()?->getId()?->toRfc4122(),
         );
     }
 }

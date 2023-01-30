@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Exception\InvalidPayloadException;
 use App\Model\Client\ClientDTO;
 use App\Model\Client\CreateClientPayload;
@@ -26,17 +27,22 @@ class ClientController extends AbstractController
     #[Route('/', name: 'all')]
     public function index(ClientRepository $clientRepository): JsonResponse
     {
+        /** @var User $user */
+        $user = $this->getUser();
+
         return $this->json(array_map(static function ($client) {
             return (ClientDTO::fromClient($client));
-        }, $clientRepository->findByUser($this->getUser())));
+        }, $clientRepository->findByUser($user)));
     }
 
     #[Route('/create', name: 'create', methods: 'POST')]
     public function create(ClientCreator $clientCreator, Request $request): JsonResponse
     {
+        /** @var User $user */
+        $user = $this->getUser();
         try {
             $payload = array_merge([
-                'ownerId' => $this->getUser()->getId(),
+                'ownerId' => $user->getId()->toRfc4122(),
             ], json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR));
         } catch (JsonException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
@@ -54,7 +60,7 @@ class ClientController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: 'delete', methods: 'DELETE')]
-    public function delete(int $id, ClientDeleter $clientDeleter): JsonResponse
+    public function delete(string $id, ClientDeleter $clientDeleter): JsonResponse
     {
         $clientDeleter(DeleteClientPayload::from(['id' => $id]));
 
@@ -62,7 +68,7 @@ class ClientController extends AbstractController
     }
 
     #[Route('/update/{id}', name: 'update', methods: 'POST')]
-    public function update(int $id, ClientUpdater $clientUpdater, Request $request): JsonResponse
+    public function update(string $id, ClientUpdater $clientUpdater, Request $request): JsonResponse
     {
         try {
             $payload = array_merge([
@@ -80,7 +86,7 @@ class ClientController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show')]
-    public function show(int $id, ClientRepository $clientRepository): Response
+    public function show(string $id, ClientRepository $clientRepository): Response
     {
         if (!$client = $clientRepository->find($id)) {
             return $this->json([], Response::HTTP_NOT_FOUND);

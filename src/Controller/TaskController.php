@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Exception\InvalidPayloadException;
 use App\Model\Task\CreateTaskPayload;
 use App\Model\Task\DeleteTaskPayload;
@@ -24,17 +25,22 @@ class TaskController extends AbstractController
     #[Route('/', name: 'all')]
     public function index(TaskRepository $taskRepository): JsonResponse
     {
+        /** @var User $user */
+        $user = $this->getUser();
+
         return $this->json(array_map(static function ($task) {
             return (TaskDTO::fromTask($task));
-        }, $taskRepository->findByUser($this->getUser())));
+        }, $taskRepository->findByUser($user)));
     }
 
     #[Route('/create', name: 'create', methods: 'POST')]
     public function create(TaskCreator $taskCreator, Request $request): JsonResponse
     {
+        /** @var User $user */
+        $user = $this->getUser();
         try {
             $payload = array_merge([
-                'ownerId' => $this->getUser()->getId(),
+                'ownerId' => $user->getId()?->toRfc4122(),
             ], json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR));
         } catch (JsonException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
@@ -52,7 +58,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: 'delete', methods: 'DELETE')]
-    public function delete(int $id, TaskDeleter $taskDeleter): JsonResponse
+    public function delete(string $id, TaskDeleter $taskDeleter): JsonResponse
     {
         // todo Add check if user is eligible to delete task
 
@@ -62,7 +68,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/update/{id}', name: 'update', methods: 'POST')]
-    public function update(int $id, TaskUpdater $taskUpdater, Request $request): JsonResponse
+    public function update(string $id, TaskUpdater $taskUpdater, Request $request): JsonResponse
     {
         try {
             $payload = array_merge([
@@ -80,7 +86,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show')]
-    public function show(int $id, TaskRepository $taskRepository): Response
+    public function show(string $id, TaskRepository $taskRepository): Response
     {
         if (!$task = $taskRepository->find($id)) {
             return $this->json([], Response::HTTP_NOT_FOUND);
