@@ -52,12 +52,14 @@ jobs:
 
       - name: Apply database api migrations
         uses: appleboy/ssh-action@master
+        env:
+          DATABASE_URL: mysql://${{ secrets.DATABASE_MIGRATION_USER }}:${{ secrets.DATABASE_MIGRATION_PASSWORD }}@${{ secrets.DATABASE_HOST }}:3306/${{ secrets.DATABASE_NAME }}?serverVersion=8
         with:
           host: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME_API }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: DATABASEURL=DATABASE_URL=mysql://${{ secrets.DATABASE_MIGRATION_USER }}:${{ secrets.DATABASE_MIGRATION_PASSWORD }}@${{ secrets.DATABASE_HOST }}:3306/${{ secrets.DATABASE_NAME }}?serverVersion=8 /usr/bin/php8.1 /home/smartfreelancer-api/tmp/build/bin/console doctrine:migrations:migrate
+          script: /usr/bin/php8.1 /home/smartfreelancer-api/tmp/build/bin/console doctrine:migrations:migrate
 
       - name: Generate JWT certs
         uses: appleboy/ssh-action@master
