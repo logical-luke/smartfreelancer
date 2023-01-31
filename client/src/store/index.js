@@ -21,6 +21,7 @@ export default createStore({
     isLogin: true,
     user: {},
     initialLoaded: false,
+    synchronised: false,
   },
   modules: {
     projects,
@@ -89,8 +90,12 @@ export default createStore({
       }
 
       commit("setInitialLoaded", true);
+      dispatch("syncInitial");
     },
-    async syncInitial({ commit, dispatch }) {
+    async syncInitial({ commit, state, dispatch }) {
+      if (state.synchronised) {
+        return;
+      }
       const timer = await api.getTimer();
       if (timer && timer.id) {
         commit("timer/setTimer", timer);
@@ -98,6 +103,7 @@ export default createStore({
       await dispatch("projects/getProjects");
       await dispatch("clients/getClients");
       await dispatch("tasks/getTasks");
+      commit("setSynchronised", true);
     },
   },
   mutations: {
@@ -108,6 +114,9 @@ export default createStore({
     },
     setInitialLoaded(state, loaded) {
       state.initialLoaded = loaded;
+    },
+    setSynchronised(state, synchronised) {
+      state.synchronised = synchronised;
     },
     setRefreshToken(state, refreshToken) {
       VueCookies.set(

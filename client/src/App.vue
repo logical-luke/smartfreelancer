@@ -25,6 +25,7 @@ onMounted(async () => {
     store.commit("setAuthorized", true);
     store.commit("setRefreshToken", refreshToken);
     await store.dispatch("loadInitial");
+    await store.dispatch("syncInitial");
   }
 });
 </script>
