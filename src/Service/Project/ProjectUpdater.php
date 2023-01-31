@@ -23,7 +23,6 @@ class ProjectUpdater
             throw new \RuntimeException('Project not found');
         }
 
-
         // todo Add check if user is eligible to update project
         // if ($project->getOwner()->getId() !==) {
         //

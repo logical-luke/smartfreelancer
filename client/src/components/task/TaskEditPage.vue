@@ -27,7 +27,6 @@
 <script>
 import TaskForm from "@/components/task/TaskForm.vue";
 import { mapState } from "vuex";
-import api from "@/api/api";
 import BackButton from "@/components/ui/BackButton.vue";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
 import DeviceFloppyIcon from "vue-tabler-icons/icons/DeviceFloppyIcon";
@@ -57,9 +56,9 @@ export default {
     },
   },
   setup() {
-    const route = useRoute()
+    const route = useRoute();
 
-    return { route }
+    return { route };
   },
 };
 </script>

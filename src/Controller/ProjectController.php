@@ -12,7 +12,6 @@ use App\Repository\ProjectRepository;
 use App\Service\Project\ProjectCreator;
 use App\Service\Project\ProjectDeleter;
 use App\Service\Project\ProjectUpdater;
-use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +28,7 @@ class ProjectController extends AbstractController
         $user = $this->getUser();
 
         return $this->json(array_map(static function ($project) {
-            return (ProjectDTO::fromProject($project));
+            return ProjectDTO::fromProject($project);
         }, $projectRepository->findByUser($user)));
     }
 
@@ -43,7 +42,7 @@ class ProjectController extends AbstractController
             $payload = array_merge([
                 'ownerId' => $user->getId()?->toRfc4122(),
             ], json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR));
-        } catch (JsonException $e) {
+        } catch (\JsonException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
@@ -75,7 +74,7 @@ class ProjectController extends AbstractController
             $payload = array_merge([
                 'id' => $id,
             ], json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR));
-        } catch (JsonException $e) {
+        } catch (\JsonException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 

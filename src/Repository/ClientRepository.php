@@ -43,7 +43,7 @@ class ClientRepository extends ServiceEntityRepository
     public function findByUser(User $user): array
     {
         return $this->findBy([
-            'owner' => $user
+            'owner' => $user,
         ], [
             'id' => 'ASC',
         ]);

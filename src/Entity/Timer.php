@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\TimerRepository;
-use DateTimeImmutable;
-use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -20,7 +18,7 @@ class Timer
     private ?Uuid $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?DateTimeInterface $startTime = null;
+    private ?\DateTimeInterface $startTime = null;
 
     #[ORM\OneToOne(inversedBy: 'timer', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
@@ -39,7 +37,7 @@ class Timer
     {
         $this->owner = $owner;
 
-        $this->startTime = new DateTimeImmutable();
+        $this->startTime = new \DateTimeImmutable();
     }
 
     public static function fromUser(User $owner): self
@@ -47,12 +45,12 @@ class Timer
         return new self($owner);
     }
 
-    public function getStartTime(): ?DateTimeInterface
+    public function getStartTime(): ?\DateTimeInterface
     {
         return $this->startTime;
     }
 
-    public function setStartTime(?DateTimeInterface $startTime): Timer
+    public function setStartTime(?\DateTimeInterface $startTime): Timer
     {
         $this->startTime = $startTime;
 

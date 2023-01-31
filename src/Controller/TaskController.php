@@ -12,7 +12,6 @@ use App\Repository\TaskRepository;
 use App\Service\Task\TaskCreator;
 use App\Service\Task\TaskDeleter;
 use App\Service\Task\TaskUpdater;
-use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +28,7 @@ class TaskController extends AbstractController
         $user = $this->getUser();
 
         return $this->json(array_map(static function ($task) {
-            return (TaskDTO::fromTask($task));
+            return TaskDTO::fromTask($task);
         }, $taskRepository->findByUser($user)));
     }
 
@@ -42,7 +41,7 @@ class TaskController extends AbstractController
             $payload = array_merge([
                 'ownerId' => $user->getId()?->toRfc4122(),
             ], json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR));
-        } catch (JsonException $e) {
+        } catch (\JsonException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
@@ -74,7 +73,7 @@ class TaskController extends AbstractController
             $payload = array_merge([
                 'id' => $id,
             ], json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR));
-        } catch (JsonException $e) {
+        } catch (\JsonException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 

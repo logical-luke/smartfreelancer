@@ -14,8 +14,7 @@ class TimerDTO
         public ?string $clientId,
         public ?string $projectId,
         public ?string $taskId,
-    )
-    {
+    ) {
     }
 
     public static function fromTimer(Timer $timer): self

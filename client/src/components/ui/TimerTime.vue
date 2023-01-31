@@ -1,4 +1,4 @@
-  <template>
+<template>
   <p class="text-gray-300" v-if="!isRunning">00:00:00</p>
   <p v-else>{{ hours }}:{{ minutes }}:{{ seconds }}</p>
 </template>

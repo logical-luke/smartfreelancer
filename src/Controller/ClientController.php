@@ -14,7 +14,6 @@ use App\Repository\ClientRepository;
 use App\Service\Client\ClientCreator;
 use App\Service\Client\ClientDeleter;
 use App\Service\Client\ClientUpdater;
-use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +30,7 @@ class ClientController extends AbstractController
         $user = $this->getUser();
 
         return $this->json(array_map(static function ($client) {
-            return (ClientDTO::fromClient($client));
+            return ClientDTO::fromClient($client);
         }, $clientRepository->findByUser($user)));
     }
 
@@ -44,7 +43,7 @@ class ClientController extends AbstractController
             $payload = array_merge([
                 'ownerId' => $user->getId()->toRfc4122(),
             ], json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR));
-        } catch (JsonException $e) {
+        } catch (\JsonException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
@@ -74,7 +73,7 @@ class ClientController extends AbstractController
             $payload = array_merge([
                 'id' => $id,
             ], json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR));
-        } catch (JsonException $e) {
+        } catch (\JsonException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 

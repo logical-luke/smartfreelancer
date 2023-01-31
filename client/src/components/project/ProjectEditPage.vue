@@ -46,7 +46,9 @@ export default {
     project: (state) => state.project.current,
   }),
   async created() {
-    const project = store.getters["projects/getProjectById"](this.route.params.id);
+    const project = store.getters["projects/getProjectById"](
+      this.route.params.id
+    );
     store.commit("project/setProject", project);
   },
   methods: {
@@ -56,9 +58,9 @@ export default {
     },
   },
   setup() {
-    const route = useRoute()
+    const route = useRoute();
 
-    return { route }
+    return { route };
   },
 };
 </script>

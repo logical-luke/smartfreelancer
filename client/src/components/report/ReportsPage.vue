@@ -11,7 +11,7 @@ import IncomeChart from "@/components/report/IncomeChart.vue";
 
 export default {
   name: "ReportsPage",
-  components: { IncomeChart }
+  components: { IncomeChart },
 };
 </script>
 

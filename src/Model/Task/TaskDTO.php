@@ -14,8 +14,7 @@ class TaskDTO
         public readonly ?string $name,
         public readonly ?string $description,
         public readonly ?string $projectId,
-    )
-    {
+    ) {
     }
 
     public static function fromTask(Task $task): self

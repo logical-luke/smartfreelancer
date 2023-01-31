@@ -141,12 +141,12 @@ class Project
     public function setTimer(?Timer $timer): self
     {
         // unset the owning side of the relation if necessary
-        if ($timer === null && $this->timer !== null) {
+        if (null === $timer && null !== $this->timer) {
             $this->timer->setProject(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($timer !== null && $timer->getProject() !== $this) {
+        if (null !== $timer && $timer->getProject() !== $this) {
             $timer->setProject($this);
         }
 

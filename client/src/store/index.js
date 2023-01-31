@@ -30,7 +30,7 @@ export default createStore({
     clients,
     client,
     tasks,
-    task
+    task,
   },
   actions: {
     async logout({ commit }) {
@@ -60,29 +60,29 @@ export default createStore({
       commit("setUser", user);
 
       let timer = null;
-      if (localStorage.getItem('timer')) {
-        timer = JSON.parse(localStorage.getItem('timer'));
+      if (localStorage.getItem("timer")) {
+        timer = JSON.parse(localStorage.getItem("timer"));
       }
       if (timer && timer.id) {
         commit("timer/setTimer", timer);
       }
       let projects = null;
-      if (localStorage.getItem('projects')) {
-        projects = JSON.parse(localStorage.getItem('projects'));
+      if (localStorage.getItem("projects")) {
+        projects = JSON.parse(localStorage.getItem("projects"));
       }
       if (projects) {
         commit("projects/setProjects", projects);
       }
       let clients = null;
-      if (localStorage.getItem('clients')) {
-        clients = JSON.parse(localStorage.getItem('clients'));
+      if (localStorage.getItem("clients")) {
+        clients = JSON.parse(localStorage.getItem("clients"));
       }
       if (clients) {
         commit("clients/setClients", clients);
       }
       let tasks = null;
-      if (localStorage.getItem('tasks')) {
-        tasks = JSON.parse(localStorage.getItem('tasks'));
+      if (localStorage.getItem("tasks")) {
+        tasks = JSON.parse(localStorage.getItem("tasks"));
       }
       if (tasks) {
         commit("tasks/setTasks", tasks);

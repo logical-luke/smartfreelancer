@@ -13,8 +13,7 @@ class ClientDTO
         public readonly string $ownerId,
         public readonly ?string $name,
         public readonly ?string $description,
-    )
-    {
+    ) {
     }
 
     public static function fromClient(Client $client): self

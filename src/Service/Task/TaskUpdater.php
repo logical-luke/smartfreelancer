@@ -23,7 +23,6 @@ class TaskUpdater
             throw new \RuntimeException('Task not found');
         }
 
-
         // todo Add check if user is eligible to update task
         // if ($task->getOwner()->getId() !==) {
         //

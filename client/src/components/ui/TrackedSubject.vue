@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 import Treeselect from "vue3-acies-treeselect";
 import "vue3-acies-treeselect/dist/vue3-treeselect.css";
 import store from "@/store";
@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       subject: null,
-      options: []
+      options: [],
     };
   },
   watch: {
@@ -38,7 +38,7 @@ export default {
     },
     tasks() {
       this.updateSubjectOptions();
-    }
+    },
   },
   methods: {
     updateSubject() {
@@ -50,9 +50,13 @@ export default {
 
       if (this.timer.projectId) {
         this.subject = "p-" + this.timer.projectId;
-        const project = store.getters["projects/getProjectById"](this.timer.projectId);
+        const project = store.getters["projects/getProjectById"](
+          this.timer.projectId
+        );
         if (project.clientId) {
-          const clientOption = this.options.find(option => option.id.slice(2) === project.clientId);
+          const clientOption = this.options.find(
+            (option) => option.id.slice(2) === project.clientId
+          );
           if (clientOption) {
             clientOption.isDefaultExpanded = true;
           }
@@ -65,7 +69,9 @@ export default {
         this.subject = "t-" + this.timer.taskId;
         const task = store.getters["tasks/getTaskById"](this.timer.taskId);
         if (task.projectId) {
-          const projectOption = this.options.find(option => option.id.slice(2) === task.projectId);
+          const projectOption = this.options.find(
+            (option) => option.id.slice(2) === task.projectId
+          );
           if (projectOption) {
             projectOption.isDefaultExpanded = true;
           }
@@ -105,7 +111,7 @@ export default {
           .forEach((task) => {
             options.push({
               id: "t-" + task.id,
-              label: "📋 " + task.name
+              label: "📋 " + task.name,
             });
           });
       }
@@ -116,14 +122,14 @@ export default {
           .forEach((project) => {
             const projectOption = {
               id: "p-" + project.id,
-              label: "💼 " + project.name
+              label: "💼 " + project.name,
             };
             const children = this.tasks
               .filter((task) => task.projectId === project.id)
               .map((task) => {
                 return {
                   id: "t-" + task.id,
-                  label: "📋 " + task.name
+                  label: "📋 " + task.name,
                 };
               });
             if (children.length > 0) {
@@ -137,21 +143,21 @@ export default {
         this.clients.forEach((client) => {
           const clientOption = {
             id: "c-" + client.id,
-            label: "👤 " + client.name
+            label: "👤 " + client.name,
           };
           const children = this.projects
             .filter((project) => project.clientId === client.id)
             .map((project) => {
               const projectOption = {
                 id: "p-" + project.id,
-                label: "💼 " + project.name
+                label: "💼 " + project.name,
               };
               const children = this.tasks
                 .filter((task) => task.projectId === project.id)
                 .map((task) => {
                   return {
                     id: "t-" + task.id,
-                    label: "📝 " + task.name
+                    label: "📝 " + task.name,
                   };
                 });
               if (children.length > 0) {
@@ -168,19 +174,19 @@ export default {
       }
 
       this.options = options;
-    }
+    },
   },
   computed: {
     ...mapState({
       timer: (state) => state.timer.current,
       projects: (state) => state.projects.all,
       clients: (state) => state.clients.all,
-      tasks: (state) => state.tasks.all
+      tasks: (state) => state.tasks.all,
     }),
   },
   mounted() {
     this.updateSubjectOptions();
     this.updateSubject();
-  }
+  },
 };
 </script>

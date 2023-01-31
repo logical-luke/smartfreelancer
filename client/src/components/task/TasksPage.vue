@@ -12,7 +12,6 @@
         </template>
       </TransitionGroup>
     </div>
-
   </div>
 </template>
 
@@ -25,11 +24,11 @@ export default {
   name: "TasksPage",
   components: { TaskPage, NewButton },
   computed: mapState({
-    tasks: (state) => state.tasks.all
+    tasks: (state) => state.tasks.all,
   }),
   mounted() {
     this.$store.dispatch("task/clearTask");
-  }
+  },
 };
 </script>
 

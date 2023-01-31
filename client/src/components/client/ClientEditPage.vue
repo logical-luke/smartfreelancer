@@ -27,7 +27,6 @@
 <script>
 import ClientForm from "@/components/client/ClientForm.vue";
 import { mapState } from "vuex";
-import api from "@/api/api";
 import BackButton from "@/components/ui/BackButton.vue";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
 import DeviceFloppyIcon from "vue-tabler-icons/icons/DeviceFloppyIcon";
@@ -47,7 +46,9 @@ export default {
     client: (state) => state.client.current,
   }),
   async created() {
-    const client = await store.getters["clients/getClientById"](this.route.params.id);
+    const client = await store.getters["clients/getClientById"](
+      this.route.params.id
+    );
     this.$store.commit("client/setClient", client);
   },
   methods: {
@@ -57,9 +58,9 @@ export default {
     },
   },
   setup() {
-    const route = useRoute()
+    const route = useRoute();
 
-    return { route }
+    return { route };
   },
 };
 </script>

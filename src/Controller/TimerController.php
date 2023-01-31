@@ -14,7 +14,6 @@ use App\Repository\TimerRepository;
 use App\Service\Timer\TimerCreator;
 use App\Service\Timer\TimerStopper;
 use App\Service\Timer\TimerUpdater;
-use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,7 +50,7 @@ class TimerController extends AbstractController
             $payload = array_merge([
                 'ownerId' => $user->getId()?->toRfc4122(),
             ], json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR));
-        } catch (JsonException $e) {
+        } catch (\JsonException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
@@ -89,7 +88,7 @@ class TimerController extends AbstractController
             $payload = array_merge([
                 'id' => $id,
             ], json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR));
-        } catch (JsonException $e) {
+        } catch (\JsonException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
         $timer = $timerUpdater(UpdateTimerPayload::from($payload));

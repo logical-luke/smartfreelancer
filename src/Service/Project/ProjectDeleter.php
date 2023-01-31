@@ -27,7 +27,6 @@ class ProjectDeleter
             $this->taskRepository->remove($task);
         }
 
-
         if ($timer = $project->getTimer()) {
             $timer->setProject(null);
         }

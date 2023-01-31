@@ -25,11 +25,11 @@ export default {
   name: "ClientsPage",
   components: { ClientPage, NewButton },
   computed: mapState({
-    clients: (state) => state.clients.all
+    clients: (state) => state.clients.all,
   }),
   mounted() {
     store.commit("client/clearClient");
-  }
+  },
 };
 </script>
 

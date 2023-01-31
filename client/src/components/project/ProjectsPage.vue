@@ -24,11 +24,11 @@ export default {
   name: "ProjectsPage",
   components: { ProjectPage, NewButton },
   computed: mapState({
-    projects: (state) => state.projects.all
+    projects: (state) => state.projects.all,
   }),
   mounted() {
     this.$store.dispatch("project/clearProject");
-  }
+  },
 };
 </script>
 

@@ -75,10 +75,11 @@ export default {
       return (
         (this.timer &&
           this.timer.startTime &&
-          (this.projectId && this.timer.projectId === this.projectId)  ||
-          (this.taskId && this.timer.taskId === this.taskId)  ||
-          (this.clientId && this.timer.clientId === this.clientId)
-        ) || (this.timer.id && this.global)
+          this.projectId &&
+          this.timer.projectId === this.projectId) ||
+        (this.taskId && this.timer.taskId === this.taskId) ||
+        (this.clientId && this.timer.clientId === this.clientId) ||
+        (this.timer.id && this.global)
       );
     },
   },

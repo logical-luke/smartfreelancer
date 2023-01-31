@@ -125,12 +125,12 @@ class Client
     public function setTimer(?Timer $timer): self
     {
         // unset the owning side of the relation if necessary
-        if ($timer === null && $this->timer !== null) {
+        if (null === $timer && null !== $this->timer) {
             $this->timer->setClient(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($timer !== null && $timer->getClient() !== $this) {
+        if (null !== $timer && $timer->getClient() !== $this) {
             $timer->setClient($this);
         }
 

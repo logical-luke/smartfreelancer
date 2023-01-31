@@ -26,7 +26,7 @@ const actions = {
     commit("setProjects", projects);
   },
 
-  async deleteProject({ commit, state, rootState, rootGetters }, id) {
+  async deleteProject({ commit, state, rootGetters }, id) {
     await api.deleteProject(id);
 
     let projects = JSON.parse(JSON.stringify(state.all));

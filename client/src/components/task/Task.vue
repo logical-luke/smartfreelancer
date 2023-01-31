@@ -42,19 +42,19 @@ export default {
   props: {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     description: {
-      type: String
+      type: String,
     },
     id: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   methods: {
-    ...mapActions("tasks", ["deleteTask"])
-  }
+    ...mapActions("tasks", ["deleteTask"]),
+  },
 };
 </script>
 

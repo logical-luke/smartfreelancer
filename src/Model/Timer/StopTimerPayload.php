@@ -11,8 +11,7 @@ class StopTimerPayload
 {
     protected function __construct(
         private readonly string $timerId,
-    )
-    {
+    ) {
     }
 
     public static function from(array $array): self

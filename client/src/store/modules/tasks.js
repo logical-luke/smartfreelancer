@@ -18,7 +18,7 @@ const actions = {
     commit("setTasks", tasks);
   },
 
-  async deleteTask({ commit, state, rootState, rootGetters }, id) {
+  async deleteTask({ commit, state, rootGetters }, id) {
     await api.deleteTask(id);
 
     let tasks = JSON.parse(JSON.stringify(state.all));

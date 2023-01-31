@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\TaskRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
@@ -106,12 +105,12 @@ class Task
     public function setTimer(?Timer $timer): self
     {
         // unset the owning side of the relation if necessary
-        if ($timer === null && $this->timer !== null) {
+        if (null === $timer && null !== $this->timer) {
             $this->timer->setTask(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($timer !== null && $timer->getTask() !== $this) {
+        if (null !== $timer && $timer->getTask() !== $this) {
             $timer->setTask($this);
         }
 

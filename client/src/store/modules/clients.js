@@ -26,7 +26,7 @@ const actions = {
     commit("setClients", clients);
   },
 
-  async deleteClient({ commit, state, rootSetters, rootGetters }, id) {
+  async deleteClient({ commit, state, rootGetters }, id) {
     await api.deleteClient(id);
 
     let clients = JSON.parse(JSON.stringify(state.all));
