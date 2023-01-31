@@ -32,15 +32,6 @@ jobs:
           source: "."
           target: "/home/smartfreelancer-app/tmp/build"
 
-      - name: Install api dependencies
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_API }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: cd /home/smartfreelancer-api/tmp/build && /usr/bin/php8.1 /usr/local/bin/composer install --no-ansi --no-dev --no-interaction --no-progress --classmap-authoritative
-
       - name: Configure api local env files
         uses: appleboy/ssh-action@master
         with:
@@ -50,17 +41,25 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD_API }}
           script: cd /home/smartfreelancer-api/tmp/build && echo $'DATABASE_URL=mysql://${{ secrets.DATABASE_USER }}:${{ secrets.DATABASE_PASSWORD }}@${{ secrets.DATABASE_HOST }}:3306/${{ secrets.DATABASE_NAME }}?serverVersion=8\nAPP_ENV=prod\nSENTRY_DSN="${{ secrets.SENTRY_DNS }}"'>.env.local
 
-      - name: Apply database api migrations
+      - name: Install api dependencies
         uses: appleboy/ssh-action@master
-        env:
-          DATABASE_URL: mysql://${{ secrets.DATABASE_MIGRATION_USER }}:${{ secrets.DATABASE_MIGRATION_PASSWORD }}@${{ secrets.DATABASE_HOST }}:3306/${{ secrets.DATABASE_NAME }}?serverVersion=8
-          APP_ENV: prod
         with:
           host: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME_API }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
-          envs: DATABASE_URL, APP_ENV
+          script: cd /home/smartfreelancer-api/tmp/build && /usr/bin/php8.1 /usr/local/bin/composer install --no-ansi --no-dev --no-interaction --no-progress --prefer-dist --classmap-authoritative
+
+      - name: Apply database api migrations
+        uses: appleboy/ssh-action@master
+        env:
+          DATABASE_URL: mysql://${{ secrets.DATABASE_MIGRATION_USER }}:${{ secrets.DATABASE_MIGRATION_PASSWORD }}@${{ secrets.DATABASE_HOST }}:3306/${{ secrets.DATABASE_NAME }}?serverVersion=8
+        with:
+          host: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME_API }}
+          PORT: ${{ secrets.PORT }}
+          PASSWORD: ${{ secrets.PASSWORD_API }}
+          envs: DATABASE_URL
           script: /usr/bin/php8.1 /home/smartfreelancer-api/tmp/build/bin/console doctrine:migrations:migrate
 
       - name: Generate JWT certs
