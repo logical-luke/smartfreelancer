@@ -100,6 +100,9 @@ export default createStore({
       if (timer && timer.id) {
         commit("timer/setTimer", timer);
       }
+      if (!timer) {
+        await dispatch("timer/clearTimer");
+      }
       await dispatch("projects/getProjects");
       await dispatch("clients/getClients");
       await dispatch("tasks/getTasks");

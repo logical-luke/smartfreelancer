@@ -56,6 +56,9 @@ const actions = {
       }
     }
   },
+  async clearTimer({ commit }) {
+    commit("setTimer", JSON.parse(JSON.stringify(emptyTimer)));
+  },
 };
 
 const getters = {
@@ -65,7 +68,7 @@ const getters = {
 const mutations = {
   setTimer(state, timer) {
     state.current = timer;
-    localStorage.setItem('timer', JSON.stringify(timer));
+    localStorage.setItem("timer", JSON.stringify(timer));
   },
 };
 
