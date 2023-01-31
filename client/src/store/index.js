@@ -44,23 +44,17 @@ export default createStore({
     async loadInitial({ commit, dispatch }) {
       let user = null;
 
-      if (localStorage.getItem('user')) {
-        user = JSON.parse(localStorage.getItem('user'));
+      try {
+        user = await api.getUser();
+      } catch (err) {
+        return dispatch("logout");
       }
 
       if (!user) {
-        try {
-          user = await api.getUser();
-        } catch (err) {
-          return dispatch("logout");
-        }
-
-        if (!user) {
-          return dispatch("logout");
-        }
+        return dispatch("logout");
       }
-
       commit("setUser", user);
+
       let timer = null;
       if (localStorage.getItem('timer')) {
         timer = JSON.parse(localStorage.getItem('timer'));
@@ -132,7 +126,6 @@ export default createStore({
     },
     setUser(state, user) {
       state.user = user;
-      localStorage.setItem('user', JSON.stringify(user));
     },
   },
   getters: {
