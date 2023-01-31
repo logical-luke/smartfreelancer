@@ -14,13 +14,15 @@
               <TrackedSubject />
             </div>
           </div>
-          <div class="px-4">
-            <SyncLoader
-              :size="spinnerSize"
-              :color="spinnerColor"
-              :loading="!isSynchronised"
-            />
-          </div>
+          <transition name="fade" mode="in-out">
+            <div class="px-4" v-if="!isSynchronised">
+              <SyncLoader
+                :size="spinnerSize"
+                :color="spinnerColor"
+                :loading="!isSynchronised"
+              />
+            </div>
+          </transition>
         </div>
       </div>
     </nav>
@@ -39,7 +41,7 @@ export default {
   data() {
     return {
       spinnerColor: "#382CDD",
-      spinnerSize: "8px",
+      spinnerSize: "8px"
     };
   },
   computed: {
@@ -49,8 +51,8 @@ export default {
     SyncLoader,
     TimerTime,
     TrackedSubject,
-    ToggleTimerButton,
-  },
+    ToggleTimerButton
+  }
 };
 </script>
 
