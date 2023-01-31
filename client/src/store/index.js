@@ -86,11 +86,11 @@ export default createStore({
         commit("tasks/setTasks", tasks);
       }
       if (!projects || !clients || !tasks) {
-        dispatch("syncInitial");
+        await dispatch("syncInitial");
       }
 
       commit("setInitialLoaded", true);
-      dispatch("syncInitial");
+      await dispatch("syncInitial");
     },
     async syncInitial({ commit, state, dispatch }) {
       if (state.synchronised) {
