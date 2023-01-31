@@ -95,7 +95,9 @@ export default {
         refreshToken: response.data.refresh_token,
       };
     } catch (e) {
-      if (e.response.status === 401) {
+      console.log(e);
+      console.log(response);
+      if (e.status === 401) {
         throw new Error("Invalid username or password.");
       }
     }
