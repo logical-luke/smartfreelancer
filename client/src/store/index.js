@@ -87,12 +87,15 @@ export default createStore({
       if (tasks) {
         commit("tasks/setTasks", tasks);
       }
-      if (!projects || !clients || !tasks) {
+      if (
+        !localStorage.getItem("clients") ||
+        !localStorage.getItem("tasks") ||
+        !localStorage.getItem("tasks")
+      ) {
         await dispatch("syncInitial");
       }
 
       commit("setInitialLoaded", true);
-      await dispatch("syncInitial");
     },
     async syncInitial({ commit, state, dispatch }) {
       if (state.synchronised) {
@@ -102,7 +105,12 @@ export default createStore({
       const projectsFetched = dispatch("projects/getProjects");
       const tasksFetched = dispatch("tasks/getTasks");
       const timerFetched = dispatch("timer/getTimer");
-      Promise.all([clientsFetched, projectsFetched, tasksFetched, timerFetched]).then(() => {
+      Promise.all([
+        clientsFetched,
+        projectsFetched,
+        tasksFetched,
+        timerFetched,
+      ]).then(() => {
         commit("setSynchronised", true);
       });
     },
