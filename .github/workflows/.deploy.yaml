@@ -39,7 +39,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_API }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: cd /home/smartfreelancer-api/tmp/build && echo $'DATABASE_URL=mysql://${{ secrets.DATABASE_USER }}:${{ secrets.DATABASE_PASSWORD }}@${{ secrets.DATABASE_HOST }}:3306/${{ secrets.DATABASE_NAME }}?serverVersion=8\nAPP_ENV=prod\nSENTRY_DSN="${{ secrets.SENTRY_DNS }}"'>.env.local
+          script: cd /home/smartfreelancer-api/tmp/build && echo $'DATABASE_URL=mysql://${{ secrets.DATABASE_USER }}:${{ secrets.DATABASE_PASSWORD }}@${{ secrets.DATABASE_HOST }}:3306/${{ secrets.DATABASE_NAME }}?serverVersion=8\nAPP_ENV=prod\nCORS_ALLOW_ORIGIN=^.*$\nSENTRY_DSN="${{ secrets.SENTRY_DNS }}"'>.env.local
 
       - name: Install api dependencies
         uses: appleboy/ssh-action@master
@@ -48,7 +48,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_API }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: cd /home/smartfreelancer-api/tmp/build && /usr/bin/php8.1 /usr/local/bin/composer install --no-interaction --no-progress --prefer-dist --no-scripts --classmap-authoritative
+          script: cd /home/smartfreelancer-api/tmp/build && /usr/bin/php8.1 /usr/local/bin/composer install --no-ansi --no-dev --no-interaction --no-progress --prefer-dist --no-scripts --classmap-authoritative
 
       - name: Apply database api migrations
         uses: appleboy/ssh-action@master
