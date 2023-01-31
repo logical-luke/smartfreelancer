@@ -115,7 +115,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_APP }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_APP }}
-          script: cd /home/smartfreelancer-app/tmp/build/client && npm install --only=production
+          script: cd /home/smartfreelancer-app/tmp/build/client && npm install
 
 
       - name: Build app
