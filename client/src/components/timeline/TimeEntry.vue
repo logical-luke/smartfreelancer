@@ -1,5 +1,5 @@
 <template>
-  <div class="pl-4 pr-6 py-4 mb-2 bg-white shadow rounded">
+  <div class="pl-4 pr-6 py-4 mb-2 bg-white shadow rounded transition-element">
     <div class="flex flex-wrap items-center -mx-4">
       <div class="w-full md:w-3/6 mb-4 md:mb-0 px-4 flex items-center">
         <h4 class="font-medium">{{ subject }}</h4>

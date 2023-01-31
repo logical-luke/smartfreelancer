@@ -66,7 +66,7 @@
               <SidebarItem go-to="/tasks">
                 <template v-slot:title>Tasks</template>
                 <template v-slot:icon>
-                  <list-icon />
+                  <checklist-icon />
                 </template>
               </SidebarItem>
               <SidebarItem go-to="/reports">
@@ -89,7 +89,6 @@
 <script>
 import { mapGetters } from "vuex";
 import SidebarItem from "@/components/ui/SidebarItem.vue";
-import ListIcon from "vue-tabler-icons/icons/ListIcon";
 import BriefcaseIcon from "vue-tabler-icons/icons/BriefcaseIcon";
 import SidebarLogout from "@/components/ui/SidebarLogout.vue";
 import UsersIcon from "vue-tabler-icons/icons/UsersIcon";
@@ -99,10 +98,12 @@ import TransparentLogoWide from "@/components/ui/TransparentLogoWide.vue";
 import SunHighIcon from "vue-tabler-icons/icons/SunHighIcon";
 import ReportMoneyIcon from "vue-tabler-icons/icons/ReportMoneyIcon";
 import ClockHour4Icon from "vue-tabler-icons/icons/ClockHour4Icon";
+import ChecklistIcon from "vue-tabler-icons/icons/ChecklistIcon";
 
 export default {
   name: "SidebarNav",
   components: {
+    ChecklistIcon,
     ClockHour4Icon,
     ReportMoneyIcon,
     SunHighIcon,
@@ -112,7 +113,6 @@ export default {
     UsersIcon,
     SidebarLogout,
     BriefcaseIcon,
-    ListIcon,
     SidebarItem,
   },
   data() {
