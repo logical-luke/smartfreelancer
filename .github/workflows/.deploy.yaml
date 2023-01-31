@@ -90,6 +90,15 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD_API }}
           script: rm -rf /home/smartfreelancer-api/tmp/build_old_* && mv /home/smartfreelancer-api/htdocs/api.smartfreelancer.io/public /home/smartfreelancer-api/tmp/build_old_$(date +%s) && mv /home/smartfreelancer-api/tmp/build /home/smartfreelancer-api/htdocs/api.smartfreelancer.io/public
 
+      - name: Clear opcache
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME_API }}
+          PORT: ${{ secrets.PORT }}
+          PASSWORD: ${{ secrets.PASSWORD_API }}
+          script: /usr/bin/php8.1 /home/smartfreelancer-api/tmp/build/tools/cachetools/cachetool.phar opcache:reset --fcgi
+
       - name: Install app dependencies
         uses: appleboy/ssh-action@master
         with:
