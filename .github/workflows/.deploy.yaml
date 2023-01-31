@@ -39,7 +39,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_API }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: cd /home/smartfreelancer-api/tmp/build && /usr/bin/php8.1 /usr/local/bin/composer install
+          script: cd /home/smartfreelancer-api/tmp/build && /usr/bin/php8.1 /usr/local/bin/composer install --no-ansi --no-dev --no-interaction --no-plugins --no-progress --no-scripts --classmap-authoritative
 
       - name: Configure api local env files
         uses: appleboy/ssh-action@master
