@@ -95,9 +95,7 @@ export default {
         refreshToken: response.data.refresh_token,
       };
     } catch (e) {
-      console.log(e);
-      console.log(response);
-      if (e.status === 401) {
+      if (e.response && e.response.status === 401) {
         throw new Error("Invalid username or password.");
       }
     }
@@ -192,10 +190,7 @@ export default {
   },
 
   async updateTask(task) {
-    const response = await postRequest(
-      "/task/update/" + task.id,
-      task
-    );
+    const response = await postRequest("/task/update/" + task.id, task);
 
     if (response.status !== 200) {
       throw new Error(response.data.message);
