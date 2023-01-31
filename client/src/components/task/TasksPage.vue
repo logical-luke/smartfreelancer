@@ -3,7 +3,7 @@
     <NewButton go-to="/task/create/">Task</NewButton>
     <div class="flex flex-wrap -mx-4 -mb-4 md:mb-0">
       <TransitionGroup name="fade" class="transition-element">
-        <template v-for="task in tasks" :key="task.id">
+        <template v-for="(task, index) in tasks" :key="`task-${index}`">
           <TaskPage
             :id="task.id"
             :description="task.description"

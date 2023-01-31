@@ -48,7 +48,7 @@ export default {
       type: String,
     },
     id: {
-      type: Number,
+      type: String,
       required: true,
     },
   },

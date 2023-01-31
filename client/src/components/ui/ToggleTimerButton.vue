@@ -19,13 +19,13 @@ export default {
   components: { PlayerStopIcon, PlayerPlayIcon },
   props: {
     projectId: {
-      type: Number,
+      type: String,
     },
     clientId: {
-      type: Number,
+      type: String,
     },
     taskId: {
-      type: Number,
+      type: String,
     },
     global: {
       type: Boolean,
