@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\TimeEntry;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,8 +40,12 @@ class TimeEntryRepository extends ServiceEntityRepository
         }
     }
 
-    public function persist(TimeEntry $timeEntry)
+    public function findByUser(User $user): array
     {
-
+        return $this->findBy([
+            'owner' => $user,
+        ], [
+            'id' => 'DESC',
+        ]);
     }
 }

@@ -10,6 +10,7 @@ import clients from "@/store/modules/clients";
 import client from "@/store/modules/client";
 import tasks from "@/store/modules/tasks";
 import task from "@/store/modules/task";
+import timeEntries from "@/store/modules/timeEntries";
 
 const debug = process.env.NODE_ENV !== "production";
 
@@ -31,6 +32,7 @@ export default createStore({
     client,
     tasks,
     task,
+    timeEntries,
   },
   actions: {
     async logout({ commit }) {

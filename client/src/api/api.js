@@ -252,4 +252,10 @@ export default {
       throw new Error(response.data.message);
     }
   },
+
+  async getTimeEntries() {
+    const response = await getRequest("/time-entry/");
+
+    return response.data;
+  },
 };

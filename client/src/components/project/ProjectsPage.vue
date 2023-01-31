@@ -1,16 +1,16 @@
 <template>
   <div class="mx-auto lg:ml-80">
-    <NewButton go-to="/project/create/">Project</NewButton>
+    <new-button go-to="/project/create/">Project</new-button>
     <div class="flex flex-wrap -mx-4 -mb-4 md:mb-0">
-      <TransitionGroup name="fade" class="transition-element">
+      <transition-group name="fade" class="transition-element">
         <template v-for="project in projects" :key="project.id">
-          <ProjectPage
+          <project-page
             :id="project.id"
             :description="project.description"
             :name="project.name"
-          ></ProjectPage>
+          ></project-page>
         </template>
-      </TransitionGroup>
+      </transition-group>
     </div>
   </div>
 </template>

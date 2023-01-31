@@ -45,6 +45,12 @@
                   <sun-high-icon />
                 </template>
               </SidebarItem>
+              <SidebarItem go-to="/timeline">
+                <template v-slot:title>Timeline</template>
+                <template v-slot:icon>
+                  <clock-hour4-icon />
+                </template>
+              </SidebarItem>
               <SidebarItem go-to="/clients">
                 <template v-slot:title>Clients</template>
                 <template v-slot:icon>
@@ -92,10 +98,12 @@ import XIcon from "vue-tabler-icons/icons/XIcon";
 import TransparentLogoWide from "@/components/ui/TransparentLogoWide.vue";
 import SunHighIcon from "vue-tabler-icons/icons/SunHighIcon";
 import ReportMoneyIcon from "vue-tabler-icons/icons/ReportMoneyIcon";
+import ClockHour4Icon from "vue-tabler-icons/icons/ClockHour4Icon";
 
 export default {
   name: "SidebarNav",
   components: {
+    ClockHour4Icon,
     ReportMoneyIcon,
     SunHighIcon,
     TransparentLogoWide,

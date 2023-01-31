@@ -12,6 +12,7 @@ import TaskEditPage from "@/components/task/TaskEditPage.vue";
 import TaskCreatePage from "@/components/task/TaskCreatePage.vue";
 import TodayPage from "@/components/today/TodayPage.vue";
 import ReportsPage from "@/components/report/ReportsPage.vue";
+import TimelinePage from "@/components/timeline/TimelinePage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -108,6 +109,14 @@ const router = createRouter({
         requiresAuth: true,
       },
       component: TaskCreatePage,
+    },
+    {
+      path: "/timeline",
+      name: "TimelinePage",
+      meta: {
+        requiresAuth: true,
+      },
+      component: TimelinePage,
     },
   ],
 });
