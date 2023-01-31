@@ -28,7 +28,6 @@ class TimeEntryCreator
     ) {
     }
 
-
     public function __invoke(CreateTimeEntryPayload $payload): TimeEntry
     {
         if ($payload->getTimerId()) {

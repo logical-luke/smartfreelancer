@@ -16,7 +16,7 @@ class TimeEntryDTO
         public ?string $clientId,
         public ?string $projectId,
         public ?string $taskId,
-    ){
+    ) {
     }
 
     public static function fromTimeEntry(TimeEntry $timeEntry): self

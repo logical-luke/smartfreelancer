@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Model\TimeEntry;
 
-use App\Entity\Timer;
 use App\Exception\InvalidPayloadException;
 use Symfony\Component\Uid\Uuid;
 
@@ -50,7 +49,6 @@ class CreateTimeEntryPayload
     {
         return $this->ownerId;
     }
-
 
     public function getTimerId(): ?string
     {
