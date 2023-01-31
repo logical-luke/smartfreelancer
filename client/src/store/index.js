@@ -157,6 +157,9 @@ export default createStore({
     isInitialLoaded(state) {
       return state.initialLoaded;
     },
+    isSynchronised(state) {
+      return state.synchronised;
+    },
   },
   strict: debug,
   plugins: debug ? [createLogger()] : [],

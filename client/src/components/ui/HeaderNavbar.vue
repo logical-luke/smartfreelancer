@@ -14,6 +14,13 @@
               <TrackedSubject />
             </div>
           </div>
+          <div class="px-4">
+            <SyncLoader
+              :size="spinnerSize"
+              :color="spinnerColor"
+              :loading="!isSynchronised"
+            />
+          </div>
         </div>
       </div>
     </nav>
@@ -24,10 +31,22 @@
 import ToggleTimerButton from "@/components/ui/ToggleTimerButton.vue";
 import TrackedSubject from "@/components/ui/TrackedSubject.vue";
 import TimerTime from "@/components/ui/TimerTime.vue";
+import { mapGetters } from "vuex";
+import { SyncLoader } from "vue3-spinner";
 
 export default {
   name: "HeaderNavbar",
+  data() {
+    return {
+      spinnerColor: "#382CDD",
+      spinnerSize: "8px",
+    };
+  },
+  computed: {
+    ...mapGetters(["isSynchronised"])
+  },
   components: {
+    SyncLoader,
     TimerTime,
     TrackedSubject,
     ToggleTimerButton,
