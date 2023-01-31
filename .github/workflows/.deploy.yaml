@@ -97,7 +97,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_API }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: /usr/bin/php8.1 /home/smartfreelancer-api/htdocs/api.smartfreelancer.io/public/tools/cachetools/cachetool.phar opcache:reset --fcgi
+          script: /usr/bin/php8.1 /home/smartfreelancer-api/htdocs/api.smartfreelancer.io/public/tools/cachetools/cachetool.phar opcache:reset --fcgi=127.0.0.1:16000
 
       - name: Install app dependencies
         uses: appleboy/ssh-action@master
