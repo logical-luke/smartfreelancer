@@ -10,7 +10,9 @@ use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
 use App\Repository\TimerRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(lazy: true)]
 class TimerUpdater
 {
     public function __construct(

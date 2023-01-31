@@ -8,7 +8,9 @@ use App\Entity\Client;
 use App\Model\Client\CreateClientPayload;
 use App\Repository\ClientRepository;
 use App\Repository\UserRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(lazy: true)]
 class ClientCreator
 {
     public function __construct(

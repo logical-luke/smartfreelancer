@@ -6,7 +6,9 @@ namespace App\Service\Task;
 
 use App\Model\Task\DeleteTaskPayload;
 use App\Repository\TaskRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(lazy: true)]
 class TaskDeleter
 {
     public function __construct(

@@ -8,7 +8,9 @@ use App\Entity\Task;
 use App\Model\Task\UpdateTaskPayload;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(lazy: true)]
 class TaskUpdater
 {
     public function __construct(

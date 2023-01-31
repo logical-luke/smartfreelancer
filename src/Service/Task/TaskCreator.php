@@ -9,7 +9,9 @@ use App\Model\Task\CreateTaskPayload;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(lazy: true)]
 class TaskCreator
 {
     public function __construct(

@@ -12,7 +12,9 @@ use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
 use App\Repository\TimerRepository;
 use App\Repository\UserRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(lazy: true)]
 class TimerCreator
 {
     public function __construct(

@@ -6,8 +6,10 @@ namespace App\Service\User;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+#[Autoconfigure(lazy: true)]
 class UserCreator
 {
     public function __construct(

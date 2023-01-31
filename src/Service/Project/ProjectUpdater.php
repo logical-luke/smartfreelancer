@@ -8,7 +8,9 @@ use App\Entity\Project;
 use App\Model\Project\UpdateProjectPayload;
 use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(lazy: true)]
 class ProjectUpdater
 {
     public function __construct(

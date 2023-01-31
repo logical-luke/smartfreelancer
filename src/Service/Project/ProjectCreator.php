@@ -9,7 +9,9 @@ use App\Model\Project\CreateProjectPayload;
 use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\UserRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(lazy: true)]
 class ProjectCreator
 {
     public function __construct(

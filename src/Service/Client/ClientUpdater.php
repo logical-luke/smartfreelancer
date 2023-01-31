@@ -7,7 +7,9 @@ namespace App\Service\Client;
 use App\Entity\Client;
 use App\Model\Client\UpdateClientPayload;
 use App\Repository\ClientRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(lazy: true)]
 class ClientUpdater
 {
     public function __construct(

@@ -7,7 +7,9 @@ namespace App\Service\Project;
 use App\Model\Project\DeleteProjectPayload;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(lazy: true)]
 class ProjectDeleter
 {
     public function __construct(

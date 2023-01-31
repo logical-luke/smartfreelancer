@@ -7,7 +7,9 @@ namespace App\Service\Timer;
 use App\Exception\InvalidPayloadException;
 use App\Model\Timer\StopTimerPayload;
 use App\Repository\TimerRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(lazy: true)]
 class TimerStopper
 {
     public function __construct(private readonly TimerRepository $timerRepository)

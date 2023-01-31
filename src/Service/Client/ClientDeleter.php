@@ -6,7 +6,9 @@ namespace App\Service\Client;
 
 use App\Model\Client\DeleteClientPayload;
 use App\Repository\ClientRepository;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(lazy: true)]
 class ClientDeleter
 {
     public function __construct(
