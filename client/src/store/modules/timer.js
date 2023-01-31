@@ -23,6 +23,15 @@ const actions = {
 
     commit("setTimer", JSON.parse(JSON.stringify(emptyTimer)));
   },
+  async getTimer({ commit, dispatch }) {
+    const timer = await api.getTimer();
+    if (timer && !timer.id) {
+      await dispatch("clearTimer");
+    }
+    if (timer && timer.id) {
+      commit("setTimer", timer);
+    }
+  },
   async setProjectId({ commit, state }, projectId) {
     if (state.current.projectId !== projectId) {
       const timer = JSON.parse(JSON.stringify(state.current));

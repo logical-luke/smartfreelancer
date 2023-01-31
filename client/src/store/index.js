@@ -98,17 +98,13 @@ export default createStore({
       if (state.synchronised) {
         return;
       }
-      const timer = await api.getTimer();
-      if (timer && !timer.id) {
-        await dispatch("timer/clearTimer");
-      }
-      if (timer && timer.id) {
-        commit("timer/setTimer", timer);
-      }
-      await dispatch("projects/getProjects");
-      await dispatch("clients/getClients");
-      await dispatch("tasks/getTasks");
-      commit("setSynchronised", true);
+      const clientsFetched = dispatch("clients/getClients");
+      const projectsFetched = dispatch("projects/getProjects");
+      const tasksFetched = dispatch("tasks/getTasks");
+      const timerFetched = dispatch("timer/getTimer");
+      Promise.all([clientsFetched, projectsFetched, tasksFetched, timerFetched]).then(() => {
+        commit("setSynchronised", true);
+      });
     },
   },
   mutations: {
