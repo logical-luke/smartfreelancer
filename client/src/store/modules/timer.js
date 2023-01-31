@@ -65,6 +65,7 @@ const getters = {
 const mutations = {
   setTimer(state, timer) {
     state.current = timer;
+    localStorage.setItem('timer', JSON.stringify(timer));
   },
 };
 

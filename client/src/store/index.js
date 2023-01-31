@@ -43,17 +43,59 @@ export default createStore({
     },
     async loadInitial({ commit, dispatch }) {
       let user = null;
-      try {
-        user = await api.getUser();
-      } catch (err) {
-        return dispatch("logout");
+
+      if (localStorage.getItem('user')) {
+        user = JSON.parse(localStorage.getItem('user'));
       }
 
       if (!user) {
-        return dispatch("logout");
+        try {
+          user = await api.getUser();
+        } catch (err) {
+          return dispatch("logout");
+        }
+
+        if (!user) {
+          return dispatch("logout");
+        }
       }
 
       commit("setUser", user);
+      let timer = null;
+      if (localStorage.getItem('timer')) {
+        timer = JSON.parse(localStorage.getItem('timer'));
+      }
+      if (timer && timer.id) {
+        commit("timer/setTimer", timer);
+      }
+      let projects = null;
+      if (localStorage.getItem('projects')) {
+        projects = JSON.parse(localStorage.getItem('projects'));
+      }
+      if (projects) {
+        commit("projects/setProjects", projects);
+      }
+      let clients = null;
+      if (localStorage.getItem('clients')) {
+        clients = JSON.parse(localStorage.getItem('clients'));
+      }
+      if (clients) {
+        commit("clients/setClients", clients);
+      }
+      let tasks = null;
+      if (localStorage.getItem('tasks')) {
+        tasks = JSON.parse(localStorage.getItem('tasks'));
+      }
+      if (tasks) {
+        commit("tasks/setTasks", tasks);
+      }
+      if (!projects || !clients || !tasks) {
+        dispatch("syncInitial");
+      }
+
+      commit("setInitialLoaded", true);
+    },
+    async syncInitial({ commit, dispatch }) {
       const timer = await api.getTimer();
       if (timer && timer.id) {
         commit("timer/setTimer", timer);
@@ -61,7 +103,6 @@ export default createStore({
       await dispatch("projects/getProjects");
       await dispatch("clients/getClients");
       await dispatch("tasks/getTasks");
-      commit("setInitialLoaded", true);
     },
   },
   mutations: {
@@ -91,6 +132,7 @@ export default createStore({
     },
     setUser(state, user) {
       state.user = user;
+      localStorage.setItem('user', JSON.stringify(user));
     },
   },
   getters: {

@@ -64,6 +64,7 @@ const actions = {
 const mutations = {
   setProjects(state, projects) {
     state.all = projects;
+    localStorage.setItem("projects", JSON.stringify(projects));
   },
 };
 

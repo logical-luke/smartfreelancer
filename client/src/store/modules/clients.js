@@ -64,6 +64,7 @@ const actions = {
 const mutations = {
   setClients(state, clients) {
     state.all = clients;
+    localStorage.setItem("clients", JSON.stringify(clients));
   },
 };
 
