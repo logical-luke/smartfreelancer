@@ -62,6 +62,15 @@ jobs:
           envs: DATABASE_URL
           script: /usr/bin/php8.1 /home/smartfreelancer-api/tmp/build/bin/console doctrine:migrations:migrate
 
+      - name: Apply database api migrations
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME_API }}
+          PORT: ${{ secrets.PORT }}
+          PASSWORD: ${{ secrets.PASSWORD_API }}
+          script: /usr/bin/php8.1 /home/smartfreelancer-api/tmp/build/bin/console cache:clear
+
       - name: Generate JWT certs
         uses: appleboy/ssh-action@master
         with:
