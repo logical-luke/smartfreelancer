@@ -48,7 +48,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_API }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: cd /home/smartfreelancer-api/tmp/build && /usr/bin/php8.1 /usr/local/bin/composer install --no-ansi --no-dev --no-interaction --no-progress --prefer-dist --no-scripts
+          script: cd /home/smartfreelancer-api/tmp/build && /usr/bin/php8.1 /usr/local/bin/composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --classmap-authoritative
 
       - name: Apply database api migrations
         uses: appleboy/ssh-action@master
