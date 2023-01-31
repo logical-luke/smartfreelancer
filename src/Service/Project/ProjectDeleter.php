@@ -33,6 +33,10 @@ class ProjectDeleter
             $timer->setProject(null);
         }
 
+        foreach ($project->getTimeEntries() as $timeEntry) {
+            $timeEntry->setProject(null);
+        }
+
         $this->projectRepository->remove($project, true);
     }
 }

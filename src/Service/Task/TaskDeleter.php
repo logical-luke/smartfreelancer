@@ -26,6 +26,10 @@ class TaskDeleter
             $timer->setTask(null);
         }
 
+        foreach ($task->getTimeEntries() as $timeEntry) {
+            $timeEntry->setTask(null);
+        }
+
         $this->taskRepository->remove($task, true);
     }
 }

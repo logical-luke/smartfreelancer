@@ -32,6 +32,10 @@ class ClientDeleter
             $project->setClient(null);
         }
 
+        foreach ($client->getTimeEntries() as $timeEntry) {
+            $timeEntry->setClient(null);
+        }
+
         $this->clientRepository->remove($client, true);
     }
 }
