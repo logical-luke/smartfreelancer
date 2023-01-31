@@ -38,6 +38,8 @@ export default createStore({
       commit("setRefreshToken", "");
       commit("setAuthorized", false);
       commit("setUser", {});
+      commit("setSynchronised", false);
+      commit("setInitialLoaded", false);
       VueCookies.remove("token");
       VueCookies.remove("refresh_token");
       localStorage.clear();

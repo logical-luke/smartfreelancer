@@ -9,6 +9,7 @@
             <transition name="fade" mode="in-out">
               <div class="md:hidden px-4" v-if="!isSynchronised">
                 <SyncLoader
+                  title="Synchronising..."
                   :size="spinnerSize"
                   :color="spinnerColor"
                   :loading="!isSynchronised"
@@ -26,6 +27,7 @@
           <transition name="fade" mode="in-out">
             <div class="hidden md:flex lg:px-4" v-if="!isSynchronised">
               <SyncLoader
+                title="Synchronising..."
                 :size="spinnerSize"
                 :color="spinnerColor"
                 :loading="!isSynchronised"
