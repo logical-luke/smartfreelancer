@@ -6,6 +6,15 @@
           <div class="flex items-center space-x-3">
             <ToggleTimerButton :global="true" />
             <TimerTime />
+            <transition name="fade" mode="in-out">
+              <div class="md:hidden px-4" v-if="!isSynchronised">
+                <SyncLoader
+                  :size="spinnerSize"
+                  :color="spinnerColor"
+                  :loading="!isSynchronised"
+                />
+              </div>
+            </transition>
           </div>
           <div
             class="flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:space-x-3 mt-4 md:mt-0 w-full md:w-96 content-start"
@@ -15,7 +24,7 @@
             </div>
           </div>
           <transition name="fade" mode="in-out">
-            <div class="px-4" v-if="!isSynchronised">
+            <div class="hidden md:flex lg:px-4" v-if="!isSynchronised">
               <SyncLoader
                 :size="spinnerSize"
                 :color="spinnerColor"
