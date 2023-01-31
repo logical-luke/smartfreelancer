@@ -54,12 +54,13 @@ jobs:
         uses: appleboy/ssh-action@master
         env:
           DATABASE_URL: mysql://${{ secrets.DATABASE_MIGRATION_USER }}:${{ secrets.DATABASE_MIGRATION_PASSWORD }}@${{ secrets.DATABASE_HOST }}:3306/${{ secrets.DATABASE_NAME }}?serverVersion=8
+          APP_ENV: prod
         with:
           host: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME_API }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
-          envs: DATABASE_URL
+          envs: DATABASE_URL, APP_ENV
           script: /usr/bin/php8.1 /home/smartfreelancer-api/tmp/build/bin/console doctrine:migrations:migrate
 
       - name: Generate JWT certs
