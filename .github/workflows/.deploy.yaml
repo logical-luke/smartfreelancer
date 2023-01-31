@@ -99,15 +99,6 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD_API }}
           script: /usr/bin/php8.1 /home/smartfreelancer-api/htdocs/api.smartfreelancer.io/public/tools/cachetools/cachetool.phar opcache:reset --fcgi=127.0.0.1:16000
 
-      - name: Install app dependencies
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_APP }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_APP }}
-          script: cd /home/smartfreelancer-app/tmp/build/client && npm install
-
       - name: Configure app local env files
         uses: appleboy/ssh-action@master
         with:
@@ -116,6 +107,15 @@ jobs:
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_APP }}
           script: cd /home/smartfreelancer-app/tmp/build/client && echo $'API_BASE_URL=${{ secrets.API_BASE_URL }}\nNODE_ENV=production'>.env.local
+
+      - name: Install app dependencies
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME_APP }}
+          PORT: ${{ secrets.PORT }}
+          PASSWORD: ${{ secrets.PASSWORD_APP }}
+          script: cd /home/smartfreelancer-app/tmp/build/client && npm install --only=production
 
 
       - name: Build app
