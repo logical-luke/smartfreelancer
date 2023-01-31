@@ -71,7 +71,7 @@
 
 <script>
 import { mapMutations } from "vuex";
-import api from "@/api/api";
+import api from "@/services/api/api";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
 import LoginIcon from "vue-tabler-icons/icons/LoginIcon";
 import store from "@/store";

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Timer;
 
+use App\Entity\TimeEntry;
 use App\Exception\InvalidPayloadException;
 use App\Model\TimeEntry\CreateTimeEntryPayload;
 use App\Model\Timer\StopTimerPayload;
@@ -20,17 +21,19 @@ class TimerStopper
     ) {
     }
 
-    public function __invoke(StopTimerPayload $payload): void
+    public function __invoke(StopTimerPayload $payload): TimeEntry
     {
         if (!$timer = $this->timerRepository->find($payload->getId())) {
             throw new InvalidPayloadException('Invalid timer id');
         }
 
-        ($this->timeEntryCreator)(CreateTimeEntryPayload::from([
+        $timeEntry = ($this->timeEntryCreator)(CreateTimeEntryPayload::from([
             'timerId' => $timer->getId()?->toRfc4122(),
             'endTime' => $payload->getEndTime()->getTimestamp(),
         ]));
 
         $this->timerRepository->remove($timer, true);
+
+        return $timeEntry;
     }
 }

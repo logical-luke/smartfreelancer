@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Exception\InvalidPayloadException;
+use App\Model\TimeEntry\TimeEntryDTO;
 use App\Model\Timer\CreateTimerPayload;
 use App\Model\Timer\StopTimerPayload;
 use App\Model\Timer\TimerDTO;
@@ -74,7 +75,7 @@ class TimerController extends AbstractController
         }
 
         try {
-            $timerStopper(StopTimerPayload::from([
+            $timeEntry = $timerStopper(StopTimerPayload::from([
                 'timerId' => $timer->getId()?->toRfc4122(),
                 'endTime' => (new \DateTime())->getTimestamp(),
                 'ownerId' => $user->getId()?->toRfc4122(),
@@ -83,7 +84,7 @@ class TimerController extends AbstractController
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
-        return $this->json([], Response::HTTP_OK);
+        return $this->json(TimeEntryDTO::fromTimeEntry($timeEntry), Response::HTTP_OK);
     }
 
     #[Route('/update/{id}', name: 'update', methods: 'POST')]

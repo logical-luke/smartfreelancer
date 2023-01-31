@@ -5,7 +5,7 @@ import router from "../router";
 import projects from "./modules/projects";
 import project from "@/store/modules/project";
 import timer from "@/store/modules/timer";
-import api from "@/api/api";
+import api from "@/services/api/api";
 import clients from "@/store/modules/clients";
 import client from "@/store/modules/client";
 import tasks from "@/store/modules/tasks";

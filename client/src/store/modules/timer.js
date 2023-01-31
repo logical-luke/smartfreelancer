@@ -1,4 +1,4 @@
-import api from "@/api/api";
+import api from "@/services/api/api";
 
 const emptyTimer = {
   id: null,
@@ -18,8 +18,12 @@ const actions = {
 
     commit("setTimer", timer);
   },
-  async stopTimer({ commit }) {
-    await api.stopTimer();
+  async stopTimer({ rootGetters, commit }) {
+    const timeEntry = await api.stopTimer();
+
+    let timeEntries = JSON.parse(JSON.stringify(rootGetters["timeEntries/getTimeEntries"]));
+    timeEntries.unshift(timeEntry);
+    commit("timeEntries/setTimeEntries", timeEntries, {root: true});
 
     commit("setTimer", JSON.parse(JSON.stringify(emptyTimer)));
   },

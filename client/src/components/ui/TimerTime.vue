@@ -5,12 +5,7 @@
 
 <script>
 import { mapState } from "vuex";
-
-const units = {
-  hour: 60 * 60 * 1000,
-  minute: 60 * 1000,
-  second: 1000,
-};
+import { getRelativeTime } from "@/services/relativeTimeGetter";
 
 export default {
   name: "TimerTime",
@@ -37,50 +32,8 @@ export default {
     checkCurrentTimer() {
       return this.timer && this.timer.id;
     },
-    getRelativeElapsedTime() {
-      if (this.timer.id) {
-        return Math.abs(new Date(this.timer.startTime * 1000) - new Date());
-      }
-
-      return 0;
-    },
     getRelativeTime() {
-      let elapsed = this.getRelativeElapsedTime();
-      let relativeTime = {
-        hours: "00",
-        minutes: "00",
-        seconds: "00",
-      };
-      if (elapsed < 1) {
-        return relativeTime;
-      }
-
-      if (elapsed > units["hour"]) {
-        const hours = Math.abs(Math.floor(elapsed / units["hour"]));
-        relativeTime.hours = hours.toLocaleString("en-US", {
-          minimumIntegerDigits: 2,
-          useGrouping: false,
-        });
-        elapsed -= hours * units["hour"];
-      }
-
-      if (elapsed > units["minute"]) {
-        const minutes = Math.abs(Math.floor(elapsed / units["minute"]));
-        relativeTime.minutes = minutes.toLocaleString("en-US", {
-          minimumIntegerDigits: 2,
-          useGrouping: false,
-        });
-        elapsed -= minutes * units["minute"];
-      }
-
-      const seconds = Math.abs(Math.floor(elapsed / units["second"]));
-      relativeTime.seconds = seconds.toLocaleString("en-US", {
-        minimumIntegerDigits: 2,
-        useGrouping: false,
-      });
-      elapsed -= seconds * units["second"];
-
-      return relativeTime;
+      return getRelativeTime(new Date(this.timer.startTime * 1000), new Date());
     },
     updateClock() {
       let time = this;
@@ -95,7 +48,7 @@ export default {
           time.minutes = "00";
           time.seconds = "00";
         }
-      }, 1000);
+      }, 500);
     },
   },
   mounted() {

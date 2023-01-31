@@ -1,4 +1,4 @@
-import api from "@/api/api";
+import api from "@/services/api/api";
 
 // initial state
 const state = () => ({
@@ -13,6 +13,10 @@ const actions = {
   },
 };
 
+const getters = {
+  getTimeEntries: (state) => state.all,
+}
+
 const mutations = {
   setTimeEntries(state, timeEntries) {
     state.all = timeEntries;
@@ -24,4 +28,5 @@ export default {
   state,
   mutations,
   actions,
+  getters,
 };
