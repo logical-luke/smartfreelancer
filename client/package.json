@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node_modules/.bin/vite",
-    "build": "node_modules/.bin/vite build",
+    "build": "node_modules/.bin/vite build --mode production",
     "preview": "node_modules/.bin/vite preview",
     "lint": "node_modules/.bin/eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "watch-css": "node_modules/.bin/tailwindcss build -i src/tailwind/tailwind.css -c src/tailwind/tailwind.config.js -o public/css/tailwind/tailwind.min.css --minify --watch",
