@@ -62,7 +62,7 @@
             "@auto-scripts"
         ],
         "cs-fixer": "tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --allow-risky=yes src",
-        "rector": "vendor/bin/rector process src",
+        "rector": "vendor/bin/rector process src"
     },
     "conflict": {
         "symfony/symfony": "*"
