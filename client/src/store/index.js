@@ -97,11 +97,11 @@ export default createStore({
         return;
       }
       const timer = await api.getTimer();
+      if (timer && !timer.id) {
+        await dispatch("timer/clearTimer");
+      }
       if (timer && timer.id) {
         commit("timer/setTimer", timer);
-      }
-      if (!timer) {
-        await dispatch("timer/clearTimer");
       }
       await dispatch("projects/getProjects");
       await dispatch("clients/getClients");
