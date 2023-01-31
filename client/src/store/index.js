@@ -11,8 +11,8 @@ import client from "@/store/modules/client";
 import tasks from "@/store/modules/tasks";
 import task from "@/store/modules/task";
 
-const debug = import.meta.env.NODE_ENV !== "production";
-console.log(import.meta.env.NODE_ENV);
+const debug = process.env.NODE_ENV !== "production";
+console.log(process.env.NODE_ENV);
 
 export default createStore({
   state: {
