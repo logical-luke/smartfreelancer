@@ -66,13 +66,18 @@ class TimerController extends AbstractController
     #[Route('/stop', name: 'stop')]
     public function stop(TimerRepository $timerRepository, TimerStopper $timerStopper): JsonResponse
     {
-        if (!$timer = $timerRepository->findOneByUser($this->getUser())) {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if (!$timer = $timerRepository->findOneByUser($user)) {
             return $this->json([], Response::HTTP_NOT_FOUND);
         }
 
         try {
             $timerStopper(StopTimerPayload::from([
                 'timerId' => $timer->getId()?->toRfc4122(),
+                'endTime' => (new \DateTime())->getTimestamp(),
+                'ownerId' => $user->getId()?->toRfc4122(),
             ]));
         } catch (InvalidPayloadException $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);

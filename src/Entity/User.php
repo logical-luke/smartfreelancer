@@ -47,11 +47,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'owner', cascade: ['persist', 'remove'])]
     private ?Timer $timer = null;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: TimeEntry::class, orphanRemoval: true)]
+    private Collection $timeEntries;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
         $this->clients = new ArrayCollection();
         $this->tasks = new ArrayCollection();
+        $this->timeEntries = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -239,6 +243,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->timer = $timer;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TimeEntry>
+     */
+    public function getTimeEntries(): Collection
+    {
+        return $this->timeEntries;
+    }
+
+    public function addTimeEntry(TimeEntry $timeEntry): self
+    {
+        if (!$this->timeEntries->contains($timeEntry)) {
+            $this->timeEntries->add($timeEntry);
+            $timeEntry->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTimeEntry(TimeEntry $timeEntry): self
+    {
+        if ($this->timeEntries->removeElement($timeEntry)) {
+            // set the owning side to null (unless already changed)
+            if ($timeEntry->getOwner() === $this) {
+                $timeEntry->setOwner(null);
+            }
+        }
 
         return $this;
     }

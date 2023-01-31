@@ -23,6 +23,39 @@ class TimeEntry
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $endTime = null;
 
+    #[ORM\ManyToOne(inversedBy: 'timeEntries')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
+
+    #[ORM\ManyToOne(inversedBy: 'timeEntries')]
+    private ?Client $client = null;
+
+    #[ORM\ManyToOne(inversedBy: 'timeEntries')]
+    private ?Project $project = null;
+
+    #[ORM\ManyToOne(inversedBy: 'timeEntries')]
+    private ?Task $task = null;
+
+    protected function __construct(User $owner, \DateTimeInterface $startTime, \DateTimeInterface $endTime)
+    {
+        $this->owner = $owner;
+        $this->startTime = $startTime;
+        $this->endTime = $endTime;
+    }
+
+    public static function fromTimer(Timer $timer, \DateTimeInterface $endTime): TimeEntry
+    {
+        return new self($timer->getOwner(), $timer->getStartTime(), $endTime);
+    }
+
+    public static function fromUser(
+        User $owner,
+        \DateTimeInterface $startTime,
+        \DateTimeInterface $endTime
+    ): TimeEntry {
+        return new self($owner, $startTime, $endTime);
+    }
+
     public function getId(): ?Uuid
     {
         return $this->id;
@@ -48,6 +81,54 @@ class TimeEntry
     public function setEndTime(\DateTimeInterface $endTime): self
     {
         $this->endTime = $endTime;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
+    public function getTask(): ?Task
+    {
+        return $this->task;
+    }
+
+    public function setTask(?Task $task): self
+    {
+        $this->task = $task;
 
         return $this;
     }

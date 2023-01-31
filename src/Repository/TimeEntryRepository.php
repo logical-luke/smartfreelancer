@@ -39,28 +39,8 @@ class TimeEntryRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return TimeEntry[] Returns an array of TimeEntry objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('t.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function persist(TimeEntry $timeEntry)
+    {
 
-//    public function findOneBySomeField($value): ?TimeEntry
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    }
 }

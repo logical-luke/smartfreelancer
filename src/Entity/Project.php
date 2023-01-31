@@ -37,6 +37,9 @@ class Project
     #[ORM\OneToOne(mappedBy: 'project', cascade: ['persist', 'remove'])]
     private ?Timer $timer = null;
 
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: TimeEntry::class)]
+    private Collection $timeEntries;
+
     protected function __construct(User $user)
     {
         $this->owner = $user;
@@ -151,6 +154,36 @@ class Project
         }
 
         $this->timer = $timer;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TimeEntry>
+     */
+    public function getTimeEntries(): Collection
+    {
+        return $this->timeEntries;
+    }
+
+    public function addTimeEntry(TimeEntry $timeEntry): self
+    {
+        if (!$this->timeEntries->contains($timeEntry)) {
+            $this->timeEntries->add($timeEntry);
+            $timeEntry->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTimeEntry(TimeEntry $timeEntry): self
+    {
+        if ($this->timeEntries->removeElement($timeEntry)) {
+            // set the owning side to null (unless already changed)
+            if ($timeEntry->getProject() === $this) {
+                $timeEntry->setProject(null);
+            }
+        }
 
         return $this;
     }
