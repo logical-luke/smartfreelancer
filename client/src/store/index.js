@@ -64,8 +64,6 @@ export default createStore({
       }
       commit("setUser", user);
 
-      dispatch("getNetworkTime");
-
       let timer = null;
       if (localStorage.getItem("timer")) {
         timer = JSON.parse(localStorage.getItem("timer"));
