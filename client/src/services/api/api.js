@@ -7,7 +7,7 @@ const getRequest = async function (url, headers) {
       headers: {
         Authorization: `Bearer ${store.getters.getToken}`,
       },
-      withCredentials: true
+      withCredentials: true,
     });
 
     if (response.status === 404) {
@@ -37,7 +37,7 @@ const postRequest = async function (url, data, headers) {
   const response = axios.post(process.env.API_BASE_URL + url, data, {
     headers: {
       Authorization: `Bearer ${store.getters.getToken}`,
-      withCredentials: true
+      withCredentials: true,
     },
   });
 
@@ -54,7 +54,7 @@ const deleteRequest = async function (url, data, headers) {
   const response = axios.delete(process.env.API_BASE_URL + url, {
     headers: {
       Authorization: `Bearer ${store.getters.getToken}`,
-      withCredentials: true
+      withCredentials: true,
     },
   });
 
@@ -88,10 +88,16 @@ const refreshToken = async function () {
 export default {
   async login(email, password) {
     try {
-      const response = await axios.post(process.env.API_BASE_URL + "/login", {
-        email: email,
-        password: password,
-      });
+      const response = await axios.post(
+        process.env.API_BASE_URL + "/login",
+        {
+          email: email,
+          password: password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
       return {
         token: response.data.token,
