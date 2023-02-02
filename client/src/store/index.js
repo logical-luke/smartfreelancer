@@ -2,6 +2,7 @@ import { createStore, createLogger } from "vuex";
 import VueCookies from "vue-cookies";
 import router from "../router";
 
+
 import projects from "./modules/projects";
 import project from "@/store/modules/project";
 import timer from "@/store/modules/timer";
@@ -11,6 +12,7 @@ import client from "@/store/modules/client";
 import tasks from "@/store/modules/tasks";
 import task from "@/store/modules/task";
 import timeEntries from "@/store/modules/timeEntries";
+import {getNetworkTime} from "@/services/time/networkTimeGetter";
 
 const debug = process.env.NODE_ENV !== "production";
 
@@ -23,6 +25,7 @@ export default createStore({
     user: {},
     initialLoaded: false,
     synchronised: false,
+    networkTime: null,
   },
   modules: {
     projects,
@@ -60,6 +63,8 @@ export default createStore({
         return dispatch("logout");
       }
       commit("setUser", user);
+
+      dispatch("getNetworkTime");
 
       let timer = null;
       if (localStorage.getItem("timer")) {
@@ -116,6 +121,14 @@ export default createStore({
         commit("setSynchronised", true);
       });
     },
+    async getNetworkTime({ commit }) {
+      const networkTime = await getNetworkTime();
+      commit("setNetworkTime", networkTime);
+
+      setInterval(() => {
+        commit("setNetworkTime", networkTime);
+      }, 1000);
+    },
   },
   mutations: {
     setToken(state, token) {
@@ -147,6 +160,9 @@ export default createStore({
     },
     setUser(state, user) {
       state.user = user;
+    },
+    setNetworkTime(state, networkTime) {
+      state.networkTime = networkTime;
     },
   },
   getters: {

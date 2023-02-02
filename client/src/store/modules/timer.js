@@ -18,8 +18,14 @@ const actions = {
 
     commit("setTimer", timer);
   },
-  async stopTimer({ rootGetters, commit }) {
-    const timeEntry = await api.stopTimer();
+  async stopTimer({ state, rootGetters, commit }) {
+    const timer = JSON.parse(JSON.stringify(state.current));
+    if (!timer.id) {
+      return;
+    }
+    const timeEntry = await api.stopTimer({
+      duration: Math.abs(new Date().getTime() - timer.startTime),
+    });
 
     let timeEntries = JSON.parse(JSON.stringify(rootGetters["timeEntries/getTimeEntries"]));
     timeEntries.unshift(timeEntry);

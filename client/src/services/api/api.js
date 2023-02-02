@@ -104,7 +104,7 @@ export default {
   },
 
   async getUser() {
-    const response = await getRequest("/user/");
+    const response = await getRequest("/me/");
 
     return response.data;
   },

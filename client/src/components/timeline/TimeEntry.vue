@@ -22,7 +22,7 @@
 
 <script>
 import store from "@/store";
-import { getRelativeTime } from "@/services/relativeTimeGetter";
+import { getRelativeTime } from "@/services/time/relativeTimeGetter";
 import ClockHour4Icon from "vue-tabler-icons/icons/ClockHour4Icon";
 
 export default {

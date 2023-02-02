@@ -37,10 +37,10 @@
           </label>
           <input
             class="block w-full px-4 py-3 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
-            type="text"
+            type="email"
             v-model="email"
             name="email"
-            placeholder="username@email.com"
+            placeholder="username@domain.com"
             autocomplete="email"
           />
         </div>
