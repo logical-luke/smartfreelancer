@@ -88,7 +88,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_API }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: rm -rf /home/smartfreelancer-api/tmp/build_old_* && mv /home/smartfreelancer-api/htdocs/api.smartfreelancer.io/public /home/smartfreelancer-api/tmp/build_old_$(date +%s) && mv /home/smartfreelancer-api/tmp/build /home/smartfreelancer-api/htdocs/api.smartfreelancer.io/public
+          script: rm -rf /home/smartfreelancer-api/tmp/build_old_* && mv /home/smartfreelancer-api/public /home/smartfreelancer-api/tmp/build_old_$(date +%s) && mv /home/smartfreelancer-api/tmp/build /home/smartfreelancer-api/public
 
       - name: Clear opcache
         uses: appleboy/ssh-action@master
@@ -97,7 +97,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_API }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: /usr/bin/php8.1 /home/smartfreelancer-api/htdocs/api.smartfreelancer.io/public/tools/cachetools/cachetool.phar opcache:reset --fcgi=127.0.0.1:16000
+          script: /usr/bin/php8.1 /home/smartfreelancer-api/public/tools/cachetools/cachetool.phar opcache:reset --fcgi=127.0.0.1:9000
 
       - name: Configure app local env files
         uses: appleboy/ssh-action@master
@@ -134,7 +134,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_APP }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_APP }}
-          script: rm -rf /home/smartfreelancer-app/tmp/build_old_* && mv /home/smartfreelancer-app/htdocs/app.smartfreelancer.io/ /home/smartfreelancer-app/tmp/build_old_$(date +%s) && mv /home/smartfreelancer-app/tmp/build/client/dist /home/smartfreelancer-app/htdocs/app.smartfreelancer.io/
+          script: rm -rf /home/smartfreelancer-app/tmp/build_old_* && mv /home/smartfreelancer-app/public/ /home/smartfreelancer-app/tmp/build_old_$(date +%s) && mv /home/smartfreelancer-app/tmp/build/client/dist /home/smartfreelancer-app/public/
 
       - name: Remove temporary api build directory
         if: always()
