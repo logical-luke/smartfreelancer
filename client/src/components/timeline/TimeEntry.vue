@@ -12,10 +12,10 @@
         </span>
         <p>{{ duration }}</p>
       </div>
-<!--      <div class="w-auto mr-16 px-4">-->
-<!--      </div>-->
-<!--      <div class="w-auto px-4">-->
-<!--      </div>-->
+      <!--      <div class="w-auto mr-16 px-4">-->
+      <!--      </div>-->
+      <!--      <div class="w-auto px-4">-->
+      <!--      </div>-->
     </div>
   </div>
 </template>
@@ -56,14 +56,14 @@ export default {
       );
 
       return `${hours}:${minutes}:${seconds}`;
-    }
+    },
   },
   props: {
     timeEntry: {
       type: Object,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 };
 </script>
 

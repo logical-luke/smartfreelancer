@@ -13,7 +13,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -36,7 +35,6 @@ class CreateContentForUserCommand extends Command
     {
         $this
             ->addArgument('email', InputArgument::REQUIRED, 'Argument description');
-        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -50,27 +48,27 @@ class CreateContentForUserCommand extends Command
             return Command::FAILURE;
         }
 
-        for ($i = 0; $i < 200; $i++) {
+        for ($i = 0; $i < 200; ++$i) {
             $task = Task::fromUser($user);
-            $task->setName((string)random_int(0,200000));
+            $task->setName((string) random_int(0, 200000));
 
             $this->taskRepository->save($task);
         }
 
         $this->taskRepository->save($task, true);
 
-        for ($i = 0; $i < 200; $i++) {
+        for ($i = 0; $i < 200; ++$i) {
             $project = Project::fromUser($user);
-            $project->setName((string)random_int(0,200000));
+            $project->setName((string) random_int(0, 200000));
 
             $this->projectRepository->save($project);
         }
 
         $this->projectRepository->save($project, true);
 
-        for ($i = 0; $i < 200; $i++) {
+        for ($i = 0; $i < 200; ++$i) {
             $client = Client::fromUser($user);
-            $client->setName((string)random_int(0,200000));
+            $client->setName((string) random_int(0, 200000));
 
             $this->clientRepository->save($client);
         }

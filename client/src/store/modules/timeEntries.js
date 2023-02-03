@@ -15,7 +15,7 @@ const actions = {
 
 const getters = {
   getTimeEntries: (state) => state.all,
-}
+};
 
 const mutations = {
   setTimeEntries(state, timeEntries) {

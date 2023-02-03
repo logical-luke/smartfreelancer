@@ -8,7 +8,7 @@ const getRequest = async function (url, headers) {
     const response = await axios.get(process.env.API_BASE_URL + url, {
       headers: {
         Authorization: `Bearer ${store.getters.getToken}`,
-      }
+      },
     });
 
     if (response.status === 404) {
@@ -67,33 +67,31 @@ const deleteRequest = async function (url, data, headers) {
 };
 
 const refreshToken = async function () {
-  const response = await axios.post(
-    process.env.API_BASE_URL + "/token/refresh",
-    {
-      refresh_token: store.getters.getRefreshToken,
+  if (store.getters.getRefreshToken) {
+    const response = await axios.post(
+      process.env.API_BASE_URL + "/token/refresh",
+      {
+        refresh_token: store.getters.getRefreshToken,
+      }
+    );
+
+    if (response.status === 200) {
+      store.commit("setToken", response.data.token);
+      store.commit("setRefreshToken", response.data.refresh_token);
+
+      return;
     }
-  );
-
-  if (response.status === 200) {
-    store.commit("setToken", response.data.token);
-    store.commit("setRefreshToken", response.data.refresh_token);
-
-    return;
   }
-
   return store.dispatch("logout");
 };
 
 export default {
   async login(email, password) {
     try {
-      const response = await axios.post(
-        process.env.API_BASE_URL + "/login",
-        {
-          email: email,
-          password: password,
-        },
-      );
+      const response = await axios.post(process.env.API_BASE_URL + "/login", {
+        email: email,
+        password: password,
+      });
 
       return {
         token: response.data.token,
@@ -130,8 +128,8 @@ export default {
     return response.data;
   },
 
-  async stopTimer() {
-    const response = await postRequest("/timer/stop");
+  async stopTimer(timer) {
+    const response = await postRequest("/timer/stop", timer);
 
     return response.data;
   },
@@ -260,6 +258,11 @@ export default {
 
   async getTimeEntries() {
     const response = await getRequest("/time-entry/");
+
+    return response.data;
+  },
+  async getServerTime() {
+    const response = await getRequest("/time/");
 
     return response.data;
   },

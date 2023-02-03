@@ -13,8 +13,10 @@ const state = () => ({
 });
 
 const actions = {
-  async startTimer({ commit, state }) {
-    const timer = await api.createTimer(state.current);
+  async startTimer({ commit, state, rootGetters }) {
+    const newTimer = JSON.parse(JSON.stringify(state.current));
+    newTimer.startTime = rootGetters["getServerTime"];
+    const timer = await api.createTimer(newTimer);
 
     commit("setTimer", timer);
   },
@@ -23,13 +25,14 @@ const actions = {
     if (!timer.id) {
       return;
     }
-    const timeEntry = await api.stopTimer({
-      duration: Math.abs(new Date().getTime() - timer.startTime),
-    });
+    timer.endTime = rootGetters.getServerTime;
+    const timeEntry = await api.stopTimer(timer);
 
-    let timeEntries = JSON.parse(JSON.stringify(rootGetters["timeEntries/getTimeEntries"]));
+    let timeEntries = JSON.parse(
+      JSON.stringify(rootGetters["timeEntries/getTimeEntries"])
+    );
     timeEntries.unshift(timeEntry);
-    commit("timeEntries/setTimeEntries", timeEntries, {root: true});
+    commit("timeEntries/setTimeEntries", timeEntries, { root: true });
 
     commit("setTimer", JSON.parse(JSON.stringify(emptyTimer)));
   },

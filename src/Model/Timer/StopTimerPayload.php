@@ -38,9 +38,9 @@ class StopTimerPayload
         return Uuid::fromString($this->timerId);
     }
 
-    public function getEndTime(): \DateTime
+    public function getEndTime(): \DateTimeImmutable
     {
-        return (new \DateTime())->setTimestamp($this->endTime);
+        return (new \DateTimeImmutable())->setTimestamp($this->endTime);
     }
 
     public function getOwnerId(): Uuid

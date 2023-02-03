@@ -24,6 +24,11 @@ onMounted(async () => {
     store.commit("setToken", token);
     store.commit("setAuthorized", true);
     store.commit("setRefreshToken", refreshToken);
+    setInterval(() => {
+      if (store.getters.getServerTime) {
+        store.commit("setServerTime", Number(store.getters.getServerTime) + 1);
+      }
+    }, 1000);
     await store.dispatch("loadInitial");
     await store.dispatch("syncInitial");
   }

@@ -33,6 +33,7 @@ class TimerCreator
         }
 
         $timer = Timer::fromUser($user);
+        $timer->setStartTime($payload->getStartTime());
 
         if ($projectId = $payload->getProjectId()) {
             if (!$project = $this->projectRepository->find($projectId)) {

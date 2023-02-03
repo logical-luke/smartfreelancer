@@ -6,6 +6,7 @@ use App\Entity\Timer;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 
 /**
  * @extends ServiceEntityRepository<Timer>
@@ -42,9 +43,11 @@ class TimerRepository extends ServiceEntityRepository
 
     public function findOneByUser(User $user): ?Timer
     {
-        return $this->findOneBy([
-            'owner' => $user,
-        ]);
+        return $this->createQueryBuilder('t')
+            ->where('t.owner = :user')
+            ->setParameter('user', $user->getId(), UuidType::NAME)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     public function persist(Timer $timer): void

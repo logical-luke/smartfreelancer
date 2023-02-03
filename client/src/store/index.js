@@ -2,7 +2,6 @@ import { createStore, createLogger } from "vuex";
 import VueCookies from "vue-cookies";
 import router from "../router";
 
-
 import projects from "./modules/projects";
 import project from "@/store/modules/project";
 import timer from "@/store/modules/timer";
@@ -12,7 +11,7 @@ import client from "@/store/modules/client";
 import tasks from "@/store/modules/tasks";
 import task from "@/store/modules/task";
 import timeEntries from "@/store/modules/timeEntries";
-import {getNetworkTime} from "@/services/time/networkTimeGetter";
+import { getServerTime } from "@/services/time/serverTimeGetter";
 
 const debug = process.env.NODE_ENV !== "production";
 
@@ -25,7 +24,7 @@ export default createStore({
     user: {},
     initialLoaded: false,
     synchronised: false,
-    networkTime: null,
+    serverTime: null,
   },
   modules: {
     projects,
@@ -63,6 +62,8 @@ export default createStore({
         return dispatch("logout");
       }
       commit("setUser", user);
+
+      await dispatch("getNetworkTime");
 
       let timer = null;
       if (localStorage.getItem("timer")) {
@@ -120,12 +121,8 @@ export default createStore({
       });
     },
     async getNetworkTime({ commit }) {
-      const networkTime = await getNetworkTime();
-      commit("setNetworkTime", networkTime);
-
-      setInterval(() => {
-        commit("setNetworkTime", networkTime);
-      }, 1000);
+      const serverTime = await getServerTime();
+      commit("setServerTime", serverTime);
     },
   },
   mutations: {
@@ -159,8 +156,8 @@ export default createStore({
     setUser(state, user) {
       state.user = user;
     },
-    setNetworkTime(state, networkTime) {
-      state.networkTime = networkTime;
+    setServerTime(state, serverTime) {
+      state.serverTime = serverTime;
     },
   },
   getters: {
@@ -181,6 +178,9 @@ export default createStore({
     },
     isSynchronised(state) {
       return state.synchronised;
+    },
+    getServerTime(state) {
+      return state.serverTime;
     },
   },
   strict: debug,

@@ -25,12 +25,12 @@ export default {
   components: { TimeEntry },
   computed: {
     ...mapState({
-      timeEntries: (state) => state.timeEntries.all
-    })
+      timeEntries: (state) => state.timeEntries.all,
+    }),
   },
   created() {
     store.dispatch("timeEntries/getTimeEntries");
-  }
+  },
 };
 </script>
 

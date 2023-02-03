@@ -55,14 +55,14 @@ class CreateTimeEntryPayload
         return $this->timerId;
     }
 
-    public function getStartTime(): ?\DateTime
+    public function getStartTime(): ?\DateTimeImmutable
     {
-        return $this->startTime ? (new \DateTime())->setTimestamp($this->startTime) : null;
+        return $this->startTime ? (new \DateTimeImmutable())->setTimestamp($this->startTime) : null;
     }
 
-    public function getEndTime(): \DateTime
+    public function getEndTime(): \DateTimeImmutable
     {
-        return (new \DateTime())->setTimestamp($this->endTime);
+        return (new \DateTimeImmutable())->setTimestamp($this->endTime);
     }
 
     public function getClientId(): ?Uuid

@@ -10,6 +10,7 @@ class CreateTimerPayload
 {
     protected function __construct(
         private readonly string $ownerId,
+        private readonly int $startTime,
         private readonly ?string $projectId,
         private readonly ?string $clientId,
         private readonly ?string $taskId,
@@ -20,6 +21,7 @@ class CreateTimerPayload
     {
         return new self(
             $payload['ownerId'],
+            $payload['startTime'],
             $payload['projectId'] ?? null,
             $payload['clientId'] ?? null,
             $payload['taskId'] ?? null,
@@ -29,6 +31,11 @@ class CreateTimerPayload
     public function getOwnerId(): Uuid
     {
         return Uuid::fromString($this->ownerId);
+    }
+
+    public function getStartTime(): \DateTimeImmutable
+    {
+        return (new \DateTimeImmutable())->setTimestamp($this->startTime);
     }
 
     public function getProjectId(): ?Uuid

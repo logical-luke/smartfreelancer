@@ -65,7 +65,7 @@ class TimerController extends AbstractController
     }
 
     #[Route('/stop', name: 'stop')]
-    public function stop(TimerRepository $timerRepository, TimerStopper $timerStopper): JsonResponse
+    public function stop(TimerRepository $timerRepository, Request $request, TimerStopper $timerStopper): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -75,11 +75,11 @@ class TimerController extends AbstractController
         }
 
         try {
-            $timeEntry = $timerStopper(StopTimerPayload::from([
+            $payload = array_merge([
                 'timerId' => $timer->getId()?->toRfc4122(),
-                'endTime' => (new \DateTime())->getTimestamp(),
                 'ownerId' => $user->getId()?->toRfc4122(),
-            ]));
+            ], json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR));
+            $timeEntry = $timerStopper(StopTimerPayload::from($payload));
         } catch (InvalidPayloadException $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }

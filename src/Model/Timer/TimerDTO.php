@@ -21,7 +21,7 @@ class TimerDTO
     {
         return new self(
             $timer->getId()?->toRfc4122(),
-            $timer->getStartTime()->getTimestamp(),
+            $timer->getStartTime()?->getTimestamp(),
             $timer->getClient()?->getId()?->toRfc4122(),
             $timer->getProject()?->getId()?->toRfc4122(),
             $timer->getTask()?->getId()?->toRfc4122(),
