@@ -21,6 +21,7 @@ export default {
     ...mapState({
       timer: (state) => state.timer.current,
       subjectName: (state) => state.timer.current.subjectName,
+      serverTime: (state) => state.serverTime,
     }),
   },
   watch: {
@@ -33,7 +34,7 @@ export default {
       return this.timer && this.timer.id;
     },
     getRelativeTime() {
-      return getRelativeTime(new Date(this.timer.startTime * 1000), new Date());
+      return getRelativeTime(this.timer.startTime, this.serverTime);
     },
     updateClock() {
       let time = this;

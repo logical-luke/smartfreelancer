@@ -1,7 +1,7 @@
 const units = {
-  hour: 60 * 60 * 1000,
-  minute: 60 * 1000,
-  second: 1000,
+  hour: 60 * 60,
+  minute: 60,
+  second: 1,
 };
 
 export function getRelativeTime(startTime, endTime) {

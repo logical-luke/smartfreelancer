@@ -51,8 +51,8 @@ export default {
     },
     duration() {
       const { hours, minutes, seconds } = getRelativeTime(
-        new Date(this.timeEntry.startTime * 1000),
-        new Date(this.timeEntry.endTime * 1000)
+        this.timeEntry.startTime,
+        this.timeEntry.endTime
       );
 
       return `${hours}:${minutes}:${seconds}`;
