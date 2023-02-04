@@ -1,11 +1,12 @@
 <template>
   <div class="pl-4 pr-6 py-4 mb-2 bg-white shadow rounded transition-element">
-    <div class="flex flex-wrap items-center -mx-4">
-      <div class="w-full md:w-3/6 mb-4 md:mb-0 px-4 flex items-center">
-        <h4 class="font-medium">{{ subject }}</h4>
+    <div class="flex flex-wrap -mx-4">
+      <div class="mb-4 md:mb-0 px-4 flex">
+        <h4 v-if="subject" class="font-medium">{{ subject }}</h4>
+        <h4 v-else class="font-medium"><TrackedSubject width="w-72" /></h4>
       </div>
       <div
-        class="w-auto ml-auto mr-16 px-4 flex items-center text-xs text-gray-500"
+        class="px-4 flex text-xs text-gray-500 items-center"
       >
         <span class="mr-1">
           <clock-hour4-icon></clock-hour4-icon>
@@ -24,10 +25,11 @@
 import store from "@/store";
 import { getRelativeTime } from "@/services/time/relativeTimeGetter";
 import ClockHour4Icon from "vue-tabler-icons/icons/ClockHour4Icon";
+import TrackedSubject from "@/components/ui/TrackedSubject.vue";
 
 export default {
   name: "TimeEntry",
-  components: { ClockHour4Icon },
+  components: { TrackedSubject, ClockHour4Icon },
   computed: {
     subject() {
       const client = store.getters["clients/getClientById"](

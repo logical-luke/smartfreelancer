@@ -6,6 +6,8 @@
           <div class="flex items-center space-x-3">
             <ToggleTimerButton :global="true" />
             <TimerTime />
+            <StartTime />
+            <EndTime />
             <transition name="fade" mode="in-out">
               <div class="md:hidden px-4" v-if="!isSynchronised">
                 <SyncLoader
@@ -46,6 +48,8 @@ import TrackedSubject from "@/components/ui/TrackedSubject.vue";
 import TimerTime from "@/components/ui/TimerTime.vue";
 import { mapGetters } from "vuex";
 import { SyncLoader } from "vue3-spinner";
+import StartTime from "@/components/ui/StartTime.vue";
+import EndTime from "@/components/ui/EndTime.vue";
 
 export default {
   name: "HeaderNavbar",
@@ -59,6 +63,8 @@ export default {
     ...mapGetters(["isSynchronised"]),
   },
   components: {
+    EndTime,
+    StartTime,
     SyncLoader,
     TimerTime,
     TrackedSubject,

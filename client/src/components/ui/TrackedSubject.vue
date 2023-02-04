@@ -1,5 +1,5 @@
 <template>
-  <div class="w-92">
+  <div :class="width">
     <treeselect
       v-model="subject"
       :multiple="false"
@@ -20,6 +20,12 @@ import store from "@/store";
 export default {
   name: "TrackedSubject",
   components: { Treeselect },
+  props: {
+    width: {
+      type: String,
+      default: "w-92"
+    },
+  },
   data() {
     return {
       subject: null,
