@@ -29,18 +29,24 @@ export default {
   },
   data() {
     return {
-      disabled: false
+      disabled: false,
+      interval: null,
     }
+  },
+  methods: {
+    updateTime(hours, minutes) {
+      this.time = {
+        hours: hours,
+        minutes: minutes,
+      }
+    },
   },
   watch: {
     timer() {
       this.disabled = !!this.timer.id;
     },
     serverTime() {
-      this.time = {
-        hours: this.serverTime.hours,
-        minutes: this.serverTime.minutes,
-      };
+      this.updateTime(this.serverTime.hours, this.serverTime.minutes);
     },
   },
   setup() {
