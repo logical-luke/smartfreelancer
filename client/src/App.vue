@@ -30,7 +30,7 @@ onMounted(async () => {
       }
     }, 1000);
     await store.dispatch("loadInitial");
-    await store.dispatch("syncInitial");
+    await store.dispatch("sync");
   }
 });
 </script>

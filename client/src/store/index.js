@@ -93,20 +93,10 @@ export default createStore({
       if (tasks) {
         commit("tasks/setTasks", tasks);
       }
-      if (
-        !localStorage.getItem("clients") ||
-        !localStorage.getItem("tasks") ||
-        !localStorage.getItem("tasks")
-      ) {
-        await dispatch("syncInitial");
-      }
 
       commit("setInitialLoaded", true);
     },
-    async syncInitial({ commit, state, dispatch }) {
-      if (state.synchronised) {
-        return;
-      }
+    async sync({ commit, state, dispatch }) {
       const clientsFetched = dispatch("clients/getClients");
       const projectsFetched = dispatch("projects/getProjects");
       const tasksFetched = dispatch("tasks/getTasks");
