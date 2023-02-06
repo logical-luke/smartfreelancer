@@ -23,7 +23,7 @@ export default {
   props: {
     width: {
       type: String,
-      default: "w-92"
+      default: "w-92",
     },
   },
   data() {

@@ -13,9 +13,8 @@
 <script>
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
-import { ref } from "vue";
 import { mapState } from "vuex";
-
+import getDateFromSecondsTimestamp from "@/services/time/getDateFromSecondsTimestamp";
 
 export default {
   name: "StartTime",
@@ -28,24 +27,41 @@ export default {
       },
     };
   },
+  watch: {
+    timer() {
+      this.updateTime();
+    },
+    serverTime() {
+      this.updateTime();
+    },
+  },
   computed: {
     ...mapState({
-      timer: state => state.timer.current,
-      serverTime: state => state.serverTime,
-    })
+      timer: (state) => state.timer.current,
+      serverTime: (state) => state.serverTime,
+    }),
   },
-  mounted() {
-    if (this.timer.id) {
-      this.time.hours = new Date(this.timer.startTime * 1000).getHours();
-      this.time.minutes = new Date(this.timer.startTime * 1000).getMinutes();
-    } else {
-      this.time.hours = new Date(this.serverTime * 1000).getHours();
-      this.time.minutes = new Date(this.serverTime * 1000).getMinutes();
-    }
-  }
+  methods: {
+    setTime(timestamp) {
+      const date = getDateFromSecondsTimestamp(timestamp);
+      this.time = {
+        hours: date.getHours(),
+        minutes: date.getMinutes(),
+      };
+    },
+    updateTime() {
+      if (this.timer.startTime) {
+        this.setTime(this.timer.startTime);
+
+        return;
+      }
+
+      if (this.serverTime) {
+        this.setTime(this.serverTime);
+      }
+    },
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

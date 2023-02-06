@@ -5,9 +5,7 @@
         <h4 v-if="subject" class="font-medium">{{ subject }}</h4>
         <h4 v-else class="font-medium"><TrackedSubject width="w-72" /></h4>
       </div>
-      <div
-        class="px-4 flex text-xs text-gray-500 items-center"
-      >
+      <div class="px-4 flex text-xs text-gray-500 items-center">
         <span class="mr-1">
           <clock-hour4-icon></clock-hour4-icon>
         </span>
@@ -23,7 +21,7 @@
 
 <script>
 import store from "@/store";
-import { getRelativeTime } from "@/services/time/relativeTimeGetter";
+import getRelativeTime from "@/services/time/relativeTimeGetter";
 import ClockHour4Icon from "vue-tabler-icons/icons/ClockHour4Icon";
 import TrackedSubject from "@/components/ui/TrackedSubject.vue";
 

@@ -4,7 +4,7 @@ const units = {
   second: 1,
 };
 
-export function getRelativeTime(startTime, endTime) {
+export default function getRelativeTime(startTime, endTime) {
   let elapsed = Math.abs(startTime - endTime);
   let relativeTime = {
     hours: "00",

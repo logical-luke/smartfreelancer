@@ -14,54 +14,54 @@
 <script>
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
-import { ref } from "vue";
 import { mapState } from "vuex";
-
+import getDateFromSecondsTimestamp from "@/services/time/getDateFromSecondsTimestamp";
 
 export default {
   name: "EndTime",
   components: { Datepicker },
-  computed: {
-    ...mapState({
-      timer: state => state.timer.current,
-      serverTime: state => state.serverTime,
-    })
-  },
   data() {
     return {
+      time: {
+        hours: null,
+        minutes: null,
+      },
       disabled: false,
-      interval: null,
-    }
+    };
+  },
+  computed: {
+    ...mapState({
+      timer: (state) => state.timer.current,
+      serverTime: (state) => state.serverTime,
+    }),
   },
   methods: {
-    updateTime(hours, minutes) {
+    setTime(timestamp) {
+      const date = getDateFromSecondsTimestamp(timestamp);
       this.time = {
-        hours: hours,
-        minutes: minutes,
-      }
+        hours: date.getHours(),
+        minutes: date.getMinutes(),
+      };
+    },
+    updateTime() {
+      this.setTime(this.serverTime);
+    },
+    setStatus() {
+      this.disabled = !!this.timer.id;
     },
   },
   watch: {
     timer() {
-      this.disabled = !!this.timer.id;
+      this.setStatus();
     },
     serverTime() {
-      this.updateTime(this.serverTime.hours, this.serverTime.minutes);
+      this.updateTime();
     },
   },
-  setup() {
-    const time = ref({
-      hours: new Date().getHours(),
-      minutes: new Date().getMinutes()
-    });
-
-    return {
-      time
-    };
-  }
+  mounted() {
+    this.setStatus();
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

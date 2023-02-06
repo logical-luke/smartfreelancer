@@ -5,7 +5,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { getRelativeTime } from "@/services/time/relativeTimeGetter";
+import getRelativeTime from "@/services/time/relativeTimeGetter";
 
 export default {
   name: "TimerTime",

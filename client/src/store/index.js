@@ -11,7 +11,7 @@ import client from "@/store/modules/client";
 import tasks from "@/store/modules/tasks";
 import task from "@/store/modules/task";
 import timeEntries from "@/store/modules/timeEntries";
-import { getServerTime } from "@/services/time/serverTimeGetter";
+import getServerTime from "@/services/time/serverTimeGetter";
 
 const debug = process.env.NODE_ENV !== "production";
 
@@ -96,7 +96,7 @@ export default createStore({
 
       commit("setInitialLoaded", true);
     },
-    async sync({ commit, state, dispatch }) {
+    async sync({ commit, dispatch }) {
       const clientsFetched = dispatch("clients/getClients");
       const projectsFetched = dispatch("projects/getProjects");
       const tasksFetched = dispatch("tasks/getTasks");
