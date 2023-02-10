@@ -108,11 +108,14 @@ export default {
 
   async register(email, password, confirmPassword) {
     try {
-      const response = await axios.post(process.env.API_BASE_URL + "/register", {
-        email: email,
-        password: password,
-        confirmPassword: confirmPassword,
-      });
+      const response = await axios.post(
+        process.env.API_BASE_URL + "/register",
+        {
+          email: email,
+          password: password,
+          confirmPassword: confirmPassword,
+        }
+      );
 
       return {
         token: response.data.token,
@@ -120,8 +123,8 @@ export default {
       };
     } catch (e) {
       if (
-        e.response
-        && (e.response.status === 400 || e.response.status === 409)
+        e.response &&
+        (e.response.status === 400 || e.response.status === 409)
       ) {
         throw new Error(e.response.data.error);
       }

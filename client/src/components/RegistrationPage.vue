@@ -55,7 +55,9 @@
           name="password"
         />
         <password-meter @score="onScore" :password="password" />
-        <span v-if="password && passwordStrength" class="mt-2">{{ passwordStrength }} password</span>
+        <span v-if="password && passwordStrength" class="mt-2"
+          >{{ passwordStrength }} password</span
+        >
       </div>
 
       <div class="mb-6">
@@ -70,9 +72,7 @@
         />
       </div>
 
-      <SubmitButton>
-        Sign in
-      </SubmitButton>
+      <SubmitButton> Sign in </SubmitButton>
       <p class="mb-2 text-base text-gray-500 mt-2">
         Already have an account? Log in
         <router-link class="text-blue-500" to="/login">here</router-link>
@@ -83,9 +83,7 @@
 
 <script>
 import TransparentLogoWide from "@/components/ui/TransparentLogoWide.vue";
-import LoginIcon from "vue-tabler-icons/icons/LoginIcon";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
-import LinkButton from "@/components/ui/LinkButton.vue";
 import PasswordMeter from "vue-simple-password-meter";
 import store from "@/store";
 
@@ -97,7 +95,7 @@ export default {
       password: "",
       confirmPassword: "",
       error: null,
-      passwordStrength: ""
+      passwordStrength: "",
     };
   },
   methods: {
@@ -106,25 +104,27 @@ export default {
     },
     async register() {
       try {
-        const error = await store.dispatch("register", {
+        await store.dispatch("register", {
           email: this.email,
           password: this.password,
-          confirmPassword: this.confirmPassword
+          confirmPassword: this.confirmPassword,
         });
       } catch (err) {
-        console.log(err);
         this.error = err.message;
       }
     },
     onScore(payload) {
       const strength = payload.strength;
-      this.passwordStrength = strength.charAt(0).toUpperCase() + strength.slice(1);
-    }
+      this.passwordStrength =
+        strength.charAt(0).toUpperCase() + strength.slice(1);
+    },
   },
-  components: { LinkButton, TransparentLogoWide, LoginIcon, SubmitButton, PasswordMeter }
+  components: {
+    TransparentLogoWide,
+    SubmitButton,
+    PasswordMeter,
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

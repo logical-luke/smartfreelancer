@@ -95,7 +95,7 @@ export default {
       return route.name;
     },
     isAuthorizedPage() {
-      const {meta} = useRoute();
+      const { meta } = useRoute();
 
       return meta.requiresAuth === true;
     },

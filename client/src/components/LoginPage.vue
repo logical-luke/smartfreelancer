@@ -57,9 +57,7 @@
         />
       </div>
 
-      <SubmitButton>
-        Log in
-      </SubmitButton>
+      <SubmitButton> Log in </SubmitButton>
       <p class="mb-2 text-base text-gray-500 mt-2">
         Don't have an account? Create a new account
         <router-link class="text-blue-500" to="/register">here</router-link>
@@ -70,40 +68,47 @@
 
 <script>
 import { mapMutations } from "vuex";
-import api from "@/services/api/api";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
-import LoginIcon from "vue-tabler-icons/icons/LoginIcon";
 import store from "@/store";
 import TransparentLogoWide from "@/components/ui/TransparentLogoWide.vue";
-import LinkButton from "@/components/ui/LinkButton.vue";
-import UserPlusIcon from "vue-tabler-icons/icons/UserPlusIcon";
 
 export default {
   name: "LoginPage",
-  components: { UserPlusIcon, LinkButton, TransparentLogoWide, LoginIcon, SubmitButton },
+  components: {
+    TransparentLogoWide,
+    SubmitButton,
+  },
   data: () => {
     return {
       email: "",
       password: "",
       buttonTitle: "Log in",
-      error: null
+      error: null,
     };
   },
   methods: {
-    ...mapMutations(["setRefreshToken", "setToken", "setAuthorized", "setInitialLoaded"]),
+    ...mapMutations([
+      "setRefreshToken",
+      "setToken",
+      "setAuthorized",
+      "setInitialLoaded",
+    ]),
     clearError() {
       this.error = null;
     },
     async login() {
       try {
-        await store.dispatch('login', {email: this.email, password: this.password});
+        await store.dispatch("login", {
+          email: this.email,
+          password: this.password,
+        });
       } catch (err) {
         this.email = "";
         this.password = "";
         this.error = err.message;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

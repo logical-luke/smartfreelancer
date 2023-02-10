@@ -10,14 +10,13 @@
 </template>
 
 <script>
-
 export default {
   name: "LinkButton",
   props: {
     goTo: {
       type: String,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 };
 </script>

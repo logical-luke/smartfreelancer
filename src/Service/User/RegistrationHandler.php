@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Service\User;
 
-use App\Entity\User;
-use App\Exception\ConfirmationPasswordIsNotSame;
 use App\Exception\InvalidPayloadException;
 use App\Exception\UserAlreadyExistsException;
 use App\Model\User\JWTTokenDTO;
 use App\Model\User\RegistrationPayload;
 use App\Repository\UserRepository;
 use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\EmailValidator;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class RegistrationHandler

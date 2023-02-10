@@ -132,8 +132,8 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (
-    (to.name === "LoginPage" || to.name === "RegistrationPage")
-    && store.getters.isAuthorized
+    (to.name === "LoginPage" || to.name === "RegistrationPage") &&
+    store.getters.isAuthorized
   ) {
     next({ name: "TodayPage" });
   } else {

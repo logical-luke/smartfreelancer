@@ -9,7 +9,6 @@ class JWTTokenDTO
     public function __construct(
         public string $token,
         public string $refreshToken,
-    )
-    {
+    ) {
     }
 }

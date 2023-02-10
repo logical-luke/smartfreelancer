@@ -56,16 +56,16 @@ export default createStore({
       );
       if (token && refreshToken) {
         commit("setToken", token);
-        commit("setRefreshToken" ,refreshToken);
+        commit("setRefreshToken", refreshToken);
         commit("setAuthorized", true);
         await dispatch("sync");
         commit("setInitialLoaded", true);
         await router.push("/");
       }
     },
-    async register({ commit, dispatch }, credentials) {
+    async register({ dispatch }, credentials) {
       try {
-        const { token, refreshToken } = await api.register(
+        await api.register(
           credentials.email,
           credentials.password,
           credentials.confirmPassword
@@ -73,7 +73,7 @@ export default createStore({
         dispatch("login", {
           email: credentials.email,
           password: credentials.password,
-        })
+        });
       } catch (err) {
         console.log(err);
         throw new Error(err.message);
