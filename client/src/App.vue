@@ -51,12 +51,12 @@ onMounted(async () => {
     </div>
     <div v-else>
       <div>
-        <SidebarNav v-if="!isLogin" />
+        <SidebarNav v-if="isAuthorizedPage" />
       </div>
       <div class="min-h-screen">
         <transition name="fade" mode="out-in">
           <div
-            v-if="!isLogin"
+            v-if="isAuthorizedPage"
             class="sticky top-0 z-10 mx-auto w-full lg:ml-80"
           >
             <HeaderNavbar />
@@ -94,10 +94,10 @@ export default {
 
       return route.name;
     },
-    isLogin() {
-      const route = useRoute();
+    isAuthorizedPage() {
+      const {meta} = useRoute();
 
-      return route.name === "LoginPage";
+      return meta.requiresAuth === true;
     },
   },
 };

@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/me', name: 'app_me_')]
 class MeController extends AbstractController
 {
-    #[Route('/', name: 'index')]
+    #[Route('', name: 'index')]
     public function index(): JsonResponse
     {
         /** @var User $user */

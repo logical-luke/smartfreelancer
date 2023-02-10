@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/register', name: 'app_register_')]
 class RegistrationController extends AbstractController
 {
-    #[Route('/', name: 'app_index')]
+    #[Route('', name: 'app_index', methods: ['POST'])]
     public function index(Request $request, RegistrationHandler $registrationHandler): JsonResponse
     {
         try {

@@ -4,7 +4,7 @@
     type="submit"
   >
     <slot name="icon"></slot>
-    <slot name="title"></slot>
+    <slot></slot>
   </button>
 </template>
 

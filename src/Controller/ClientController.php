@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/client', name: 'app_client_')]
 class ClientController extends AbstractController
 {
-    #[Route('/', name: 'all')]
+    #[Route('', name: 'all')]
     public function index(ClientRepository $clientRepository): JsonResponse
     {
         /** @var User $user */

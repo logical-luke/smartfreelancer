@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/project', name: 'app_project_')]
 class ProjectController extends AbstractController
 {
-    #[Route('/', name: 'all')]
+    #[Route('', name: 'all')]
     public function index(ProjectRepository $projectRepository): JsonResponse
     {
         /** @var User $user */

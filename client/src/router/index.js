@@ -13,6 +13,7 @@ import TaskCreatePage from "@/components/task/TaskCreatePage.vue";
 import TodayPage from "@/components/today/TodayPage.vue";
 import ReportsPage from "@/components/report/ReportsPage.vue";
 import TimelinePage from "@/components/timeline/TimelinePage.vue";
+import RegistrationPage from "@/components/RegistrationPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -24,6 +25,11 @@ const router = createRouter({
       path: "/login",
       name: "LoginPage",
       component: LoginPage,
+    },
+    {
+      path: "/register",
+      name: "RegistrationPage",
+      component: RegistrationPage,
     },
     {
       path: "/",
@@ -125,7 +131,10 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.name === "LoginPage" && store.getters.isAuthorized) {
+  if (
+    (to.name === "LoginPage" || to.name === "RegistrationPage")
+    && store.getters.isAuthorized
+  ) {
     next({ name: "TodayPage" });
   } else {
     if (to.matched.some((record) => record.meta.requiresAuth)) {

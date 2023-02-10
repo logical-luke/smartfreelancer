@@ -106,6 +106,30 @@ export default {
     throw new Error("Unable to log in. Please try again later.");
   },
 
+  async register(email, password, confirmPassword) {
+    try {
+      const response = await axios.post(process.env.API_BASE_URL + "/register", {
+        email: email,
+        password: password,
+        confirmPassword: confirmPassword,
+      });
+
+      return {
+        token: response.data.token,
+        refreshToken: response.data.refresh_token,
+      };
+    } catch (e) {
+      if (
+        e.response
+        && (e.response.status === 400 || e.response.status === 409)
+      ) {
+        throw new Error(e.response.data.error);
+      }
+    }
+
+    throw new Error("Unable to sign in. Please try again later.");
+  },
+
   async getUser() {
     const response = await getRequest("/me/");
 

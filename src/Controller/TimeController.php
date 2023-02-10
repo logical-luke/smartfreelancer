@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/time', name: 'app_time_')]
 class TimeController extends AbstractController
 {
-    #[Route('/', name: 'index')]
+    #[Route('', name: 'index')]
     public function index(): JsonResponse
     {
         return $this->json(TimeDTO::fromDateTime(new \DateTimeImmutable())->getTime());

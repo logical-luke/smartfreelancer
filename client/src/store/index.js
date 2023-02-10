@@ -49,6 +49,36 @@ export default createStore({
       localStorage.clear();
       await router.push("/login");
     },
+    async login({ commit, dispatch }, credentials) {
+      const { token, refreshToken } = await api.login(
+        credentials.email,
+        credentials.password
+      );
+      if (token && refreshToken) {
+        commit("setToken", token);
+        commit("setRefreshToken" ,refreshToken);
+        commit("setAuthorized", true);
+        await dispatch("sync");
+        commit("setInitialLoaded", true);
+        await router.push("/");
+      }
+    },
+    async register({ commit, dispatch }, credentials) {
+      try {
+        const { token, refreshToken } = await api.register(
+          credentials.email,
+          credentials.password,
+          credentials.confirmPassword
+        );
+        dispatch("login", {
+          email: credentials.email,
+          password: credentials.password,
+        })
+      } catch (err) {
+        console.log(err);
+        throw new Error(err.message);
+      }
+    },
     async loadInitial({ commit, dispatch }) {
       let user = null;
 

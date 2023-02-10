@@ -29,7 +29,7 @@
         </div>
       </div>
     </transition>
-    <form @submit.prevent="login">
+    <form @submit.prevent="register">
       <div class="mb-6">
         <label class="block text-sm font-medium mb-2" for="email">
           Email
@@ -53,58 +53,78 @@
           v-model="password"
           type="password"
           name="password"
-          autocomplete="password"
+        />
+        <password-meter @score="onScore" :password="password" />
+        <span v-if="password && passwordStrength" class="mt-2">{{ passwordStrength }} password</span>
+      </div>
+
+      <div class="mb-6">
+        <label class="block text-sm font-medium mb-2" for="password">
+          Confirm Password
+        </label>
+        <input
+          class="block w-full px-4 py-3 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
+          v-model="confirmPassword"
+          type="password"
+          name="confirmPassword"
         />
       </div>
 
       <SubmitButton>
-        Log in
+        Sign in
       </SubmitButton>
       <p class="mb-2 text-base text-gray-500 mt-2">
-        Don't have an account? Create a new account
-        <router-link class="text-blue-500" to="/register">here</router-link>
+        Already have an account? Log in
+        <router-link class="text-blue-500" to="/login">here</router-link>
       </p>
     </form>
   </div>
 </template>
 
 <script>
-import { mapMutations } from "vuex";
-import api from "@/services/api/api";
-import SubmitButton from "@/components/ui/SubmitButton.vue";
-import LoginIcon from "vue-tabler-icons/icons/LoginIcon";
-import store from "@/store";
 import TransparentLogoWide from "@/components/ui/TransparentLogoWide.vue";
+import LoginIcon from "vue-tabler-icons/icons/LoginIcon";
+import SubmitButton from "@/components/ui/SubmitButton.vue";
 import LinkButton from "@/components/ui/LinkButton.vue";
-import UserPlusIcon from "vue-tabler-icons/icons/UserPlusIcon";
+import PasswordMeter from "vue-simple-password-meter";
+import store from "@/store";
 
 export default {
-  name: "LoginPage",
-  components: { UserPlusIcon, LinkButton, TransparentLogoWide, LoginIcon, SubmitButton },
-  data: () => {
+  name: "RegistrationPage",
+  data() {
     return {
       email: "",
       password: "",
-      buttonTitle: "Log in",
-      error: null
+      confirmPassword: "",
+      error: null,
+      passwordStrength: ""
     };
   },
   methods: {
-    ...mapMutations(["setRefreshToken", "setToken", "setAuthorized", "setInitialLoaded"]),
     clearError() {
       this.error = null;
     },
-    async login() {
+    async register() {
       try {
-        await store.dispatch('login', {email: this.email, password: this.password});
+        const error = await store.dispatch("register", {
+          email: this.email,
+          password: this.password,
+          confirmPassword: this.confirmPassword
+        });
       } catch (err) {
-        this.email = "";
-        this.password = "";
+        console.log(err);
         this.error = err.message;
       }
+    },
+    onScore(payload) {
+      const strength = payload.strength;
+      this.passwordStrength = strength.charAt(0).toUpperCase() + strength.slice(1);
     }
-  }
+  },
+  components: { LinkButton, TransparentLogoWide, LoginIcon, SubmitButton, PasswordMeter }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

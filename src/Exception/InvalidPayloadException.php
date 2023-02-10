@@ -10,6 +10,6 @@ class InvalidPayloadException extends \RuntimeException
     {
         parent::__construct();
 
-        $this->message = 'Invalid payload: '.$string;
+        $this->message = $string;
     }
 }

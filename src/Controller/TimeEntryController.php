@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/time-entry', name: 'app_time_entry_')]
 class TimeEntryController extends AbstractController
 {
-    #[Route('/', name: 'index')]
+    #[Route('', name: 'index')]
     public function index(TimeEntryRepository $timeEntryRepository): JsonResponse
     {
         /** @var User $user */

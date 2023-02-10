@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Exception\ConfirmationPasswordIsNotSame;
 use App\Exception\InvalidPayloadException;
 use App\Exception\UserAlreadyExistsException;
+use App\Model\User\JWTTokenDTO;
 use App\Model\User\RegistrationPayload;
 use App\Repository\UserRepository;
 use Symfony\Component\Validator\Constraints\Email;
@@ -20,13 +21,14 @@ class RegistrationHandler
         private readonly UserCreator $userCreator,
         private readonly UserRepository $userRepository,
         private readonly ValidatorInterface $validator,
+        private readonly JWTTokenGetter $tokenGetter,
     ) {
     }
 
-    public function __invoke(RegistrationPayload $payload): User
+    public function __invoke(RegistrationPayload $payload): JWTTokenDTO
     {
         if ($payload->getPassword() !== $payload->getConfirmPassword()) {
-            throw new InvalidPayloadException('Confirm password does not match');
+            throw new InvalidPayloadException('Passwords does not match');
         }
 
         if ($this->userRepository->findOneByEmail($payload->getEmail())) {
@@ -37,6 +39,8 @@ class RegistrationHandler
             throw new InvalidPayloadException('Invalid email');
         }
 
-        return ($this->userCreator)($payload->getEmail(), $payload->getPassword());
+        $user = ($this->userCreator)($payload->getEmail(), $payload->getPassword());
+
+        return ($this->tokenGetter)($user);
     }
 }

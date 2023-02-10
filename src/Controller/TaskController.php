@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/task', name: 'app_task_')]
 class TaskController extends AbstractController
 {
-    #[Route('/', name: 'all')]
+    #[Route('', name: 'all')]
     public function index(TaskRepository $taskRepository): JsonResponse
     {
         /** @var User $user */
