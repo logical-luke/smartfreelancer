@@ -2,7 +2,7 @@
   <section class="py-5 px-6 bg-white shadow">
     <nav class="relative">
       <div class="flex items-center">
-        <div class="flex flex-wrap space-x-3 content-start items-center mr-4">
+        <div class="flex flex-wrap md:space-x-3 content-start items-center mr-4">
           <div class="flex items-center space-x-3">
             <ToggleTimerButton :global="true" />
             <TimerTime />
@@ -22,7 +22,7 @@
           <div
             class="flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:space-x-3 mt-4 md:mt-0 w-full md:w-96 content-start"
           >
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center lg:space-x-3">
               <TrackedSubject />
             </div>
           </div>
