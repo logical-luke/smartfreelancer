@@ -2,7 +2,7 @@
   <section class="py-5 px-6 bg-white shadow">
     <nav class="relative">
       <div class="flex items-center">
-        <div class="flex flex-wrap md:space-x-3 content-start items-center mr-4">
+        <div class="flex flex-wrap md:space-x-3 content-start items-center">
           <div class="flex items-center space-x-3">
             <ToggleTimerButton :global="true" />
             <TimerTime />

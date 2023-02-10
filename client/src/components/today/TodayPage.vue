@@ -1,12 +1,10 @@
 <template>
-  <div class="mx-auto lg:ml-80">
-    <div class="py-8 px-6">
-      <div class="container px-4 mx-auto">
-        <h2 class="text-2xl font-bold">
-          Welcome<template v-if="name">, {{ name }}</template> 👋
-        </h2>
-      </div>
-    </div>
+  <div class="container px-4 mx-auto">
+    <h2 class="text-2xl font-bold">
+      Welcome
+      <template v-if="name">, {{ name }}</template>
+      👋
+    </h2>
   </div>
 </template>
 
@@ -16,8 +14,8 @@ import { mapState } from "vuex";
 export default {
   name: "TodayPage",
   computed: mapState({
-    name: (state) => state.user.name,
-  }),
+    name: (state) => state.user.name
+  })
 };
 </script>
 

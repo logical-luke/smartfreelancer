@@ -50,14 +50,12 @@ onMounted(async () => {
       </div>
     </div>
     <div v-else>
-      <div>
+      <div class="min-h-screen mx-auto lg:ml-80">
         <SidebarNav v-if="isAuthorizedPage" />
-      </div>
-      <div class="min-h-screen">
         <transition name="fade" mode="out-in">
           <div
             v-if="isAuthorizedPage"
-            class="sticky top-0 z-10 mx-auto w-full lg:ml-80"
+            class="fixed bottom-0 lg:sticky lg:top-0 w-full"
           >
             <HeaderNavbar />
           </div>
@@ -65,12 +63,13 @@ onMounted(async () => {
         <div v-if="store.getters.isInitialLoaded">
           <router-view v-slot="{ Component }">
             <transition name="fade" mode="out-in">
-              <div :key="path">
+              <div class="py-8 px-6" :key="path">
                 <component :is="Component"></component>
               </div>
             </transition>
           </router-view>
         </div>
+
       </div>
     </div>
   </transition>

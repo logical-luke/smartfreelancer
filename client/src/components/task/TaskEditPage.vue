@@ -1,27 +1,25 @@
 <template>
-  <div class="mx-auto lg:ml-80">
-    <section class="py-8">
-      <div class="container px-4 mx-auto">
-        <h1 class="mb-2 text-5xl font-bold font-heading">Edit task</h1>
-        <form @submit.prevent="submitForm">
-          <TaskForm />
-          <div class="flex flex-wrap space-x-4">
-            <div>
-              <SubmitButton>
-                <template v-slot:title>Save</template>
-                <template v-slot:icon>
-                  <device-floppy-icon />
-                </template>
-              </SubmitButton>
-            </div>
-            <div>
-              <BackButton />
-            </div>
+  <section class="py-8">
+    <div class="container px-4 mx-auto">
+      <h1 class="mb-2 text-5xl font-bold font-heading">Edit task</h1>
+      <form @submit.prevent="submitForm">
+        <TaskForm />
+        <div class="flex flex-wrap space-x-4">
+          <div>
+            <SubmitButton>
+              <template v-slot:title>Save</template>
+              <template v-slot:icon>
+                <device-floppy-icon />
+              </template>
+            </SubmitButton>
           </div>
-        </form>
-      </div>
-    </section>
-  </div>
+          <div>
+            <BackButton />
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -39,11 +37,11 @@ export default {
   components: { DeviceFloppyIcon, SubmitButton, BackButton, TaskForm },
   data() {
     return {
-      buttonTitle: "Save",
+      buttonTitle: "Save"
     };
   },
   computed: mapState({
-    task: (state) => state.task.current,
+    task: (state) => state.task.current
   }),
   async created() {
     const task = await store.getters["tasks/getTaskById"](this.route.params.id);
@@ -53,13 +51,13 @@ export default {
     async submitForm() {
       await store.dispatch("tasks/updateTask", this.task);
       await router.push("/tasks");
-    },
+    }
   },
   setup() {
     const route = useRoute();
 
     return { route };
-  },
+  }
 };
 </script>
 
