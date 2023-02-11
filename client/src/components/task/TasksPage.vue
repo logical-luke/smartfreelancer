@@ -22,11 +22,11 @@ export default {
   name: "TasksPage",
   components: { TaskGridItem, NewButton },
   computed: mapState({
-    tasks: (state) => state.tasks.all
+    tasks: (state) => state.tasks.all,
   }),
   mounted() {
     this.$store.dispatch("task/clearTask");
-  }
+  },
 };
 </script>
 

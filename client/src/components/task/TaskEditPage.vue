@@ -37,11 +37,11 @@ export default {
   components: { DeviceFloppyIcon, SubmitButton, BackButton, TaskForm },
   data() {
     return {
-      buttonTitle: "Save"
+      buttonTitle: "Save",
     };
   },
   computed: mapState({
-    task: (state) => state.task.current
+    task: (state) => state.task.current,
   }),
   async created() {
     const task = await store.getters["tasks/getTaskById"](this.route.params.id);
@@ -51,13 +51,13 @@ export default {
     async submitForm() {
       await store.dispatch("tasks/updateTask", this.task);
       await router.push("/tasks");
-    }
+    },
   },
   setup() {
     const route = useRoute();
 
     return { route };
-  }
+  },
 };
 </script>
 

@@ -22,11 +22,11 @@ export default {
   name: "ProjectsPage",
   components: { ProjectGridItem, NewButton },
   computed: mapState({
-    projects: (state) => state.projects.all
+    projects: (state) => state.projects.all,
   }),
   mounted() {
     this.$store.dispatch("project/clearProject");
-  }
+  },
 };
 </script>
 

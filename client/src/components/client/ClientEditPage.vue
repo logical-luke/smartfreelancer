@@ -37,11 +37,11 @@ export default {
   components: { DeviceFloppyIcon, SubmitButton, BackButton, ClientForm },
   data() {
     return {
-      buttonTitle: "Save"
+      buttonTitle: "Save",
     };
   },
   computed: mapState({
-    client: (state) => state.client.current
+    client: (state) => state.client.current,
   }),
   async created() {
     const client = await store.getters["clients/getClientById"](
@@ -53,13 +53,13 @@ export default {
     async submitForm() {
       await store.dispatch("clients/updateClient", this.client);
       await router.push("/clients");
-    }
+    },
   },
   setup() {
     const route = useRoute();
 
     return { route };
-  }
+  },
 };
 </script>
 

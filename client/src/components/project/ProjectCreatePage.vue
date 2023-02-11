@@ -34,7 +34,7 @@ export default {
   components: { SquarePlusIcon, SubmitButton, BackButton, ProjectForm },
   computed: mapState({
     project: (state) => state.project.current,
-    userId: (state) => state.user.id
+    userId: (state) => state.user.id,
   }),
   created() {
     this.$store.dispatch("project/clearProject");
@@ -44,8 +44,8 @@ export default {
       await this.$store.dispatch("projects/createProject", this.project);
 
       this.$router.push("/projects");
-    }
-  }
+    },
+  },
 };
 </script>
 

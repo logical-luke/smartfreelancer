@@ -34,7 +34,7 @@ export default {
   components: { SquarePlusIcon, SubmitButton, BackButton, TaskForm },
   computed: mapState({
     task: (state) => state.task.current,
-    userId: (state) => state.user.id
+    userId: (state) => state.user.id,
   }),
   created() {
     this.$store.dispatch("task/clearTask");
@@ -44,8 +44,8 @@ export default {
       await this.$store.dispatch("tasks/createTask", this.task);
 
       this.$router.push("/tasks");
-    }
-  }
+    },
+  },
 };
 </script>
 

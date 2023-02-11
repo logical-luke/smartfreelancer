@@ -50,7 +50,10 @@ onMounted(async () => {
       </div>
     </div>
     <div v-else>
-      <div class="min-h-screen mx-auto lg:ml-80">
+      <div
+        class="min-h-screen"
+        :class="{ 'mx-auto lg:ml-80': isAuthorizedPage }"
+      >
         <SidebarNav v-if="isAuthorizedPage" />
         <transition name="fade" mode="out-in">
           <div
@@ -69,7 +72,6 @@ onMounted(async () => {
             </transition>
           </router-view>
         </div>
-
       </div>
     </div>
   </transition>

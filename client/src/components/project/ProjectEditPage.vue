@@ -37,11 +37,11 @@ export default {
   components: { DeviceFloppyIcon, SubmitButton, BackButton, ProjectForm },
   data() {
     return {
-      buttonTitle: "Save"
+      buttonTitle: "Save",
     };
   },
   computed: mapState({
-    project: (state) => state.project.current
+    project: (state) => state.project.current,
   }),
   async created() {
     const project = store.getters["projects/getProjectById"](
@@ -53,13 +53,13 @@ export default {
     async submitForm() {
       await store.dispatch("projects/updateProject", this.project);
       await router.push("/projects");
-    }
+    },
   },
   setup() {
     const route = useRoute();
 
     return { route };
-  }
+  },
 };
 </script>
 

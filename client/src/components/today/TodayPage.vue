@@ -14,8 +14,8 @@ import { mapState } from "vuex";
 export default {
   name: "TodayPage",
   computed: mapState({
-    name: (state) => state.user.name
-  })
+    name: (state) => state.user.name,
+  }),
 };
 </script>
 
