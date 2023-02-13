@@ -58,7 +58,7 @@ onMounted(async () => {
         <transition name="fade" mode="out-in">
           <div
             v-if="isAuthorizedPage"
-            class="fixed bottom-0 lg:sticky lg:top-0 w-full"
+            class="fixed bottom-0 z-20 lg:sticky lg:top-0 w-full"
           >
             <HeaderNavbar />
           </div>

@@ -4,6 +4,7 @@
       v-model="subject"
       :multiple="false"
       :options="options"
+      zIndex="10"
       :show-count="true"
       @update:modelValue="setSubject"
       placeholder="Select task/project/client..."
