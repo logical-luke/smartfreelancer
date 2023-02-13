@@ -3,12 +3,12 @@
     <div class="flex flex-wrap items-center mb-6">
       <h3 class="text-xl font-bold">Timeline</h3>
     </div>
-    <transition-group name="fade" class="transition-element">
-      <div class="flex justify-center" v-if="!entriesLoaded">
-      <MoonLoader
-        :color="spinnerColor"
-        :loading="!entriesLoaded"
-      />
+    <transition name="fade" mode="out-in">
+      <div class="flex justify-center h-[32rem] items-center" v-if="!entriesLoaded">
+        <MoonLoader
+          :color="spinnerColor"
+          :loading="!entriesLoaded"
+        />
       </div>
       <div v-else>
         <div class="w-28 mb-3">
@@ -22,12 +22,14 @@
             @update:model-value="updateDate"
           />
         </div>
-        <template v-if="timeEntries.length > 0" v-for="timeEntry in timeEntries" :key="timeEntry.id">
-          <time-entry :time-entry="timeEntry"></time-entry>
-        </template>
-        <p v-else>No entries found</p>
+        <transition-group name="fade" class="transition-element">
+          <template v-if="timeEntries.length > 0" v-for="timeEntry in timeEntries" :key="timeEntry.id">
+            <time-entry :time-entry="timeEntry"></time-entry>
+          </template>
+          <p v-else>No entries found</p>
+        </transition-group>
       </div>
-    </transition-group>
+    </transition>
   </div>
 </template>
 
