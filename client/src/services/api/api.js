@@ -3,9 +3,10 @@ import store from "../../store";
 
 axios.defaults.withCredentials = true;
 
-const getRequest = async function (url, headers) {
+const getRequest = async function (url, params, headers) {
   try {
     const response = await axios.get(process.env.API_BASE_URL + url, {
+      params: params,
       headers: {
         Authorization: `Bearer ${store.getters.getToken}`,
       },
@@ -283,8 +284,8 @@ export default {
     }
   },
 
-  async getTimeEntries() {
-    const response = await getRequest("/time-entry/");
+  async getTimeEntries(payload) {
+    const response = await getRequest("/time-entry/", payload);
 
     return response.data;
   },

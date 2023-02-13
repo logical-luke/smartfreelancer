@@ -4,8 +4,10 @@ namespace App\Repository;
 
 use App\Entity\TimeEntry;
 use App\Entity\User;
+use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 
 /**
  * @extends ServiceEntityRepository<TimeEntry>
@@ -40,12 +42,19 @@ class TimeEntryRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByUser(User $user): array
+    public function findByEndTime(User $user, DateTimeInterface $endDate): array
     {
-        return $this->findBy([
-            'owner' => $user,
-        ], [
-            'id' => 'DESC',
-        ]);
+        $startTime = $endDate->setTime(0, 0);
+        $endTime = $endDate->setTime(23, 59, 59);
+
+        return $this->createQueryBuilder('te')
+            ->where('te.owner = :user')
+            ->andWhere('te.endTime > :startDate')
+            ->andWhere('te.endTime < :endDate')
+            ->setParameter('user', $user->getId(), UuidType::NAME)
+            ->setParameter('startDate', $startTime)
+            ->setParameter('endDate', $endTime)
+            ->getQuery()
+            ->getResult();
     }
 }

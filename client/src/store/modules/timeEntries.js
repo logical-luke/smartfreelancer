@@ -6,8 +6,8 @@ const state = () => ({
 });
 
 const actions = {
-  async getTimeEntries({ commit }) {
-    const timeEntries = await api.getTimeEntries();
+  async getTimeEntries({ commit }, payload) {
+    const timeEntries = await api.getTimeEntries(payload);
 
     commit("setTimeEntries", timeEntries);
   },
