@@ -40,39 +40,45 @@
           <div class="px-4 pb-6">
             <ul class="mb-8 text-sm font-medium">
               <SidebarItem go-to="/">
-                <template v-slot:title>Today</template>
-                <template v-slot:icon>
+                <template #title>Today</template>
+                <template #icon>
                   <sun-high-icon />
                 </template>
               </SidebarItem>
               <SidebarItem go-to="/timeline">
-                <template v-slot:title>Timeline</template>
-                <template v-slot:icon>
+                <template #title>Timeline</template>
+                <template #icon>
                   <clock-hour4-icon />
                 </template>
               </SidebarItem>
               <SidebarItem go-to="/clients">
-                <template v-slot:title>Clients</template>
-                <template v-slot:icon>
+                <template #title>Clients</template>
+                <template #icon>
                   <users-icon />
                 </template>
               </SidebarItem>
               <SidebarItem go-to="/projects">
-                <template v-slot:title>Projects</template>
-                <template v-slot:icon>
+                <template #title>Projects</template>
+                <template #icon>
                   <briefcase-icon />
                 </template>
               </SidebarItem>
               <SidebarItem go-to="/tasks">
-                <template v-slot:title>Tasks</template>
-                <template v-slot:icon>
+                <template #title>Tasks</template>
+                <template #icon>
                   <checklist-icon />
                 </template>
               </SidebarItem>
               <SidebarItem go-to="/reports">
-                <template v-slot:title>Reports</template>
-                <template v-slot:icon>
-                  <report-money-icon />
+                <template #title>Reports</template>
+                <template #icon>
+                  <chart-bar-icon />
+                </template>
+              </SidebarItem>
+              <SidebarItem go-to="/invoices">
+                <template #title>Invoices</template>
+                <template #icon>
+                  <file-dollar-icon />
                 </template>
               </SidebarItem>
             </ul>
@@ -96,16 +102,18 @@ import Menu2Icon from "vue-tabler-icons/icons/Menu2Icon";
 import XIcon from "vue-tabler-icons/icons/XIcon";
 import TransparentLogoWide from "@/components/ui/TransparentLogoWide.vue";
 import SunHighIcon from "vue-tabler-icons/icons/SunHighIcon";
-import ReportMoneyIcon from "vue-tabler-icons/icons/ReportMoneyIcon";
 import ClockHour4Icon from "vue-tabler-icons/icons/ClockHour4Icon";
 import ChecklistIcon from "vue-tabler-icons/icons/ChecklistIcon";
+import FileDollarIcon from "vue-tabler-icons/icons/FileDollarIcon";
+import ChartBarIcon from "vue-tabler-icons/icons/ChartBarIcon";
 
 export default {
   name: "SidebarNav",
   components: {
+    ChartBarIcon,
+    FileDollarIcon,
     ChecklistIcon,
     ClockHour4Icon,
-    ReportMoneyIcon,
     SunHighIcon,
     TransparentLogoWide,
     XIcon,

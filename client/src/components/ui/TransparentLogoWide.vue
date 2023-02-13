@@ -2,7 +2,7 @@
   <router-link to="/">
     <svg
       :class="size"
-      class="h-auto"
+      class="h-full"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="-33.81501770019531 94.489990234375 642.6300048828125 387.3600082397461"
     >

@@ -14,6 +14,7 @@ import TodayPage from "@/components/today/TodayPage.vue";
 import ReportsPage from "@/components/report/ReportsPage.vue";
 import TimelinePage from "@/components/timeline/TimelinePage.vue";
 import RegistrationPage from "@/components/RegistrationPage.vue";
+import NotFoundPage from "@/components/NotFoundPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -126,6 +127,11 @@ const router = createRouter({
         requiresAuth: true,
       },
       component: TimelinePage,
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: "NotFoundPage",
+      component: NotFoundPage,
     },
   ],
 });
