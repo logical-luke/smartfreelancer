@@ -33,7 +33,7 @@
           <tr class="text-sm text-gray-500 text-left">
             <th v-if="bulkMode" class="font-medium w-8">
               <div class="flex items-center justify-center">
-                <input @click="toggleAll" type="checkbox">
+                <input :checked="allSelected" @click="toggleAll" type="checkbox">
               </div>
             </th>
             <th class="font-medium">Name</th>
@@ -92,7 +92,10 @@ export default {
       const end = start + this.limit;
 
       return this.filteredProjects.slice(start, end);
-    }
+    },
+    allSelected() {
+      return this.selectedProjects.length === this.paginatedProjects.length;
+    },
   }),
   methods: {
     ...mapActions("projects", ["deleteProject"]),
@@ -128,6 +131,7 @@ export default {
       this.selectedProjects.forEach((projectId) => {
         this.deleteProject(projectId);
       });
+      this.selectedProjects = [];
     },
     toggleAll() {
       if (this.selectedProjects.length < this.paginatedProjects.length) {
