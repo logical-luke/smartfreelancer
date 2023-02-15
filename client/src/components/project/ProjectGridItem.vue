@@ -1,8 +1,8 @@
 <template>
   <tr :class="greyBackground ? 'bg-gray-50' : ''" class="text-xs">
-    <td>
+    <td v-if="bulkMode">
       <div class="flex items-center justify-center">
-        <input type="checkbox" name="field-name" value="example value">
+        <input @click="toggleSelect" :checked="selected" type="checkbox">
       </div>
     </td>
     <td class="p-2">
@@ -43,11 +43,27 @@ export default {
     greyBackground: {
       type: Boolean,
       default: false
-    }
+    },
+    bulkMode: {
+      type: Boolean,
+      default: false
+    },
+    selected: {
+      type: Boolean,
+      default: false
+    },
   },
   methods: {
-    ...mapActions("projects", ["deleteProject"])
-  }
+    ...mapActions("projects", ["deleteProject"]),
+    toggleSelect(event) {
+        const action = event.target.checked ? "add" : "remove";
+        this.$emit("toggle-select", {
+          id: this.id,
+          action: action
+        });
+    },
+  },
+  emits: ['toggle-select'],
 };
 </script>
 
