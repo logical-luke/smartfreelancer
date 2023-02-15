@@ -56,7 +56,7 @@ const actions = {
     const createdProject = await api.createProject(project);
 
     let projects = JSON.parse(JSON.stringify(state.all));
-    projects.push(createdProject);
+    projects.unshift(createdProject);
     commit("setProjects", projects);
   },
 };

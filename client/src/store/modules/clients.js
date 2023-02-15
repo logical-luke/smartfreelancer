@@ -56,7 +56,7 @@ const actions = {
     const client = await api.createClient(newClient);
     console.log(client);
     let clients = JSON.parse(JSON.stringify(state.all));
-    clients.push(client);
+    clients.unshift(client);
     commit("setClients", clients);
   },
 };

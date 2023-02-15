@@ -45,7 +45,7 @@ class ClientRepository extends ServiceEntityRepository
         return $this->findBy([
             'owner' => $user,
         ], [
-            'id' => 'ASC',
+            'id' => 'DESC',
         ]);
     }
 

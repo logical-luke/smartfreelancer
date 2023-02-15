@@ -48,7 +48,7 @@ const actions = {
     const createdTask = await api.createTask(task);
 
     let tasks = JSON.parse(JSON.stringify(state.all));
-    tasks.push(createdTask);
+    tasks.unshift(createdTask);
     commit("setTasks", tasks);
   },
 };
