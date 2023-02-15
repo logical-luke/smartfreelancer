@@ -9,13 +9,14 @@
       <div class="pt-4 px-4 overflow-x-auto">
         <table class="table-auto w-full">
           <thead>
-          <tr class="text-xs text-gray-500 text-left">
+          <tr class="text-sm text-gray-500 text-left">
+            <th class="font-medium w-8">Bulk</th>
             <th class="font-medium">Name</th>
             <th class="font-medium">Action</th>
           </tr>
           </thead>
           <tbody>
-          <transition-group name="fade" class="transition-element">
+          <transition-group name="fade-slower" class="transition-element">
             <template v-for="(project, index) in paginatedProjects" :key="project.id">
               <project-grid-item :grey-background="index % 2 === 0" :id="project.id" :name="project.name" />
             </template>

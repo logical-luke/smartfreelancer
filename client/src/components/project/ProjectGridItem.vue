@@ -1,15 +1,14 @@
 <template>
   <tr :class="greyBackground ? 'bg-gray-50' : ''" class="text-xs">
-    <td class="flex px-4 py-3">
-      <div class="flex items-center">
-                    <span
-                      class="inline-flex justify-center text-white items-center w-10 h-10 mr-4 bg-indigo-500 rounded">
-                      <briefcase-icon />
-                    </span>
-        <p class="font-medium">{{ name }}</p>
+    <td>
+      <div class="flex items-center justify-center">
+        <input type="checkbox" name="field-name" value="example value">
       </div>
     </td>
-    <td>
+    <td class="p-2">
+      <p class="font-medium text-sm">{{ name }}</p>
+    </td>
+    <td class="p-2">
       <div class="flex items-center space-x-2">
         <toggle-timer-button :size="8" :project-id="id" />
         <edit-button class="mt-1" :goTo="`/project/edit/${id}`" :icon-only="true" />

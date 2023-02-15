@@ -12,7 +12,7 @@
       </div>
       <p class="text-xs">of {{ total }}</p>
     </div>
-    <div class="w-full flex-wrap justify-center lg:w-auto flex items-center">
+    <div class="flex-wrap w-auto flex items-center">
       <span v-if="hasPages"
             @click="setPage(page - 1)"
             class="cursor-pointer inline-flex mr-3 items-center justify-center w-8 h-8 text-xs text-gray-500 border border-gray-300 bg-white hover:bg-indigo-50 rounded"
@@ -160,6 +160,9 @@ export default {
       if (this.isCloseToLastPage()) {
         return this.pages - 3;
       }
+      if (this.page === 2) {
+        return 2;
+      }
 
       return this.page - 1;
     },
@@ -170,6 +173,9 @@ export default {
       if (this.isCloseToLastPage()) {
         return this.pages - 2;
       }
+      if (this.page === 2) {
+        return 3;
+      }
 
       return this.page;
     },
@@ -179,6 +185,9 @@ export default {
       }
       if (this.isCloseToLastPage()) {
         return this.pages - 1;
+      }
+      if (this.page === 2) {
+        return 4;
       }
 
       return this.page + 1;
