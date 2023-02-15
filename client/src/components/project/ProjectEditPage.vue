@@ -1,25 +1,23 @@
 <template>
-  <section class="py-8">
-    <div class="container px-4 mx-auto">
-      <h1 class="mb-2 text-5xl font-bold font-heading">Edit project</h1>
-      <form @submit.prevent="submitForm">
-        <ProjectForm />
-        <div class="flex flex-wrap space-x-4">
-          <div>
-            <SubmitButton>
-              <template v-slot:title>Save</template>
-              <template v-slot:icon>
-                <device-floppy-icon />
-              </template>
-            </SubmitButton>
-          </div>
-          <div>
-            <BackButton />
-          </div>
+  <div class="container px-4 mx-auto">
+    <h1 class="mb-2 text-xl font-bold font-heading">Edit project</h1>
+    <form @submit.prevent="submitForm">
+      <ProjectForm />
+      <div class="flex flex-wrap space-x-4">
+        <div>
+          <SubmitButton>
+            Save
+            <template #icon>
+              <device-floppy-icon size="20" />
+            </template>
+          </SubmitButton>
         </div>
-      </form>
-    </div>
-  </section>
+        <div>
+          <BackButton />
+        </div>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -37,11 +35,11 @@ export default {
   components: { DeviceFloppyIcon, SubmitButton, BackButton, ProjectForm },
   data() {
     return {
-      buttonTitle: "Save",
+      buttonTitle: "Save"
     };
   },
   computed: mapState({
-    project: (state) => state.project.current,
+    project: (state) => state.project.current
   }),
   async created() {
     const project = store.getters["projects/getProjectById"](
@@ -53,13 +51,13 @@ export default {
     async submitForm() {
       await store.dispatch("projects/updateProject", this.project);
       await router.push("/projects");
-    },
+    }
   },
   setup() {
     const route = useRoute();
 
     return { route };
-  },
+  }
 };
 </script>
 

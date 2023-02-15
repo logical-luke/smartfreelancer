@@ -4,7 +4,7 @@
     @click="goBack"
     class="inline-flex text-center items-center w-full md:w-auto px-6 py-3 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
   >
-    <arrow-back-up-icon />
+    <arrow-back-up-icon size="20" />
     Back
   </button>
 </template>

@@ -58,7 +58,7 @@ onMounted(async () => {
         <transition name="fade" mode="out-in">
           <div
             v-if="isAuthorizedPage"
-            class="fixed bottom-0 z-20 lg:sticky lg:top-0 w-full"
+            class="fixed z-20 sticky top-0 w-full"
           >
             <HeaderNavbar />
           </div>
@@ -66,7 +66,7 @@ onMounted(async () => {
         <div v-if="store.getters.isInitialLoaded">
           <router-view v-slot="{ Component }">
             <transition name="fade" mode="out-in">
-              <div class="py-8 px-6" :key="path">
+              <div class="py-4 md:py-8 px-6" :key="path">
                 <component :is="Component"></component>
               </div>
             </transition>

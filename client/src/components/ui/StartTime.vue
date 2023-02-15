@@ -3,6 +3,8 @@
     <Datepicker
       v-model="time"
       time-picker
+      auto-apply
+      @update:model-value="updateStartTime"
       hide-input-icon
       :clearable="false"
       show-now-button
@@ -42,6 +44,9 @@ export default {
     }),
   },
   methods: {
+    updateStartTime() {
+        // store.dispatch("timer/setStartTime", )
+    },
     setTime(timestamp) {
       const date = getDateFromSecondsTimestamp(timestamp);
       this.time = {

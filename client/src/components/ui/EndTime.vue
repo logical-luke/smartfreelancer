@@ -3,6 +3,7 @@
     <Datepicker
       v-model="time"
       time-picker
+      auto-apply
       hide-input-icon
       :clearable="false"
       :disabled="disabled"
