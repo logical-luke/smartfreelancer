@@ -43,7 +43,7 @@
           <tbody>
           <transition-group name="fade-slower" class="transition-element">
             <template v-for="(project, index) in paginatedProjects" :key="project.id">
-              <project-grid-item :bulkMode="bulkMode"
+              <project-list-item :bulkMode="bulkMode"
                                  @toggle-select="updateBulkItems"
                                  :selected="isSelected(project.id)"
                                  :grey-background="index % 2 === 0"
@@ -63,7 +63,7 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import NewButton from "@/components/ui/NewButton.vue";
-import ProjectGridItem from "@/components/project/ProjectGridItem.vue";
+import ProjectListItem from "@/components/project/ProjectListItem.vue";
 import PaginationControls from "@/components/ui/PaginationControls.vue";
 import SearchControls from "@/components/ui/SearchControls.vue";
 import BulkEditButton from "@/components/ui/BulkEditButton.vue";
@@ -72,7 +72,7 @@ import { forEach } from "vue3-acies-treeselect";
 
 export default {
   name: "ProjectsPage",
-  components: { TrashIcon, BulkEditButton, SearchControls, PaginationControls, ProjectGridItem, NewButton },
+  components: { TrashIcon, BulkEditButton, SearchControls, PaginationControls, ProjectListItem, NewButton },
   data() {
     return {
       limit: 10,

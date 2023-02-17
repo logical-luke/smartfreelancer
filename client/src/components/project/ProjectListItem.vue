@@ -26,7 +26,7 @@ import { mapActions } from "vuex";
 import BriefcaseIcon from "vue-tabler-icons/icons/BriefcaseIcon";
 
 export default {
-  name: "ProjectGridItem",
+  name: "ProjectListItem",
   components: { BriefcaseIcon, ToggleTimerButton, EditButton, DeleteButton },
   props: {
     name: {
