@@ -12,7 +12,7 @@
       <div class="flex items-center space-x-2">
         <toggle-timer-button :size="8" :project-id="id" />
         <edit-button class="mt-1" :goTo="`/project/edit/${id}`" :icon-only="true" />
-        <delete-button @confirm="deleteProject(id)" :subject="name" :icon-only="true" />
+        <delete-button @delete="deleteProject(id)" :subject="name" :icon-only="true" />
       </div>
     </td>
   </tr>

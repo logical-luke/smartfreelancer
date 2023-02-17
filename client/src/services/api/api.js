@@ -52,7 +52,11 @@ const postRequest = async function (url, data, headers) {
 };
 
 const deleteRequest = async function (url, data, headers) {
+  if (!data) {
+    data = {};
+  }
   const response = axios.delete(process.env.API_BASE_URL + url, {
+    data: data,
     headers: {
       Authorization: `Bearer ${store.getters.getToken}`,
     },
@@ -135,13 +139,13 @@ export default {
   },
 
   async getUser() {
-    const response = await getRequest("/me/");
+    const response = await getRequest("/me");
 
     return response.data;
   },
 
   async getTimer() {
-    const response = await getRequest("/timer/");
+    const response = await getRequest("/timer");
 
     if (response) {
       return response.data;
@@ -163,7 +167,7 @@ export default {
   },
 
   async getProjects() {
-    const response = await getRequest("/project/");
+    const response = await getRequest("/project");
 
     return response.data;
   },
@@ -176,6 +180,12 @@ export default {
 
   async deleteProject(id) {
     const response = await deleteRequest("/project/delete/" + id);
+
+    return response.data;
+  },
+
+  async deleteProjects(ids) {
+    const response = await deleteRequest("/project/delete", ids);
 
     return response.data;
   },
@@ -203,7 +213,7 @@ export default {
   },
 
   async getTasks() {
-    const response = await getRequest("/task/");
+    const response = await getRequest("/task");
 
     return response.data;
   },
@@ -240,7 +250,7 @@ export default {
   },
 
   async getClients() {
-    const response = await getRequest("/client/");
+    const response = await getRequest("/client");
 
     return response.data;
   },
@@ -290,7 +300,7 @@ export default {
     return response.data;
   },
   async getServerTime() {
-    const response = await getRequest("/time/");
+    const response = await getRequest("/time");
 
     return response.data;
   },

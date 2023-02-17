@@ -57,6 +57,21 @@ class ProjectController extends AbstractController
         }
     }
 
+    #[Route('/delete', name: 'delete_bulk', methods: 'DELETE')]
+    public function deleteBulk(Request $request, ProjectDeleter $projectDeleter): JsonResponse
+    {
+        // todo Add check if user is eligible to delete project
+        try {
+            $ids = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+
+        array_walk($ids, static fn($id) => $projectDeleter(DeleteProjectPayload::from(['id' => $id])));
+
+        return $this->json([]);
+    }
+
     #[Route('/delete/{id}', name: 'delete', methods: 'DELETE')]
     public function delete(string $id, ProjectDeleter $projectDeleter): JsonResponse
     {
@@ -85,7 +100,7 @@ class ProjectController extends AbstractController
         );
     }
 
-    #[Route('/{id}', name: 'show')]
+    #[Route('/{id}', name: 'show', methods: 'GET')]
     public function show(string $id, ProjectRepository $projectRepository): Response
     {
         if (!$project = $projectRepository->find($id)) {

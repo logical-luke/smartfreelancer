@@ -10,8 +10,6 @@ const state = () => ({
   current: JSON.parse(JSON.stringify(emptyTask)),
 });
 
-const getters = {};
-
 const actions = {
   async getTask({ commit }, taskId) {
     const task = await api.getTask(taskId);
@@ -49,7 +47,6 @@ const mutations = {
 export default {
   namespaced: true,
   state,
-  getters,
   actions,
   mutations,
 };

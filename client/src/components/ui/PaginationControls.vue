@@ -69,7 +69,7 @@
         <span v-if="pages > 3" class="inline-block mr-3">
           <dots-icon size="12" />
         </span>
-        <span
+        <span v-if="pages > 3"
           :class="getActiveClass(pages)"
           @click="setPage(pages)"
           class="cursor-pointer inline-flex mr-3 items-center justify-center w-8 h-8 text-xs  rounded"

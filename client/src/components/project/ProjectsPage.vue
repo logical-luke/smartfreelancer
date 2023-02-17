@@ -2,13 +2,13 @@
   <div class="flex justify-between gap-4 flex-wrap items-center">
     <div class="flex flex-wrap gap-2 flex-wrap">
       <new-button go-to="/project/create/">project</new-button>
-      <bulk-edit-button @toggle-bulk="toggleBulk" />
+      <bulk-edit-button :active="bulkMode" @toggle-bulk="toggleBulk" />
       <transition name="fade" mode="out-in">
         <div v-if="bulkMode">
           <button
             type="button"
             @click="deleteSelected"
-            class="inline-flex text-center items-center w-full px-3 py-3 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
+            class="inline-flex text-center items-center w-full px-3 py-3 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded transition duration-200"
           >
             <trash-icon size="20" />
             <span class="ml-2">
@@ -95,10 +95,10 @@ export default {
     },
     allSelected() {
       return this.selectedProjects.length === this.paginatedProjects.length;
-    },
+    }
   }),
   methods: {
-    ...mapActions("projects", ["deleteProject"]),
+    ...mapActions("projects", ["deleteProject", "deleteProjects"]),
     setLimit(limit) {
       this.limit = limit;
     },
@@ -128,10 +128,16 @@ export default {
       if (this.selectedProjects.length === 0) {
         return;
       }
-      this.selectedProjects.forEach((projectId) => {
-        this.deleteProject(projectId);
+      this.$confirm.require({
+        message: "Are you sure you want to delete " + this.selectedProjects.length + " projects?",
+        header: "Delete projects",
+        acceptClass: "confirm-button-accept",
+        icon: "pi pi-exclamation-triangle",
+        accept: () => {
+          this.deleteProjects(this.selectedProjects);
+          this.selectedProjects = [];
+        }
       });
-      this.selectedProjects = [];
     },
     toggleAll() {
       if (this.selectedProjects.length < this.paginatedProjects.length) {
@@ -142,7 +148,7 @@ export default {
     },
     isSelected(projectId) {
       return this.selectedProjects.includes(projectId);
-    },
+    }
   },
   mounted() {
     this.$store.dispatch("project/clearProject");

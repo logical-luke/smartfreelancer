@@ -39,6 +39,19 @@ const actions = {
     }
   },
 
+  async deleteProjects({ commit, state, rootGetters }, ids) {
+    await api.deleteProjects(ids);
+
+    let projects = JSON.parse(JSON.stringify(state.all));
+    projects = projects.filter((project) => !ids.includes(project.id));
+    commit("setProjects", projects);
+    const timer = JSON.parse(JSON.stringify(rootGetters["timer/getTimer"]));
+    if (ids.includes(timer.projectId)) {
+      timer.projectId = null;
+      commit("timer/setTimer", timer, { root: true });
+    }
+  },
+
   async updateProject({ commit, state }, projectToUpdate) {
     const updatedProject = await api.updateProject(projectToUpdate);
     let projects = JSON.parse(JSON.stringify(state.all));

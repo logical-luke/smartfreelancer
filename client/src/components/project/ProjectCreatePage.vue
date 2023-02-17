@@ -6,9 +6,9 @@
       <div class="flex flex-wrap space-x-4">
         <div>
           <SubmitButton>
-            <template v-slot:title>Add</template>
-            <template v-slot:icon>
-              <square-plus-icon />
+            Add
+            <template #icon>
+              <plus-icon size="20" />
             </template>
           </SubmitButton>
         </div>
@@ -25,11 +25,11 @@ import ProjectForm from "@/components/project/ProjectForm.vue";
 import { mapState } from "vuex";
 import BackButton from "@/components/ui/BackButton.vue";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
-import SquarePlusIcon from "vue-tabler-icons/icons/SquarePlusIcon";
+import PlusIcon from "vue-tabler-icons/icons/PlusIcon";
 
 export default {
   name: "ProjectCreate",
-  components: { SquarePlusIcon, SubmitButton, BackButton, ProjectForm },
+  components: { PlusIcon, SubmitButton, BackButton, ProjectForm },
   computed: mapState({
     project: (state) => state.project.current,
     userId: (state) => state.user.id
