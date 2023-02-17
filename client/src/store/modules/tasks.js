@@ -31,6 +31,19 @@ const actions = {
     }
   },
 
+  async deleteTasks({ commit, state, rootGetters }, ids) {
+    await api.deleteTasks(ids);
+
+    let tasks = JSON.parse(JSON.stringify(state.all));
+    tasks = tasks.filter((task) => !ids.includes(task.id));
+    commit("setTasks", tasks);
+    const timer = JSON.parse(JSON.stringify(rootGetters["timer/getTimer"]));
+    if (ids.includes(timer.taskId)) {
+      timer.taskId = null;
+      commit("timer/setTimer", timer, { root: true });
+    }
+  },
+
   async updateTask({ commit, state }, taskToUpdate) {
     const updatedTask = await api.updateTask(taskToUpdate);
     let tasks = JSON.parse(JSON.stringify(state.all));

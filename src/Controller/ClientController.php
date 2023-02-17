@@ -58,6 +58,21 @@ class ClientController extends AbstractController
         }
     }
 
+    #[Route('/delete', name: 'delete_bulk', methods: 'DELETE')]
+    public function deleteBulk(Request $request, ClientDeleter $clientDeleter): JsonResponse
+    {
+        // todo Add check if user is eligible to delete client
+        try {
+            $ids = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+
+        array_walk($ids, static fn($id) => $clientDeleter(DeleteClientPayload::from(['id' => $id])));
+
+        return $this->json([]);
+    }
+
     #[Route('/delete/{id}', name: 'delete', methods: 'DELETE')]
     public function delete(string $id, ClientDeleter $clientDeleter): JsonResponse
     {

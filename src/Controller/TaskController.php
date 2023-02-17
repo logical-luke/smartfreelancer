@@ -56,6 +56,21 @@ class TaskController extends AbstractController
         }
     }
 
+    #[Route('/delete', name: 'delete_bulk', methods: 'DELETE')]
+    public function deleteBulk(Request $request, TaskDeleter $taskDeleter): JsonResponse
+    {
+        // todo Add check if user is eligible to delete task
+        try {
+            $ids = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+
+        array_walk($ids, static fn($id) => $taskDeleter(DeleteTaskPayload::from(['id' => $id])));
+
+        return $this->json([]);
+    }
+
     #[Route('/delete/{id}', name: 'delete', methods: 'DELETE')]
     public function delete(string $id, TaskDeleter $taskDeleter): JsonResponse
     {

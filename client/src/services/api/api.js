@@ -184,8 +184,20 @@ export default {
     return response.data;
   },
 
+  async deleteClients(ids) {
+    const response = await deleteRequest("/client/delete", ids);
+
+    return response.data;
+  },
+
   async deleteProjects(ids) {
     const response = await deleteRequest("/project/delete", ids);
+
+    return response.data;
+  },
+
+  async deleteTasks(ids) {
+    const response = await deleteRequest("/task/delete", ids);
 
     return response.data;
   },

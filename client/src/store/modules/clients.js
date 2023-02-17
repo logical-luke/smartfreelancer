@@ -39,6 +39,19 @@ const actions = {
     }
   },
 
+  async deleteClients({ commit, state, rootGetters }, ids) {
+    await api.deleteClients(ids);
+
+    let clients = JSON.parse(JSON.stringify(state.all));
+    clients = clients.filter((client) => !ids.includes(client.id));
+    commit("setClients", clients);
+    const timer = JSON.parse(JSON.stringify(rootGetters["timer/getTimer"]));
+    if (ids.includes(timer.clientId)) {
+      timer.clientId = null;
+      commit("timer/setTimer", timer, { root: true });
+    }
+  },
+
   async updateClient({ commit, state }, clientToUpdate) {
     const updatedClient = await api.updateClient(clientToUpdate);
     let clients = JSON.parse(JSON.stringify(state.all));
