@@ -5,6 +5,9 @@
       <template v-if="name">, {{ name }}</template>
       👋
     </h2>
+    <div class="text-gray-600 font-medium flex flex-wrap mt-6 justify-center">
+      There are no more scheduled tasks for today. You can relax 🥳
+    </div>
   </div>
 </template>
 

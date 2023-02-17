@@ -81,10 +81,26 @@
                   <file-dollar-icon />
                 </template>
               </SidebarItem>
-            </ul>
-            <div class="pt-8 text-sm font-medium">
+              <SidebarItem go-to="/automations">
+                <template #title>Automations</template>
+                <template #icon>
+                  <bolt-icon />
+                </template>
+              </SidebarItem>
+              <SidebarItem go-to="/expenses">
+                <template #title>Expenses</template>
+                <template #icon>
+                  <shopping-cart-icon />
+                </template>
+              </SidebarItem>
+              <SidebarItem go-to="/settings">
+                <template #title>Settings</template>
+                <template #icon>
+                  <settings-icon />
+                </template>
+              </SidebarItem>
               <SidebarLogout />
-            </div>
+            </ul>
           </div>
         </nav>
       </div>
@@ -106,10 +122,16 @@ import ClockHour4Icon from "vue-tabler-icons/icons/ClockHour4Icon";
 import ChecklistIcon from "vue-tabler-icons/icons/ChecklistIcon";
 import FileDollarIcon from "vue-tabler-icons/icons/FileDollarIcon";
 import ChartBarIcon from "vue-tabler-icons/icons/ChartBarIcon";
+import ShoppingCartIcon from "vue-tabler-icons/icons/ShoppingCartIcon";
+import BoltIcon from "vue-tabler-icons/icons/BoltIcon";
+import SettingsIcon from "vue-tabler-icons/icons/SettingsIcon";
 
 export default {
   name: "SidebarNav",
   components: {
+    SettingsIcon,
+    BoltIcon,
+    ShoppingCartIcon,
     ChartBarIcon,
     FileDollarIcon,
     ChecklistIcon,

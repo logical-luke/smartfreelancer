@@ -5,8 +5,8 @@
     class="inline-flex bg-indigo-500 hover:bg-indigo-600 items-center justify-center items-center px-2 py-2 text-sm font-medium text-white rounded-full transition duration-200"
     @click.prevent="toggleTimer"
   >
-    <player-play-icon :size="size*1.8" v-if="!isRunning" />
-    <player-stop-icon :size="size*1.8" v-else />
+    <player-play-icon :size="Math.ceil(size*1.8)" v-if="!isRunning" />
+    <player-stop-icon :size="Math.ceil(size*1.8)" v-else />
   </button>
 </template>
 

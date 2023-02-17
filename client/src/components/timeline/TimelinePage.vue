@@ -26,7 +26,7 @@
           <template v-if="timeEntries.length > 0" v-for="timeEntry in timeEntries" :key="timeEntry.id">
             <time-entry :time-entry="timeEntry"></time-entry>
           </template>
-          <p v-else>No entries found</p>
+          <div class="flex mt-6 text-gray-600 font-medium justify-center" v-else>No entries found</div>
         </transition-group>
       </div>
     </transition>

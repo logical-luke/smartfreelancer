@@ -26,7 +26,7 @@
               class="absolute top-0 left-0 h-full bg-purple-500 rounded"
             ></div>
           </div>
-          <p class="text-xs text-black">Yearly Goal</p>
+          <p class="text-xs text-black">Monthly Goal</p>
         </div>
       </div>
     </div>
