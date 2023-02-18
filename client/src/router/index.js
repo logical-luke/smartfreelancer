@@ -129,7 +129,7 @@ const router = createRouter({
       component: TimelinePage,
     },
     {
-      path: '/:pathMatch(.*)*',
+      path: "/:pathMatch(.*)*",
       name: "NotFoundPage",
       component: NotFoundPage,
     },

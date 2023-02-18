@@ -1,7 +1,7 @@
 <template>
   <div class="container px-4 py-16 md:px-72 md:py-48 mx-auto">
     <div class="flex justify-center">
-      <TransparentLogoWide size="w-72" text-color="#410B01" />
+      <transparent-logo-wide size="w-72" text-color="#410B01" />
     </div>
     <transition name="fade">
       <div v-if="error" class="pb-2">
@@ -72,7 +72,7 @@
         />
       </div>
 
-      <SubmitButton> Sign in </SubmitButton>
+      <submit-button> Sign in </submit-button>
       <p class="mb-2 text-base text-gray-500 mt-2">
         Already have an account? Log in
         <router-link class="text-blue-500" to="/login">here</router-link>

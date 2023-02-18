@@ -11,53 +11,60 @@
             class="inline-flex text-center items-center w-full px-3 py-3 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded transition duration-200"
           >
             <trash-icon size="20" />
-            <span class="ml-2">
-              Delete selected
-            </span>
+            <span class="ml-2"> Delete selected </span>
           </button>
         </div>
       </transition>
     </div>
     <search-controls @pattern-changed="setSearchPattern" />
-    <pagination-controls @limit-change="setLimit"
-                         :page="currentPage"
-                         @page-change="setPage"
-                         :limit="limit"
-                         :total="filteredProjects.length" />
+    <pagination-controls
+      @limit-change="setLimit"
+      :page="currentPage"
+      @page-change="setPage"
+      :limit="limit"
+      :total="filteredProjects.length"
+    />
   </div>
   <div class="container px-4 mx-auto">
     <div class="bg-white rounded">
       <div class="pt-4 px-4 overflow-x-auto">
         <table class="table-auto w-full">
           <thead>
-          <tr class="text-sm text-gray-500 text-left">
-            <th v-if="bulkMode" class="font-medium w-8">
-              <div class="flex items-center justify-center">
-                <input :checked="allSelected" @click="toggleAll" type="checkbox">
-              </div>
-            </th>
-            <th class="font-medium">Name</th>
-            <th class="font-medium">Action</th>
-          </tr>
+            <tr class="text-sm text-gray-500 text-left">
+              <th v-if="bulkMode" class="font-medium w-8">
+                <div class="flex items-center justify-center">
+                  <input
+                    :checked="allSelected"
+                    @click="toggleAll"
+                    type="checkbox"
+                  />
+                </div>
+              </th>
+              <th class="font-medium">Name</th>
+              <th class="font-medium">Action</th>
+            </tr>
           </thead>
           <tbody>
-          <transition-group name="fade-slower" class="transition-element">
-            <template v-for="(project, index) in paginatedProjects" :key="project.id">
-              <project-list-item :bulkMode="bulkMode"
-                                 @toggle-select="updateBulkItems"
-                                 :selected="isSelected(project.id)"
-                                 :grey-background="index % 2 === 0"
-                                 :id="project.id"
-                                 :name="project.name" />
-            </template>
-          </transition-group>
+            <transition-group name="fade-slower" class="transition-element">
+              <template
+                v-for="(project, index) in paginatedProjects"
+                :key="project.id"
+              >
+                <project-list-item
+                  :bulkMode="bulkMode"
+                  @toggle-select="updateBulkItems"
+                  :selected="isSelected(project.id)"
+                  :grey-background="index % 2 === 0"
+                  :id="project.id"
+                  :name="project.name"
+                />
+              </template>
+            </transition-group>
           </tbody>
         </table>
       </div>
     </div>
   </div>
-
-
 </template>
 
 <script>
@@ -68,24 +75,32 @@ import PaginationControls from "@/components/ui/PaginationControls.vue";
 import SearchControls from "@/components/ui/SearchControls.vue";
 import BulkEditButton from "@/components/ui/BulkEditButton.vue";
 import TrashIcon from "vue-tabler-icons/icons/TrashIcon";
-import { forEach } from "vue3-acies-treeselect";
 
 export default {
   name: "ProjectsPage",
-  components: { TrashIcon, BulkEditButton, SearchControls, PaginationControls, ProjectListItem, NewButton },
+  components: {
+    TrashIcon,
+    BulkEditButton,
+    SearchControls,
+    PaginationControls,
+    ProjectListItem,
+    NewButton,
+  },
   data() {
     return {
       limit: 10,
       currentPage: 1,
       searchPattern: "",
       bulkMode: false,
-      selectedProjects: []
+      selectedProjects: [],
     };
   },
   computed: mapState({
     projects: (state) => state.projects.all,
     filteredProjects() {
-      return this.projects.filter((project) => project.name.toLowerCase().includes(this.searchPattern.toLowerCase()));
+      return this.projects.filter((project) =>
+        project.name.toLowerCase().includes(this.searchPattern.toLowerCase())
+      );
     },
     paginatedProjects() {
       const start = (this.currentPage - 1) * this.limit;
@@ -95,7 +110,7 @@ export default {
     },
     allSelected() {
       return this.selectedProjects.length === this.paginatedProjects.length;
-    }
+    },
   }),
   methods: {
     ...mapActions("projects", ["deleteProject", "deleteProjects"]),
@@ -129,30 +144,35 @@ export default {
         return;
       }
       this.$confirm.require({
-        message: "Are you sure you want to delete " + this.selectedProjects.length + " projects?",
+        message:
+          "Are you sure you want to delete " +
+          this.selectedProjects.length +
+          " projects?",
         header: "Delete projects",
         acceptClass: "confirm-button-accept",
         icon: "pi pi-exclamation-triangle",
         accept: () => {
           this.deleteProjects(this.selectedProjects);
           this.selectedProjects = [];
-        }
+        },
       });
     },
     toggleAll() {
       if (this.selectedProjects.length < this.paginatedProjects.length) {
-        this.selectedProjects = this.paginatedProjects.map((project) => project.id);
+        this.selectedProjects = this.paginatedProjects.map(
+          (project) => project.id
+        );
       } else {
         this.selectedProjects = [];
       }
     },
     isSelected(projectId) {
       return this.selectedProjects.includes(projectId);
-    }
+    },
   },
   mounted() {
     this.$store.dispatch("project/clearProject");
-  }
+  },
 };
 </script>
 

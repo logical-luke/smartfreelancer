@@ -1,6 +1,6 @@
 <template>
   <div class="w-[4.1rem]">
-    <Datepicker
+    <datepicker
       v-model="time"
       time-picker
       auto-apply

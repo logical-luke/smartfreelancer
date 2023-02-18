@@ -67,7 +67,7 @@ class ProjectController extends AbstractController
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
-        array_walk($ids, static fn($id) => $projectDeleter(DeleteProjectPayload::from(['id' => $id])));
+        array_walk($ids, static fn ($id) => $projectDeleter(DeleteProjectPayload::from(['id' => $id])));
 
         return $this->json([]);
     }

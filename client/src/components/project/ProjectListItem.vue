@@ -2,7 +2,7 @@
   <tr :class="greyBackground ? 'bg-gray-50' : ''" class="text-xs">
     <td v-if="bulkMode">
       <div class="flex items-center justify-center">
-        <input @click="toggleSelect" :checked="selected" type="checkbox">
+        <input @click="toggleSelect" :checked="selected" type="checkbox" />
       </div>
     </td>
     <td class="p-2">
@@ -11,8 +11,16 @@
     <td class="p-2">
       <div class="flex items-center space-x-2">
         <toggle-timer-button :size="8" :project-id="id" />
-        <edit-button class="mt-1" :goTo="`/project/edit/${id}`" :icon-only="true" />
-        <delete-button @delete="deleteProject(id)" :subject="name" :icon-only="true" />
+        <edit-button
+          class="mt-1"
+          :goTo="`/project/edit/${id}`"
+          :icon-only="true"
+        />
+        <delete-button
+          @delete="deleteProject(id)"
+          :subject="name"
+          :icon-only="true"
+        />
       </div>
     </td>
   </tr>
@@ -23,47 +31,46 @@ import DeleteButton from "@/components/ui/DeleteButton.vue";
 import EditButton from "@/components/ui/EditButton.vue";
 import ToggleTimerButton from "@/components/ui/ToggleTimerButton.vue";
 import { mapActions } from "vuex";
-import BriefcaseIcon from "vue-tabler-icons/icons/BriefcaseIcon";
 
 export default {
   name: "ProjectListItem",
-  components: { BriefcaseIcon, ToggleTimerButton, EditButton, DeleteButton },
+  components: { ToggleTimerButton, EditButton, DeleteButton },
   props: {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     description: {
-      type: String
+      type: String,
     },
     id: {
       type: String,
-      required: true
+      required: true,
     },
     greyBackground: {
       type: Boolean,
-      default: false
+      default: false,
     },
     bulkMode: {
       type: Boolean,
-      default: false
+      default: false,
     },
     selected: {
       type: Boolean,
-      default: false
+      default: false,
     },
   },
   methods: {
     ...mapActions("projects", ["deleteProject"]),
     toggleSelect(event) {
-        const action = event.target.checked ? "add" : "remove";
-        this.$emit("toggle-select", {
-          id: this.id,
-          action: action
-        });
+      const action = event.target.checked ? "add" : "remove";
+      this.$emit("toggle-select", {
+        id: this.id,
+        action: action,
+      });
     },
   },
-  emits: ['toggle-select'],
+  emits: ["toggle-select"],
 };
 </script>
 

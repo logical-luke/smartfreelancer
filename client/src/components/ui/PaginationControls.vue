@@ -13,15 +13,17 @@
       <p class="text-xs">of {{ total }}</p>
     </div>
     <div class="flex-wrap w-auto flex items-center">
-      <span v-if="hasPages"
-            @click="setPage(page - 1)"
-            class="cursor-pointer inline-flex mr-3 items-center justify-center w-8 h-8 text-xs text-gray-500 border border-gray-300 bg-white hover:bg-indigo-50 rounded"
+      <span
+        v-if="hasPages"
+        @click="setPage(page - 1)"
+        class="cursor-pointer inline-flex mr-3 items-center justify-center w-8 h-8 text-xs text-gray-500 border border-gray-300 bg-white hover:bg-indigo-50 rounded"
       >
         <chevron-left-icon size="12" />
       </span>
-      <span v-if="pages > 6"
-            @click="setPage(page - 3)"
-            class="cursor-pointer inline-flex mr-3 items-center justify-center w-8 h-8 text-xs text-gray-500 border border-gray-300 bg-white hover:bg-indigo-50 rounded"
+      <span
+        v-if="pages > 6"
+        @click="setPage(page - 3)"
+        class="cursor-pointer inline-flex mr-3 items-center justify-center w-8 h-8 text-xs text-gray-500 border border-gray-300 bg-white hover:bg-indigo-50 rounded"
       >
         <chevrons-left-icon size="12" />
       </span>
@@ -34,7 +36,7 @@
       </span>
       <template v-if="hasPages">
         <span v-if="pages > 3" class="inline-block mr-3">
-            <dots-icon size="12" />
+          <dots-icon size="12" />
         </span>
         <template v-if="pages > 3">
           <span
@@ -59,20 +61,22 @@
             {{ getThirdMiddlePage() }}
           </span>
         </template>
-        <span v-else
+        <span
+          v-else
           :class="getActiveClass(2)"
           class="cursor-pointer inline-flex mr-3 items-center justify-center w-8 h-8 text-xs rounded"
           @click="setPage(2)"
         >
-            2
+          2
         </span>
         <span v-if="pages > 3" class="inline-block mr-3">
           <dots-icon size="12" />
         </span>
-        <span v-if="pages > 3"
+        <span
+          v-if="pages > 3"
           :class="getActiveClass(pages)"
           @click="setPage(pages)"
-          class="cursor-pointer inline-flex mr-3 items-center justify-center w-8 h-8 text-xs  rounded"
+          class="cursor-pointer inline-flex mr-3 items-center justify-center w-8 h-8 text-xs rounded"
         >
           {{ pages }}
         </span>
@@ -104,20 +108,26 @@ import ChevronsRightIcon from "vue-tabler-icons/icons/ChevronsRightIcon";
 
 export default {
   name: "PaginationControls",
-  components: { ChevronsRightIcon, ChevronsLeftIcon, DotsIcon, ChevronRightIcon, ChevronLeftIcon },
+  components: {
+    ChevronsRightIcon,
+    ChevronsLeftIcon,
+    DotsIcon,
+    ChevronRightIcon,
+    ChevronLeftIcon,
+  },
   props: {
     total: {
       type: Number,
-      required: true
+      required: true,
     },
     limit: {
       type: Number,
-      required: true
+      required: true,
     },
     page: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     pages() {
@@ -194,12 +204,11 @@ export default {
     },
     getActiveClass(page) {
       return page !== this.page
-        ? "text-gray-500 border border-gray-300 bg-white hover:bg-indigo-50 " : "text-white bg-indigo-500";
-    }
-  }
+        ? "text-gray-500 border border-gray-300 bg-white hover:bg-indigo-50 "
+        : "text-white bg-indigo-500";
+    },
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -4,11 +4,11 @@
       <h3 class="text-xl font-bold">Timeline</h3>
     </div>
     <transition name="fade" mode="out-in">
-      <div class="flex justify-center h-[32rem] items-center" v-if="!entriesLoaded">
-        <MoonLoader
-          :color="spinnerColor"
-          :loading="!entriesLoaded"
-        />
+      <div
+        class="flex justify-center h-[32rem] items-center"
+        v-if="!entriesLoaded"
+      >
+        <moon-loader :color="spinnerColor" :loading="!entriesLoaded" />
       </div>
       <div v-else>
         <div class="w-28 mb-3">
@@ -22,12 +22,18 @@
             @update:model-value="updateDate"
           />
         </div>
-        <transition-group name="fade" class="transition-element">
-          <template v-if="timeEntries.length > 0" v-for="timeEntry in timeEntries" :key="timeEntry.id">
-            <time-entry :time-entry="timeEntry"></time-entry>
-          </template>
-          <div class="flex mt-6 text-gray-600 font-medium justify-center" v-else>No entries found</div>
-        </transition-group>
+        <div v-if="timeEntries.length > 0">
+          <transition-group name="fade" class="transition-element">
+            <time-entry
+              v-for="timeEntry in timeEntries"
+              :key="timeEntry.id"
+              :time-entry="timeEntry"
+            />
+          </transition-group>
+        </div>
+        <div class="flex mt-6 text-gray-600 font-medium justify-center" v-else>
+          No entries found
+        </div>
       </div>
     </transition>
   </div>
@@ -48,25 +54,29 @@ export default {
     return {
       date: new Date(),
       entriesLoaded: false,
-      spinnerColor: "#382CDD"
+      spinnerColor: "#382CDD",
     };
   },
   methods: {
-    async updateDate(date) {
+    async updateDate() {
       this.entriesLoaded = false;
-      await store.dispatch("timeEntries/getTimeEntries", { date: this.date.toISOString().split("T")[0] });
+      await store.dispatch("timeEntries/getTimeEntries", {
+        date: this.date.toISOString().split("T")[0],
+      });
       this.entriesLoaded = true;
-    }
+    },
   },
   computed: {
     ...mapState({
-      timeEntries: (state) => state.timeEntries.all
-    })
+      timeEntries: (state) => state.timeEntries.all,
+    }),
   },
   async created() {
-    await store.dispatch("timeEntries/getTimeEntries", { date: this.date.toISOString().split("T")[0] });
+    await store.dispatch("timeEntries/getTimeEntries", {
+      date: this.date.toISOString().split("T")[0],
+    });
     this.entriesLoaded = true;
-  }
+  },
 };
 </script>
 

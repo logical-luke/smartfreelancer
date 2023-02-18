@@ -1,19 +1,19 @@
 <template>
   <div class="container px-4 mx-auto">
-    <h1 class="mb-2 text-xl font-bold font-heading">Edit project</h1>
+    <h1 class="mb-2 text-2xl font-bold font-heading">Edit project</h1>
     <form @submit.prevent="submitForm">
-      <ProjectForm />
+      <project-form />
       <div class="flex flex-wrap space-x-4">
         <div>
-          <SubmitButton>
+          <submit-button>
             Save
             <template #icon>
               <device-floppy-icon size="20" />
             </template>
-          </SubmitButton>
+          </submit-button>
         </div>
         <div>
-          <BackButton />
+          <back-button />
         </div>
       </div>
     </form>
@@ -35,11 +35,11 @@ export default {
   components: { DeviceFloppyIcon, SubmitButton, BackButton, ProjectForm },
   data() {
     return {
-      buttonTitle: "Save"
+      buttonTitle: "Save",
     };
   },
   computed: mapState({
-    project: (state) => state.project.current
+    project: (state) => state.project.current,
   }),
   async created() {
     const project = store.getters["projects/getProjectById"](
@@ -51,13 +51,13 @@ export default {
     async submitForm() {
       await store.dispatch("projects/updateProject", this.project);
       await router.push("/projects");
-    }
+    },
   },
   setup() {
     const route = useRoute();
 
     return { route };
-  }
+  },
 };
 </script>
 

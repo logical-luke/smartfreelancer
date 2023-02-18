@@ -7,8 +7,6 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Model\TimeEntry\TimeEntryDTO;
 use App\Repository\TimeEntryRepository;
-use DateTime;
-use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +19,7 @@ class TimeEntryController extends AbstractController
     public function index(Request $request, TimeEntryRepository $timeEntryRepository): JsonResponse
     {
         $date = $request->query->get('date')
-            ? DateTimeImmutable::createFromFormat('Y-m-d', $request->query->get('date')) : new DateTimeImmutable();
+            ? \DateTimeImmutable::createFromFormat('Y-m-d', $request->query->get('date')) : new \DateTimeImmutable();
 
         /** @var User $user */
         $user = $this->getUser();

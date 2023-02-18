@@ -6,9 +6,9 @@
     >
       <plus-icon size="20" />
       <span class="ml-2">
-          New
-          <slot></slot>
-        </span>
+        New
+        <slot></slot>
+      </span>
     </button>
   </router-link>
 </template>
@@ -22,8 +22,8 @@ export default {
   props: {
     goTo: {
       type: String,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 };
 </script>

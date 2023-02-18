@@ -2,18 +2,18 @@
   <div class="container px-4 mx-auto">
     <h1 class="mb-2 text-2xl font-bold font-heading">Add project</h1>
     <form @submit.prevent="submitForm">
-      <ProjectForm />
+      <project-form />
       <div class="flex flex-wrap space-x-4">
         <div>
-          <SubmitButton>
+          <submit-button>
             Add
             <template #icon>
               <plus-icon size="20" />
             </template>
-          </SubmitButton>
+          </submit-button>
         </div>
         <div>
-          <BackButton />
+          <back-button />
         </div>
       </div>
     </form>
@@ -32,7 +32,7 @@ export default {
   components: { PlusIcon, SubmitButton, BackButton, ProjectForm },
   computed: mapState({
     project: (state) => state.project.current,
-    userId: (state) => state.user.id
+    userId: (state) => state.user.id,
   }),
   created() {
     this.$store.dispatch("project/clearProject");
@@ -42,8 +42,8 @@ export default {
       await this.$store.dispatch("projects/createProject", this.project);
 
       this.$router.push("/projects");
-    }
-  }
+    },
+  },
 };
 </script>
 

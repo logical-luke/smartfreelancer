@@ -9,10 +9,8 @@
 
 <script>
 export default {
-  name: "PomodoroTimer"
+  name: "PomodoroTimer",
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

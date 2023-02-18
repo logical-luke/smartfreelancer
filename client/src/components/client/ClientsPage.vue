@@ -11,53 +11,60 @@
             class="inline-flex text-center items-center w-full px-3 py-3 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded transition duration-200"
           >
             <trash-icon size="20" />
-            <span class="ml-2">
-              Delete selected
-            </span>
+            <span class="ml-2"> Delete selected </span>
           </button>
         </div>
       </transition>
     </div>
     <search-controls @pattern-changed="setSearchPattern" />
-    <pagination-controls @limit-change="setLimit"
-                         :page="currentPage"
-                         @page-change="setPage"
-                         :limit="limit"
-                         :total="filteredClients.length" />
+    <pagination-controls
+      @limit-change="setLimit"
+      :page="currentPage"
+      @page-change="setPage"
+      :limit="limit"
+      :total="filteredClients.length"
+    />
   </div>
   <div class="container px-4 mx-auto">
     <div class="bg-white rounded">
       <div class="pt-4 px-4 overflow-x-auto">
         <table class="table-auto w-full">
           <thead>
-          <tr class="text-sm text-gray-500 text-left">
-            <th v-if="bulkMode" class="font-medium w-8">
-              <div class="flex items-center justify-center">
-                <input :checked="allSelected" @click="toggleAll" type="checkbox">
-              </div>
-            </th>
-            <th class="font-medium">Name</th>
-            <th class="font-medium">Action</th>
-          </tr>
+            <tr class="text-sm text-gray-500 text-left">
+              <th v-if="bulkMode" class="font-medium w-8">
+                <div class="flex items-center justify-center">
+                  <input
+                    :checked="allSelected"
+                    @click="toggleAll"
+                    type="checkbox"
+                  />
+                </div>
+              </th>
+              <th class="font-medium">Name</th>
+              <th class="font-medium">Action</th>
+            </tr>
           </thead>
           <tbody>
-          <transition-group name="fade-slower" class="transition-element">
-            <template v-for="(client, index) in paginatedClients" :key="client.id">
-              <client-list-item :bulkMode="bulkMode"
-                                 @toggle-select="updateBulkItems"
-                                 :selected="isSelected(client.id)"
-                                 :grey-background="index % 2 === 0"
-                                 :id="client.id"
-                                 :name="client.name" />
-            </template>
-          </transition-group>
+            <transition-group name="fade-slower" class="transition-element">
+              <template
+                v-for="(client, index) in paginatedClients"
+                :key="client.id"
+              >
+                <client-list-item
+                  :bulkMode="bulkMode"
+                  @toggle-select="updateBulkItems"
+                  :selected="isSelected(client.id)"
+                  :grey-background="index % 2 === 0"
+                  :id="client.id"
+                  :name="client.name"
+                />
+              </template>
+            </transition-group>
           </tbody>
         </table>
       </div>
     </div>
   </div>
-
-
 </template>
 
 <script>
@@ -68,24 +75,32 @@ import PaginationControls from "@/components/ui/PaginationControls.vue";
 import SearchControls from "@/components/ui/SearchControls.vue";
 import BulkEditButton from "@/components/ui/BulkEditButton.vue";
 import TrashIcon from "vue-tabler-icons/icons/TrashIcon";
-import { forEach } from "vue3-acies-treeselect";
 
 export default {
   name: "ClientsPage",
-  components: { TrashIcon, BulkEditButton, SearchControls, PaginationControls, ClientListItem, NewButton },
+  components: {
+    TrashIcon,
+    BulkEditButton,
+    SearchControls,
+    PaginationControls,
+    ClientListItem,
+    NewButton,
+  },
   data() {
     return {
       limit: 10,
       currentPage: 1,
       searchPattern: "",
       bulkMode: false,
-      selectedClients: []
+      selectedClients: [],
     };
   },
   computed: mapState({
     clients: (state) => state.clients.all,
     filteredClients() {
-      return this.clients.filter((client) => client.name.toLowerCase().includes(this.searchPattern.toLowerCase()));
+      return this.clients.filter((client) =>
+        client.name.toLowerCase().includes(this.searchPattern.toLowerCase())
+      );
     },
     paginatedClients() {
       const start = (this.currentPage - 1) * this.limit;
@@ -95,7 +110,7 @@ export default {
     },
     allSelected() {
       return this.selectedClients.length === this.paginatedClients.length;
-    }
+    },
   }),
   methods: {
     ...mapActions("clients", ["deleteClient", "deleteClients"]),
@@ -129,14 +144,17 @@ export default {
         return;
       }
       this.$confirm.require({
-        message: "Are you sure you want to delete " + this.selectedClients.length + " clients?",
+        message:
+          "Are you sure you want to delete " +
+          this.selectedClients.length +
+          " clients?",
         header: "Delete clients",
         acceptClass: "confirm-button-accept",
         icon: "pi pi-exclamation-triangle",
         accept: () => {
           this.deleteClients(this.selectedClients);
           this.selectedClients = [];
-        }
+        },
       });
     },
     toggleAll() {
@@ -148,11 +166,11 @@ export default {
     },
     isSelected(clientId) {
       return this.selectedClients.includes(clientId);
-    }
+    },
   },
   mounted() {
     this.$store.dispatch("client/clearClient");
-  }
+  },
 };
 </script>
 

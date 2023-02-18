@@ -1,6 +1,6 @@
 <template>
   <div class="w-[4.1rem]">
-    <Datepicker
+    <datepicker
       v-model="time"
       time-picker
       auto-apply
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     updateStartTime() {
-        // store.dispatch("timer/setStartTime", )
+      // store.dispatch("timer/setStartTime", )
     },
     setTime(timestamp) {
       const date = getDateFromSecondsTimestamp(timestamp);

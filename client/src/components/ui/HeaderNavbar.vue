@@ -58,11 +58,11 @@ export default {
   data() {
     return {
       spinnerColor: "#382CDD",
-      spinnerSize: "8px"
+      spinnerSize: "8px",
     };
   },
   computed: {
-    ...mapGetters(["isSynchronised"])
+    ...mapGetters(["isSynchronised"]),
   },
   components: {
     PomodoroTimer,
@@ -71,8 +71,8 @@ export default {
     SyncLoader,
     TimerTime,
     TrackedSubject,
-    ToggleTimerButton
-  }
+    ToggleTimerButton,
+  },
 };
 </script>
 

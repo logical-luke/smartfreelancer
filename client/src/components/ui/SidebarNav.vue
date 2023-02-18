@@ -3,12 +3,12 @@
     <div v-if="isAuthorized">
       <nav class="lg:hidden py-6 px-6 bg-gray-800">
         <div class="flex items-center justify-between">
-          <TransparentLogoWide />
+          <transparent-logo-wide />
           <button
             @click="toggle"
             class="navbar-burger p-1 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
           >
-            <Menu2Icon />
+            <menu2-icon />
           </button>
         </div>
       </nav>
@@ -26,80 +26,80 @@
             class="flex justify-between px-6 pb-6 mb-6 lg:border-b border-gray-700"
           >
             <div>
-              <TransparentLogoWide />
+              <transparent-logo-wide />
             </div>
             <div class="flex content-center items-center">
               <button
                 @click="toggle"
                 class="lg:hidden navbar-burger p-1 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
               >
-                <XIcon />
+                <x-icon />
               </button>
             </div>
           </div>
           <div class="px-4 pb-6">
             <ul class="mb-8 text-sm font-medium">
-              <SidebarItem go-to="/">
+              <sidebar-item go-to="/">
                 <template #title>Today</template>
                 <template #icon>
                   <sun-high-icon />
                 </template>
-              </SidebarItem>
-              <SidebarItem go-to="/timeline">
+              </sidebar-item>
+              <sidebar-item go-to="/timeline">
                 <template #title>Timeline</template>
                 <template #icon>
                   <clock-hour4-icon />
                 </template>
-              </SidebarItem>
-              <SidebarItem go-to="/clients">
+              </sidebar-item>
+              <sidebar-item go-to="/clients">
                 <template #title>Clients</template>
                 <template #icon>
                   <users-icon />
                 </template>
-              </SidebarItem>
-              <SidebarItem go-to="/projects">
+              </sidebar-item>
+              <sidebar-item go-to="/projects">
                 <template #title>Projects</template>
                 <template #icon>
                   <briefcase-icon />
                 </template>
-              </SidebarItem>
-              <SidebarItem go-to="/tasks">
+              </sidebar-item>
+              <sidebar-item go-to="/tasks">
                 <template #title>Tasks</template>
                 <template #icon>
                   <checklist-icon />
                 </template>
-              </SidebarItem>
-              <SidebarItem go-to="/reports">
+              </sidebar-item>
+              <sidebar-item go-to="/reports">
                 <template #title>Reports</template>
                 <template #icon>
                   <chart-bar-icon />
                 </template>
-              </SidebarItem>
-              <SidebarItem go-to="/invoices">
+              </sidebar-item>
+              <sidebar-item go-to="/invoices">
                 <template #title>Invoices</template>
                 <template #icon>
                   <file-dollar-icon />
                 </template>
-              </SidebarItem>
-              <SidebarItem go-to="/automations">
+              </sidebar-item>
+              <sidebar-item go-to="/automations">
                 <template #title>Automations</template>
                 <template #icon>
                   <bolt-icon />
                 </template>
-              </SidebarItem>
-              <SidebarItem go-to="/expenses">
+              </sidebar-item>
+              <sidebar-item go-to="/expenses">
                 <template #title>Expenses</template>
                 <template #icon>
                   <shopping-cart-icon />
                 </template>
-              </SidebarItem>
-              <SidebarItem go-to="/settings">
+              </sidebar-item>
+              <sidebar-item go-to="/settings">
                 <template #title>Settings</template>
                 <template #icon>
                   <settings-icon />
                 </template>
-              </SidebarItem>
-              <SidebarLogout />
+              </sidebar-item>
+              <sidebar-logout />
             </ul>
           </div>
         </nav>

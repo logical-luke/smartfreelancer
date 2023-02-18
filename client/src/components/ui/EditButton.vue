@@ -2,7 +2,11 @@
   <router-link :to="goTo">
     <button
       type="button"
-      :class="iconOnly ? 'text-indigo-500 hover:text-indigo-600' : 'inline-flex text-center items-center w-full md:w-auto px-6 py-3 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200'"
+      :class="
+        iconOnly
+          ? 'text-indigo-500 hover:text-indigo-600'
+          : 'inline-flex text-center items-center w-full md:w-auto px-6 py-3 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200'
+      "
     >
       <edit-icon />
       <template v-if="!iconOnly">Edit</template>
@@ -19,13 +23,13 @@ export default {
   props: {
     goTo: {
       type: String,
-      required: true
+      required: true,
     },
     iconOnly: {
       type: Boolean,
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 };
 </script>
 

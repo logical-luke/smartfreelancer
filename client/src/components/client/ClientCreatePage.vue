@@ -1,20 +1,20 @@
 <template>
   <section class="py-8">
     <div class="container px-4 mx-auto">
-      <h1 class="mb-2 text-5xl font-bold font-heading">Add client</h1>
+      <h1 class="mb-2 text-2xl font-bold font-heading">Add client</h1>
       <form @submit.prevent="submitForm">
-        <ClientForm />
+        <client-form />
         <div class="flex flex-wrap space-x-4">
           <div>
-            <SubmitButton>
-              <template v-slot:title>Add</template>
-              <template v-slot:icon>
+            <submit-button>
+              Add
+              <template #icon>
                 <square-plus-icon />
               </template>
-            </SubmitButton>
+            </submit-button>
           </div>
           <div>
-            <BackButton />
+            <back-button />
           </div>
         </div>
       </form>
