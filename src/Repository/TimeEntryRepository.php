@@ -53,6 +53,7 @@ class TimeEntryRepository extends ServiceEntityRepository
             ->setParameter('user', $user->getId(), UuidType::NAME)
             ->setParameter('startDate', $startTime)
             ->setParameter('endDate', $endTime)
+            ->orderBy('te.endTime', 'DESC')
             ->getQuery()
             ->getResult();
     }
