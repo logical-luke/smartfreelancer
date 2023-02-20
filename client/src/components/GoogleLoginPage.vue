@@ -1,13 +1,12 @@
 <template>
     <div
       class="grid h-screen place-items-center"
-      v-if="loading"
     >
       <div>
         <moon-loader
           :size="spinnerSize"
           :color="spinnerColor"
-          :loading="loading"
+          :loading="true"
         />
       </div>
     </div>
@@ -24,7 +23,6 @@ export default {
     return {
       spinnerSize: "96 px",
       spinnerColor: "#382CDD",
-      loading: true,
     };
   },
   async mounted() {
@@ -36,7 +34,6 @@ export default {
     }
 
     const tokens = await api.postGoogleCheck({code: code, state: state});
-    this.loading = false;
     await store.dispatch('login', tokens);
   },
 };
