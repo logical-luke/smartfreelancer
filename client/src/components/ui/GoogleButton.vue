@@ -14,12 +14,14 @@
 <script>
 import BrandGoogleIcon from "vue-tabler-icons/icons/BrandGoogleIcon";
 import api from "@/services/api/api";
+import store from "@/store";
 
 export default {
   name: "GoogleButton",
   components: { BrandGoogleIcon },
   methods: {
     async loginWithGoogle() {
+      store.commit("setInitialLoaded", false);
       window.location.href = await api.postGoogleStart();
     },
   },

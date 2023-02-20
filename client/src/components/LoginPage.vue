@@ -92,12 +92,6 @@ export default {
     };
   },
   methods: {
-    ...mapMutations([
-      "setRefreshToken",
-      "setToken",
-      "setAuthorized",
-      "setInitialLoaded",
-    ]),
     clearError() {
       this.error = null;
     },

@@ -51,6 +51,7 @@ export default createStore({
       await router.push("/login");
     },
     async login({ commit, dispatch }, payload) {
+      commit("setInitialLoaded", false)
       let token = null;
       let refreshToken = null;
       if (payload.email && payload.password) {
@@ -68,9 +69,12 @@ export default createStore({
         commit("setAuthorized", true);
         await dispatch("sync");
         await dispatch("enableServerTimeSync");
+
         commit("setInitialLoaded", true);
-        await router.push("/");
+
+        return router.push("/");
       }
+      commit("setInitialLoaded", true);
     },
     async register({ dispatch }, credentials) {
       try {
