@@ -41,13 +41,13 @@ export default createStore({
     async logout({ commit }) {
       commit("setToken", "");
       commit("setRefreshToken", "");
-      commit("setInitialLoaded", true);
       commit("setAuthorized", false);
       commit("setUser", {});
       commit("setSynchronised", false);
       VueCookies.remove("token");
       VueCookies.remove("refresh_token");
       localStorage.clear();
+      commit("setInitialLoaded", false);
       await router.push("/login");
     },
     async login({ commit, dispatch }, payload) {

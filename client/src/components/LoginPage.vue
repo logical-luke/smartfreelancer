@@ -107,6 +107,9 @@ export default {
       }
     },
   },
+  mounted() {
+    store.commit("setInitialLoaded", true);
+  },
 };
 </script>
 
