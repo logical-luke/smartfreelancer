@@ -107,7 +107,7 @@ export default {
       }
     },
   },
-  mounted() {
+  beforeRouteEnter() {
     store.commit("setInitialLoaded", true);
   },
 };

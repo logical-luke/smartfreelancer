@@ -124,6 +124,9 @@ export default {
     SubmitButton,
     PasswordMeter,
   },
+  beforeRouteEnter() {
+    store.commit("setInitialLoaded", true);
+  },
 };
 </script>
 
