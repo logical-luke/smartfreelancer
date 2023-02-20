@@ -70,7 +70,6 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
 import store from "@/store";
 import TransparentLogoWide from "@/components/ui/TransparentLogoWide.vue";

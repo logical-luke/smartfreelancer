@@ -51,7 +51,7 @@ export default createStore({
       await router.push("/login");
     },
     async login({ commit, dispatch }, payload) {
-      commit("setInitialLoaded", false)
+      commit("setInitialLoaded", false);
       let token = null;
       let refreshToken = null;
       if (payload.email && payload.password) {
