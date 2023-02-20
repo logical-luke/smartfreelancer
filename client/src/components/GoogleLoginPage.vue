@@ -1,15 +1,11 @@
 <template>
-  <div class="grid h-screen place-items-center">
-    <div>
-      <moon-loader :size="spinnerSize" :color="spinnerColor" :loading="true" />
-    </div>
-  </div>
+  <div></div>
 </template>
 
 <script>
 import router from "../router";
-import api from "@/services/api/api";
 import store from "@/store";
+import api from "@/services/api/api";
 
 export default {
   name: "GoogleLoginPage",
@@ -20,6 +16,7 @@ export default {
     };
   },
   async mounted() {
+    store.commit("setInitialLoaded", false);
     const code = this.$route.query.code;
     const state = this.$route.query.state;
 
