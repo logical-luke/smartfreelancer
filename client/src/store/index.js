@@ -25,6 +25,7 @@ export default createStore({
     initialLoaded: false,
     synchronised: false,
     serverTime: null,
+    serverTimeSyncId: null,
   },
   modules: {
     projects,
@@ -69,6 +70,7 @@ export default createStore({
         commit("setRefreshToken", refreshToken);
         commit("setAuthorized", true);
         await dispatch("sync");
+        await dispatch("enableServerTimeSync");
         commit("setInitialLoaded", true);
         await router.push("/");
       }
@@ -103,8 +105,6 @@ export default createStore({
       }
       commit("setUser", user);
 
-      dispatch("getNetworkTime");
-
       let timer = null;
       if (localStorage.getItem("timer")) {
         timer = JSON.parse(localStorage.getItem("timer"));
@@ -136,6 +136,19 @@ export default createStore({
 
       commit("setInitialLoaded", true);
     },
+    async enableServerTimeSync({ commit, dispatch, rootGetters }) {
+      await dispatch("getServerTime");
+      const serverTimeSyncId = setInterval(() => {
+        if (rootGetters.getServerTime) {
+          commit("setServerTime", Number(rootGetters.getServerTime) + 1);
+        }
+      }, 1000);
+      commit("setServerTimeSyncId", serverTimeSyncId);
+    },
+    async disableServerTimeSync({ commit, rootGetters }) {
+      clearInterval(rootGetters.serverTimeSyncId);
+      commit("setServerTimeSyncId", null);
+    },
     async sync({ commit, dispatch }) {
       const clientsFetched = dispatch("clients/getClients");
       const projectsFetched = dispatch("projects/getProjects");
@@ -150,7 +163,7 @@ export default createStore({
         commit("setSynchronised", true);
       });
     },
-    async getNetworkTime({ commit }) {
+    async getServerTime({ commit }) {
       const serverTime = await getServerTime();
       commit("setServerTime", serverTime);
     },
@@ -188,6 +201,9 @@ export default createStore({
     },
     setServerTime(state, serverTime) {
       state.serverTime = serverTime;
+    },
+    setServerTimeSyncId(state, serverTimeSyncId) {
+      state.serverTimeSyncId = serverTimeSyncId;
     },
   },
   getters: {
