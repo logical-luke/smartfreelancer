@@ -4,13 +4,14 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/doctrine-bundle": "^2.8",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.14",
         "gesdinet/jwt-refresh-token-bundle": "^1.1",
+        "google/apiclient": "^2.13",
         "lexik/jwt-authentication-bundle": "^2.16",
         "sentry/sentry-symfony": "^4.5",
         "symfony/console": "6.2.*",
@@ -61,7 +62,7 @@
             "@auto-scripts"
         ],
         "cs-fixer": "tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --allow-risky=yes src",
-        "rector": "vendor/bin/rector process src"
+        "rector": "php8.2 vendor/bin/rector process src"
     },
     "conflict": {
         "symfony/symfony": "*"

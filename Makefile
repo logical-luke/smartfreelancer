@@ -1,6 +1,6 @@
 start-dev:
 	docker start smartfreelancer-mysql
-	symfony server:start &
+	PHP=/usr/bin/php8.2 symfony server:start &
 	npm run dev --prefix client/ &
 
 stop-dev:

@@ -48,7 +48,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_API }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: cd /home/smartfreelancer-api/tmp/build && /usr/bin/php8.1 /usr/local/bin/composer install --no-ansi --no-interaction --no-progress --prefer-dist --no-scripts --classmap-authoritative --no-dev
+          script: cd /home/smartfreelancer-api/tmp/build && /usr/bin/php8.2 /usr/local/bin/composer install --no-ansi --no-interaction --no-progress --prefer-dist --no-scripts --classmap-authoritative --no-dev
 
       - name: Apply database api migrations
         uses: appleboy/ssh-action@master
@@ -60,7 +60,7 @@ jobs:
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
           envs: DATABASE_URL
-          script: /usr/bin/php8.1 /home/smartfreelancer-api/tmp/build/bin/console doctrine:migrations:migrate
+          script: /usr/bin/php8.2 /home/smartfreelancer-api/tmp/build/bin/console doctrine:migrations:migrate
 
       - name: Generate JWT certs
         uses: appleboy/ssh-action@master
@@ -69,7 +69,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_API }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: /usr/bin/php8.1 /home/smartfreelancer-api/tmp/build/bin/console lexik:jwt:generate-keypair
+          script: /usr/bin/php8.2 /home/smartfreelancer-api/tmp/build/bin/console lexik:jwt:generate-keypair
 
       - name: Clear cache
         uses: appleboy/ssh-action@master
@@ -78,7 +78,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_API }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: /usr/bin/php8.1 /home/smartfreelancer-api/tmp/build/bin/console cache:clear
+          script: /usr/bin/php8.2 /home/smartfreelancer-api/tmp/build/bin/console cache:clear
 
 
       - name: Copy new version to api directory
@@ -97,7 +97,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME_API }}
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: /usr/bin/php8.1 /home/smartfreelancer-api/public/tools/cachetools/cachetool.phar opcache:reset --fcgi=/run/php/php8.1-fpm.sock
+          script: /usr/bin/php8.2 /home/smartfreelancer-api/public/tools/cachetools/cachetool.phar opcache:reset --fcgi=/run/php/php8.2-fpm.sock
 
       - name: Configure app local env files
         uses: appleboy/ssh-action@master

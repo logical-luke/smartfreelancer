@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Model\User\LoginTypeEnum;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -29,7 +30,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -49,6 +50,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: TimeEntry::class, orphanRemoval: true)]
     private Collection $timeEntries;
+
+    #[ORM\Column(length: 255)]
+    private ?string $loginType = LoginTypeEnum::EMAIL->value;
 
     public function __construct()
     {
@@ -273,6 +277,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $timeEntry->setOwner(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLoginType(): ?string
+    {
+        return $this->loginType;
+    }
+
+    public function setLoginType(string $loginType): self
+    {
+        $this->loginType = $loginType;
 
         return $this;
     }
