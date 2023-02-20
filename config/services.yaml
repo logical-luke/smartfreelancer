@@ -26,3 +26,4 @@ services:
     App\Service\External\GoogleClient:
         arguments:
             $credentialsFile: '%kernel.project_dir%/config/google/client_secret.json'
+            $feAppBaseUrl: '%env(FE_APP_BASE_URL)%'

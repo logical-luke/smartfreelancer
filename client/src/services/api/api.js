@@ -316,4 +316,24 @@ export default {
 
     return response.data;
   },
+
+  async postGoogleStart() {
+    const response = await axios.post(
+      process.env.API_BASE_URL + "/google/connect"
+    );
+
+    return response.data.targetUrl;
+  },
+
+  async postGoogleCheck(payload) {
+    const response = await axios.post(
+      process.env.API_BASE_URL + "/google/connect/check",
+      {
+        code: payload.code,
+        state: payload.state,
+      }
+    );
+
+    return response.data;
+  },
 };

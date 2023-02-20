@@ -15,6 +15,7 @@ import ReportsPage from "@/components/report/ReportsPage.vue";
 import TimelinePage from "@/components/timeline/TimelinePage.vue";
 import RegistrationPage from "@/components/RegistrationPage.vue";
 import NotFoundPage from "@/components/NotFoundPage.vue";
+import GoogleLoginPage from "@/components/GoogleLoginPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -31,6 +32,11 @@ const router = createRouter({
       path: "/register",
       name: "RegistrationPage",
       component: RegistrationPage,
+    },
+    {
+      path: "/google/login",
+      name: "GoogleLoginPage",
+      component: GoogleLoginPage,
     },
     {
       path: "/",

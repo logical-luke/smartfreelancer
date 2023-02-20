@@ -13,6 +13,7 @@ use App\Service\User\UserCreator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/google/', name: 'app_google_')]
@@ -31,7 +32,7 @@ class GoogleController extends AbstractController
         return $this->json(['targetUrl' => $client->createAuthUrl()]);
     }
 
-    #[Route('connect/check', name: 'connect_check')]
+    #[Route('connect/check', name: 'connect_check', methods: "POST")]
     public function connectCheckAction(
         JWTTokenGetter $tokenGetter,
         UserCreator $userCreator,
@@ -39,9 +40,28 @@ class GoogleController extends AbstractController
         GoogleClient $client,
         Request $request
     ): JsonResponse {
-        if (!$code = $request->query->get('code')) {
-            return $this->json(['error' => 'missing_code'], 400);
+        try {
+            $payload = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
+
+        if (!isset($payload['code'])) {
+            return $this->json(['error' => 'Missing code'], 400);
+        }
+
+        if (!isset($payload['state'])) {
+            return $this->json(['error' => 'Missing state'], 400);
+        }
+
+        $csrfToken = $request->getSession()->get('google_csrf_token');
+        $state = $payload['state'];
+
+        // if ($csrfToken!== $state) {
+        //     return $this->json(['error' => 'Invalid CSRF token'], 400);
+        // }
+
+        $code = $payload['code'];
 
         $googleUser = $client->authorize($code);
 

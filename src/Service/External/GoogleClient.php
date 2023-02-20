@@ -11,11 +11,14 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 readonly class GoogleClient
 {
-    public function __construct(private string $credentialsFile, private Client $client, private UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(
+        private string $credentialsFile,
+        private string $feAppBaseUrl,
+        private Client $client,
+    ) {
         $this->client->setAuthConfig($this->credentialsFile);
         $this->client->setApplicationName('SmartFreelancer');
-        $this->setRedirectUri($this->urlGenerator->generate('app_google_connect_check', [], UrlGeneratorInterface::ABSOLUTE_URL));
+        $this->setRedirectUri(sprintf('%s/google/login', $this->feAppBaseUrl));
     }
 
     public function setRedirectUri(string $redirectUri): self

@@ -57,7 +57,10 @@
         />
       </div>
 
+      <div class="flex gap-2">
       <submit-button> Log in </submit-button>
+      <google-button> Log in</google-button>
+      </div>
       <p class="mb-2 text-base text-gray-500 mt-2">
         Don't have an account? Create a new account
         <router-link class="text-blue-500" to="/register">here</router-link>
@@ -71,10 +74,12 @@ import { mapMutations } from "vuex";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
 import store from "@/store";
 import TransparentLogoWide from "@/components/ui/TransparentLogoWide.vue";
+import GoogleButton from "@/components/ui/GoogleButton.vue";
 
 export default {
   name: "LoginPage",
   components: {
+    GoogleButton,
     TransparentLogoWide,
     SubmitButton,
   },

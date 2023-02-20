@@ -49,11 +49,21 @@ export default createStore({
       localStorage.clear();
       await router.push("/login");
     },
-    async login({ commit, dispatch }, credentials) {
-      const { token, refreshToken } = await api.login(
-        credentials.email,
-        credentials.password
-      );
+    async login({ commit, dispatch }, payload) {
+      let token = null;
+      let refreshToken = null;
+      if (payload.email && payload.password) {
+        const tokens = await api.login(
+          payload.email,
+          payload.password
+        );
+        token = tokens.token;
+        refreshToken = tokens.refreshToken;
+      }
+      if (payload.token && payload.refreshToken) {
+        token = payload.token;
+        refreshToken = payload.refreshToken;
+      }
       if (token && refreshToken) {
         commit("setToken", token);
         commit("setRefreshToken", refreshToken);
