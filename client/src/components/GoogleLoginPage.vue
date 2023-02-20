@@ -1,15 +1,9 @@
 <template>
-    <div
-      class="grid h-screen place-items-center"
-    >
-      <div>
-        <moon-loader
-          :size="spinnerSize"
-          :color="spinnerColor"
-          :loading="true"
-        />
-      </div>
+  <div class="grid h-screen place-items-center">
+    <div>
+      <moon-loader :size="spinnerSize" :color="spinnerColor" :loading="true" />
     </div>
+  </div>
 </template>
 
 <script>
@@ -30,15 +24,13 @@ export default {
     const state = this.$route.query.state;
 
     if (!code || !state) {
-      await router.push('/login')
+      await router.push("/login");
     }
 
-    const tokens = await api.postGoogleCheck({code: code, state: state});
-    await store.dispatch('login', tokens);
+    const tokens = await api.postGoogleCheck({ code: code, state: state });
+    await store.dispatch("login", tokens);
   },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

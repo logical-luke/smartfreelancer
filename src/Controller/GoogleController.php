@@ -32,7 +32,7 @@ class GoogleController extends AbstractController
         return $this->json(['targetUrl' => $client->createAuthUrl()]);
     }
 
-    #[Route('connect/check', name: 'connect_check', methods: "POST")]
+    #[Route('connect/check', name: 'connect_check', methods: 'POST')]
     public function connectCheckAction(
         JWTTokenGetter $tokenGetter,
         UserCreator $userCreator,

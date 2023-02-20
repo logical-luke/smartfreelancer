@@ -54,10 +54,7 @@ export default createStore({
       let token = null;
       let refreshToken = null;
       if (payload.email && payload.password) {
-        const tokens = await api.login(
-          payload.email,
-          payload.password
-        );
+        const tokens = await api.login(payload.email, payload.password);
         token = tokens.token;
         refreshToken = tokens.refreshToken;
       }

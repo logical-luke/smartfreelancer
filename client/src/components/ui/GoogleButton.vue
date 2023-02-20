@@ -5,7 +5,9 @@
     @click.prevent="loginWithGoogle"
   >
     <brand-google-icon />
-    <span class="ml-2"><slot></slot> with <span class="text-red-700">Google</span></span>
+    <span class="ml-2"
+      ><slot></slot> with <span class="text-red-700">Google</span></span
+    >
   </button>
 </template>
 
@@ -19,7 +21,7 @@ export default {
   methods: {
     async loginWithGoogle() {
       window.location.href = await api.postGoogleStart();
-    }
-  }
+    },
+  },
 };
 </script>

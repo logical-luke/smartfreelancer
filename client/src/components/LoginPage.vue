@@ -58,8 +58,8 @@
       </div>
 
       <div class="flex gap-2">
-      <submit-button> Log in </submit-button>
-      <google-button> Log in</google-button>
+        <submit-button> Log in </submit-button>
+        <google-button> Log in</google-button>
       </div>
       <p class="mb-2 text-base text-gray-500 mt-2">
         Don't have an account? Create a new account
