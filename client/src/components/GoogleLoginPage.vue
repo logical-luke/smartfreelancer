@@ -1,5 +1,16 @@
 <template>
-
+    <div
+      class="grid h-screen place-items-center"
+      v-if="loading"
+    >
+      <div>
+        <moon-loader
+          :size="spinnerSize"
+          :color="spinnerColor"
+          :loading="loading"
+        />
+      </div>
+    </div>
 </template>
 
 <script>
@@ -9,6 +20,13 @@ import store from "@/store";
 
 export default {
   name: "GoogleLoginPage",
+  data() {
+    return {
+      spinnerSize: "96 px",
+      spinnerColor: "#382CDD",
+      loading: true,
+    };
+  },
   async mounted() {
     const code = this.$route.query.code;
     const state = this.$route.query.state;
@@ -18,7 +36,7 @@ export default {
     }
 
     const tokens = await api.postGoogleCheck({code: code, state: state});
-
+    this.loading = false;
     await store.dispatch('login', tokens);
   },
 };
