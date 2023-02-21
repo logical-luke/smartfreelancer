@@ -26,6 +26,7 @@ export default createStore({
     synchronised: false,
     serverTime: null,
     serverTimeSyncId: null,
+    navBarCollapsed: false,
   },
   modules: {
     projects,
@@ -202,6 +203,9 @@ export default createStore({
     setServerTimeSyncId(state, serverTimeSyncId) {
       state.serverTimeSyncId = serverTimeSyncId;
     },
+    toggleNavBarCollapsed(state) {
+      state.navBarCollapsed =!state.navBarCollapsed;
+    }
   },
   getters: {
     isAuthorized(state) {
@@ -224,6 +228,9 @@ export default createStore({
     },
     getServerTime(state) {
       return state.serverTime;
+    },
+    isNavBarCollapsed(state) {
+      return state.navBarCollapsed;
     },
   },
   strict: debug,

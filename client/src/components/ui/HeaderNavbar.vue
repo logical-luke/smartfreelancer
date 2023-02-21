@@ -2,41 +2,40 @@
   <section class="py-5 px-6 bg-white shadow">
     <nav class="relative">
       <div class="flex items-center">
-        <div class="flex flex-wrap md:space-x-3 content-start items-center">
-          <div class="flex items-center gap-2">
-            <toggle-timer-button size="12" :global="true" />
+        <transition name="slide-up-down" @enter="enter" @leave="leave">
+          <div v-if="!isNavBarCollapsed" class="flex flex-wrap gap-3 content-start items-center">
+            <toggle-timer-button :size="12" :global="true" />
             <pomodoro-timer />
             <timer-time />
             <start-time />
             <end-time />
+            <tracked-subject />
             <transition name="fade" mode="in-out">
-              <div class="md:hidden px-4" v-if="!isSynchronised">
-                <sync-loader
-                  title="Synchronising..."
-                  :size="spinnerSize"
-                  :color="spinnerColor"
-                  :loading="!isSynchronised"
-                />
-              </div>
-            </transition>
-          </div>
-          <div
-            class="flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:space-x-3 mt-4 md:mt-0 w-full md:w-96 content-start"
-          >
-            <div class="flex items-center lg:space-x-3">
-              <tracked-subject />
-            </div>
-          </div>
-          <transition name="fade" mode="in-out">
-            <div class="hidden md:flex lg:px-4" v-if="!isSynchronised">
-              <sync-loader
+              <moon-loader
+                v-if="!isSynchronised"
                 title="Synchronising..."
                 :size="spinnerSize"
                 :color="spinnerColor"
                 :loading="!isSynchronised"
               />
-            </div>
-          </transition>
+            </transition>
+          </div>
+          <div v-else class="flex flex-row gap-3 content-start items-center">
+            <toggle-timer-button :size="8" :global="true" />
+            <pomodoro-timer :size="8" />
+            <transition name="fade" mode="in-out">
+              <moon-loader
+                v-if="!isSynchronised"
+                title="Synchronising..."
+                :size="spinnerSize"
+                :color="spinnerColor"
+                :loading="!isSynchronised"
+              />
+            </transition>
+          </div>
+        </transition>
+        <div :class="isNavBarCollapsed ? '-mb-9' : '-mb-10'" class="lg:hidden absolute bottom-0 right-0">
+          <collapse-nav-bar-button />
         </div>
       </div>
     </nav>
@@ -48,31 +47,54 @@ import ToggleTimerButton from "@/components/ui/ToggleTimerButton.vue";
 import TrackedSubject from "@/components/ui/TrackedSubject.vue";
 import TimerTime from "@/components/ui/TimerTime.vue";
 import { mapGetters } from "vuex";
-import { SyncLoader } from "vue3-spinner";
+import { MoonLoader } from "vue3-spinner";
 import StartTime from "@/components/ui/StartTime.vue";
 import EndTime from "@/components/ui/EndTime.vue";
 import PomodoroTimer from "@/components/ui/PomodoroTimer.vue";
+import CollapseNavBarButton from "@/components/ui/CollapseNavBarButton.vue";
 
 export default {
   name: "HeaderNavbar",
   data() {
     return {
       spinnerColor: "#382CDD",
-      spinnerSize: "8px",
+      spinnerSize: "22px",
     };
   },
   computed: {
-    ...mapGetters(["isSynchronised"]),
+    ...mapGetters(["isSynchronised", "isNavBarCollapsed"])
+  },
+  methods: {
+    enter(el) {
+      el.style.opacity = 0;
+      el.style.transform = 'translateY(-100%)';
+      setTimeout(() => {
+        el.style.opacity = 1;
+        el.style.transform = '';
+      }, 300);
+    },
+    leave(el, done) {
+      el.style.opacity = 1;
+      el.style.transform = '';
+      setTimeout(() => {
+        el.style.opacity = 0;
+        el.style.transform = 'translateY(-100%)';
+        setTimeout(() => {
+          done();
+        }, 0);
+      }, 300);
+    }
   },
   components: {
+    CollapseNavBarButton,
+    MoonLoader,
     PomodoroTimer,
     EndTime,
     StartTime,
-    SyncLoader,
     TimerTime,
     TrackedSubject,
-    ToggleTimerButton,
-  },
+    ToggleTimerButton
+  }
 };
 </script>
 
@@ -83,4 +105,19 @@ export default {
   width: 40px;
   max-height: 28px;
 }
+
+.slide-up-down-enter-active, .slide-up-down-leave-active {
+  transition: transform 0.8s cubic-bezier(.66,.5,.52,1.29);
+}
+
+.slide-up-down-enter {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.slide-up-down-leave-to {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
 </style>

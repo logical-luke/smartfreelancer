@@ -5,7 +5,7 @@
     </div>
     <transition name="fade" mode="out-in">
       <div
-        class="flex justify-center h-[32rem] items-center"
+        class="flex justify-center h-[12rem] md:h-[32rem] items-center"
         v-if="!entriesLoaded"
       >
         <moon-loader :color="spinnerColor" :loading="!entriesLoaded" />
