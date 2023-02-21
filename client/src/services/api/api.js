@@ -3,7 +3,7 @@ import store from "../../store";
 
 axios.defaults.withCredentials = true;
 
-const getRequest = async function (url, params, headers) {
+const getRequest = async function (url, params, headers, repeated = 0) {
   try {
     const response = await axios.get(process.env.API_BASE_URL + url, {
       params: params,
@@ -16,6 +16,17 @@ const getRequest = async function (url, params, headers) {
       return null;
     }
 
+    if (response.status === 401) {
+      if (repeated > 0) {
+        return await store.dispatch("logout");
+      }
+
+      await refreshToken();
+
+      repeated++;
+      return getRequest(url, params, headers, repeated);
+    }
+
     return response;
   } catch (err) {
     if (err.response.status === 404) {
@@ -23,52 +34,108 @@ const getRequest = async function (url, params, headers) {
     }
 
     if (err.response.status === 401) {
+      if (repeated > 0) {
+        return await store.dispatch("logout");
+      }
+
       await refreshToken();
 
-      return getRequest(url, headers);
+      repeated++;
+      return getRequest(url, params, headers, repeated);
     }
   }
 
-  return null;
+  if (repeated > 3) {
+    throw new Error("Too many failed requests");
+  }
+
+  repeated++;
+  return getRequest(url, params, headers, repeated);
 };
 
-const postRequest = async function (url, data, headers) {
+const postRequest = async function (url, data, headers, repeated = 0) {
   if (!data) {
     data = {};
   }
-  const response = axios.post(process.env.API_BASE_URL + url, data, {
-    headers: {
-      Authorization: `Bearer ${store.getters.getToken}`,
-    },
-  });
+  try {
+    const response = axios.post(process.env.API_BASE_URL + url, data, {
+      headers: {
+        Authorization: `Bearer ${store.getters.getToken}`,
+      },
+    });
 
-  if (response.status === 401) {
-    await refreshToken();
+    if (response.status === 401) {
+      if (repeated > 0) {
+        return await store.dispatch("logout");
+      }
+      await refreshToken();
 
-    return postRequest(url, data, headers);
+      repeated++;
+      return postRequest(url, data, headers, repeated);
+    }
+
+    return response;
+  } catch (err) {
+    if (err.response.status === 401) {
+      if (repeated > 0) {
+        return await store.dispatch("logout");
+      }
+      await refreshToken();
+
+      repeated++;
+      return postRequest(url, data, headers, repeated);
+    }
   }
 
-  return response;
+  if (repeated > 3) {
+    throw new Error("Too many failed requests");
+  }
+
+  repeated++;
+  return postRequest(url, data, headers, repeated);
 };
 
-const deleteRequest = async function (url, data, headers) {
+const deleteRequest = async function (url, data, headers, repeated = 0) {
   if (!data) {
     data = {};
   }
-  const response = axios.delete(process.env.API_BASE_URL + url, {
-    data: data,
-    headers: {
-      Authorization: `Bearer ${store.getters.getToken}`,
-    },
-  });
+  try {
+    const response = axios.delete(process.env.API_BASE_URL + url, {
+      data: data,
+      headers: {
+        Authorization: `Bearer ${store.getters.getToken}`,
+      },
+    });
 
-  if (response.status === 401) {
-    await refreshToken();
+    if (response.status === 401) {
+      if (repeated > 0) {
+        return await store.dispatch("logout");
+      }
+      await refreshToken();
 
-    return deleteRequest(url, data, headers);
+      repeated++;
+      return deleteRequest(url, data, headers, repeated);
+    }
+
+    return response;
+  } catch (err) {
+    if (err.response.status === 401) {
+      if (repeated > 0) {
+        return await store.dispatch("logout");
+      }
+      await refreshToken();
+
+      repeated++;
+      return deleteRequest(url, data, headers, repeated);
+    }
   }
 
-  return response;
+  if (repeated > 3) {
+    throw new Error("Too many failed requests");
+  }
+
+  repeated++;
+  return deleteRequest(url, data, headers, repeated);
 };
 
 const refreshToken = async function () {

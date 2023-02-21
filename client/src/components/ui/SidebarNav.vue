@@ -1,6 +1,6 @@
 <template>
-  <transition name="fade" mode="out-in">
-    <div v-if="isAuthorized">
+  <transition name="fade" mode="in-out">
+    <div v-if="isAuthorized" class="relative z-50">
       <nav class="lg:hidden py-6 px-6 bg-gray-800">
         <div class="flex items-center justify-between">
           <transparent-logo-wide />

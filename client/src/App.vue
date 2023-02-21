@@ -52,10 +52,10 @@ onMounted(async () => {
         :class="{ 'mx-auto lg:ml-80': isAuthorizedPage }"
       >
         <confirm-dialog> </confirm-dialog>
-        <SidebarNav v-if="isAuthorizedPage" />
+        <sidebar-nav v-if="isAuthorizedPage" />
         <transition name="fade" mode="out-in">
           <div v-if="isAuthorizedPage" class="fixed z-20 sticky top-0 w-full">
-            <HeaderNavbar />
+            <header-navbar />
           </div>
         </transition>
         <div v-if="store.getters.isInitialLoaded">
