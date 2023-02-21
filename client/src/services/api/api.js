@@ -3,7 +3,7 @@ import store from "../../store";
 
 axios.defaults.withCredentials = true;
 
-const getRequest = async function (url, params, headers) {
+const getRequest = async function (url, params, headers, repeated = 0) {
   try {
     const response = await axios.get(process.env.API_BASE_URL + url, {
       params: params,
@@ -23,8 +23,13 @@ const getRequest = async function (url, params, headers) {
     }
 
     if (err.response.status === 401) {
+      if (repeated > 0) {
+        return await store.dispatch("logout");
+      }
+
       await refreshToken();
 
+      repeated++;
       return getRequest(url, headers);
     }
   }
@@ -32,7 +37,7 @@ const getRequest = async function (url, params, headers) {
   return null;
 };
 
-const postRequest = async function (url, data, headers) {
+const postRequest = async function (url, data, headers, repeated = 0) {
   if (!data) {
     data = {};
   }
@@ -43,15 +48,19 @@ const postRequest = async function (url, data, headers) {
   });
 
   if (response.status === 401) {
+    if (repeated > 0) {
+      return await store.dispatch("logout");
+    }
     await refreshToken();
 
+    repeated++;
     return postRequest(url, data, headers);
   }
 
   return response;
 };
 
-const deleteRequest = async function (url, data, headers) {
+const deleteRequest = async function (url, data, headers, repeated = 0) {
   if (!data) {
     data = {};
   }
@@ -63,9 +72,13 @@ const deleteRequest = async function (url, data, headers) {
   });
 
   if (response.status === 401) {
+    if (repeated > 0) {
+      return await store.dispatch("logout");
+    }
     await refreshToken();
 
-    return deleteRequest(url, data, headers);
+    repeated++;
+    return deleteRequest(url, data, headers, repeated);
   }
 
   return response;
