@@ -25,7 +25,6 @@ onMounted(async () => {
     store.commit("setToken", token);
     store.commit("setAuthorized", true);
     store.commit("setRefreshToken", refreshToken);
-    await store.dispatch("enableServerTimeSync");
     await store.dispatch("loadInitial");
     await store.dispatch("sync");
   }

@@ -23,7 +23,7 @@ class JWTTokenGetter
     {
         $token = $this->tokenManager->create($user);
 
-        $refreshToken = $this->refreshTokenGenerator->createForUserWithTtl($user, 86400);
+        $refreshToken = $this->refreshTokenGenerator->createForUserWithTtl($user, 2592000);
 
         $this->refreshTokenManager->save($refreshToken);
 

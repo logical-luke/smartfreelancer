@@ -56,11 +56,11 @@ export default createStore({
       if (payload.email && payload.password) {
         try {
           const tokens = await api.login(payload.email, payload.password);
+          token = tokens.token;
+          refreshToken = tokens.refreshToken;
         } catch (error) {
           throw new Error(error.message);
         }
-        token = tokens.token;
-        refreshToken = tokens.refreshToken;
       }
       if (payload.token && payload.refreshToken) {
         token = payload.token;
@@ -102,13 +102,19 @@ export default createStore({
       try {
         user = await api.getUser();
       } catch (err) {
-        return dispatch("logout");
+        await dispatch("logout");
+
+        return;
       }
 
       if (!user) {
-        return dispatch("logout");
+        await dispatch("logout");
+
+        return
       }
       commit("setUser", user);
+
+      await dispatch("enableServerTimeSync");
 
       let timer = null;
       if (localStorage.getItem("timer")) {

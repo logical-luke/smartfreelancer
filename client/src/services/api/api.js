@@ -154,7 +154,7 @@ const refreshToken = async function () {
   let response = false;
   if (store.getters.getRefreshToken) {
     try {
-      const response = await axios.post(
+      response = await axios.post(
         process.env.API_BASE_URL + "/token/refresh",
         {
           refresh_token: store.getters.getRefreshToken,
@@ -165,10 +165,9 @@ const refreshToken = async function () {
 
       return;
     }
-
     if (response && response.status === 200) {
-      store.commit("setToken", response.data.token);
-      store.commit("setRefreshToken", response.data.refresh_token);
+      await store.commit("setToken", response.data.token);
+      await store.commit("setRefreshToken", response.data.refresh_token);
 
       return;
     }
