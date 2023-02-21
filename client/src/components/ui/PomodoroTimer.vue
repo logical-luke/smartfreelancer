@@ -19,17 +19,20 @@
         :options="times"
         optionLabel="name"
       />
-      <input-text
-        type="text"
-        class="w-16"
-        v-model="customTime"
-        placeholder="30m"
-      />
-      <button
-        type="button"
-        class="inline-flex text-center items-center w-auto px-3 flex-nowrap py-3 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
-      >
-        Start timer
+      <div>
+        Custom:
+        <input-text
+          type="text"
+          class="w-16"
+          v-model="customTime"
+          placeholder="30m"
+        />
+      </div>
+        <button
+          type="button"
+          class="inline-flex text-center items-center w-auto px-3 flex-nowrap py-3 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
+        >
+      Start timer
       </button>
     </div>
   </overlay-panel>
@@ -47,13 +50,13 @@ export default {
   computed: {
     sizeClasses() {
       return `w-${this.size} h-${this.size}`;
-    },
+    }
   },
   props: {
     size: {
       type: Number,
-      default: 12,
-    },
+      default: 12
+    }
   },
   data() {
     return {
@@ -61,21 +64,21 @@ export default {
       times: [
         { name: "5m", code: "5" },
         { name: "10m", code: "10" },
-        { name: "25m", code: "25" },
+        { name: "25m", code: "25" }
       ],
       modes: [
         { name: "Fixed", code: "f" },
-        { name: "Pomodoro", code: "p" },
+        { name: "Pomodoro", code: "p" }
       ],
       selectedMode: { name: "Fixed", code: "f" },
-      customTime: null,
+      customTime: null
     };
   },
   methods: {
     toggle(event) {
       this.$refs.op.toggle(event);
-    },
-  },
+    }
+  }
 };
 </script>
 
