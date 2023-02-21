@@ -13,14 +13,14 @@ const getRequest = async function (url, params, headers, repeated = 0) {
     });
 
     if (response.status === 404) {
-      return {data: {}};
+      return { data: {} };
     }
 
     if (response.status === 401) {
       if (repeated > 0) {
         await store.dispatch("logout");
 
-        return {data: {}};
+        return { data: {} };
       }
 
       await refreshToken();
@@ -32,14 +32,14 @@ const getRequest = async function (url, params, headers, repeated = 0) {
     return response;
   } catch (err) {
     if (err.response.status === 404) {
-      return {data: {}};
+      return { data: {} };
     }
 
     if (err.response.status === 401) {
       if (repeated > 0) {
         await store.dispatch("logout");
 
-        return {data: {}};
+        return { data: {} };
       }
 
       await refreshToken();
@@ -72,7 +72,7 @@ const postRequest = async function (url, data, headers, repeated = 0) {
       if (repeated > 0) {
         await store.dispatch("logout");
 
-        return {data: {}};
+        return { data: {} };
       }
       await refreshToken();
 
@@ -86,7 +86,7 @@ const postRequest = async function (url, data, headers, repeated = 0) {
       if (repeated > 0) {
         await store.dispatch("logout");
 
-        return {data: {}};
+        return { data: {} };
       }
       await refreshToken();
 
@@ -119,7 +119,7 @@ const deleteRequest = async function (url, data, headers, repeated = 0) {
       if (repeated > 0) {
         return await store.dispatch("logout");
 
-        return {data: {}};
+        return { data: {} };
       }
       await refreshToken();
 
@@ -133,7 +133,7 @@ const deleteRequest = async function (url, data, headers, repeated = 0) {
       if (repeated > 0) {
         return await store.dispatch("logout");
 
-        return {data: {}};
+        return { data: {} };
       }
       await refreshToken();
 
@@ -166,7 +166,6 @@ const refreshToken = async function () {
       return;
     }
 
-
     if (response && response.status === 200) {
       store.commit("setToken", response.data.token);
       store.commit("setRefreshToken", response.data.refresh_token);
@@ -185,10 +184,12 @@ export default {
         password: password,
       });
 
-      return {
-        token: response.data.token,
-        refreshToken: response.data.refresh_token,
-      };
+      if (response && response.status === 200) {
+        return {
+          token: response.data.token,
+          refreshToken: response.data.refresh_token,
+        };
+      }
     } catch (e) {
       if (e.response && e.response.status === 401) {
         throw new Error("Invalid username or password.");

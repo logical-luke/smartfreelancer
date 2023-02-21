@@ -51,11 +51,14 @@ export default createStore({
       await router.push("/login");
     },
     async login({ commit, dispatch }, payload) {
-      commit("setInitialLoaded", false);
       let token = null;
       let refreshToken = null;
       if (payload.email && payload.password) {
-        const tokens = await api.login(payload.email, payload.password);
+        try {
+          const tokens = await api.login(payload.email, payload.password);
+        } catch (error) {
+          throw new Error(error.message);
+        }
         token = tokens.token;
         refreshToken = tokens.refreshToken;
       }
@@ -63,6 +66,7 @@ export default createStore({
         token = payload.token;
         refreshToken = payload.refreshToken;
       }
+      commit("setInitialLoaded", false);
       if (token && refreshToken) {
         commit("setToken", token);
         commit("setRefreshToken", refreshToken);
