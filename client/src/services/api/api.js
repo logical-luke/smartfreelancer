@@ -46,7 +46,7 @@ const getRequest = async function (url, params, headers, repeated = 0) {
   }
 
   if (repeated > 3) {
-    return throw new Error("Too many failed requests");
+    throw new Error("Too many failed requests");
   }
 
   repeated++;
@@ -88,7 +88,7 @@ const postRequest = async function (url, data, headers, repeated = 0) {
   }
 
   if (repeated > 3) {
-    return throw new Error("Too many failed requests");
+    throw new Error("Too many failed requests");
   }
 
   repeated++;
@@ -131,7 +131,7 @@ const deleteRequest = async function (url, data, headers, repeated = 0) {
   }
 
   if (repeated > 3) {
-    return throw new Error("Too many failed requests");
+    throw new Error("Too many failed requests");
   }
 
   repeated++;
