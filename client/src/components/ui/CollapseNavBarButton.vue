@@ -1,12 +1,13 @@
 <template>
-  <button
-    type="button"
-    class="inline-flex bg-indigo-500 hover:bg-indigo-600 items-center justify-center items-center px-2 py-2 text-sm font-medium text-white rounded-full transition duration-200"
-    @click.prevent="toggleCollapsed"
-  >
-    <arrow-down-icon :size="12" v-if="isNavBarCollapsed" />
-    <arrow-up-icon v-else />
-  </button>
+    <button
+      v-if="slideFinished"
+      type="button"
+      class="inline-flex bg-white text-indigo-500 items-center justify-center items-center px-1 py-1 border-2 border-indigo-500 rounded-full"
+      @click.prevent="toggleCollapsed"
+    >
+      <arrow-down-icon :size="16" v-if="isNavBarCollapsed" />
+      <arrow-up-icon :size="16" v-else />
+    </button>
 </template>
 
 <script>
@@ -20,6 +21,12 @@ import ArrowDownIcon from "vue-tabler-icons/icons/ArrowDownIcon";
 export default {
   name: "CollapseNavBarButton",
   components: { ArrowDownIcon, ArrowUpIcon },
+  props: {
+    slideFinished: {
+      type: Boolean,
+      default: true
+    }
+  },
   computed: {
     ...mapGetters(["isNavBarCollapsed"])
   },
@@ -27,6 +34,6 @@ export default {
     toggleCollapsed() {
       store.commit("toggleNavBarCollapsed");
     }
-  },
+  }
 };
 </script>

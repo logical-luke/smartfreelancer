@@ -1,46 +1,80 @@
 <template>
-  <section class="py-5 px-6 bg-white shadow">
-    <nav class="relative">
-      <div class="flex items-center">
-        <transition name="slide-up-down" @enter="enter" @leave="leave">
-          <div v-if="!isNavBarCollapsed" class="flex flex-wrap gap-3 content-start items-center">
-            <toggle-timer-button :size="12" :global="true" />
-            <pomodoro-timer />
-            <timer-time />
-            <start-time />
-            <end-time />
-            <tracked-subject />
-            <transition name="fade" mode="in-out">
-              <moon-loader
-                v-if="!isSynchronised"
-                title="Synchronising..."
-                :size="spinnerSize"
-                :color="spinnerColor"
-                :loading="!isSynchronised"
-              />
-            </transition>
-          </div>
-          <div v-else class="flex flex-row gap-3 content-start items-center">
-            <toggle-timer-button :size="8" :global="true" />
-            <pomodoro-timer :size="8" />
-            <transition name="fade" mode="in-out">
-              <moon-loader
-                v-if="!isSynchronised"
-                title="Synchronising..."
-                :size="spinnerSize"
-                :color="spinnerColor"
-                :loading="!isSynchronised"
-              />
-            </transition>
+  <nav class="sticky top-0 py-3 px-4 bg-white shadow" :class="{ 'transition-all duration-700 ease-linear': true }" :style="{ height: navHeight }">
+    <transition name="slide-up-down" @enter="enter" @leave="leave">
+      <div v-if="!isNavBarCollapsed" class="flex flex-wrap gap-3 content-start items-center">
+        <div class="flex content-start items-center gap-3">
+          <toggle-timer-button :size="12" :global="true" />
+          <pomodoro-timer />
+          <timer-time />
+        </div>
+        <div class="flex content-start items-center gap-3">
+          <start-time />
+          <end-time />
+        </div>
+        <div class="flex content-start items-center gap-3">
+          <tracked-subject />
+        </div>
+
+        <transition name="fade" mode="in-out">
+          <div v-if="!isSynchronised" class="flex content-start items-center gap-3">
+            <moon-loader
+
+              title="Synchronising..."
+              :size="spinnerSize"
+              :color="spinnerColor"
+              :loading="!isSynchronised"
+            />
           </div>
         </transition>
-        <div :class="isNavBarCollapsed ? '-mb-9' : '-mb-10'" class="lg:hidden absolute bottom-0 right-0">
-          <collapse-nav-bar-button />
-        </div>
+
       </div>
-    </nav>
-  </section>
+      <div v-else class="flex flex-row gap-3 content-start items-center">
+        <toggle-timer-button :size="8" :global="true" />
+        <pomodoro-timer :size="8" />
+        <transition name="fade" mode="in-out">
+          <moon-loader
+            v-if="!isSynchronised"
+            title="Synchronising..."
+            :size="spinnerSize"
+            :color="spinnerColor"
+            :loading="!isSynchronised"
+          />
+        </transition>
+      </div>
+    </transition>
+    <div :class="isNavBarCollapsed ? 'mb-2' : '-mb-5'" class="lg:hidden absolute bottom-0 right-0 mr-3">
+      <collapse-nav-bar-button @click="slideFinished = !slideFinished" :slide-finished="slideFinished" />
+    </div>
+  </nav>
 </template>
+
+<style>
+.v-select .vs__selected-options {
+  flex-wrap: nowrap;
+  overflow: hidden;
+  width: 40px;
+  max-height: 28px;
+}
+
+.slide-up-down-enter-active, .slide-up-down-leave-active {
+  transition: transform 0.8s cubic-bezier(.66, .5, .52, 1.29);
+}
+
+.slide-up-down-enter {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.slide-up-down-leave-to {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+nav {
+  transition: height 0.2s cubic-bezier(.66, .5, .52, 1.29);
+}
+
+</style>
 
 <script>
 import ToggleTimerButton from "@/components/ui/ToggleTimerButton.vue";
@@ -52,6 +86,7 @@ import StartTime from "@/components/ui/StartTime.vue";
 import EndTime from "@/components/ui/EndTime.vue";
 import PomodoroTimer from "@/components/ui/PomodoroTimer.vue";
 import CollapseNavBarButton from "@/components/ui/CollapseNavBarButton.vue";
+import { onMounted, ref } from "vue";
 
 export default {
   name: "HeaderNavbar",
@@ -59,6 +94,8 @@ export default {
     return {
       spinnerColor: "#382CDD",
       spinnerSize: "22px",
+      slideFinished: true,
+      navHeight: null,
     };
   },
   computed: {
@@ -66,22 +103,27 @@ export default {
   },
   methods: {
     enter(el) {
+      const navHeight = el.offsetHeight + 20;
+      this.navHeight = `${navHeight}px`;
       el.style.opacity = 0;
-      el.style.transform = 'translateY(-100%)';
+      el.style.transform = "translateY(-100%)";
       setTimeout(() => {
         el.style.opacity = 1;
-        el.style.transform = '';
-      }, 300);
+        el.style.transform = "";
+        this.slideFinished = true;
+      }, 400);
     },
     leave(el, done) {
+      const navHeight = el.offsetHeight + 20;
+      this.navHeight = `${navHeight}px`;
       el.style.opacity = 1;
-      el.style.transform = '';
+      el.style.transform = "";
       setTimeout(() => {
         el.style.opacity = 0;
-        el.style.transform = 'translateY(-100%)';
+        el.style.transform = "translateY(-100%)";
         setTimeout(() => {
           done();
-        }, 0);
+        }, 100);
       }, 300);
     }
   },
@@ -98,26 +140,4 @@ export default {
 };
 </script>
 
-<style>
-.v-select .vs__selected-options {
-  flex-wrap: nowrap;
-  overflow: hidden;
-  width: 40px;
-  max-height: 28px;
-}
 
-.slide-up-down-enter-active, .slide-up-down-leave-active {
-  transition: transform 0.8s cubic-bezier(.66,.5,.52,1.29);
-}
-
-.slide-up-down-enter {
-  transform: translateY(-100%);
-  opacity: 0;
-}
-
-.slide-up-down-leave-to {
-  transform: translateY(-100%);
-  opacity: 0;
-}
-
-</style>
