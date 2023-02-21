@@ -13,12 +13,14 @@ const getRequest = async function (url, params, headers, repeated = 0) {
     });
 
     if (response.status === 404) {
-      return null;
+      return {data: {}};
     }
 
     if (response.status === 401) {
       if (repeated > 0) {
-        return await store.dispatch("logout");
+        await store.dispatch("logout");
+
+        return {data: {}};
       }
 
       await refreshToken();
@@ -30,12 +32,14 @@ const getRequest = async function (url, params, headers, repeated = 0) {
     return response;
   } catch (err) {
     if (err.response.status === 404) {
-      return null;
+      return {data: {}};
     }
 
     if (err.response.status === 401) {
       if (repeated > 0) {
-        return await store.dispatch("logout");
+        await store.dispatch("logout");
+
+        return {data: {}};
       }
 
       await refreshToken();
@@ -66,7 +70,9 @@ const postRequest = async function (url, data, headers, repeated = 0) {
 
     if (response.status === 401) {
       if (repeated > 0) {
-        return await store.dispatch("logout");
+        await store.dispatch("logout");
+
+        return {data: {}};
       }
       await refreshToken();
 
@@ -78,7 +84,9 @@ const postRequest = async function (url, data, headers, repeated = 0) {
   } catch (err) {
     if (err.response.status === 401) {
       if (repeated > 0) {
-        return await store.dispatch("logout");
+        await store.dispatch("logout");
+
+        return {data: {}};
       }
       await refreshToken();
 
@@ -110,6 +118,8 @@ const deleteRequest = async function (url, data, headers, repeated = 0) {
     if (response.status === 401) {
       if (repeated > 0) {
         return await store.dispatch("logout");
+
+        return {data: {}};
       }
       await refreshToken();
 
@@ -122,6 +132,8 @@ const deleteRequest = async function (url, data, headers, repeated = 0) {
     if (err.response.status === 401) {
       if (repeated > 0) {
         return await store.dispatch("logout");
+
+        return {data: {}};
       }
       await refreshToken();
 
@@ -139,22 +151,30 @@ const deleteRequest = async function (url, data, headers, repeated = 0) {
 };
 
 const refreshToken = async function () {
+  let response = false;
   if (store.getters.getRefreshToken) {
-    const response = await axios.post(
-      process.env.API_BASE_URL + "/token/refresh",
-      {
-        refresh_token: store.getters.getRefreshToken,
-      }
-    );
+    try {
+      const response = await axios.post(
+        process.env.API_BASE_URL + "/token/refresh",
+        {
+          refresh_token: store.getters.getRefreshToken,
+        }
+      );
+    } catch (err) {
+      await store.dispatch("logout");
 
-    if (response.status === 200) {
+      return;
+    }
+
+
+    if (response && response.status === 200) {
       store.commit("setToken", response.data.token);
       store.commit("setRefreshToken", response.data.refresh_token);
 
       return;
     }
   }
-  return store.dispatch("logout");
+  await store.dispatch("logout");
 };
 
 export default {

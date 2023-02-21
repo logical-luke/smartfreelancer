@@ -48,7 +48,6 @@ export default createStore({
       VueCookies.remove("token");
       VueCookies.remove("refresh_token");
       localStorage.clear();
-      commit("setInitialLoaded", false);
       await router.push("/login");
     },
     async login({ commit, dispatch }, payload) {

@@ -107,9 +107,6 @@ export default {
       }
     },
   },
-  beforeRouteEnter() {
-    store.commit("setInitialLoaded", true);
-  },
 };
 </script>
 
