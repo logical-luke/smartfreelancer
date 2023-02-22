@@ -31,7 +31,7 @@
             />
           </transition-group>
         </div>
-        <div class="flex mt-6 text-gray-600 font-medium justify-center" v-else>
+        <div class="flex text-gray-600 font-medium justify-center" v-else>
           {{ $t("No entries yet") }}
         </div>
       </div>

@@ -1,15 +1,16 @@
 <template>
-  <div :class="width">
-    <treeselect
-      v-model="subject"
-      :multiple="false"
-      :options="options"
-      zIndex="10"
-      :show-count="true"
-      @update:modelValue="setSubject"
-      :placeholder="$t('Select task/project/client') + '...'"
-    />
-  </div>
+  <treeselect
+    v-model="subject"
+    :multiple="false"
+    :options="options"
+    :noOptionsText="$t('No tasks/projects/clients')"
+    :noResultsText="$t('No results found')"
+    zIndex="10"
+    :show-count="true"
+    search-nested
+    @update:modelValue="setSubject"
+    :placeholder="$t('Select task/project/client') + '...'"
+  />
 </template>
 
 <script>
@@ -24,7 +25,7 @@ export default {
   props: {
     width: {
       type: String,
-      default: "w-60 md:w-72",
+      default: "w-auto",
     },
   },
   data() {

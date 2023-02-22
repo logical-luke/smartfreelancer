@@ -1,6 +1,7 @@
 <template>
   <div class="relative flex justify-center">
     <button
+      type="button"
       @click="toggle"
       class="navbar-burger bg-indigo-500 text-white flex items-center rounded focus:outline-none"
     >

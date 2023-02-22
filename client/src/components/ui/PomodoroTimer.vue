@@ -20,7 +20,7 @@
         optionLabel="name"
       />
       <div>
-        Custom:
+        {{ $t("Custom")}}:
         <input-text
           type="text"
           class="w-16"
@@ -32,7 +32,7 @@
         type="button"
         class="inline-flex text-center items-center w-auto px-3 flex-nowrap py-3 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
       >
-        Start timer
+        {{ $t("Start timer")}}
       </button>
     </div>
   </overlay-panel>
@@ -51,6 +51,15 @@ export default {
     sizeClasses() {
       return `w-${this.size} h-${this.size}`;
     },
+    modes() {
+      return [
+        { name: this.$t("Fixed"), code: "f" },
+        { name: this.$t("Pomodoro"), code: "p" },
+      ];
+    },
+    selectedMode() {
+      return { name: this.$t("Fixed"), code: "f" };
+    }
   },
   props: {
     size: {
@@ -66,11 +75,6 @@ export default {
         { name: "10m", code: "10" },
         { name: "25m", code: "25" },
       ],
-      modes: [
-        { name: "Fixed", code: "f" },
-        { name: "Pomodoro", code: "p" },
-      ],
-      selectedMode: { name: "Fixed", code: "f" },
       customTime: null,
     };
   },

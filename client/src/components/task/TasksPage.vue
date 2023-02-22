@@ -1,35 +1,39 @@
 <template>
-  <div class="flex justify-between gap-4 flex-wrap items-center">
-    <div class="flex flex-wrap gap-2 flex-wrap">
-      <new-button go-to="/task/create/">task</new-button>
-      <bulk-edit-button :active="bulkMode" @toggle-bulk="toggleBulk" />
-      <transition name="fade" mode="out-in">
-        <div v-if="bulkMode">
-          <button
-            type="button"
-            @click="deleteSelected"
-            class="inline-flex text-center items-center w-full px-3 py-3 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded transition duration-200"
-          >
-            <trash-icon size="20" />
-            <span class="ml-2"> Delete selected </span>
-          </button>
-        </div>
-      </transition>
-    </div>
-    <search-controls @pattern-changed="setSearchPattern" />
-    <pagination-controls
-      @limit-change="setLimit"
-      :page="currentPage"
-      @page-change="setPage"
-      :limit="limit"
-      :total="filteredTasks.length"
-    />
-  </div>
   <div class="container px-4 mx-auto">
-    <div class="bg-white rounded">
-      <div class="pt-4 px-4 overflow-x-auto">
-        <table class="table-auto w-full">
-          <thead>
+    <div class="flex flex-wrap items-center mb-6">
+      <h3 class="text-xl font-bold">{{ $t("Tasks") }}</h3>
+    </div>
+    <div class="flex justify-between gap-4 flex-wrap items-center">
+      <div class="flex flex-wrap gap-2 flex-wrap">
+        <new-button go-to="/task/create/">task</new-button>
+        <bulk-edit-button :active="bulkMode" @toggle-bulk="toggleBulk" />
+        <transition name="fade" mode="out-in">
+          <div v-if="bulkMode">
+            <button
+              type="button"
+              @click="deleteSelected"
+              class="inline-flex text-center items-center w-full px-3 py-3 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded transition duration-200"
+            >
+              <trash-icon size="20" />
+              <span class="ml-2"> Delete selected </span>
+            </button>
+          </div>
+        </transition>
+      </div>
+      <search-controls @pattern-changed="setSearchPattern" />
+      <pagination-controls
+        @limit-change="setLimit"
+        :page="currentPage"
+        @page-change="setPage"
+        :limit="limit"
+        :total="filteredTasks.length"
+      />
+    </div>
+    <div class="container px-4 mx-auto">
+      <div class="bg-white rounded">
+        <div class="pt-4 px-4 overflow-x-auto">
+          <table class="table-auto w-full">
+            <thead>
             <tr class="text-sm text-gray-500 text-left">
               <th v-if="bulkMode" class="font-medium w-8">
                 <div class="flex items-center justify-center">
@@ -43,8 +47,8 @@
               <th class="font-medium">Name</th>
               <th class="font-medium">Action</th>
             </tr>
-          </thead>
-          <tbody>
+            </thead>
+            <tbody>
             <transition-group name="fade-slower" class="transition-element">
               <template v-for="(task, index) in paginatedTasks" :key="task.id">
                 <task-list-item
@@ -57,8 +61,9 @@
                 />
               </template>
             </transition-group>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -81,7 +86,7 @@ export default {
     SearchControls,
     PaginationControls,
     TaskListItem,
-    NewButton,
+    NewButton
   },
   data() {
     return {
@@ -89,7 +94,7 @@ export default {
       currentPage: 1,
       searchPattern: "",
       bulkMode: false,
-      selectedTasks: [],
+      selectedTasks: []
     };
   },
   computed: mapState({
@@ -107,7 +112,7 @@ export default {
     },
     allSelected() {
       return this.selectedTasks.length === this.paginatedTasks.length;
-    },
+    }
   }),
   methods: {
     ...mapActions("tasks", ["deleteTask", "deleteTasks"]),
@@ -151,7 +156,7 @@ export default {
         accept: () => {
           this.deleteTasks(this.selectedTasks);
           this.selectedTasks = [];
-        },
+        }
       });
     },
     toggleAll() {
@@ -163,11 +168,11 @@ export default {
     },
     isSelected(taskId) {
       return this.selectedTasks.includes(taskId);
-    },
+    }
   },
   mounted() {
     this.$store.dispatch("task/clearTask");
-  },
+  }
 };
 </script>
 

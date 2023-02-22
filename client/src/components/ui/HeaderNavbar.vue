@@ -9,23 +9,23 @@
         v-if="!isNavBarCollapsed"
         class="flex flex-wrap gap-3 content-start items-center"
       >
-        <div class="flex content-start items-center gap-3">
+        <div class="flex items-center gap-3">
           <toggle-timer-button :size="12" :global="true" />
           <pomodoro-timer />
           <timer-time />
         </div>
-        <div class="flex content-start items-center gap-3">
+        <div class="flex items-center gap-3">
           <start-time />
           <end-time />
         </div>
-        <div class="flex content-start items-center gap-3">
+        <div class="flex max-w-24 items-center gap-3">
           <tracked-subject />
         </div>
 
         <transition name="fade" mode="in-out">
           <div
             v-if="!isSynchronised"
-            class="flex content-start items-center gap-3"
+            class="flex items-center gap-3"
           >
             <moon-loader
               title="Synchronising..."
@@ -36,7 +36,7 @@
           </div>
         </transition>
       </div>
-      <div v-else class="flex flex-row gap-3 content-start items-center">
+      <div v-else class="flex gap-3 items-center">
         <toggle-timer-button :size="8" :global="true" />
         <pomodoro-timer :size="8" />
         <transition name="fade" mode="in-out">
@@ -51,8 +51,8 @@
       </div>
     </transition>
     <div
-      :class="isNavBarCollapsed ? 'mb-2' : '-mb-5'"
-      class="lg:hidden absolute bottom-0 right-0 mr-3"
+      :class="isNavBarCollapsed ? 'mb-2' : '-mb-6'"
+      class="absolute bottom-0 right-0 mr-3"
     >
       <collapse-nav-bar-button
         @click="slideFinished = !slideFinished"

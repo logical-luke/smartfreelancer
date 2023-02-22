@@ -11,7 +11,6 @@
   "Settings": "Settings",
   "Log out": "Log out",
   "No entries yet": "No entries yet",
-  "Welcome": "Welcome",
   "There are no more scheduled tasks for today": "There are no more scheduled tasks for today",
   "Select task/project/client": "Select task/project/client",
   "Enjoy your spare time": "Enjoy your spare time",
@@ -21,5 +20,27 @@
   "with": "with",
   "Don't have an account": "Don't have an account",
   "Create a new account": "Create a new account",
-  "here": "here"
+  "here": "here",
+  "No tasks/projects/clients": "No tasks/projects/clients",
+  "No results found": "No results found",
+  "Fixed": "Fixed",
+  "Pomodoro": "Pomodoro",
+  "Custom": "Custom",
+  "Start timer": "Start timer",
+  "username@domain": {
+    "com": "username@domain.com"
+  },
+  "Confirm password": "Confirm password",
+  "Sign in ": "Sign in ",
+  "Sign in": "Sign in",
+  "Already have an account": "Already have an account",
+  "Error": "Error",
+  "Page not found": "Page not found",
+  "Sorry": "Sorry",
+  "We are unable to find the page you are looking for": "We are unable to find the page you are looking for",
+  "Return to homepage": "Return to homepage",
+  "Calendar": "Calendar",
+  "Statistics": "Statistics",
+  "Metrics": "Metrics",
+  "Predictions": "Predictions"
 }

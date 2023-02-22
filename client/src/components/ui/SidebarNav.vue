@@ -75,8 +75,14 @@
                   <checklist-icon />
                 </template>
               </sidebar-item>
-              <sidebar-item go-to="/reports">
-                {{ $t("Reports") }}
+              <sidebar-item go-to="/calendar">
+                {{ $t("Calendar") }}
+                <template #icon>
+                  <calendar-icon />
+                </template>
+              </sidebar-item>
+              <sidebar-item go-to="/metrics">
+                {{ $t("Metrics") }}
                 <template #icon>
                   <chart-bar-icon />
                 </template>
@@ -87,16 +93,22 @@
                   <file-dollar-icon />
                 </template>
               </sidebar-item>
+              <sidebar-item go-to="/expenses">
+                {{ $t("Expenses") }}
+                <template #icon>
+                  <shopping-cart-icon />
+                </template>
+              </sidebar-item>
               <sidebar-item go-to="/automations">
                 {{ $t("Automations") }}
                 <template #icon>
                   <bolt-icon />
                 </template>
               </sidebar-item>
-              <sidebar-item go-to="/expenses">
-                {{ $t("Expenses") }}
+              <sidebar-item go-to="/predictions">
+                {{ $t("Predictions") }}
                 <template #icon>
-                  <shopping-cart-icon />
+                  <robot-icon />
                 </template>
               </sidebar-item>
               <sidebar-item go-to="/settings">
@@ -132,10 +144,14 @@ import ShoppingCartIcon from "vue-tabler-icons/icons/ShoppingCartIcon";
 import BoltIcon from "vue-tabler-icons/icons/BoltIcon";
 import SettingsIcon from "vue-tabler-icons/icons/SettingsIcon";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher.vue";
+import CalendarIcon from "vue-tabler-icons/icons/CalendarIcon";
+import RobotIcon from "vue-tabler-icons/icons/RobotIcon";
 
 export default {
   name: "SidebarNav",
   components: {
+    RobotIcon,
+    CalendarIcon,
     LanguageSwitcher,
     SettingsIcon,
     BoltIcon,

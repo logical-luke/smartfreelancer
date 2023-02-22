@@ -32,7 +32,7 @@
     <form @submit.prevent="register">
       <div class="mb-6">
         <label class="block text-sm font-medium mb-2" for="email">
-          Email
+          {{$t("Email")}}
         </label>
         <input
           class="block w-full px-4 py-3 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
@@ -46,7 +46,7 @@
 
       <div class="mb-6">
         <label class="block text-sm font-medium mb-2" for="password">
-          Password
+          {{$t("Password")}}
         </label>
         <input
           class="block w-full px-4 py-3 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
@@ -62,7 +62,7 @@
 
       <div class="mb-6">
         <label class="block text-sm font-medium mb-2" for="password">
-          Confirm Password
+          {{$t("Confirm password")}}
         </label>
         <input
           class="block w-full px-4 py-3 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
@@ -72,10 +72,14 @@
         />
       </div>
 
-      <submit-button> Sign in </submit-button>
+      <div class="flex flex-wrap gap-2 items-center">
+        <submit-button>{{$t("Sign in ")}}</submit-button>
+        <google-button>{{$t("Sign in")}}</google-button>
+        <language-switcher />
+      </div>
       <p class="mb-2 text-base text-gray-500 mt-2">
-        Already have an account? Log in
-        <router-link class="text-blue-500" to="/login">here</router-link>
+        {{$t("Already have an account")}}? {{$t("Log in")}}
+        <router-link class="text-blue-500" to="/login">{{$t("here")}}</router-link>
       </p>
     </form>
   </div>
@@ -86,6 +90,8 @@ import TransparentLogoWide from "@/components/ui/TransparentLogoWide.vue";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
 import PasswordMeter from "vue-simple-password-meter";
 import store from "@/store";
+import GoogleButton from "@/components/ui/GoogleButton.vue";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher.vue";
 
 export default {
   name: "RegistrationPage",
@@ -120,6 +126,8 @@ export default {
     },
   },
   components: {
+    LanguageSwitcher,
+    GoogleButton,
     TransparentLogoWide,
     SubmitButton,
     PasswordMeter,
