@@ -1,13 +1,13 @@
 <template>
   <button
-    class="flex justify-center items-center w-auto px-6 py-3 border-indigo-500 border text-sm font-medium hover:bg-gray-200 rounded transition duration-200"
+    class="flex justify-center items-center w-auto px-6 py-3 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
     type="button"
     @click.prevent="loginWithGoogle"
   >
-    <brand-google-icon />
-    <span class="ml-2"
-      ><slot></slot> {{$t("with")}} <span class="text-red-700">Google</span></span
-    >
+    <brand-google-icon size="18" />
+    <span class="ml-2">
+      <slot></slot> {{ $t("with") }} Google
+    </span>
   </button>
 </template>
 
@@ -23,7 +23,7 @@ export default {
     async loginWithGoogle() {
       store.commit("setInitialLoaded", false);
       window.location.href = await api.postGoogleStart();
-    },
-  },
+    }
+  }
 };
 </script>
