@@ -7,16 +7,14 @@
       <country-flag :country="getFlagCode(getLocale)"></country-flag>
     </button>
     <overlay-panel ref="op" :show-close-icon="true">
-      <div class="py-1">
         <button
           v-for="lang in getLanguages"
           :key="lang"
-          class="w-full flex text-sm text-gray-700 px-4 py-2 hover:bg-gray-100 hover:text-gray-900"
+          class="w-full flex text-sm text-gray-700 pl-2 pr-2 pb-2 hover:bg-gray-100 hover:text-gray-900"
           @click="setLanguage(lang)"
         >
-          <country-flag :country="getFlagCode(lang)"></country-flag>
+          <country-flag :shadow="true" :country="getFlagCode(lang)"></country-flag>
         </button>
-      </div>
     </overlay-panel>
   </div>
 </template>
