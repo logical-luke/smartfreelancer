@@ -1,3 +1,13 @@
 {
-  "Today": "Today"
+  "Today": "Today",
+  "Timeline": "Timeline",
+  "Clients": "Clients",
+  "Projects": "Projects",
+  "Tasks": "Tasks",
+  "Reports": "Reports",
+  "Invoices": "Invoices",
+  "Automations": "Automations",
+  "Expenses": "Expenses",
+  "Settings": "Settings",
+  "Log out": "Log out"
 }

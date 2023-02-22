@@ -27,6 +27,7 @@ export default createStore({
     serverTime: null,
     serverTimeSyncId: null,
     navBarCollapsed: false,
+    locale: "en",
   },
   modules: {
     projects,

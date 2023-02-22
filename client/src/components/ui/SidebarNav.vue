@@ -40,61 +40,61 @@
           <div class="px-4 pb-6">
             <ul class="mb-8 text-sm font-medium">
               <sidebar-item go-to="/">
-                <template #title>{{ $t("Today")}}</template>
+                {{ $t("Today") }}
                 <template #icon>
                   <sun-high-icon />
                 </template>
               </sidebar-item>
               <sidebar-item go-to="/timeline">
-                <template #title>Timeline</template>
+                {{ $t("Timeline") }}
                 <template #icon>
                   <clock-hour4-icon />
                 </template>
               </sidebar-item>
               <sidebar-item go-to="/clients">
-                <template #title>Clients</template>
+                {{ $t("Clients") }}
                 <template #icon>
                   <users-icon />
                 </template>
               </sidebar-item>
               <sidebar-item go-to="/projects">
-                <template #title>Projects</template>
+                {{ $t("Projects") }}
                 <template #icon>
                   <briefcase-icon />
                 </template>
               </sidebar-item>
               <sidebar-item go-to="/tasks">
-                <template #title>Tasks</template>
+                {{ $t("Tasks") }}
                 <template #icon>
                   <checklist-icon />
                 </template>
               </sidebar-item>
               <sidebar-item go-to="/reports">
-                <template #title>Reports</template>
+                {{ $t("Reports") }}
                 <template #icon>
                   <chart-bar-icon />
                 </template>
               </sidebar-item>
               <sidebar-item go-to="/invoices">
-                <template #title>Invoices</template>
+                {{ $t("Invoices") }}
                 <template #icon>
                   <file-dollar-icon />
                 </template>
               </sidebar-item>
               <sidebar-item go-to="/automations">
-                <template #title>Automations</template>
+                {{ $t("Automations") }}
                 <template #icon>
                   <bolt-icon />
                 </template>
               </sidebar-item>
               <sidebar-item go-to="/expenses">
-                <template #title>Expenses</template>
+                {{ $t("Expenses") }}
                 <template #icon>
                   <shopping-cart-icon />
                 </template>
               </sidebar-item>
               <sidebar-item go-to="/settings">
-                <template #title>Settings</template>
+                {{ $t("Settings") }}
                 <template #icon>
                   <settings-icon />
                 </template>
@@ -143,25 +143,25 @@ export default {
     UsersIcon,
     SidebarLogout,
     BriefcaseIcon,
-    SidebarItem,
+    SidebarItem
   },
   data() {
     return {
-      open: false,
+      open: false
     };
   },
   watch: {
     $route() {
       this.open = false;
-    },
+    }
   },
   computed: {
-    ...mapGetters(["isAuthorized"]),
+    ...mapGetters(["isAuthorized"])
   },
   methods: {
     toggle() {
       this.open = !this.open;
-    },
-  },
+    }
+  }
 };
 </script>

@@ -9,7 +9,7 @@
       <span class="flex justify-center items-center mr-3">
         <slot name="icon"></slot>
       </span>
-      <span><slot name="title"></slot></span>
+      <span><slot></slot></span>
     </router-link>
   </li>
 </template>

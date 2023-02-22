@@ -6,7 +6,7 @@
     <span class="inline-block mr-4">
       <logout-icon />
     </span>
-    <span>Log out</span>
+    <span>{{ $t("Log out")}}</span>
   </a>
 </template>
 
