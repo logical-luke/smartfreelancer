@@ -7,7 +7,7 @@
       zIndex="10"
       :show-count="true"
       @update:modelValue="setSubject"
-      placeholder="Select task/project/client..."
+      :placeholder="$t('Select task/project/client') + '...'"
     />
   </div>
 </template>

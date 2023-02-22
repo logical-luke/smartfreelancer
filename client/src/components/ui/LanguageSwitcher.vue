@@ -7,14 +7,17 @@
       <country-flag :country="getFlagCode(getLocale)"></country-flag>
     </button>
     <overlay-panel ref="op" :show-close-icon="true">
-        <button
-          v-for="lang in getLanguages"
-          :key="lang"
-          class="w-full flex text-sm text-gray-700 pl-2 pr-2 pb-2 hover:bg-gray-100 hover:text-gray-900"
-          @click="setLanguage(lang)"
-        >
-          <country-flag :shadow="true" :country="getFlagCode(lang)"></country-flag>
-        </button>
+      <button
+        v-for="lang in getLanguages"
+        :key="lang"
+        class="w-full flex text-sm text-gray-700 pl-2 pr-2 pb-2 hover:bg-gray-100 hover:text-gray-900"
+        @click="setLanguage(lang)"
+      >
+        <country-flag
+          :shadow="true"
+          :country="getFlagCode(lang)"
+        ></country-flag>
+      </button>
     </overlay-panel>
   </div>
 </template>

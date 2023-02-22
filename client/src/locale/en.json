@@ -9,5 +9,10 @@
   "Automations": "Automations",
   "Expenses": "Expenses",
   "Settings": "Settings",
-  "Log out": "Log out"
+  "Log out": "Log out",
+  "No entries yet": "No entries yet",
+  "Welcome": "Welcome",
+  "There are no more scheduled tasks for today": "There are no more scheduled tasks for today",
+  "Select task/project/client": "Select task/project/client",
+  "Enjoy your spare time": "Enjoy your spare time"
 }

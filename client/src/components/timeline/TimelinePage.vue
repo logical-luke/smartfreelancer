@@ -1,7 +1,7 @@
 <template>
   <div class="container px-4 mx-auto">
     <div class="flex flex-wrap items-center mb-6">
-      <h3 class="text-xl font-bold">Timeline</h3>
+      <h3 class="text-xl font-bold">{{ $t("Timeline")}}</h3>
     </div>
     <transition name="fade" mode="out-in">
       <div
@@ -32,7 +32,7 @@
           </transition-group>
         </div>
         <div class="flex mt-6 text-gray-600 font-medium justify-center" v-else>
-          No entries found
+          {{ $t("No entries yet") }}
         </div>
       </div>
     </transition>
