@@ -1,7 +1,7 @@
 <template>
   <div class="container px-4 mx-auto">
     <div class="flex flex-wrap items-center mb-6">
-      <h3 class="text-xl font-bold">{{ $t("Timeline")}}</h3>
+      <h3 class="text-xl font-bold">{{ $t("Timeline") }}</h3>
     </div>
     <transition name="fade" mode="out-in">
       <div
