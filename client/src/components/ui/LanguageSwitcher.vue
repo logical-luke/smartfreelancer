@@ -1,16 +1,16 @@
 <template>
-  <div class="relative">
+  <div class="relative flex justify-center">
     <button
       @click="toggle"
-      class="navbar-burger pl-2 pr-2 pb-2 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
+      class="navbar-burger bg-indigo-500 text-white flex items-center rounded focus:outline-none"
     >
-      <country-flag :country="getFlagCode(getLocale)"></country-flag>
+      <country-flag :size="size" :country="getFlagCode(getLocale)"></country-flag>
     </button>
     <overlay-panel ref="op" :show-close-icon="true">
       <button
         v-for="lang in getLanguages"
         :key="lang"
-        class="w-full flex text-sm text-gray-700 pl-2 pr-2 pb-2 hover:bg-gray-100 hover:text-gray-900"
+        class="w-full flex text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
         @click="setLanguage(lang)"
       >
         <country-flag
@@ -31,6 +31,12 @@ import OverlayPanel from "primevue/overlaypanel";
 export default {
   name: "LanguageSwitcher",
   components: { CountryFlag, OverlayPanel },
+  props: {
+    size: {
+      type: String,
+      default: "normal"
+    }
+  },
   data() {
     return {
       showList: false,
@@ -70,4 +76,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+  span.flag.normal-flag {
+    margin: 0 -6px 0 -5px;
+  }
+</style>

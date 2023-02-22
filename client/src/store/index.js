@@ -117,11 +117,6 @@ export default createStore({
 
       await dispatch("enableServerTimeSync");
 
-      const locale = localStorage.getItem("locale");
-      if (locale) {
-        commit("setLocale", locale);
-      }
-
       let timer = null;
       if (localStorage.getItem("timer")) {
         timer = JSON.parse(localStorage.getItem("timer"));

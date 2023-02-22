@@ -14,5 +14,12 @@
   "Welcome": "Welcome",
   "There are no more scheduled tasks for today": "There are no more scheduled tasks for today",
   "Select task/project/client": "Select task/project/client",
-  "Enjoy your spare time": "Enjoy your spare time"
+  "Enjoy your spare time": "Enjoy your spare time",
+  "Email": "Email",
+  "Password": "Password",
+  "Log in": "Log in",
+  "with": "with",
+  "Don't have an account": "Don't have an account",
+  "Create a new account": "Create a new account",
+  "here": "here"
 }

@@ -32,7 +32,7 @@
     <form @submit.prevent="login">
       <div class="mb-6">
         <label class="block text-sm font-medium mb-2" for="email">
-          Email
+          {{ $t("Email")}}
         </label>
         <input
           class="block w-full px-4 py-3 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
@@ -46,7 +46,7 @@
 
       <div class="mb-6">
         <label class="block text-sm font-medium mb-2" for="password">
-          Password
+          {{ $t("Password")}}
         </label>
         <input
           class="block w-full px-4 py-3 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
@@ -57,13 +57,14 @@
         />
       </div>
 
-      <div class="flex gap-2">
-        <submit-button> Log in </submit-button>
-        <google-button> Log in</google-button>
+      <div class="flex flex-wrap gap-2 items-center">
+        <submit-button>{{$t("Log in")}}</submit-button>
+        <google-button>{{$t("Log in")}}</google-button>
+        <language-switcher />
       </div>
       <p class="mb-2 text-base text-gray-500 mt-2">
-        Don't have an account? Create a new account
-        <router-link class="text-blue-500" to="/register">here</router-link>
+        {{$t("Don't have an account")}}? {{$t("Create a new account")}}
+        <router-link class="text-blue-500" to="/register">{{$t("here")}}</router-link>
       </p>
     </form>
   </div>
@@ -74,10 +75,12 @@ import SubmitButton from "@/components/ui/SubmitButton.vue";
 import store from "@/store";
 import TransparentLogoWide from "@/components/ui/TransparentLogoWide.vue";
 import GoogleButton from "@/components/ui/GoogleButton.vue";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher.vue";
 
 export default {
   name: "LoginPage",
   components: {
+    LanguageSwitcher,
     GoogleButton,
     TransparentLogoWide,
     SubmitButton,

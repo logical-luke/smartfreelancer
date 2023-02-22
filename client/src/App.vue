@@ -10,6 +10,10 @@ import { MoonLoader } from "vue3-spinner";
 import ConfirmDialog from "primevue/confirmdialog";
 
 onMounted(async () => {
+  const locale = localStorage.getItem("locale");
+  if (locale) {
+    store.commit("setLocale", locale);
+  }
   let token = VueCookies.get("api_token");
   if (token === "null" || token === "") {
     token = null;

@@ -1,12 +1,12 @@
 <template>
   <button
-    class="flex justify-center items-center w-full md:w-auto px-6 py-3 border-indigo-500 border text-sm font-medium hover:bg-gray-200 rounded transition duration-200"
+    class="flex justify-center items-center w-auto px-6 py-3 border-indigo-500 border text-sm font-medium hover:bg-gray-200 rounded transition duration-200"
     type="button"
     @click.prevent="loginWithGoogle"
   >
     <brand-google-icon />
     <span class="ml-2"
-      ><slot></slot> with <span class="text-red-700">Google</span></span
+      ><slot></slot> {{$t("with")}} <span class="text-red-700">Google</span></span
     >
   </button>
 </template>
