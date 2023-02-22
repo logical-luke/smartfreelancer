@@ -1,7 +1,6 @@
 import { createStore, createLogger } from "vuex";
 import VueCookies from "vue-cookies";
 import router from "../router";
-
 import projects from "./modules/projects";
 import project from "@/store/modules/project";
 import timer from "@/store/modules/timer";
@@ -28,6 +27,7 @@ export default createStore({
     serverTimeSyncId: null,
     navBarCollapsed: false,
     locale: "en",
+    languages: ["pl", "en", "de", "fr", "pt", "ru", "uk", "it", "cs"].sort(),
   },
   modules: {
     projects,
@@ -111,11 +111,16 @@ export default createStore({
       if (!user) {
         await dispatch("logout");
 
-        return
+        return;
       }
       commit("setUser", user);
 
       await dispatch("enableServerTimeSync");
+
+      const locale = localStorage.getItem("locale");
+      if (locale) {
+        commit("setLocale", locale);
+      }
 
       let timer = null;
       if (localStorage.getItem("timer")) {
@@ -179,6 +184,11 @@ export default createStore({
       const serverTime = await getServerTime();
       commit("setServerTime", serverTime);
     },
+    setLocale({ commit }, locale) {
+      this.$i18n.locale = locale;
+      localStorage.setItem("locale", locale);
+      commit("setLocale", locale);
+    },
   },
   mutations: {
     setToken(state, token) {
@@ -218,8 +228,12 @@ export default createStore({
       state.serverTimeSyncId = serverTimeSyncId;
     },
     toggleNavBarCollapsed(state) {
-      state.navBarCollapsed =!state.navBarCollapsed;
-    }
+      state.navBarCollapsed = !state.navBarCollapsed;
+    },
+    setLocale(state, locale) {
+      localStorage.setItem("locale", locale);
+      state.locale = locale;
+    },
   },
   getters: {
     isAuthorized(state) {
@@ -245,6 +259,12 @@ export default createStore({
     },
     isNavBarCollapsed(state) {
       return state.navBarCollapsed;
+    },
+    getLanguages(state) {
+      return state.languages;
+    },
+    getLocale(state) {
+      return state.locale;
     },
   },
   strict: debug,

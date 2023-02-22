@@ -117,7 +117,7 @@ const deleteRequest = async function (url, data, headers, repeated = 0) {
 
     if (response.status === 401) {
       if (repeated > 0) {
-        return await store.dispatch("logout");
+        await store.dispatch("logout");
 
         return { data: {} };
       }
@@ -131,7 +131,7 @@ const deleteRequest = async function (url, data, headers, repeated = 0) {
   } catch (err) {
     if (err.response.status === 401) {
       if (repeated > 0) {
-        return await store.dispatch("logout");
+        await store.dispatch("logout");
 
         return { data: {} };
       }
@@ -154,12 +154,9 @@ const refreshToken = async function () {
   let response = false;
   if (store.getters.getRefreshToken) {
     try {
-      response = await axios.post(
-        process.env.API_BASE_URL + "/token/refresh",
-        {
-          refresh_token: store.getters.getRefreshToken,
-        }
-      );
+      response = await axios.post(process.env.API_BASE_URL + "/token/refresh", {
+        refresh_token: store.getters.getRefreshToken,
+      });
     } catch (err) {
       await store.dispatch("logout");
 

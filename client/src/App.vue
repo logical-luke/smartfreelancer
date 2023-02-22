@@ -82,7 +82,6 @@ export default {
       spinnerColor: "#382CDD",
     };
   },
-  setup() {},
   computed: {
     path() {
       const route = useRoute();

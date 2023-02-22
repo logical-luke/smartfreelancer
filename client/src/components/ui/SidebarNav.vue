@@ -2,14 +2,19 @@
   <transition name="fade" mode="in-out">
     <div v-if="isAuthorized" class="relative z-50">
       <nav class="lg:hidden py-6 px-6 bg-gray-800">
-        <div class="flex items-center justify-between">
-          <transparent-logo-wide />
-          <button
-            @click="toggle"
-            class="navbar-burger p-1 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
-          >
-            <menu2-icon />
-          </button>
+        <div class="flex flex-row items-center justify-between">
+          <div class="flex mr-auto">
+            <transparent-logo-wide />
+          </div>
+          <div class="flex-row flex items-center justify-end gap-2">
+            <language-switcher />
+            <button
+              @click="toggle"
+              class="navbar-burger p-2 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
+            >
+              <menu2-icon />
+            </button>
+          </div>
         </div>
       </nav>
       <div
@@ -23,15 +28,16 @@
           class="flex fixed top-0 left-0 bottom-0 flex-col w-full lg:max-w-xs lg:w-3/4 pt-6 pb-8 bg-gray-800 overflow-y-auto"
         >
           <div
-            class="flex justify-between px-6 pb-6 mb-6 lg:border-b border-gray-700"
+            class="flex flex-row justify-between items-center px-6 pb-6 mb-6 lg:border-b border-gray-700"
           >
-            <div>
+            <div class="flex mr-auto">
               <transparent-logo-wide />
             </div>
-            <div class="flex content-center items-center">
+            <div class="flex flex-row items-center justify-end gap-2">
+              <language-switcher />
               <button
                 @click="toggle"
-                class="lg:hidden navbar-burger p-1 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
+                class="lg:hidden navbar-burger p-2 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
               >
                 <x-icon />
               </button>
@@ -125,10 +131,12 @@ import ChartBarIcon from "vue-tabler-icons/icons/ChartBarIcon";
 import ShoppingCartIcon from "vue-tabler-icons/icons/ShoppingCartIcon";
 import BoltIcon from "vue-tabler-icons/icons/BoltIcon";
 import SettingsIcon from "vue-tabler-icons/icons/SettingsIcon";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher.vue";
 
 export default {
   name: "SidebarNav",
   components: {
+    LanguageSwitcher,
     SettingsIcon,
     BoltIcon,
     ShoppingCartIcon,
@@ -143,25 +151,25 @@ export default {
     UsersIcon,
     SidebarLogout,
     BriefcaseIcon,
-    SidebarItem
+    SidebarItem,
   },
   data() {
     return {
-      open: false
+      open: false,
     };
   },
   watch: {
     $route() {
       this.open = false;
-    }
+    },
   },
   computed: {
-    ...mapGetters(["isAuthorized"])
+    ...mapGetters(["isAuthorized"]),
   },
   methods: {
     toggle() {
       this.open = !this.open;
-    }
-  }
+    },
+  },
 };
 </script>

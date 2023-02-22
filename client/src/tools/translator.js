@@ -43,7 +43,7 @@ fs.readFile(path.join(__dirname, "../locale/en.json"), "utf8", (err, data) => {
               .then((response) => {
                 console.log(response.data);
                 translated[key] = response.data.translations[0].text;
-                fs.writeFileSync(langFileName, JSON.stringify(translated));// update the translated value in the object
+                fs.writeFileSync(langFileName, JSON.stringify(translated)); // update the translated value in the object
               })
               .catch((error) => console.error(error));
           }
