@@ -40,7 +40,7 @@
           <div class="px-4 pb-6">
             <ul class="mb-8 text-sm font-medium">
               <sidebar-item go-to="/">
-                <template #title>Today</template>
+                <template #title>{{ $t("Today")}}</template>
                 <template #icon>
                   <sun-high-icon />
                 </template>
