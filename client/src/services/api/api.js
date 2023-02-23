@@ -188,11 +188,11 @@ export default {
       }
     } catch (e) {
       if (e.response && e.response.status === 401) {
-        throw new Error("Invalid username or password.");
+        throw new Error("Invalid username or password");
       }
     }
 
-    throw new Error("Unable to log in. Please try again later.");
+    throw new Error("Unable to log in. Please try again later");
   },
 
   async register(email, password, confirmPassword) {

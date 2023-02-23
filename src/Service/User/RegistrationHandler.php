@@ -6,6 +6,7 @@ namespace App\Service\User;
 
 use App\Exception\InvalidPayloadException;
 use App\Exception\UserAlreadyExistsException;
+use App\Model\User\CreateUserPayload;
 use App\Model\User\JWTTokenDTO;
 use App\Model\User\RegistrationPayload;
 use App\Repository\UserRepository;
@@ -36,7 +37,10 @@ class RegistrationHandler
             throw new InvalidPayloadException('Invalid email');
         }
 
-        $user = ($this->userCreator)($payload->getEmail(), $payload->getPassword());
+        $user = ($this->userCreator)(CreateUserPayload::from([
+            'email' => $payload->getEmail(),
+            'password' => $payload->getPassword(),
+        ]));
 
         return ($this->tokenGetter)($user);
     }

@@ -86,7 +86,12 @@ export default {
           password: this.password
         });
       } catch (err) {
-        this.$toast.add({ severity: "error", summary: "Unable to log in", detail: err.message, life: 5000 });
+        this.password = "";
+        let message = this.$i18n.t("Unknown error") + ". " + this.i18n.t("Please try again");
+        if (err.message  === "Invalid username or password") {
+          message = this.$i18n.t("Invalid email or password");
+        }
+        this.$toast.add({ severity: "error", summary: this.$i18n.t("Unable to sign in"), detail: message, life: 5000 });
       }
     }
   }

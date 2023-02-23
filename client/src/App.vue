@@ -1,9 +1,7 @@
 <script setup>
 import { onMounted } from "vue";
 import store from "@/store";
-
 import VueCookies from "vue-cookies";
-
 import SidebarNav from "@/components/ui/SidebarNav.vue";
 import HeaderNavbar from "@/components/ui/HeaderNavbar.vue";
 import { MoonLoader } from "vue3-spinner";
@@ -55,7 +53,11 @@ onMounted(async () => {
         class="min-h-screen"
         :class="{ 'mx-auto lg:ml-80': isAuthorizedPage }"
       >
-        <toast :breakpoints="{'920px': {width: '100%', right: '0', left: '0'}}" />
+        <toast
+          :breakpoints="{'920px': {width: '100%', right: '0', left: '0'}}"
+          :closeButtonProps="{style: {'box-shadow': 'none'}}"
+          errorIcon="pi pi-minus-circle"
+        />
         <confirm-dialog />
         <sidebar-nav v-if="isAuthorizedPage" />
         <transition name="fade" mode="out-in">
@@ -132,9 +134,5 @@ button.p-button.p-component.p-confirm-dialog-accept.confirm-button-accept {
 button.p-button.p-component.p-confirm-dialog-accept.confirm-button-accept:enabled:hover {
   background-color: #dc2626 !important;
   border: none !important;
-}
-
-button.p-button.p-component.p-confirm-dialog-accept.confirm-button-accept:focus {
-  box-shadow: none !important;
 }
 </style>

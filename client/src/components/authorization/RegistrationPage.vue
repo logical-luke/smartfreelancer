@@ -33,9 +33,9 @@
             :strong-label="$t('Strong password')"
             v-model="password"
           >
-            <template #header><p class="mb-1">{{ $t("Enter a password")}}</p></template>
+            <template #header><p class="mb-1">{{ $t("Enter a password") }}</p></template>
             <template #footer="sp">
-              {{sp.level}}
+              {{ sp.level }}
               <divider />
               <p class="mt-2">{{ $t("Recommendations") }}:</p>
               <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
@@ -56,15 +56,17 @@
             class="p-inputtext-sm"
             v-model="confirmPassword"
             type="password"
+            input-id="confirmPasswordInput"
             :toggle-mask="true"
+            id="confirmPasswordPanel"
             :feedback="false"
             name="confirmPassword"
           />
         </div>
 
         <div class="flex flex-wrap gap-2 items-center">
-          <submit-button>{{ $t("Sign in ") }}</submit-button>
-          <google-button>{{ $t("Sign in") }}</google-button>
+          <submit-button>{{ $t("Sign up") }}</submit-button>
+          <google-button>{{ $t("Sign up") }}</google-button>
         </div>
         <div class="flex">
           <language-switcher />
@@ -84,9 +86,9 @@ import SubmitButton from "@/components/ui/SubmitButton.vue";
 import store from "@/store";
 import GoogleButton from "@/components/ui/GoogleButton.vue";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher.vue";
-import Password from 'primevue/password';
-import Divider from 'primevue/divider';
-import InputText from 'primevue/inputtext';
+import Password from "primevue/password";
+import Divider from "primevue/divider";
+import InputText from "primevue/inputtext";
 
 export default {
   name: "RegistrationPage",
@@ -95,8 +97,6 @@ export default {
       email: "",
       password: "",
       confirmPassword: "",
-      error: null,
-      passwordStrength: "",
     };
   },
   methods: {
@@ -104,6 +104,18 @@ export default {
       this.error = null;
     },
     async register() {
+      this.$toast.removeAllGroups();
+      if (this.password !== this.confirmPassword) {
+        this.confirmPassword = "";
+        this.$toast.add({
+          severity: "error",
+          summary: this.$i18n.t("Unable to sign up"),
+          detail: this.$i18n.t("The passwords given are not the same"),
+          life: 5000
+        });
+
+        return;
+      }
       try {
         await store.dispatch("register", {
           email: this.email,
@@ -111,9 +123,18 @@ export default {
           confirmPassword: this.confirmPassword
         });
       } catch (err) {
-        this.error = err.message;
+        let message = this.$i18n.t("Unable to sign up");
+        if (err.message === "User already exists") {
+          message = this.$i18n.t("Email is already taken");
+        }
+        this.$toast.add({
+          severity: "error",
+          summary: this.$i18n.t("Unable to sign up"),
+          detail: message,
+          life: 5000
+        });
       }
-    },
+    }
   },
   components: {
     LanguageSwitcher,
@@ -122,11 +143,11 @@ export default {
     SubmitButton,
     Password,
     Divider,
-    InputText,
+    InputText
   },
   beforeRouteEnter() {
     store.commit("setInitialLoaded", true);
-  },
+  }
 };
 </script>
 
@@ -134,7 +155,16 @@ export default {
 #passwordPanel {
   width: 100%;
 }
+
 #passwordInput {
+  width: 100%;
+}
+
+#confirmPasswordPanel {
+  width: 100%;
+}
+
+#confirmPasswordInput {
   width: 100%;
 }
 </style>
