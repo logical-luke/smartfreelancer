@@ -81,8 +81,8 @@
                   <calendar-icon />
                 </template>
               </sidebar-item>
-              <sidebar-item go-to="/metrics">
-                {{ $t("Metrics") }}
+              <sidebar-item go-to="/insights">
+                {{ $t("Insights") }}
                 <template #icon>
                   <chart-bar-icon />
                 </template>
@@ -105,8 +105,8 @@
                   <bolt-icon />
                 </template>
               </sidebar-item>
-              <sidebar-item go-to="/predictions">
-                {{ $t("Predictions") }}
+              <sidebar-item go-to="/forecasting">
+                {{ $t("Forecasting") }}
                 <template #icon>
                   <robot-icon />
                 </template>
