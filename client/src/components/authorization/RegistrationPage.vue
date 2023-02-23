@@ -49,12 +49,29 @@
           <label class="block text-sm font-medium mb-2" for="password">
             {{ $t("Password") }}
           </label>
-          <input
-            class="block w-full px-4 py-3 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
+          <password
+            input-id="passwordInput"
+            :toggle-mask="true"
+            id="passwordPanel"
+            prompt-label=" "
+            :weak-label="$t('Weak password')"
+            :medium-label="$t('Medium password')"
+            :strong-label="$t('Strong password')"
             v-model="password"
-            type="password"
-            name="password"
-          />
+          >
+            <template #header><p class="mb-1">{{ $t("Enter a password")}}</p></template>
+            <template #footer="sp">
+              {{sp.level}}
+              <divider />
+              <p class="mt-2">{{ $t("Recommendations") }}:</p>
+              <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+                <li>{{ $t("At least one lowercase") }}</li>
+                <li>{{ $t("At least one uppercase") }}</li>
+                <li>{{ $t("At least one numeric") }}</li>
+                <li>{{ $t("Minimum 8 characters") }}</li>
+              </ul>
+            </template>
+          </password>
         </div>
 
         <div>
@@ -88,10 +105,11 @@
 <script>
 import TransparentLogoWide from "@/components/ui/TransparentLogoWide.vue";
 import SubmitButton from "@/components/ui/SubmitButton.vue";
-import PasswordMeter from "vue-simple-password-meter";
 import store from "@/store";
 import GoogleButton from "@/components/ui/GoogleButton.vue";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher.vue";
+import Password from 'primevue/password';
+import Divider from 'primevue/divider';
 
 export default {
   name: "RegistrationPage",
@@ -101,7 +119,7 @@ export default {
       password: "",
       confirmPassword: "",
       error: null,
-      passwordStrength: ""
+      passwordStrength: "",
     };
   },
   methods: {
@@ -119,23 +137,26 @@ export default {
         this.error = err.message;
       }
     },
-    onScore(payload) {
-      const strength = payload.strength;
-      this.passwordStrength =
-        strength.charAt(0).toUpperCase() + strength.slice(1);
-    }
   },
   components: {
     LanguageSwitcher,
     GoogleButton,
     TransparentLogoWide,
     SubmitButton,
-    PasswordMeter
+    Password,
+    Divider,
   },
   beforeRouteEnter() {
     store.commit("setInitialLoaded", true);
-  }
+  },
 };
 </script>
 
-<style scoped></style>
+<style>
+#passwordPanel {
+  width: 100%;
+}
+#passwordInput {
+  width: 100%;
+}
+</style>

@@ -6,7 +6,7 @@ const apiKey = "21c74419-4d32-bafb-387d-899a0e6cc67a:fx";
 
 const languages = ["pl", "de", "fr", "pt", "ru", "uk", "it", "cs"];
 
-fs.readFile(path.join(__dirname, "../locale/en.json"), "utf8", (err, data) => {
+fs.readFile(path.join(__dirname, "../src/locale/en.json"), "utf8", (err, data) => {
   if (err) {
     console.error(err);
     return;
@@ -17,7 +17,7 @@ fs.readFile(path.join(__dirname, "../locale/en.json"), "utf8", (err, data) => {
 
   for (const lang of languages) {
     let translated = {};
-    const langFileName = path.join(__dirname, `../locale/${lang}.json`);
+    const langFileName = path.join(__dirname, `../src/locale/${lang}.json`);
     fs.access(langFileName, fs.constants.F_OK, (err) => {
       if (err) {
         // If the file doesn't exist, create it and write some data to it

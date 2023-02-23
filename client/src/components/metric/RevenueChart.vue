@@ -1,8 +1,8 @@
 <template>
-  <div class="p-2">
+  <div class="p-2 flex-grow">
     <div class="p-6 mb-8 bg-white shadow rounded">
       <div class="flex mb-3 items-center justify-between">
-        <h3 class="text-gray-500">Income</h3>
+        <h3 class="text-gray-500">Total Revenue</h3>
         <button class="focus:outline-none">
           <svg
             class="h-4 w-4 text-gray-200"
@@ -27,12 +27,11 @@
       <p class="text-xs text-black">Monthly Goal</p>
     </div>
   </div>
-
 </template>
 
 <script>
 export default {
-  name: "IncomeChart"
+  name: "RevenueChart"
 };
 </script>
 
