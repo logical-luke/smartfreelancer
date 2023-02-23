@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import router from "../router";
+import router from "../../router";
 import store from "@/store";
 import api from "@/services/api/api";
 

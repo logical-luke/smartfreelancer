@@ -4,7 +4,6 @@
   "Clients": "Clients",
   "Projects": "Projects",
   "Tasks": "Tasks",
-  "Reports": "Reports",
   "Invoices": "Invoices",
   "Automations": "Automations",
   "Expenses": "Expenses",
@@ -27,20 +26,18 @@
   "Pomodoro": "Pomodoro",
   "Custom": "Custom",
   "Start timer": "Start timer",
-  "username@domain": {
-    "com": "username@domain.com"
-  },
+  "username@domain": {},
   "Confirm password": "Confirm password",
   "Sign in ": "Sign in ",
   "Sign in": "Sign in",
   "Already have an account": "Already have an account",
   "Error": "Error",
   "Page not found": "Page not found",
-  "Sorry": "Sorry",
-  "We are unable to find the page you are looking for": "We are unable to find the page you are looking for",
   "Return to homepage": "Return to homepage",
   "Calendar": "Calendar",
   "Statistics": "Statistics",
+  "Insights": "Insights",
+  "Forecasting": "Forecasting",
   "Metrics": "Metrics",
-  "Predictions": "Predictions"
+  "Forecasts": "Forecasts"
 }

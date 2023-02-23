@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import ProjectsPage from "@/components/project/ProjectsPage.vue";
-import LoginPage from "@/components/LoginPage.vue";
+import LoginPage from "@/components/authorization/LoginPage.vue";
 import store from "../store";
 import ProjectEditPage from "@/components/project/ProjectEditPage.vue";
 import ProjectCreatePage from "@/components/project/ProjectCreatePage.vue";
@@ -11,11 +11,17 @@ import ClientEditPage from "@/components/client/ClientEditPage.vue";
 import TaskEditPage from "@/components/task/TaskEditPage.vue";
 import TaskCreatePage from "@/components/task/TaskCreatePage.vue";
 import TodayPage from "@/components/today/TodayPage.vue";
-import ReportsPage from "@/components/report/ReportsPage.vue";
+import MetricsPage from "@/components/metric/MetricsPage.vue";
 import TimelinePage from "@/components/timeline/TimelinePage.vue";
-import RegistrationPage from "@/components/RegistrationPage.vue";
+import RegistrationPage from "@/components/authorization/RegistrationPage.vue";
 import NotFoundPage from "@/components/NotFoundPage.vue";
-import GoogleLoginPage from "@/components/GoogleLoginPage.vue";
+import GoogleLoginPage from "@/components/authorization/GoogleLoginPage.vue";
+import AutomationsPage from "@/components/automation/AutomationsPage.vue";
+import CalendarPage from "@/components/calendar/CalendarPage.vue";
+import ExpensesPage from "@/components/expense/ExpensesPage.vue";
+import ForecastsPage from "@/components/forecast/ForecastsPage.vue";
+import SettingsPage from "@/components/setting/SettingsPage.vue";
+import InvoicesPage from "@/components/invoice/InvoicesPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -47,9 +53,9 @@ const router = createRouter({
       },
     },
     {
-      path: "/reports",
-      name: "ReportsPage",
-      component: ReportsPage,
+      path: "/metrics",
+      name: "MetricsPage",
+      component: MetricsPage,
       meta: {
         requiresAuth: true,
       },
@@ -133,6 +139,54 @@ const router = createRouter({
         requiresAuth: true,
       },
       component: TimelinePage,
+    },
+    {
+      path: "/automations",
+      name: "AutomationsPage",
+      meta: {
+        requiresAuth: true,
+      },
+      component: AutomationsPage,
+    },
+    {
+      path: "/calendar",
+      name: "CalendarPage",
+      meta: {
+        requiresAuth: true,
+      },
+      component: CalendarPage,
+    },
+    {
+      path: "/expenses",
+      name: "ExpensesPage",
+      meta: {
+        requiresAuth: true,
+      },
+      component: ExpensesPage,
+    },
+    {
+      path: "/forecasts",
+      name: "ForecastsPage",
+      meta: {
+        requiresAuth: true,
+      },
+      component: ForecastsPage,
+    },
+    {
+      path: "/settings",
+      name: "SettingsPage",
+      meta: {
+        requiresAuth: true,
+      },
+      component: SettingsPage,
+    },
+    {
+      path: "/invoices",
+      name: "InvoicesPage",
+      meta: {
+        requiresAuth: true,
+      },
+      component: InvoicesPage,
     },
     {
       path: "/:pathMatch(.*)*",
