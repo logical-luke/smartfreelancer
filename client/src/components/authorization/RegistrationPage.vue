@@ -76,7 +76,7 @@
         <div class="flex pt-2">
           <language-switcher />
         </div>
-        <p class="mb-2 text-base text-gray-500 mt-2">
+        <p class="mb-2 font-medium text-gray-500 mt-2">
           {{ $t("Already have an account") }}? {{ $t("Log in") }}
           <router-link class="text-blue-500" to="/login">{{ $t("here") }}</router-link>
         </p>

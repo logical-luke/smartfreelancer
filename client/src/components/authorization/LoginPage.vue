@@ -65,7 +65,7 @@
         <div class="flex pt-2">
           <language-switcher />
         </div>
-        <p class="mb-2 text-base text-gray-500 mt-2">
+        <p class="mb-2 font-medium text-gray-500 mt-2">
           {{ $t("Don't have an account") }}? {{ $t("Create a new account") }}
           <router-link class="text-blue-500" to="/register">{{ $t("here") }}</router-link>
         </p>
