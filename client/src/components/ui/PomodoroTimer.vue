@@ -57,9 +57,6 @@ export default {
         { name: this.$t("Pomodoro"), code: "p" },
       ];
     },
-    selectedMode() {
-      return { name: this.$t("Fixed"), code: "f" };
-    }
   },
   props: {
     size: {
@@ -69,6 +66,7 @@ export default {
   },
   data() {
     return {
+      selectedMode: null,
       selectedTime: null,
       times: [
         { name: "5m", code: "5" },
@@ -82,6 +80,9 @@ export default {
     toggle(event) {
       this.$refs.op.toggle(event);
     },
+  },
+  mounted() {
+    this.selectedMode = { name: this.$t("Fixed"), code: "f" }
   },
 };
 </script>
