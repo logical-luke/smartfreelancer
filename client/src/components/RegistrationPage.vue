@@ -3,7 +3,7 @@
     <div class="flex justify-center w-full">
       <transparent-logo-wide size="w-60" text-color="#410B01" />
     </div>
-    <div class="flex justify-center items-center">
+    <div class="flex justify-center items-center w-3/4">
       <transition name="fade">
         <div v-if="error" class="pb-2">
           <div

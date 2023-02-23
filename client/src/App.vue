@@ -64,7 +64,7 @@ onMounted(async () => {
         <div v-if="store.getters.isInitialLoaded">
           <router-view v-slot="{ Component }">
             <transition name="fade" mode="out-in">
-              <div class="py-4 md:py-8 px-6" :key="path">
+              <div :class="isAuthorizedPage? 'py-4 md:py-8 px-6' : ''" :key="path">
                 <component :is="Component"></component>
               </div>
             </transition>
