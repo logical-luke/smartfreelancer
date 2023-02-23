@@ -4,9 +4,19 @@
       <nav class="lg:hidden py-6 px-6 bg-gray-800">
         <div class="flex flex-row items-center justify-between">
           <div class="flex mr-auto">
-            <transparent-logo-wide />
+            <icon-only-logo />
           </div>
           <div class="flex-row flex items-center justify-end gap-2">
+            <transition name="fade" mode="in-out">
+              <div class="flex items-center p-4" v-if="!isSynchronised">
+                <moon-loader
+                  title="Synchronising..."
+                  size="40"
+                  color="white"
+                  :loading="!isSynchronised"
+                />
+              </div>
+            </transition>
             <language-switcher />
             <button
               @click="toggle"
@@ -31,9 +41,19 @@
             class="flex flex-row justify-between items-center px-6 pb-6 mb-6 lg:border-b border-gray-700"
           >
             <div class="flex mr-auto">
-              <transparent-logo-wide />
+              <icon-only-logo />
             </div>
             <div class="flex flex-row items-center justify-end gap-2">
+              <transition name="fade" mode="in-out">
+                <div class="flex items-center p-4" v-if="!isSynchronised">
+                  <moon-loader
+                    title="Synchronising..."
+                    size="40"
+                    color="white"
+                    :loading="!isSynchronised"
+                  />
+                </div>
+              </transition>
               <language-switcher />
               <button
                 @click="toggle"
@@ -146,10 +166,14 @@ import SettingsIcon from "vue-tabler-icons/icons/SettingsIcon";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher.vue";
 import CalendarIcon from "vue-tabler-icons/icons/CalendarIcon";
 import RobotIcon from "vue-tabler-icons/icons/RobotIcon";
+import IconOnlyLogo from "@/components/ui/IconOnlyLogo.vue";
+import { MoonLoader } from "vue3-spinner";
 
 export default {
   name: "SidebarNav",
   components: {
+    MoonLoader,
+    IconOnlyLogo,
     RobotIcon,
     CalendarIcon,
     LanguageSwitcher,
@@ -167,25 +191,25 @@ export default {
     UsersIcon,
     SidebarLogout,
     BriefcaseIcon,
-    SidebarItem,
+    SidebarItem
   },
   data() {
     return {
-      open: false,
+      open: false
     };
   },
   watch: {
     $route() {
       this.open = false;
-    },
+    }
   },
   computed: {
-    ...mapGetters(["isAuthorized"]),
+    ...mapGetters(["isAuthorized", "isSynchronised"])
   },
   methods: {
     toggle() {
       this.open = !this.open;
-    },
-  },
+    }
+  }
 };
 </script>

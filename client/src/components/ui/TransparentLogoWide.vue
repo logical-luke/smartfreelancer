@@ -4,7 +4,7 @@
       :class="size"
       class="h-full"
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="-33.81501770019531 94.489990234375 642.6300048828125 387.3600082397461"
+      :viewBox="viewBox"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -232,6 +232,7 @@
         ></path>
       </svg>
       <svg
+        v-if="!iconOnly"
         y="363"
         viewBox="1.5499999523162842 12.34000015258789 502.6300048828125 48.849998474121094"
         x="36.18498229980469"
@@ -262,6 +263,14 @@ export default {
       type: String,
       default: "white",
     },
+    iconOnly: {
+      type: Boolean,
+      default: false,
+    },
+    viewBox: {
+      type: String,
+      default: "-33.81501770019531 94.489990234375 642.6300048828125 387.3600082397461",
+    }
   },
 };
 </script>

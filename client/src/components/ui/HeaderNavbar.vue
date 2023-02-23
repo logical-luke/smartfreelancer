@@ -21,33 +21,10 @@
         <div class="flex max-w-24 items-center gap-3">
           <tracked-subject />
         </div>
-
-        <transition name="fade" mode="in-out">
-          <div
-            v-if="!isSynchronised"
-            class="flex items-center gap-3"
-          >
-            <moon-loader
-              title="Synchronising..."
-              :size="spinnerSize"
-              :color="spinnerColor"
-              :loading="!isSynchronised"
-            />
-          </div>
-        </transition>
       </div>
       <div v-else class="flex gap-3 items-center">
         <toggle-timer-button :size="8" :global="true" />
         <pomodoro-timer :size="8" />
-        <transition name="fade" mode="in-out">
-          <moon-loader
-            v-if="!isSynchronised"
-            title="Synchronising..."
-            :size="spinnerSize"
-            :color="spinnerColor"
-            :loading="!isSynchronised"
-          />
-        </transition>
       </div>
     </transition>
     <div
@@ -95,7 +72,6 @@ import ToggleTimerButton from "@/components/ui/ToggleTimerButton.vue";
 import TrackedSubject from "@/components/ui/TrackedSubject.vue";
 import TimerTime from "@/components/ui/TimerTime.vue";
 import { mapGetters } from "vuex";
-import { MoonLoader } from "vue3-spinner";
 import StartTime from "@/components/ui/StartTime.vue";
 import EndTime from "@/components/ui/EndTime.vue";
 import PomodoroTimer from "@/components/ui/PomodoroTimer.vue";
@@ -105,14 +81,12 @@ export default {
   name: "HeaderNavbar",
   data() {
     return {
-      spinnerColor: "#382CDD",
-      spinnerSize: "22px",
       slideFinished: true,
-      navHeight: null,
+      navHeight: null
     };
   },
   computed: {
-    ...mapGetters(["isSynchronised", "isNavBarCollapsed"]),
+    ...mapGetters(["isNavBarCollapsed"])
   },
   methods: {
     enter(el) {
@@ -138,17 +112,16 @@ export default {
           done();
         }, 100);
       }, 300);
-    },
+    }
   },
   components: {
     CollapseNavBarButton,
-    MoonLoader,
     PomodoroTimer,
     EndTime,
     StartTime,
     TimerTime,
     TrackedSubject,
-    ToggleTimerButton,
-  },
+    ToggleTimerButton
+  }
 };
 </script>

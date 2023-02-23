@@ -37,6 +37,9 @@ class Task
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: TimeEntry::class)]
     private Collection $timeEntries;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $scheduledDate = null;
+
     protected function __construct(User $user)
     {
         $this->owner = $user;
@@ -149,6 +152,18 @@ class Task
                 $timeEntry->setTask(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getScheduledDate(): ?\DateTimeImmutable
+    {
+        return $this->scheduledDate;
+    }
+
+    public function setScheduledDate(?\DateTimeImmutable $scheduledDate): self
+    {
+        $this->scheduledDate = $scheduledDate;
 
         return $this;
     }
