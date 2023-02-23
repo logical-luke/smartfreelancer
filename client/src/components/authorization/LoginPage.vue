@@ -45,16 +45,16 @@
           />
         </div>
 
-        <div>
-          <label class="block text-sm font-medium mb-2" for="password">
+        <div class="mb-2">
+          <label class="block text-sm font-medium" for="password">
             {{ $t("Password") }}
           </label>
-          <input
-            class="block w-full px-4 py-3 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
+          <password
             v-model="password"
-            type="password"
-            name="password"
-            autocomplete="password"
+            input-id="passwordInput"
+            :toggle-mask="true"
+            id="passwordPanel"
+            :feedback="false"
           />
         </div>
 
@@ -80,6 +80,7 @@ import store from "@/store";
 import TransparentLogoWide from "@/components/ui/TransparentLogoWide.vue";
 import GoogleButton from "@/components/ui/GoogleButton.vue";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher.vue";
+import Password from "primevue/password";
 
 export default {
   name: "LoginPage",
@@ -87,7 +88,8 @@ export default {
     LanguageSwitcher,
     GoogleButton,
     TransparentLogoWide,
-    SubmitButton
+    SubmitButton,
+    Password
   },
   data: () => {
     return {
@@ -117,4 +119,12 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style>
+#passwordPanel {
+  width: 100%;
+}
+
+#passwordInput {
+  width: 100%;
+}
+</style>
