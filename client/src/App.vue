@@ -8,6 +8,7 @@ import SidebarNav from "@/components/ui/SidebarNav.vue";
 import HeaderNavbar from "@/components/ui/HeaderNavbar.vue";
 import { MoonLoader } from "vue3-spinner";
 import ConfirmDialog from "primevue/confirmdialog";
+import Toast from 'primevue/toast';
 
 onMounted(async () => {
   const locale = localStorage.getItem("locale");
@@ -54,7 +55,8 @@ onMounted(async () => {
         class="min-h-screen"
         :class="{ 'mx-auto lg:ml-80': isAuthorizedPage }"
       >
-        <confirm-dialog> </confirm-dialog>
+        <toast :breakpoints="{'920px': {width: '100%', right: '0', left: '0'}}" />
+        <confirm-dialog />
         <sidebar-nav v-if="isAuthorizedPage" />
         <transition name="fade" mode="out-in">
           <div v-if="isAuthorizedPage" class="fixed z-20 sticky top-0 w-full">
