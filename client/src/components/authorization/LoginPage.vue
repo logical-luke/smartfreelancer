@@ -87,7 +87,7 @@ export default {
         });
       } catch (err) {
         this.password = "";
-        let message = this.$i18n.t("Unknown error") + ". " + this.i18n.t("Please try again");
+        let message = this.$i18n.t("Unknown error") + ". " + this.$i18n.t("Please try again");
         if (err.message  === "Invalid username or password") {
           message = this.$i18n.t("Invalid email or password");
         }
