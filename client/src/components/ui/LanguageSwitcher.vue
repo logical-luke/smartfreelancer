@@ -49,7 +49,7 @@ export default {
   methods: {
     setLanguage(language) {
       this.$i18n.locale = language;
-      store.commit("setLocale", language);
+      store.dispatch("setLocale", language);
       this.toggle();
     },
     toggle(event) {

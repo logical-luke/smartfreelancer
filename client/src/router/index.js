@@ -22,6 +22,7 @@ import ExpensesPage from "@/components/expense/ExpensesPage.vue";
 import ForecastsPage from "@/components/forecast/ForecastsPage.vue";
 import SettingsPage from "@/components/setting/SettingsPage.vue";
 import InvoicesPage from "@/components/invoice/InvoicesPage.vue";
+import ShareableReportsPage from "@/components/shareable-reports/ShareableReportsPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -187,6 +188,14 @@ const router = createRouter({
         requiresAuth: true,
       },
       component: InvoicesPage,
+    },
+    {
+      path: "/shareable-reports",
+      name: "ShareableReportsPage",
+      meta: {
+        requiresAuth: true,
+      },
+      component: ShareableReportsPage,
     },
     {
       path: "/:pathMatch(.*)*",

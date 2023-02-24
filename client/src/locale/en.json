@@ -52,5 +52,7 @@
   "Unable to sign in": "Unable to sign in",
   "Unable to sign up": "Unable to sign up",
   "The passwords given are not the same": "The passwords given are not the same",
-  "Email is already taken": "Email is already taken"
+  "Email is already taken": "Email is already taken",
+  "Shared Reports": "Shared Reports",
+  "Shareable Reports": "Shareable Reports"
 }

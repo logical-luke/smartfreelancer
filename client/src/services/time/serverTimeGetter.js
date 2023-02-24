@@ -1,4 +1,4 @@
-import api from "@/services/api/api";
+import api from "@/services/api";
 
 export default async function getServerTime() {
   const requestTime = Math.round(Date.now() / 1000);

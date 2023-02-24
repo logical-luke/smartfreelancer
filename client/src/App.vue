@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted } from "vue";
 import store from "@/store";
-import VueCookies from "vue-cookies";
+import cookies from "@/services/cookies"
 import SidebarNav from "@/components/ui/SidebarNav.vue";
 import HeaderNavbar from "@/components/ui/HeaderNavbar.vue";
 import { MoonLoader } from "vue3-spinner";
@@ -11,23 +11,23 @@ import Toast from 'primevue/toast';
 onMounted(async () => {
   const locale = localStorage.getItem("locale");
   if (locale) {
-    store.commit("setLocale", locale);
+    await store.dispatch("setLocale", locale);
   }
-  let token = VueCookies.get("api_token");
+  let token = await cookies.get("api_token");
   if (token === "null" || token === "") {
     token = null;
   }
   if (!token) {
     store.commit("setInitialLoaded", true);
   }
-  let refreshToken = VueCookies.get("refresh_token");
+  let refreshToken = await cookies.get("refresh_token");
   if (refreshToken === "null" || refreshToken === "") {
     refreshToken = null;
   }
   if (token && refreshToken) {
-    store.commit("setToken", token);
-    store.commit("setAuthorized", true);
-    store.commit("setRefreshToken", refreshToken);
+    await store.dispatch("setToken", token);
+    await store.dispatch("setRefreshToken", refreshToken);
+    await store.commit("setAuthorized", true);
     await store.dispatch("loadInitial");
     await store.dispatch("sync");
   }

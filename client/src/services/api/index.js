@@ -163,8 +163,8 @@ const refreshToken = async function () {
       return;
     }
     if (response && response.status === 200) {
-      await store.commit("setToken", response.data.token);
-      await store.commit("setRefreshToken", response.data.refresh_token);
+      await store.dispatch("setToken", response.data.token);
+      await store.dispatch("setRefreshToken", response.data.refresh_token);
 
       return;
     }

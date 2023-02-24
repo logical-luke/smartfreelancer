@@ -13,7 +13,7 @@
 
 <script>
 import BrandGoogleIcon from "vue-tabler-icons/icons/BrandGoogleIcon";
-import api from "@/services/api/api";
+import api from "@/services/api";
 import store from "@/store";
 
 export default {

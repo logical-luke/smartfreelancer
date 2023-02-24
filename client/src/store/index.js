@@ -1,16 +1,17 @@
 import { createStore, createLogger } from "vuex";
-import VueCookies from "vue-cookies";
 import router from "../router";
 import projects from "./modules/projects";
 import project from "@/store/modules/project";
 import timer from "@/store/modules/timer";
-import api from "@/services/api/api";
+import api from "@/services/api";
 import clients from "@/store/modules/clients";
 import client from "@/store/modules/client";
 import tasks from "@/store/modules/tasks";
 import task from "@/store/modules/task";
 import timeEntries from "@/store/modules/timeEntries";
 import getServerTime from "@/services/time/serverTimeGetter";
+import cookies from "@/services/cookies";
+import cache from "@/services/cache";
 
 const debug = process.env.NODE_ENV !== "production";
 
@@ -40,15 +41,15 @@ export default createStore({
     timeEntries,
   },
   actions: {
-    async logout({ commit }) {
-      commit("setToken", "");
-      commit("setRefreshToken", "");
+    async logout({ commit, dispatch }) {
+      dispatch("setToken", "");
+      dispatch("setRefreshToken", "");
       commit("setAuthorized", false);
       commit("setUser", {});
       commit("setSynchronised", false);
-      VueCookies.remove("token");
-      VueCookies.remove("refresh_token");
-      localStorage.clear();
+      await cookies.remove("token");
+      await cookies.remove("refresh_token");
+      await cache.clear();
       await router.push("/login");
     },
     async login({ commit, dispatch }, payload) {
@@ -69,8 +70,8 @@ export default createStore({
       }
       commit("setInitialLoaded", false);
       if (token && refreshToken) {
-        commit("setToken", token);
-        commit("setRefreshToken", refreshToken);
+        dispatch("setToken", token);
+        dispatch("setRefreshToken", refreshToken);
         commit("setAuthorized", true);
         await dispatch("sync");
         await dispatch("enableServerTimeSync");
@@ -179,15 +180,28 @@ export default createStore({
       commit("setServerTime", serverTime);
     },
     setLocale({ commit }, locale) {
-      this.$i18n.locale = locale;
       localStorage.setItem("locale", locale);
       commit("setLocale", locale);
+    },
+    async setToken({ commit }, token) {
+      await cookies.set("api_token", token, "1d", "/", null, true, "Strict");
+      commit("setToken", token);
+    },
+    async setRefreshToken({ commit }, refreshToken) {
+      await cookies.set(
+        "refresh_token",
+        refreshToken,
+        "1d",
+        "/",
+        null,
+        true,
+        "Strict"
+      );
+      commit("setRefreshToken", refreshToken);
     },
   },
   mutations: {
     setToken(state, token) {
-      VueCookies.set("api_token", token, "1d", "/", null, true, "Strict");
-
       state.token = token;
     },
     setInitialLoaded(state, loaded) {
@@ -197,16 +211,6 @@ export default createStore({
       state.synchronised = synchronised;
     },
     setRefreshToken(state, refreshToken) {
-      VueCookies.set(
-        "refresh_token",
-        refreshToken,
-        "1d",
-        "/",
-        null,
-        true,
-        "Strict"
-      );
-
       state.refreshToken = refreshToken;
     },
     setAuthorized(state, authorized) {
@@ -225,7 +229,6 @@ export default createStore({
       state.navBarCollapsed = !state.navBarCollapsed;
     },
     setLocale(state, locale) {
-      localStorage.setItem("locale", locale);
       state.locale = locale;
     },
   },

@@ -107,6 +107,12 @@
                   <chart-bar-icon />
                 </template>
               </sidebar-item>
+              <sidebar-item go-to="/shareable-reports">
+                {{ $t("Shareable Reports") }}
+                <template #icon>
+                  <report-icon />
+                </template>
+              </sidebar-item>
               <sidebar-item go-to="/invoices">
                 {{ $t("Invoices") }}
                 <template #icon>
@@ -168,10 +174,12 @@ import CalendarIcon from "vue-tabler-icons/icons/CalendarIcon";
 import RobotIcon from "vue-tabler-icons/icons/RobotIcon";
 import IconOnlyLogo from "@/components/ui/IconOnlyLogo.vue";
 import { MoonLoader } from "vue3-spinner";
+import ReportIcon from "vue-tabler-icons/icons/ReportIcon";
 
 export default {
   name: "SidebarNav",
   components: {
+    ReportIcon,
     MoonLoader,
     IconOnlyLogo,
     RobotIcon,

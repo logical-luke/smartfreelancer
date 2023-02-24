@@ -3,7 +3,6 @@ import App from "./App.vue";
 
 import router from "./router";
 import store from "./store";
-import VueCookies from "vue-cookies";
 import "./tailwind/tailwind.css";
 import "primevue/resources/themes/tailwind-light/theme.css";
 import "primevue/resources/primevue.min.css";
@@ -18,7 +17,6 @@ import ToastService from 'primevue/toastservice';
 const app = createApp(App);
 
 app.use(i18n);
-app.use(VueCookies);
 app.use(store);
 app.use(router);
 

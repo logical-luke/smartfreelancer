@@ -5,7 +5,7 @@
 <script>
 import router from "../../router";
 import store from "@/store";
-import api from "@/services/api/api";
+import api from "@/services/api";
 
 export default {
   name: "GoogleLoginPage",
