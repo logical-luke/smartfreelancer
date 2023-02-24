@@ -1,25 +1,25 @@
-const MILLISECONDS_PER_SECOND = 1000;
-const SECONDS_PER_MINUTE = 60;
-const MINUTES_PER_HOUR = 60;
+const millisecondsPerSecond = 1000;
+const secondsPerMinute = 60;
+const minutesPerHour = 60;
 
 export default function getRelativeTime(startTime, endTime) {
   if (typeof startTime === "number") {
-    startTime = new Date(startTime * MILLISECONDS_PER_SECOND);
+    startTime = new Date(startTime * millisecondsPerSecond);
   }
   if (typeof endTime === "number") {
-    endTime = new Date(endTime * MILLISECONDS_PER_SECOND);
+    endTime = new Date(endTime * millisecondsPerSecond);
   }
 
   const timeDiff = Math.abs(endTime.getTime() - startTime.getTime());
   const hours = Math.floor(
-    timeDiff / (MILLISECONDS_PER_SECOND * SECONDS_PER_MINUTE * MINUTES_PER_HOUR)
+    timeDiff / (millisecondsPerSecond * secondsPerMinute * minutesPerHour)
   );
   const minutes = Math.floor(
-    (timeDiff / (MILLISECONDS_PER_SECOND * SECONDS_PER_MINUTE)) %
-      MINUTES_PER_HOUR
+    (timeDiff / (millisecondsPerSecond * secondsPerMinute)) %
+      minutesPerHour
   );
   const seconds = Math.floor(
-    (timeDiff / MILLISECONDS_PER_SECOND) % SECONDS_PER_MINUTE
+    (timeDiff / millisecondsPerSecond) % secondsPerMinute
   );
   return {
     hours: hours.toString().padStart(2, "0"),
