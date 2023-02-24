@@ -54,5 +54,8 @@
   "The passwords given are not the same": "The passwords given are not the same",
   "Email is already taken": "Email is already taken",
   "Shared Reports": "Shared Reports",
-  "Shareable Reports": "Shareable Reports"
+  "Shareable Reports": "Shareable Reports",
+  "You are offline": "You are offline",
+  "Synchronization in progress": "Synchronization in progress",
+  "Last synchronization time": "Last synchronization time"
 }

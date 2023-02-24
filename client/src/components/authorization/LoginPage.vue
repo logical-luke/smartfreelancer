@@ -50,14 +50,18 @@
 </template>
 
 <script>
-import SubmitButton from "@/components/ui/SubmitButton.vue";
 import store from "@/store";
+import router from "@/router";
+import synchronization from "@/services/synchronization";
+import authorization from "@/services/authorization";
+import SubmitButton from "@/components/ui/SubmitButton.vue";
 import TransparentLogoWide from "@/components/ui/TransparentLogoWide.vue";
 import GoogleButton from "@/components/ui/GoogleButton.vue";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher.vue";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Message from "primevue/message";
+import time from "@/services/synchronization/time";
 
 export default {
   name: "LoginPage",
@@ -81,10 +85,16 @@ export default {
     async login() {
       try {
         this.$toast.removeAllGroups();
-        await store.dispatch("login", {
+        await authorization.login({
           email: this.email,
           password: this.password
         });
+        await store.commit("synchronization/setInitialLoaded", false)
+        await time.enableServerTimeSync();
+        await synchronization.syncInitial();
+        await store.commit("synchronization/setInitialLoaded", true)
+
+        await router.push("/");
       } catch (err) {
         this.password = "";
         let message = this.$i18n.t("Unknown error") + ". " + this.$i18n.t("Please try again");

@@ -33,7 +33,7 @@ export default {
   computed: {
     ...mapState({
       timer: (state) => state.timer.current,
-      serverTime: (state) => state.serverTime,
+      serverTime: (state) => state.time.serverTime,
     }),
   },
   methods: {

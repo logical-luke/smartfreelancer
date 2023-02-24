@@ -21,7 +21,7 @@ export default {
     ...mapState({
       timer: (state) => state.timer.current,
       subjectName: (state) => state.timer.current.subjectName,
-      serverTime: (state) => state.serverTime,
+      serverTime: (state) => state.time.serverTime,
     }),
   },
   watch: {

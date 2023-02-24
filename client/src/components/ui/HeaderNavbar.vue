@@ -86,7 +86,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["isNavBarCollapsed"])
+    ...mapGetters("settings" ,["isNavBarCollapsed"])
   },
   methods: {
     enter(el) {

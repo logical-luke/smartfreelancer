@@ -5,7 +5,7 @@
     :class="sizeClasses"
     class="inline-flex bg-indigo-500 hover:bg-indigo-600 items-center justify-center items-center px-2 py-2 text-sm font-medium text-white rounded-full transition duration-200"
   >
-    <hourglass-icon :size="Math.ceil(size * 1.8)" />
+    <hourglass-empty-icon :size="Math.ceil(size * 1.8)" />
   </button>
   <overlay-panel ref="op" :show-close-icon="true">
     <div class="flex gap-2 flex-col items-center justify-center">
@@ -43,10 +43,11 @@ import OverlayPanel from "primevue/overlaypanel";
 import SelectButton from "primevue/selectbutton";
 import InputText from "primevue/inputtext";
 import HourglassIcon from "vue-tabler-icons/icons/HourglassIcon";
+import HourglassEmptyIcon from "vue-tabler-icons/icons/HourglassEmptyIcon";
 
 export default {
   name: "PomodoroTimer",
-  components: { HourglassIcon, OverlayPanel, SelectButton, InputText },
+  components: { HourglassEmptyIcon, HourglassIcon, OverlayPanel, SelectButton, InputText },
   computed: {
     sizeClasses() {
       return `w-${this.size} h-${this.size}`;

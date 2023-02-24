@@ -208,14 +208,14 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (
     (to.name === "LoginPage" || to.name === "RegistrationPage") &&
-    store.getters.isAuthorized
+    store.getters["authorization/isAuthorized"]
   ) {
     next({ name: "TodayPage" });
   } else {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       // this route requires auth, check if logged in
       // if not, redirect to login page.
-      if (!store.getters.isAuthorized) {
+      if (!store.getters["authorization/isAuthorized"]) {
         next({ name: "LoginPage" });
       } else {
         next(); // go to wherever I'm going

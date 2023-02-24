@@ -1,5 +1,3 @@
-import api from "../../services/api";
-
 const emptyProject = {
   name: "",
   description: "",
@@ -13,10 +11,6 @@ const state = () => ({
 const getters = {};
 
 const actions = {
-  async getProject({ commit }, projectId) {
-    const project = await api.getProject(projectId);
-    commit("setProject", project);
-  },
   setProject({ commit }, project) {
     commit("setProject", project);
   },

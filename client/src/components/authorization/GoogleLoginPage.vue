@@ -16,7 +16,7 @@ export default {
     };
   },
   async mounted() {
-    store.commit("setInitialLoaded", false);
+    store.commit("synchronization/setInitialLoaded", false);
     const code = this.$route.query.code;
     const state = this.$route.query.state;
 
@@ -25,7 +25,7 @@ export default {
     }
 
     const tokens = await api.postGoogleCheck({ code: code, state: state });
-    await store.dispatch("login", tokens);
+    await store.dispatch("authorization/login", tokens);
   },
 };
 </script>

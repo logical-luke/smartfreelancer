@@ -11,14 +11,16 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
 import LogoutIcon from "vue-tabler-icons/icons/LogoutIcon";
+import authorization from "@/services/authorization";
 
 export default {
   name: "SidebarLogout",
   components: { LogoutIcon },
   methods: {
-    ...mapActions(["logout"]),
+    async logout() {
+      return await authorization.logout();
+    }
   },
 };
 </script>

@@ -1,25 +1,14 @@
-import { openDB } from 'idb';
-
-const dbPromise = openDB('smartfreelancer-database', 1, {
-  upgrade(db) {
-    db.createObjectStore('main-store', { keyPath: 'id' });
-  },
-});
+import db from "@/services/cache/db";
+import store from "@/store";
 
 export default {
-  async set(key, value) {
-
+  async getInitial() {
+    await store.commit("synchronization/setInitialLoaded", true);
   },
-  async get(key) {
-
+  async getLocale() {
+    return await db.get("locale");
   },
-  async keys() {
-
-  },
-  async remove(key) {
-
-  },
-  async clear() {
-
-  },
+  async setLocale(locale) {
+    return await db.set("locale", locale);
+  }
 }

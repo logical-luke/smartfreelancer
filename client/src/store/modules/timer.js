@@ -15,7 +15,7 @@ const state = () => ({
 const actions = {
   async startTimer({ commit, state, rootGetters }) {
     const newTimer = JSON.parse(JSON.stringify(state.current));
-    newTimer.startTime = rootGetters["getServerTime"];
+    newTimer.startTime = rootGetters["time/getServerTime"];
     const timer = await api.createTimer(newTimer);
 
     commit("setTimer", timer);
@@ -25,7 +25,7 @@ const actions = {
     if (!timer.id) {
       return;
     }
-    timer.endTime = rootGetters.getServerTime;
+    timer.endTime = rootGetters["time/getServerTime"];
     const timeEntry = await api.stopTimer(timer);
 
     let timeEntries = JSON.parse(
@@ -36,24 +36,12 @@ const actions = {
 
     commit("setTimer", JSON.parse(JSON.stringify(emptyTimer)));
   },
-  async getTimer({ commit, dispatch }) {
-    const timer = await api.getTimer();
-    if (timer && !timer.id) {
-      await dispatch("clearTimer");
-    }
-    if (timer && timer.id) {
-      commit("setTimer", timer);
-    }
-  },
   async setProjectId({ commit, state }, projectId) {
     if (state.current.projectId !== projectId) {
       const timer = JSON.parse(JSON.stringify(state.current));
       timer.projectId = projectId;
       timer.clientId = null;
       commit("setTimer", timer);
-      if (state.current.id) {
-        await api.updateTimer(state.current);
-      }
     }
   },
   async setTaskId({ commit, state }, taskId) {
@@ -62,9 +50,6 @@ const actions = {
       timer.taskId = taskId;
       timer.clientId = null;
       commit("setTimer", timer);
-      if (state.current.id) {
-        await api.updateTimer(state.current);
-      }
     }
   },
   async setClientId({ commit, state }, clientId) {
@@ -73,13 +58,7 @@ const actions = {
       timer.clientId = clientId;
       timer.projectId = null;
       commit("setTimer", timer);
-      if (state.current.id) {
-        await api.updateTimer(state.current);
-      }
     }
-  },
-  async clearTimer({ commit }) {
-    commit("setTimer", JSON.parse(JSON.stringify(emptyTimer)));
   },
 };
 
@@ -90,7 +69,33 @@ const getters = {
 const mutations = {
   setTimer(state, timer) {
     state.current = timer;
-    localStorage.setItem("timer", JSON.stringify(timer));
+  },
+  clearTimer(state) {
+    state.current = JSON.parse(JSON.stringify(emptyTimer));
+  },
+  setProjectId({ state }, projectId) {
+    if (state.current.projectId !== projectId) {
+      const timer = JSON.parse(JSON.stringify(state.current));
+      timer.projectId = projectId;
+      timer.clientId = null;
+      state.current = timer;
+    }
+  },
+  setTaskId({ state }, taskId) {
+    if (state.current.taskId !== taskId) {
+      const timer = JSON.parse(JSON.stringify(state.current));
+      timer.taskId = taskId;
+      timer.clientId = null;
+      state.current = timer;
+    }
+  },
+  setClientId({ state }, clientId) {
+    if (state.current.clientId !== clientId) {
+      const timer = JSON.parse(JSON.stringify(state.current));
+      timer.clientId = clientId;
+      timer.projectId = null;
+      state.current = timer;
+    }
   },
 };
 

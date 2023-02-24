@@ -8,7 +8,7 @@ const getRequest = async function (url, params, headers, repeated = 0) {
     const response = await axios.get(process.env.API_BASE_URL + url, {
       params: params,
       headers: {
-        Authorization: `Bearer ${store.getters.getToken}`,
+        Authorization: `Bearer ${store.getters['authorization/getToken']}`,
       },
     });
 
@@ -18,7 +18,7 @@ const getRequest = async function (url, params, headers, repeated = 0) {
 
     if (response.status === 401) {
       if (repeated > 0) {
-        await store.dispatch("logout");
+        await store.dispatch("authorization/logout");
 
         return { data: {} };
       }
@@ -37,7 +37,7 @@ const getRequest = async function (url, params, headers, repeated = 0) {
 
     if (err.response.status === 401) {
       if (repeated > 0) {
-        await store.dispatch("logout");
+        await store.dispatch("authorization/logout");
 
         return { data: {} };
       }
@@ -62,15 +62,16 @@ const postRequest = async function (url, data, headers, repeated = 0) {
     data = {};
   }
   try {
+    console.log(data);
     const response = axios.post(process.env.API_BASE_URL + url, data, {
       headers: {
-        Authorization: `Bearer ${store.getters.getToken}`,
+        Authorization: `Bearer ${store.getters["authorization/getToken"]}`,
       },
     });
 
     if (response.status === 401) {
       if (repeated > 0) {
-        await store.dispatch("logout");
+        await store.dispatch("authorization/logout");
 
         return { data: {} };
       }
@@ -84,7 +85,7 @@ const postRequest = async function (url, data, headers, repeated = 0) {
   } catch (err) {
     if (err.response.status === 401) {
       if (repeated > 0) {
-        await store.dispatch("logout");
+        await store.dispatch("authorization/logout");
 
         return { data: {} };
       }
@@ -111,13 +112,13 @@ const deleteRequest = async function (url, data, headers, repeated = 0) {
     const response = axios.delete(process.env.API_BASE_URL + url, {
       data: data,
       headers: {
-        Authorization: `Bearer ${store.getters.getToken}`,
+        Authorization: `Bearer ${store.getters["authorization/getToken"]}`,
       },
     });
 
     if (response.status === 401) {
       if (repeated > 0) {
-        await store.dispatch("logout");
+        await store.dispatch("authorization/logout");
 
         return { data: {} };
       }
@@ -131,7 +132,7 @@ const deleteRequest = async function (url, data, headers, repeated = 0) {
   } catch (err) {
     if (err.response.status === 401) {
       if (repeated > 0) {
-        await store.dispatch("logout");
+        await store.dispatch("authorization/logout");
 
         return { data: {} };
       }
@@ -152,24 +153,24 @@ const deleteRequest = async function (url, data, headers, repeated = 0) {
 
 const refreshToken = async function () {
   let response = false;
-  if (store.getters.getRefreshToken) {
+  if (store.getters["authorization/getRefreshToken"]) {
     try {
       response = await axios.post(process.env.API_BASE_URL + "/token/refresh", {
-        refresh_token: store.getters.getRefreshToken,
+        refresh_token: store.getters["authorization/getRefreshToken"],
       });
     } catch (err) {
-      await store.dispatch("logout");
+      await store.dispatch("authorization/logout");
 
       return;
     }
     if (response && response.status === 200) {
-      await store.dispatch("setToken", response.data.token);
-      await store.dispatch("setRefreshToken", response.data.refresh_token);
+      await store.dispatch("authorization/setToken", response.data.token);
+      await store.dispatch("authorization/setRefreshToken", response.data.refresh_token);
 
       return;
     }
   }
-  await store.dispatch("logout");
+  await store.dispatch("authorization/logout");
 };
 
 export default {

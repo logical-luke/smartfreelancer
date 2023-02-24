@@ -1,5 +1,3 @@
-import api from "../../services/api";
-
 const state = () => ({
   current: {
     name: "",
@@ -10,10 +8,6 @@ const state = () => ({
 const getters = {};
 
 const actions = {
-  async getClient({ commit }, clientId) {
-    const client = await api.getClient(clientId);
-    commit("setClient", client);
-  },
   async setName({ commit }, name) {
     commit("setName", name);
   },

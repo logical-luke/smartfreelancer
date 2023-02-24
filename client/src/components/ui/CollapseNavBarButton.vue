@@ -26,11 +26,11 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["isNavBarCollapsed"]),
+    ...mapGetters("settings", ["isNavBarCollapsed"]),
   },
   methods: {
     toggleCollapsed() {
-      store.commit("toggleNavBarCollapsed");
+      store.commit("settings/toggleNavBarCollapsed");
     },
   },
 };

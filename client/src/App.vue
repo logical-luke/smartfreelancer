@@ -1,35 +1,42 @@
 <script setup>
 import { onMounted } from "vue";
 import store from "@/store";
-import cookies from "@/services/cookies"
+import cookies from "@/services/cookies";
+import authorization from "@/services/authorization";
+import cache from "@/services/cache";
+import time from "@/services/synchronization/time";
+import synchronization from "@/services/synchronization";
 import SidebarNav from "@/components/ui/SidebarNav.vue";
 import HeaderNavbar from "@/components/ui/HeaderNavbar.vue";
 import { MoonLoader } from "vue3-spinner";
 import ConfirmDialog from "primevue/confirmdialog";
-import Toast from 'primevue/toast';
+import Toast from "primevue/toast";
 
 onMounted(async () => {
-  const locale = localStorage.getItem("locale");
+  const locale = await cache.getLocale();
   if (locale) {
-    await store.dispatch("setLocale", locale);
+    await store.commit("settings/setLocale", locale);
   }
+
   let token = await cookies.get("api_token");
   if (token === "null" || token === "") {
     token = null;
   }
   if (!token) {
-    store.commit("setInitialLoaded", true);
+    store.commit("synchronization/setInitialLoaded", true);
   }
+
   let refreshToken = await cookies.get("refresh_token");
   if (refreshToken === "null" || refreshToken === "") {
     refreshToken = null;
   }
+
   if (token && refreshToken) {
-    await store.dispatch("setToken", token);
-    await store.dispatch("setRefreshToken", refreshToken);
-    await store.commit("setAuthorized", true);
-    await store.dispatch("loadInitial");
-    await store.dispatch("sync");
+    await authorization.authorize(token, refreshToken);
+    await synchronization.syncUser();
+    await time.enableServerTimeSync();
+    await cache.getInitial();
+    synchronization.syncInitial();
   }
 });
 </script>
@@ -38,13 +45,13 @@ onMounted(async () => {
   <transition name="fade" mode="out-in">
     <div
       class="grid h-screen place-items-center"
-      v-if="!store.getters.isInitialLoaded"
+      v-if="!isInitialLoaded"
     >
       <div>
         <moon-loader
           :size="spinnerSize"
           :color="spinnerColor"
-          :loading="!store.getters.isInitialLoaded"
+          :loading="!isInitialLoaded"
         />
       </div>
     </div>
@@ -65,7 +72,7 @@ onMounted(async () => {
             <header-navbar />
           </div>
         </transition>
-        <div v-if="store.getters.isInitialLoaded">
+        <div v-if="isInitialLoaded">
           <router-view v-slot="{ Component }">
             <transition name="fade" mode="out-in">
               <div :class="isAuthorizedPage? 'py-4 md:py-8 px-6' : ''" :key="path">
@@ -81,13 +88,14 @@ onMounted(async () => {
 
 <script>
 import { useRoute } from "vue-router";
+import { mapGetters } from "vuex";
 
 export default {
   name: "App",
   data() {
     return {
       spinnerSize: "96 px",
-      spinnerColor: "#382CDD",
+      spinnerColor: "#382CDD"
     };
   },
   computed: {
@@ -101,7 +109,8 @@ export default {
 
       return meta.requiresAuth === true;
     },
-  },
+    ...mapGetters("synchronization", ["isInitialLoaded"])
+  }
 };
 </script>
 

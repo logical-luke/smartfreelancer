@@ -100,9 +100,6 @@ export default {
     };
   },
   methods: {
-    clearError() {
-      this.error = null;
-    },
     async register() {
       this.$toast.removeAllGroups();
       if (this.password !== this.confirmPassword) {
@@ -146,7 +143,7 @@ export default {
     InputText
   },
   beforeRouteEnter() {
-    store.commit("setInitialLoaded", true);
+    store.commit("synchronization/setInitialLoaded", true);
   }
 };
 </script>

@@ -1,6 +1,3 @@
-import api from "../../services/api";
-
-// initial state
 const state = () => ({
   all: [],
 });
@@ -20,12 +17,6 @@ const getters = {
 };
 
 const actions = {
-  async getClients({ commit }) {
-    const clients = await api.getClients();
-
-    commit("setClients", clients);
-  },
-
   async deleteClient({ commit, state, rootGetters }, id) {
     await api.deleteClient(id);
 

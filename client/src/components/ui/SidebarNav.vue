@@ -7,16 +7,7 @@
             <icon-only-logo />
           </div>
           <div class="flex-row flex items-center justify-end gap-2">
-            <transition name="fade" mode="in-out">
-              <div class="flex items-center p-4" v-if="!isSynchronised">
-                <moon-loader
-                  title="Synchronising..."
-                  size="40"
-                  color="white"
-                  :loading="!isSynchronised"
-                />
-              </div>
-            </transition>
+            <synchronization-status />
             <language-switcher />
             <button
               @click="toggle"
@@ -44,16 +35,7 @@
               <icon-only-logo />
             </div>
             <div class="flex flex-row items-center justify-end gap-2">
-              <transition name="fade" mode="in-out">
-                <div class="flex items-center p-4" v-if="!isSynchronised">
-                  <moon-loader
-                    title="Synchronising..."
-                    size="40"
-                    color="white"
-                    :loading="!isSynchronised"
-                  />
-                </div>
-              </transition>
+              <synchronization-status />
               <language-switcher />
               <button
                 @click="toggle"
@@ -173,14 +155,14 @@ import LanguageSwitcher from "@/components/ui/LanguageSwitcher.vue";
 import CalendarIcon from "vue-tabler-icons/icons/CalendarIcon";
 import RobotIcon from "vue-tabler-icons/icons/RobotIcon";
 import IconOnlyLogo from "@/components/ui/IconOnlyLogo.vue";
-import { MoonLoader } from "vue3-spinner";
 import ReportIcon from "vue-tabler-icons/icons/ReportIcon";
+import SynchronizationStatus from "@/components/ui/SynchronizationStatus.vue";
 
 export default {
   name: "SidebarNav",
   components: {
+    SynchronizationStatus,
     ReportIcon,
-    MoonLoader,
     IconOnlyLogo,
     RobotIcon,
     CalendarIcon,
@@ -212,7 +194,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["isAuthorized", "isSynchronised"])
+    ...mapGetters("authorization", ["isAuthorized"])
   },
   methods: {
     toggle() {

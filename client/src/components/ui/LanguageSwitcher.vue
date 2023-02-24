@@ -9,7 +9,7 @@
     </button>
     <overlay-panel ref="op" :show-close-icon="true">
       <button
-        v-for="lang in getLanguages"
+        v-for="lang in languages"
         :key="lang"
         class="w-full flex text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
         @click="setLanguage(lang)"
@@ -44,12 +44,15 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getLanguages", "getLocale"]),
+    ...mapGetters("settings", ["getLocale"]),
+    languages() {
+      return ["pl", "en", "de", "fr", "pt", "ru", "uk", "it", "cs"].sort();
+    },
   },
   methods: {
     setLanguage(language) {
       this.$i18n.locale = language;
-      store.dispatch("setLocale", language);
+      store.dispatch("settings/setLocale", language);
       this.toggle();
     },
     toggle(event) {

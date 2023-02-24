@@ -1,5 +1,3 @@
-import api from "../../services/api";
-
 const emptyTask = {
   name: "",
   description: "",
@@ -11,10 +9,6 @@ const state = () => ({
 });
 
 const actions = {
-  async getTask({ commit }, taskId) {
-    const task = await api.getTask(taskId);
-    commit("setTask", task);
-  },
   setTask({ commit }, task) {
     commit("setTask", task);
   },
