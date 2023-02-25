@@ -1,9 +1,9 @@
 <template>
   <div class="pl-4 pr-6 py-4 mb-2 bg-white shadow rounded transition-element">
-    <div class="flex flex-wrap -mx-4">
+    <div class="flex flex-wrap -mx-4 justify-between">
       <div class="mb-4 md:mb-0 px-4 flex">
         <h4 v-if="subject" class="font-medium">{{ subject }}</h4>
-<!--        <h4 v-else class="font-medium"><TrackedSubject width="w-72" /></h4>-->
+        <h4 v-else class="font-medium">{{ $t("Unassigned")}}</h4>
       </div>
       <div class="px-4 flex text-xs text-gray-500 items-center">
         <span class="mr-1">
