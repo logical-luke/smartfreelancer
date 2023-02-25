@@ -13,7 +13,6 @@
             class="w-full p-inputtext-sm"
             type="email"
             v-model="email"
-            name="email"
             autocomplete="email"
           />
         </div>
@@ -42,7 +41,9 @@
         </div>
         <p class="mb-2 font-medium text-gray-500">
           {{ $t("Don't have an account") }}? {{ $t("Create a new account") }}
-          <router-link class="text-blue-500" to="/register">{{ $t("here") }}</router-link>
+          <router-link class="text-blue-500" to="/register">{{
+            $t("here")
+          }}</router-link>
         </p>
       </form>
     </div>
@@ -60,7 +61,6 @@ import GoogleButton from "@/components/ui/GoogleButton.vue";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher.vue";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
-import Message from "primevue/message";
 import time from "@/services/synchronization/time";
 
 export default {
@@ -72,38 +72,46 @@ export default {
     SubmitButton,
     Password,
     InputText,
-    Message
   },
   data: () => {
     return {
       email: "",
       password: "",
-      buttonTitle: "Log in"
+      buttonTitle: "Log in",
     };
   },
   methods: {
     async login() {
       try {
         this.$toast.removeAllGroups();
-        await authorization.login({
-          email: this.email,
-          password: this.password
-        });
-        await store.commit("synchronization/setInitialLoaded", false)
+        const {token, refreshToken} = await authorization.login(this.email, this.password);
+        await authorization.authorize(token, refreshToken);
+        await store.commit("synchronization/setInitialLoaded", false);
         await time.enableServerTimeSync();
         await synchronization.syncInitial();
-        await store.commit("synchronization/setInitialLoaded", true)
+        await store.commit("synchronization/setInitialLoaded", true);
 
         await router.push("/");
       } catch (err) {
         this.password = "";
-        let message = this.$i18n.t("Unknown error") + ". " + this.$i18n.t("Please try again");
-        if (err.message  === "Invalid username or password") {
+        let message =
+          this.$i18n.t("Unknown error") +
+          ". " +
+          this.$i18n.t("Please try again");
+        if (err.message === "Invalid username or password") {
           message = this.$i18n.t("Invalid email or password");
         }
-        this.$toast.add({ severity: "error", summary: this.$i18n.t("Unable to sign in"), detail: message, life: 5000 });
+        this.$toast.add({
+          severity: "error",
+          summary: this.$i18n.t("Unable to sign in"),
+          detail: message,
+          life: 5000,
+        });
       }
-    }
+    },
+  },
+  beforeRouteEnter() {
+    store.commit("synchronization/setInitialLoaded", true);
   }
 };
 </script>

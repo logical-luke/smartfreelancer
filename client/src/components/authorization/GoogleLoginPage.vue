@@ -6,13 +6,16 @@
 import router from "../../router";
 import store from "@/store";
 import api from "@/services/api";
+import authorization from "@/services/authorization";
+import time from "@/services/synchronization/time";
+import synchronization from "@/services/synchronization";
 
 export default {
   name: "GoogleLoginPage",
   data() {
     return {
       spinnerSize: "96 px",
-      spinnerColor: "#382CDD",
+      spinnerColor: "#382CDD"
     };
   },
   async mounted() {
@@ -24,9 +27,15 @@ export default {
       await router.push("/login");
     }
 
-    const tokens = await api.postGoogleCheck({ code: code, state: state });
-    await store.dispatch("authorization/login", tokens);
-  },
+    const { token, refreshToken } = await api.postGoogleCheck({ code: code, state: state });
+    await authorization.authorize(token, refreshToken);
+    await store.commit("synchronization/setInitialLoaded", false);
+    await time.enableServerTimeSync();
+    await synchronization.syncInitial();
+    await store.commit("synchronization/setInitialLoaded", true);
+
+    await router.push("/");
+  }
 };
 </script>
 

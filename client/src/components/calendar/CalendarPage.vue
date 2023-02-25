@@ -8,10 +8,8 @@
 
 <script>
 export default {
-  name: "CalendarPage"
+  name: "CalendarPage",
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

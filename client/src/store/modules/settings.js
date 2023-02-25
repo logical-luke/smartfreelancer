@@ -7,19 +7,20 @@ const actions = {
   setLocale({ commit }, locale) {
     commit("setLocale", locale);
   },
-}
+};
 
 const mutations = {
-  toggleNavBarCollapsed: state => state.navBarCollapsed = !state.navBarCollapsed,
+  toggleNavBarCollapsed: (state) =>
+    (state.navBarCollapsed = !state.navBarCollapsed),
   setLocale(state, locale) {
     state.locale = locale;
   },
-}
+};
 
 const getters = {
-  isNavBarCollapsed: state => state.navBarCollapsed,
-  getLocale: state => state.locale,
-}
+  isNavBarCollapsed: (state) => state.navBarCollapsed,
+  getLocale: (state) => state.locale,
+};
 
 export default {
   namespaced: true,
@@ -27,4 +28,4 @@ export default {
   actions,
   mutations,
   getters,
-}
+};

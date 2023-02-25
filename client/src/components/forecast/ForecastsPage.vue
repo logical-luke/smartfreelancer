@@ -8,10 +8,8 @@
 
 <script>
 export default {
-  name: "ForecastsPage"
+  name: "ForecastsPage",
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

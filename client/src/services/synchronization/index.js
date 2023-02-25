@@ -40,4 +40,16 @@ export default {
       store.commit("synchronization/setSynchronizationTime", new Date());
     });
   },
+  async upload() {
+
+  },
+  async enableBackgroundUpload() {
+    const backgroundUploadId = setInterval(() => {
+      this.upload();
+    }, 1000);
+    store.commit("synchronization/setBackgroundUploadIntervalId", backgroundUploadId);
+  },
+  async disableBackgroundUpload() {
+    clearInterval(store.state.synchronization.backgroundUploadIntervalId);
+  },
 };

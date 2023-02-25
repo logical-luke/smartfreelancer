@@ -5,7 +5,10 @@
       @click="toggle"
       class="navbar-burger bg-indigo-500 text-white flex items-center rounded focus:outline-none"
     >
-      <country-flag :size="size" :country="getFlagCode(getLocale)"></country-flag>
+      <country-flag
+        :size="size"
+        :country="getFlagCode(getLocale)"
+      ></country-flag>
     </button>
     <overlay-panel ref="op" :show-close-icon="true">
       <button
@@ -27,6 +30,7 @@
 import CountryFlag from "vue-country-flag-next";
 import { mapGetters } from "vuex";
 import store from "@/store";
+import cache from "@/services/cache"
 import OverlayPanel from "primevue/overlaypanel";
 
 export default {
@@ -35,8 +39,8 @@ export default {
   props: {
     size: {
       type: String,
-      default: "normal"
-    }
+      default: "normal",
+    },
   },
   data() {
     return {
@@ -53,6 +57,7 @@ export default {
     setLanguage(language) {
       this.$i18n.locale = language;
       store.dispatch("settings/setLocale", language);
+      cache.setLocale(language);
       this.toggle();
     },
     toggle(event) {
@@ -81,7 +86,7 @@ export default {
 </script>
 
 <style scoped>
-  span.flag.normal-flag {
-    margin: 0 -6px 0 -5px;
-  }
+span.flag.normal-flag {
+  margin: 0 -6px 0 -5px;
+}
 </style>

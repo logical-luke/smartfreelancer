@@ -16,7 +16,7 @@
         <span class="text-4xl font-bold">$0</span>
         <span
           class="inline-block ml-2 py-1 px-2 bg-red-500 text-white text-xs rounded-full"
-        >+0%</span
+          >+0%</span
         >
       </div>
       <div class="relative w-full h-1 mb-2 bg-gray-50 rounded">
@@ -27,12 +27,11 @@
       <p class="text-xs text-black">{{ $t("Monthly Goal") }}</p>
     </div>
   </div>
-
 </template>
 
 <script>
 export default {
-  name: "ExpensesChart"
+  name: "ExpensesChart",
 };
 </script>
 

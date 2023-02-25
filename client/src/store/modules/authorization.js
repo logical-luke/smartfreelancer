@@ -14,7 +14,7 @@ const mutations = {
   setAuthorized(state, authorized) {
     state.authorized = authorized;
   },
-}
+};
 
 const getters = {
   isAuthorized(state) {
@@ -26,11 +26,11 @@ const getters = {
   getRefreshToken(state) {
     return state.refreshToken;
   },
-}
+};
 
 export default {
   namespaced: true,
   state,
   mutations,
   getters,
-}
+};

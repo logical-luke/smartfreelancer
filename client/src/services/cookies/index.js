@@ -16,6 +16,6 @@ export default {
     return VueCookies.get(key);
   },
   async remove(key) {
-    return VueCookies.remove("token");
+    return VueCookies.remove(key);
   },
 };

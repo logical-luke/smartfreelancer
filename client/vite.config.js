@@ -32,15 +32,15 @@ export default defineConfig({
       output: {
         // replace feature flag globals with boolean literals
         manualChunks(id) {
-          if (id.includes('vue-i18n')) {
-            return 'vue-i18n';
+          if (id.includes("vue-i18n")) {
+            return "vue-i18n";
           }
         },
         globals: {
           // replace feature flag globals with boolean literals
-          'vue-i18n': 'vue-i18n'
-        }
-      }
-    }
+          "vue-i18n": "vue-i18n",
+        },
+      },
+    },
   },
 });

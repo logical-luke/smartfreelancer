@@ -14,4 +14,4 @@ export default {
   async clear() {
     return localStorage.clear();
   },
-}
+};

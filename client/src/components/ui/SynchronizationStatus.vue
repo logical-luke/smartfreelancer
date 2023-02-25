@@ -1,8 +1,6 @@
 <template>
   <div class="p-1" v-if="isOffline">
-    <div
-      class="flex items-center"
-    >
+    <div class="flex items-center">
       <button
         type="button"
         v-tooltip.bottom="$t('You are offline')"
@@ -17,26 +15,21 @@
     </div>
   </div>
   <div v-else class="p-1">
-    <div
-      class="flex items-center animate-pulse-slow"
-      v-if="!isSynchronized"
-    >
+    <div class="flex items-center animate-pulse-slow" v-if="!isSynchronized">
       <button
         type="button"
         @click="showSyncPanel"
         v-tooltip.bottom="$t('Synchronization in progress') + '...'"
         class="inline-flex cursor-auto bg-yellow-600 items-center justify-center items-center p-2 text-sm font-medium text-white rounded-full transition duration-200"
       >
-        <cloud-download-icon class="animate-pulse-slow" size="20" />
+        <cloud-download-icon v-if="isQueueEmpty" class="animate-pulse-slow" size="20" />
+        <cloud-upload-icon v-else class="animate-pulse-slow" size="20" />
       </button>
       <overlay-panel class="lg:hidden" ref="opp">
-        {{ $t('Synchronization in progress') + '...' }}
+        {{ $t("Synchronization in progress") + "..." }}
       </overlay-panel>
     </div>
-    <div
-      v-else
-      class="flex items-center"
-    >
+    <div v-else class="flex items-center">
       <button
         type="button"
         @click="showSyncedPanel"
@@ -53,22 +46,36 @@
 </template>
 
 <script>
-import { MoonLoader } from "vue3-spinner";
 import { mapGetters } from "vuex";
-import Button from "primevue/button";
 import CloudIcon from "vue-tabler-icons/icons/CloudIcon";
 import CloudDownloadIcon from "vue-tabler-icons/icons/CloudDownloadIcon";
+import CloudUploadIcon from "vue-tabler-icons/icons/CloudUploadIcon";
 import CloudOffIcon from "vue-tabler-icons/icons/CloudOffIcon";
 import OverlayPanel from "primevue/overlaypanel";
 
 export default {
   name: "SynchronizationStatus",
-  components: { OverlayPanel, CloudOffIcon, CloudDownloadIcon, CloudIcon, MoonLoader, Button },
+  components: {
+    OverlayPanel,
+    CloudOffIcon,
+    CloudDownloadIcon,
+    CloudUploadIcon,
+    CloudIcon,
+  },
   computed: {
-    ...mapGetters("synchronization", ["isSynchronized", "isOffline", "getSynchronizationTime"]),
+    ...mapGetters("synchronization", [
+      "isSynchronized",
+      "isOffline",
+      "getSynchronizationTime",
+      "isQueueEmpty",
+    ]),
     getSynchronizationStatus() {
-      return this.$t("Last synchronization time") + ": " + this.getSynchronizationTime.toLocaleString();
-    }
+      return (
+        this.$t("Last synchronization time") +
+        ": " +
+        this.getSynchronizationTime.toLocaleString()
+      );
+    },
   },
   methods: {
     showOfflinePanel(event) {
@@ -79,14 +86,15 @@ export default {
     },
     showSyncedPanel(event) {
       this.$refs.ops.toggle(event);
-    }
+    },
   },
 };
 </script>
 
 <style scoped>
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {

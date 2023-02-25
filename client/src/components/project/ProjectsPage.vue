@@ -34,36 +34,36 @@
         <div class="pt-4 px-4 overflow-x-auto">
           <table class="table-auto w-full">
             <thead>
-            <tr class="text-sm text-gray-500 text-left">
-              <th v-if="bulkMode" class="font-medium w-8">
-                <div class="flex items-center justify-center">
-                  <input
-                    :checked="allSelected"
-                    @click="toggleAll"
-                    type="checkbox"
-                  />
-                </div>
-              </th>
-              <th class="font-medium">Name</th>
-              <th class="font-medium">Action</th>
-            </tr>
+              <tr class="text-sm text-gray-500 text-left">
+                <th v-if="bulkMode" class="font-medium w-8">
+                  <div class="flex items-center justify-center">
+                    <input
+                      :checked="allSelected"
+                      @click="toggleAll"
+                      type="checkbox"
+                    />
+                  </div>
+                </th>
+                <th class="font-medium">Name</th>
+                <th class="font-medium">Action</th>
+              </tr>
             </thead>
             <tbody>
-            <transition-group name="fade-slower" class="transition-element">
-              <template
-                v-for="(project, index) in paginatedProjects"
-                :key="project.id"
-              >
-                <project-list-item
-                  :bulkMode="bulkMode"
-                  @toggle-select="updateBulkItems"
-                  :selected="isSelected(project.id)"
-                  :grey-background="index % 2 === 0"
-                  :id="project.id"
-                  :name="project.name"
-                />
-              </template>
-            </transition-group>
+              <transition-group name="fade-slower" class="transition-element">
+                <template
+                  v-for="(project, index) in paginatedProjects"
+                  :key="project.id"
+                >
+                  <project-list-item
+                    :bulkMode="bulkMode"
+                    @toggle-select="updateBulkItems"
+                    :selected="isSelected(project.id)"
+                    :grey-background="index % 2 === 0"
+                    :id="project.id"
+                    :name="project.name"
+                  />
+                </template>
+              </transition-group>
             </tbody>
           </table>
         </div>
@@ -89,7 +89,7 @@ export default {
     SearchControls,
     PaginationControls,
     ProjectListItem,
-    NewButton
+    NewButton,
   },
   data() {
     return {
@@ -97,7 +97,7 @@ export default {
       currentPage: 1,
       searchPattern: "",
       bulkMode: false,
-      selectedProjects: []
+      selectedProjects: [],
     };
   },
   computed: mapState({
@@ -115,7 +115,7 @@ export default {
     },
     allSelected() {
       return this.selectedProjects.length === this.paginatedProjects.length;
-    }
+    },
   }),
   methods: {
     ...mapActions("projects", ["deleteProject", "deleteProjects"]),
@@ -159,7 +159,7 @@ export default {
         accept: () => {
           this.deleteProjects(this.selectedProjects);
           this.selectedProjects = [];
-        }
+        },
       });
     },
     toggleAll() {
@@ -173,11 +173,11 @@ export default {
     },
     isSelected(projectId) {
       return this.selectedProjects.includes(projectId);
-    }
+    },
   },
   mounted() {
     this.$store.dispatch("project/clearProject");
-  }
+  },
 };
 </script>
 

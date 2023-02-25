@@ -42,7 +42,6 @@
 <script>
 import { mapState } from "vuex";
 import TimeEntry from "@/components/timeline/TimeEntry.vue";
-import store from "@/store";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { MoonLoader } from "vue3-spinner";

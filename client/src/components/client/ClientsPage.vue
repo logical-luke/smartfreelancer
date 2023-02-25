@@ -34,36 +34,36 @@
         <div class="pt-4 px-4 overflow-x-auto">
           <table class="table-auto w-full">
             <thead>
-            <tr class="text-sm text-gray-500 text-left">
-              <th v-if="bulkMode" class="font-medium w-8">
-                <div class="flex items-center justify-center">
-                  <input
-                    :checked="allSelected"
-                    @click="toggleAll"
-                    type="checkbox"
-                  />
-                </div>
-              </th>
-              <th class="font-medium">Name</th>
-              <th class="font-medium">Action</th>
-            </tr>
+              <tr class="text-sm text-gray-500 text-left">
+                <th v-if="bulkMode" class="font-medium w-8">
+                  <div class="flex items-center justify-center">
+                    <input
+                      :checked="allSelected"
+                      @click="toggleAll"
+                      type="checkbox"
+                    />
+                  </div>
+                </th>
+                <th class="font-medium">Name</th>
+                <th class="font-medium">Action</th>
+              </tr>
             </thead>
             <tbody>
-            <transition-group name="fade-slower" class="transition-element">
-              <template
-                v-for="(client, index) in paginatedClients"
-                :key="client.id"
-              >
-                <client-list-item
-                  :bulkMode="bulkMode"
-                  @toggle-select="updateBulkItems"
-                  :selected="isSelected(client.id)"
-                  :grey-background="index % 2 === 0"
-                  :id="client.id"
-                  :name="client.name"
-                />
-              </template>
-            </transition-group>
+              <transition-group name="fade-slower" class="transition-element">
+                <template
+                  v-for="(client, index) in paginatedClients"
+                  :key="client.id"
+                >
+                  <client-list-item
+                    :bulkMode="bulkMode"
+                    @toggle-select="updateBulkItems"
+                    :selected="isSelected(client.id)"
+                    :grey-background="index % 2 === 0"
+                    :id="client.id"
+                    :name="client.name"
+                  />
+                </template>
+              </transition-group>
             </tbody>
           </table>
         </div>
@@ -89,7 +89,7 @@ export default {
     SearchControls,
     PaginationControls,
     ClientListItem,
-    NewButton
+    NewButton,
   },
   data() {
     return {
@@ -97,7 +97,7 @@ export default {
       currentPage: 1,
       searchPattern: "",
       bulkMode: false,
-      selectedClients: []
+      selectedClients: [],
     };
   },
   computed: mapState({
@@ -115,7 +115,7 @@ export default {
     },
     allSelected() {
       return this.selectedClients.length === this.paginatedClients.length;
-    }
+    },
   }),
   methods: {
     ...mapActions("clients", ["deleteClient", "deleteClients"]),
@@ -159,7 +159,7 @@ export default {
         accept: () => {
           this.deleteClients(this.selectedClients);
           this.selectedClients = [];
-        }
+        },
       });
     },
     toggleAll() {
@@ -171,11 +171,11 @@ export default {
     },
     isSelected(clientId) {
       return this.selectedClients.includes(clientId);
-    }
+    },
   },
   mounted() {
     this.$store.dispatch("client/clearClient");
-  }
+  },
 };
 </script>
 

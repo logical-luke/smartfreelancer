@@ -8,10 +8,8 @@
 
 <script>
 export default {
-  name: "AutomationsPage"
+  name: "AutomationsPage",
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

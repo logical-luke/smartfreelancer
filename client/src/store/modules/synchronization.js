@@ -3,6 +3,7 @@ const state = () => ({
   synchronizationTime: null,
   queue: [],
   isOffline: false,
+  backgroundUploadIntervalId: null,
 });
 
 const mutations = {
@@ -18,6 +19,9 @@ const mutations = {
   setIsOffline(state, isOffline) {
     state.isOffline = isOffline;
   },
+  setBackgroundUploadIntervalId(state, backgroundUploadIntervalId) {
+    state.backgroundSyncIntervalId = backgroundUploadIntervalId;
+  }
 };
 
 const getters = {
@@ -36,6 +40,12 @@ const getters = {
   isOffline(state) {
     return state.isOffline;
   },
+  isQueueEmpty(state) {
+    return state.queue.length === 0;
+  },
+  getBackgroundUploadIntervalId(state) {
+    return state.backgroundSyncIntervalId;
+  }
 };
 
 export default {

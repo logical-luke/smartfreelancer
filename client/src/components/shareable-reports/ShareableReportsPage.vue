@@ -8,10 +8,8 @@
 
 <script>
 export default {
-  name: "ShareableReportsPage"
+  name: "ShareableReportsPage",
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

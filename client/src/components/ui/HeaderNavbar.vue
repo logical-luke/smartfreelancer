@@ -82,11 +82,11 @@ export default {
   data() {
     return {
       slideFinished: true,
-      navHeight: null
+      navHeight: null,
     };
   },
   computed: {
-    ...mapGetters("settings" ,["isNavBarCollapsed"])
+    ...mapGetters("settings", ["isNavBarCollapsed"]),
   },
   methods: {
     enter(el) {
@@ -112,7 +112,7 @@ export default {
           done();
         }, 100);
       }, 300);
-    }
+    },
   },
   components: {
     CollapseNavBarButton,
@@ -121,7 +121,7 @@ export default {
     StartTime,
     TimerTime,
     TrackedSubject,
-    ToggleTimerButton
-  }
+    ToggleTimerButton,
+  },
 };
 </script>

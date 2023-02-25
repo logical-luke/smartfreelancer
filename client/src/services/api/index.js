@@ -8,7 +8,7 @@ const getRequest = async function (url, params, headers, repeated = 0) {
     const response = await axios.get(process.env.API_BASE_URL + url, {
       params: params,
       headers: {
-        Authorization: `Bearer ${store.getters['authorization/getToken']}`,
+        Authorization: `Bearer ${store.getters["authorization/getToken"]}`,
       },
     });
 
@@ -165,7 +165,10 @@ const refreshToken = async function () {
     }
     if (response && response.status === 200) {
       await store.dispatch("authorization/setToken", response.data.token);
-      await store.dispatch("authorization/setRefreshToken", response.data.refresh_token);
+      await store.dispatch(
+        "authorization/setRefreshToken",
+        response.data.refresh_token
+      );
 
       return;
     }

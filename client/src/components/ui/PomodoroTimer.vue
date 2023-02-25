@@ -20,7 +20,7 @@
         optionLabel="name"
       />
       <div>
-        {{ $t("Custom")}}:
+        {{ $t("Custom") }}:
         <input-text
           type="text"
           class="w-16"
@@ -32,7 +32,7 @@
         type="button"
         class="inline-flex text-center items-center w-auto px-3 flex-nowrap py-3 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
       >
-        {{ $t("Start timer")}}
+        {{ $t("Start timer") }}
       </button>
     </div>
   </overlay-panel>
@@ -42,12 +42,16 @@
 import OverlayPanel from "primevue/overlaypanel";
 import SelectButton from "primevue/selectbutton";
 import InputText from "primevue/inputtext";
-import HourglassIcon from "vue-tabler-icons/icons/HourglassIcon";
 import HourglassEmptyIcon from "vue-tabler-icons/icons/HourglassEmptyIcon";
 
 export default {
   name: "PomodoroTimer",
-  components: { HourglassEmptyIcon, HourglassIcon, OverlayPanel, SelectButton, InputText },
+  components: {
+    HourglassEmptyIcon,
+    OverlayPanel,
+    SelectButton,
+    InputText,
+  },
   computed: {
     sizeClasses() {
       return `w-${this.size} h-${this.size}`;
@@ -83,7 +87,7 @@ export default {
     },
   },
   mounted() {
-    this.selectedMode = { name: this.$t("Fixed"), code: "f" }
+    this.selectedMode = { name: this.$t("Fixed"), code: "f" };
   },
 };
 </script>

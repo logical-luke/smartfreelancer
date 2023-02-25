@@ -13,14 +13,17 @@
 <script>
 import LogoutIcon from "vue-tabler-icons/icons/LogoutIcon";
 import authorization from "@/services/authorization";
+import router from "@/router";
 
 export default {
   name: "SidebarLogout",
   components: { LogoutIcon },
   methods: {
     async logout() {
-      return await authorization.logout();
-    }
+      await authorization.logout();
+
+      return await router.push("/login");
+    },
   },
 };
 </script>

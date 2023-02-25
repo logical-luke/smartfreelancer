@@ -10,17 +10,17 @@ const mutations = {
   setServerTimeSyncId(state, serverTimeSyncId) {
     state.serverTimeSyncId = serverTimeSyncId;
   },
-}
+};
 
 const getters = {
   getServerTime(state) {
     return state.serverTime;
   },
-}
+};
 
 export default {
   namespaced: true,
   state,
   mutations,
   getters,
-}
+};

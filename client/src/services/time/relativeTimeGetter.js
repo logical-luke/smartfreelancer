@@ -15,8 +15,7 @@ export default function getRelativeTime(startTime, endTime) {
     timeDiff / (millisecondsPerSecond * secondsPerMinute * minutesPerHour)
   );
   const minutes = Math.floor(
-    (timeDiff / (millisecondsPerSecond * secondsPerMinute)) %
-      minutesPerHour
+    (timeDiff / (millisecondsPerSecond * secondsPerMinute)) % minutesPerHour
   );
   const seconds = Math.floor(
     (timeDiff / millisecondsPerSecond) % secondsPerMinute

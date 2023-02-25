@@ -10,5 +10,8 @@ export default {
   },
   async setLocale(locale) {
     return await db.set("locale", locale);
+  },
+  async clear() {
+    return await db.clear();
   }
-}
+};

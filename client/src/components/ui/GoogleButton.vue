@@ -5,9 +5,7 @@
     @click.prevent="loginWithGoogle"
   >
     <brand-google-icon size="18" />
-    <span class="ml-2">
-      <slot></slot> {{ $t("with") }} Google
-    </span>
+    <span class="ml-2"> <slot></slot> {{ $t("with") }} Google </span>
   </button>
 </template>
 
@@ -23,7 +21,7 @@ export default {
     async loginWithGoogle() {
       store.commit("synchronization/setInitialLoaded", false);
       window.location.href = await api.postGoogleStart();
-    }
-  }
+    },
+  },
 };
 </script>

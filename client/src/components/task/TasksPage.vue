@@ -34,33 +34,36 @@
         <div class="pt-4 px-4 overflow-x-auto">
           <table class="table-auto w-full">
             <thead>
-            <tr class="text-sm text-gray-500 text-left">
-              <th v-if="bulkMode" class="font-medium w-8">
-                <div class="flex items-center justify-center">
-                  <input
-                    :checked="allSelected"
-                    @click="toggleAll"
-                    type="checkbox"
-                  />
-                </div>
-              </th>
-              <th class="font-medium">Name</th>
-              <th class="font-medium">Action</th>
-            </tr>
+              <tr class="text-sm text-gray-500 text-left">
+                <th v-if="bulkMode" class="font-medium w-8">
+                  <div class="flex items-center justify-center">
+                    <input
+                      :checked="allSelected"
+                      @click="toggleAll"
+                      type="checkbox"
+                    />
+                  </div>
+                </th>
+                <th class="font-medium">Name</th>
+                <th class="font-medium">Action</th>
+              </tr>
             </thead>
             <tbody>
-            <transition-group name="fade-slower" class="transition-element">
-              <template v-for="(task, index) in paginatedTasks" :key="task.id">
-                <task-list-item
-                  :bulkMode="bulkMode"
-                  @toggle-select="updateBulkItems"
-                  :selected="isSelected(task.id)"
-                  :grey-background="index % 2 === 0"
-                  :id="task.id"
-                  :name="task.name"
-                />
-              </template>
-            </transition-group>
+              <transition-group name="fade-slower" class="transition-element">
+                <template
+                  v-for="(task, index) in paginatedTasks"
+                  :key="task.id"
+                >
+                  <task-list-item
+                    :bulkMode="bulkMode"
+                    @toggle-select="updateBulkItems"
+                    :selected="isSelected(task.id)"
+                    :grey-background="index % 2 === 0"
+                    :id="task.id"
+                    :name="task.name"
+                  />
+                </template>
+              </transition-group>
             </tbody>
           </table>
         </div>
@@ -86,7 +89,7 @@ export default {
     SearchControls,
     PaginationControls,
     TaskListItem,
-    NewButton
+    NewButton,
   },
   data() {
     return {
@@ -94,7 +97,7 @@ export default {
       currentPage: 1,
       searchPattern: "",
       bulkMode: false,
-      selectedTasks: []
+      selectedTasks: [],
     };
   },
   computed: mapState({
@@ -112,7 +115,7 @@ export default {
     },
     allSelected() {
       return this.selectedTasks.length === this.paginatedTasks.length;
-    }
+    },
   }),
   methods: {
     ...mapActions("tasks", ["deleteTask", "deleteTasks"]),
@@ -156,7 +159,7 @@ export default {
         accept: () => {
           this.deleteTasks(this.selectedTasks);
           this.selectedTasks = [];
-        }
+        },
       });
     },
     toggleAll() {
@@ -168,11 +171,11 @@ export default {
     },
     isSelected(taskId) {
       return this.selectedTasks.includes(taskId);
-    }
+    },
   },
   mounted() {
     this.$store.dispatch("task/clearTask");
-  }
+  },
 };
 </script>
 

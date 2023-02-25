@@ -43,10 +43,7 @@ onMounted(async () => {
 
 <template>
   <transition name="fade" mode="out-in">
-    <div
-      class="grid h-screen place-items-center"
-      v-if="!isInitialLoaded"
-    >
+    <div class="grid h-screen place-items-center" v-if="!isInitialLoaded">
       <div>
         <moon-loader
           :size="spinnerSize"
@@ -61,8 +58,8 @@ onMounted(async () => {
         :class="{ 'mx-auto lg:ml-80': isAuthorizedPage }"
       >
         <toast
-          :breakpoints="{'920px': {width: '100%', right: '0', left: '0'}}"
-          :closeButtonProps="{style: {'box-shadow': 'none'}}"
+          :breakpoints="{ '920px': { width: '100%', right: '0', left: '0' } }"
+          :closeButtonProps="{ style: { 'box-shadow': 'none' } }"
           errorIcon="pi pi-minus-circle"
         />
         <confirm-dialog />
@@ -75,7 +72,10 @@ onMounted(async () => {
         <div v-if="isInitialLoaded">
           <router-view v-slot="{ Component }">
             <transition name="fade" mode="out-in">
-              <div :class="isAuthorizedPage? 'py-4 md:py-8 px-6' : ''" :key="path">
+              <div
+                :class="isAuthorizedPage ? 'py-4 md:py-8 px-6' : ''"
+                :key="path"
+              >
                 <component :is="Component"></component>
               </div>
             </transition>
@@ -95,7 +95,7 @@ export default {
   data() {
     return {
       spinnerSize: "96 px",
-      spinnerColor: "#382CDD"
+      spinnerColor: "#382CDD",
     };
   },
   computed: {
@@ -109,8 +109,8 @@ export default {
 
       return meta.requiresAuth === true;
     },
-    ...mapGetters("synchronization", ["isInitialLoaded"])
-  }
+    ...mapGetters("synchronization", ["isInitialLoaded"]),
+  },
 };
 </script>
 

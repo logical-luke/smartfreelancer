@@ -142,7 +142,6 @@ import SidebarLogout from "@/components/ui/SidebarLogout.vue";
 import UsersIcon from "vue-tabler-icons/icons/UsersIcon";
 import Menu2Icon from "vue-tabler-icons/icons/Menu2Icon";
 import XIcon from "vue-tabler-icons/icons/XIcon";
-import TransparentLogoWide from "@/components/ui/TransparentLogoWide.vue";
 import SunHighIcon from "vue-tabler-icons/icons/SunHighIcon";
 import ClockHour4Icon from "vue-tabler-icons/icons/ClockHour4Icon";
 import ChecklistIcon from "vue-tabler-icons/icons/ChecklistIcon";
@@ -175,31 +174,30 @@ export default {
     ChecklistIcon,
     ClockHour4Icon,
     SunHighIcon,
-    TransparentLogoWide,
     XIcon,
     Menu2Icon,
     UsersIcon,
     SidebarLogout,
     BriefcaseIcon,
-    SidebarItem
+    SidebarItem,
   },
   data() {
     return {
-      open: false
+      open: false,
     };
   },
   watch: {
     $route() {
       this.open = false;
-    }
+    },
   },
   computed: {
-    ...mapGetters("authorization", ["isAuthorized"])
+    ...mapGetters("authorization", ["isAuthorized"]),
   },
   methods: {
     toggle() {
       this.open = !this.open;
-    }
-  }
+    },
+  },
 };
 </script>

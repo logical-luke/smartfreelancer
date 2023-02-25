@@ -24,7 +24,7 @@ import ExpensesChart from "@/components/metric/ExpensesChart.vue";
 
 export default {
   name: "MetricsPage",
-  components: { ExpensesChart, RevenueChart, IncomeChart }
+  components: { ExpensesChart, RevenueChart, IncomeChart },
 };
 </script>
 

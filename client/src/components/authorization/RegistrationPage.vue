@@ -33,7 +33,9 @@
             :strong-label="$t('Strong password')"
             v-model="password"
           >
-            <template #header><p class="mb-1">{{ $t("Enter a password") }}</p></template>
+            <template #header
+              ><p class="mb-1">{{ $t("Enter a password") }}</p></template
+            >
             <template #footer="sp">
               {{ sp.level }}
               <divider />
@@ -73,7 +75,9 @@
         </div>
         <p class="mb-2 font-medium text-gray-500">
           {{ $t("Already have an account") }}? {{ $t("Log in") }}
-          <router-link class="text-blue-500" to="/login">{{ $t("here") }}</router-link>
+          <router-link class="text-blue-500" to="/login">{{
+            $t("here")
+          }}</router-link>
         </p>
       </form>
     </div>
@@ -89,6 +93,10 @@ import LanguageSwitcher from "@/components/ui/LanguageSwitcher.vue";
 import Password from "primevue/password";
 import Divider from "primevue/divider";
 import InputText from "primevue/inputtext";
+import authorization from "@/services/authorization";
+import time from "@/services/synchronization/time";
+import synchronization from "@/services/synchronization";
+import router from "@/router";
 
 export default {
   name: "RegistrationPage",
@@ -108,17 +116,25 @@ export default {
           severity: "error",
           summary: this.$i18n.t("Unable to sign up"),
           detail: this.$i18n.t("The passwords given are not the same"),
-          life: 5000
+          life: 5000,
         });
 
         return;
       }
       try {
-        await store.dispatch("register", {
+        await authorization.register({
           email: this.email,
           password: this.password,
-          confirmPassword: this.confirmPassword
+          confirmPassword: this.confirmPassword,
         });
+        const {token, refreshToken} = await authorization.login(this.email, this.password);
+        await authorization.authorize(token, refreshToken);
+        await store.commit("synchronization/setInitialLoaded", false);
+        await time.enableServerTimeSync();
+        await synchronization.syncInitial();
+        await store.commit("synchronization/setInitialLoaded", true);
+
+        await router.push("/");
       } catch (err) {
         let message = this.$i18n.t("Unable to sign up");
         if (err.message === "User already exists") {
@@ -128,10 +144,10 @@ export default {
           severity: "error",
           summary: this.$i18n.t("Unable to sign up"),
           detail: message,
-          life: 5000
+          life: 5000,
         });
       }
-    }
+    },
   },
   components: {
     LanguageSwitcher,
@@ -140,11 +156,11 @@ export default {
     SubmitButton,
     Password,
     Divider,
-    InputText
+    InputText,
   },
   beforeRouteEnter() {
     store.commit("synchronization/setInitialLoaded", true);
-  }
+  },
 };
 </script>
 

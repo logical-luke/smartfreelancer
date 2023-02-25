@@ -7,13 +7,13 @@ import "./tailwind/tailwind.css";
 import "primevue/resources/themes/tailwind-light/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
-import Tooltip from 'primevue/tooltip';
+import Tooltip from "primevue/tooltip";
 
 import i18n from "@/services/locale/i18n";
 
 import PrimeVue from "primevue/config";
 import ConfirmationService from "primevue/confirmationservice";
-import ToastService from 'primevue/toastservice';
+import ToastService from "primevue/toastservice";
 
 const app = createApp(App);
 
@@ -25,6 +25,6 @@ app.use(PrimeVue);
 app.use(ConfirmationService);
 app.use(ToastService);
 
-app.directive('tooltip', Tooltip);
+app.directive("tooltip", Tooltip);
 
 app.mount("#app");
