@@ -45,7 +45,7 @@ import TimeEntry from "@/components/timeline/TimeEntry.vue";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { MoonLoader } from "vue3-spinner";
-import getTimeEntries from "@/services/synchronization/timeEntries";
+import timeEntries from "@/services/synchronization/timeEntries";
 
 export default {
   name: "TimelinePage",
@@ -60,7 +60,7 @@ export default {
   methods: {
     async updateDate() {
       this.entriesLoaded = false;
-      await getTimeEntries({
+      await timeEntries.syncTimeEntries({
         date: this.date.toISOString().split("T")[0],
       });
       this.entriesLoaded = true;
@@ -72,7 +72,7 @@ export default {
     }),
   },
   async created() {
-    await getTimeEntries({
+    await timeEntries.syncTimeEntries({
       date: this.date.toISOString().split("T")[0],
     });
     this.entriesLoaded = true;

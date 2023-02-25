@@ -1,4 +1,5 @@
 import api from "@/services/api";
+import getUuid from "@/services/uuidGenerator";
 
 const emptyTimer = {
   id: null,
@@ -13,29 +14,6 @@ const state = () => ({
 });
 
 const actions = {
-  async startTimer({ commit, state, rootGetters }) {
-    const newTimer = JSON.parse(JSON.stringify(state.current));
-    newTimer.startTime = rootGetters["time/getServerTime"];
-    const timer = await api.createTimer(newTimer);
-
-    commit("setTimer", timer);
-  },
-  async stopTimer({ state, rootGetters, commit }) {
-    const timer = JSON.parse(JSON.stringify(state.current));
-    if (!timer.id) {
-      return;
-    }
-    timer.endTime = rootGetters["time/getServerTime"];
-    const timeEntry = await api.stopTimer(timer);
-
-    let timeEntries = JSON.parse(
-      JSON.stringify(rootGetters["timeEntries/getTimeEntries"])
-    );
-    timeEntries.unshift(timeEntry);
-    commit("timeEntries/setTimeEntries", timeEntries, { root: true });
-
-    commit("setTimer", JSON.parse(JSON.stringify(emptyTimer)));
-  },
   async setProjectId({ commit, state }, projectId) {
     if (state.current.projectId !== projectId) {
       const timer = JSON.parse(JSON.stringify(state.current));

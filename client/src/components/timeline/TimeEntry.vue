@@ -3,7 +3,7 @@
     <div class="flex flex-wrap -mx-4">
       <div class="mb-4 md:mb-0 px-4 flex">
         <h4 v-if="subject" class="font-medium">{{ subject }}</h4>
-        <h4 v-else class="font-medium"><TrackedSubject width="w-72" /></h4>
+<!--        <h4 v-else class="font-medium"><TrackedSubject width="w-72" /></h4>-->
       </div>
       <div class="px-4 flex text-xs text-gray-500 items-center">
         <span class="mr-1">

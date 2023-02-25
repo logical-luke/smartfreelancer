@@ -21,6 +21,7 @@
     "ntpclient": "^1.1.3",
     "primevue": "^3.23.0",
     "tailwind-merge": "^1.9.1",
+    "uuidv7": "^0.4.1",
     "vue": "^3.2.45",
     "vue-cookies": "^1.8.2",
     "vue-country-flag-next": "^2.3.2",

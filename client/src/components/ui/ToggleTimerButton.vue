@@ -14,6 +14,7 @@
 import PlayerPlayIcon from "vue-tabler-icons/icons/PlayerPlayIcon";
 import { mapActions, mapState } from "vuex";
 import PlayerStopIcon from "vue-tabler-icons/icons/PlayerStopIcon";
+import timer from "@/services/timer";
 
 export default {
   name: "ToggleTimerButton",
@@ -58,13 +59,13 @@ export default {
   methods: {
     async toggleTimer() {
       if (!this.isRunning && this.timer && this.timer.id) {
-        await this.$store.dispatch("timer/stopTimer");
+        await timer.stopTimer();
       }
 
       if (this.isRunning) {
-        await this.$store.dispatch("timer/stopTimer");
+        await timer.stopTimer();
       } else {
-        await this.$store.dispatch("timer/startTimer");
+        await timer.startTimer();
 
         if (this.projectId && this.timer.projectId !== this.projectId) {
           await this.$store.dispatch("timer/setProjectId", this.projectId);

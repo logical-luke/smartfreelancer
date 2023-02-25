@@ -57,7 +57,7 @@ export default {
     setLanguage(language) {
       this.$i18n.locale = language;
       store.dispatch("settings/setLocale", language);
-      cache.setLocale(language);
+      cache.set("locale", language);
       this.toggle();
     },
     toggle(event) {

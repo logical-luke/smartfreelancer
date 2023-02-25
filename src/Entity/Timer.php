@@ -13,8 +13,6 @@ class Timer
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     private ?Uuid $id = null;
 
     #[ORM\Column(type: Types::DATETIMETZ_IMMUTABLE)]
@@ -33,16 +31,18 @@ class Timer
     #[ORM\OneToOne(inversedBy: 'timer', cascade: ['persist'])]
     private ?Task $task = null;
 
-    protected function __construct(User $owner)
+    protected function __construct(User $owner, ?Uuid $id = null)
     {
+        $this->id = !$id ? Uuid::v7() : $id;
+
         $this->owner = $owner;
 
         $this->startTime = new \DateTimeImmutable();
     }
 
-    public static function fromUser(User $owner): self
+    public static function fromUser(User $owner, ?Uuid $id = null): self
     {
-        return new self($owner);
+        return new self($owner, $id);
     }
 
     public function getStartTime(): ?\DateTimeInterface

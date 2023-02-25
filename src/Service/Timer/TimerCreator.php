@@ -32,7 +32,7 @@ class TimerCreator
             throw new InvalidPayloadException('Invalid owner id');
         }
 
-        $timer = Timer::fromUser($user);
+        $timer = Timer::fromUser($user, $payload->getId());
         $timer->setStartTime($payload->getStartTime());
 
         if ($projectId = $payload->getProjectId()) {

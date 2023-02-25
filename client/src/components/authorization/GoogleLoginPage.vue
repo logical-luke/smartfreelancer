@@ -31,7 +31,7 @@ export default {
     await authorization.authorize(token, refreshToken);
     await store.commit("synchronization/setInitialLoaded", false);
     await time.enableServerTimeSync();
-    await synchronization.syncInitial();
+    await synchronization.syncAll();
     await store.commit("synchronization/setInitialLoaded", true);
 
     await router.push("/");

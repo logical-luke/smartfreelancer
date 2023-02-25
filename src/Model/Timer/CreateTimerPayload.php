@@ -6,26 +6,33 @@ namespace App\Model\Timer;
 
 use Symfony\Component\Uid\Uuid;
 
-class CreateTimerPayload
+readonly class CreateTimerPayload
 {
     protected function __construct(
-        private readonly string $ownerId,
-        private readonly int $startTime,
-        private readonly ?string $projectId,
-        private readonly ?string $clientId,
-        private readonly ?string $taskId,
+        private ?string $id,
+        private string $ownerId,
+        private int $startTime,
+        private ?string $projectId,
+        private ?string $clientId,
+        private ?string $taskId,
     ) {
     }
 
     public static function from(array $payload): CreateTimerPayload
     {
         return new self(
+            $payload['id'] ?? null,
             $payload['ownerId'],
             $payload['startTime'],
             $payload['projectId'] ?? null,
             $payload['clientId'] ?? null,
             $payload['taskId'] ?? null,
         );
+    }
+
+    public function getId(): ?Uuid
+    {
+        return $this->id ? Uuid::fromString($this->id) : null;
     }
 
     public function getOwnerId(): Uuid

@@ -2,9 +2,26 @@ const state = () => ({
   initialLoaded: false,
   synchronizationTime: null,
   queue: [],
-  isOffline: false,
+  offline: false,
   backgroundUploadIntervalId: null,
+  backgroundDownloadIntervalId: null,
+  backgroundUploadInProgress: false,
+  backgroundDownloadInProgress: false,
+  synchronizationFailed: false,
 });
+
+const actions = {
+    pushToQueue({ commit, rootGetters }, queueItem) {
+        const queue = JSON.parse(JSON.stringify(rootGetters["synchronization/getQueue"]));
+        queue.push(queueItem);
+        commit("setQueue", queue);
+    },
+    removeFromQueue({ commit, rootGetters }, queueItem) {
+        const queue = JSON.parse(JSON.stringify(rootGetters["synchronization/getQueue"]));
+        queue.splice(queue.indexOf(queueItem), 1);
+        commit("setQueue", queue);
+    },
+};
 
 const mutations = {
   setInitialLoaded(state, loaded) {
@@ -16,12 +33,27 @@ const mutations = {
   setQueue(state, queue) {
     state.queue = queue;
   },
-  setIsOffline(state, isOffline) {
-    state.isOffline = isOffline;
+  setOffline(state, offline) {
+    state.offline = isOffline;
   },
   setBackgroundUploadIntervalId(state, backgroundUploadIntervalId) {
     state.backgroundSyncIntervalId = backgroundUploadIntervalId;
-  }
+  },
+  setBackgroundDownloadIntervalId(state, backgroundDownloadIntervalId) {
+    state.backgroundSyncIntervalId = backgroundDownloadIntervalId;
+  },
+  setBackgroundUploadInProgress(state, backgroundUploadInProgress) {
+    state.backgroundUploadInProgress = backgroundUploadInProgress;
+  },
+  setBackgroundDownloadInProgress(state, backgroundDownloadInProgress) {
+    state.backgroundDownloadInProgress = backgroundDownloadInProgress;
+  },
+  clearQueue(state) {
+    state.queue = [];
+  },
+  setSynchronizationFailed(state, synchronizationFailed) {
+    state.synchronizationFailed = synchronizationFailed;
+  },
 };
 
 const getters = {
@@ -38,14 +70,26 @@ const getters = {
     return state.queue;
   },
   isOffline(state) {
-    return state.isOffline;
+    return state.offline;
   },
   isQueueEmpty(state) {
     return state.queue.length === 0;
   },
   getBackgroundUploadIntervalId(state) {
     return state.backgroundSyncIntervalId;
-  }
+  },
+  getBackgroundDownloadIntervalId(state) {
+    return state.backgroundSyncIntervalId;
+  },
+  isBackgroundUploadInProgress(state) {
+    return state.backgroundUploadInProgress;
+  },
+  isBackgroundDownloadInProgress(state) {
+    return state.backgroundDownloadInProgress;
+  },
+  isSynchronizationFailed(state) {
+    return state.synchronizationFailed;
+  },
 };
 
 export default {
@@ -53,4 +97,5 @@ export default {
   state,
   mutations,
   getters,
+  actions,
 };

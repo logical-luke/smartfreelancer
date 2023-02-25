@@ -13,11 +13,6 @@ import ConfirmDialog from "primevue/confirmdialog";
 import Toast from "primevue/toast";
 
 onMounted(async () => {
-  const locale = await cache.getLocale();
-  if (locale) {
-    await store.commit("settings/setLocale", locale);
-  }
-
   let token = await cookies.get("api_token");
   if (token === "null" || token === "") {
     token = null;
@@ -36,7 +31,9 @@ onMounted(async () => {
     await synchronization.syncUser();
     await time.enableServerTimeSync();
     await cache.getInitial();
-    synchronization.syncInitial();
+    await synchronization.enableBackgroundUpload();
+    synchronization.syncAll().then(() => {});
+    await synchronization.enableBackgroundSync();
   }
 });
 </script>
