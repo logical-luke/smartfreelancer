@@ -46,7 +46,6 @@ export default {
     ...mapState({
       timer: (state) => state.timer.current,
     }),
-    ...mapActions("timer", ["stopTimer"]),
     sizeClasses() {
       return `w-${this.size} h-${this.size}`;
     },

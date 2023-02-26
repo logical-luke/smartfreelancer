@@ -25,7 +25,6 @@ export default {
       return;
     }
     await store.commit("timer/clearTimer");
-    await cache.set("timer", JSON.stringify(newTimer));
     timer.endTime = endTime;
     await synchronization.pushToQueue(queueName, "stopTimer", timer);
     await timeEntries.createTimeEntry(
