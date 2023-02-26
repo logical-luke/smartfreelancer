@@ -63,7 +63,11 @@ class GoogleController extends AbstractController
 
         $code = $payload['code'];
 
-        $googleUser = $client->authorize($code);
+        try {
+            $googleUser = $client->authorize($code);
+        } catch (\Exception $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
 
         if (!$user = $userRepository->findOneByEmail($googleUser->getEmail())) {
             $user = $userCreator(CreateUserPayload::from([

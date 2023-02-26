@@ -66,10 +66,11 @@
           />
         </div>
 
-        <div class="flex flex-wrap gap-2 items-center">
-          <submit-button>{{ $t("Sign up") }}</submit-button>
-          <google-button>{{ $t("Sign up") }}</google-button>
-        </div>
+        <submit-button>{{ $t("Sign up") }}</submit-button>
+        <divider align="center">
+          <span>{{ $t("OR")}}</span>
+        </divider>
+        <google-button>{{ $t("Sign up") }}</google-button>
         <div class="flex">
           <language-switcher />
         </div>

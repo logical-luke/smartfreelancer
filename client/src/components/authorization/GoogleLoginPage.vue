@@ -19,22 +19,35 @@ export default {
     };
   },
   async mounted() {
-    store.commit("synchronization/setInitialLoaded", false);
     const code = this.$route.query.code;
     const state = this.$route.query.state;
 
     if (!code || !state) {
+      console.log("No code or state found");
+      await router.push("/login");
+
+      return;
+    }
+    try {
+      const response = await api.postGoogleCheck({ code: code, state: state });
+      const token = response.token;
+      const refreshToken = response.refreshToken;
+      if (!token || !refreshToken) {
+        console.log("No token or refresh token found");
+        await router.push("/login");
+
+        return;
+      }
+      await authorization.authorize(token, refreshToken);
+      await store.commit("synchronization/setInitialLoaded", false);
+      await time.enableServerTimeSync();
+      await synchronization.syncAll();
+      await store.commit("synchronization/setInitialLoaded", true);
+
+      await router.push("/");
+    } catch (e) {
       await router.push("/login");
     }
-
-    const { token, refreshToken } = await api.postGoogleCheck({ code: code, state: state });
-    await authorization.authorize(token, refreshToken);
-    await store.commit("synchronization/setInitialLoaded", false);
-    await time.enableServerTimeSync();
-    await synchronization.syncAll();
-    await store.commit("synchronization/setInitialLoaded", true);
-
-    await router.push("/");
   }
 };
 </script>

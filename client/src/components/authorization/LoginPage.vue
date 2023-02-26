@@ -32,10 +32,12 @@
           />
         </div>
 
-        <div class="flex flex-wrap gap-2 items-center">
           <submit-button>{{ $t("Log in") }}</submit-button>
+        <divider align="center">
+          <span>{{ $t("OR")}}</span>
+        </divider>
+
           <google-button>{{ $t("Log in") }}</google-button>
-        </div>
         <div class="flex">
           <language-switcher />
         </div>
@@ -62,6 +64,7 @@ import LanguageSwitcher from "@/components/ui/LanguageSwitcher.vue";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import time from "@/services/synchronization/time";
+import Divider from 'primevue/divider';
 
 export default {
   name: "LoginPage",
@@ -72,6 +75,7 @@ export default {
     SubmitButton,
     Password,
     InputText,
+    Divider,
   },
   data: () => {
     return {
