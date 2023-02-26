@@ -19,7 +19,6 @@ export default {
   components: { BrandGoogleIcon },
   methods: {
     async loginWithGoogle() {
-      store.commit("synchronization/setInitialLoaded", false);
       window.location.href = await api.postGoogleStart();
     },
   },

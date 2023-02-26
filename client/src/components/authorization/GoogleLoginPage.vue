@@ -18,12 +18,11 @@ export default {
       spinnerColor: "#382CDD"
     };
   },
-  async mounted() {
-    const code = this.$route.query.code;
-    const state = this.$route.query.state;
+  async beforeRouteEnter(to) {
+    const code = to.query.code;
+    const state = to.query.state;
 
     if (!code || !state) {
-      console.log("No code or state found");
       await router.push("/login");
 
       return;
@@ -33,7 +32,6 @@ export default {
       const token = response.token;
       const refreshToken = response.refreshToken;
       if (!token || !refreshToken) {
-        console.log("No token or refresh token found");
         await router.push("/login");
 
         return;
