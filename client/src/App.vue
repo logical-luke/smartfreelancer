@@ -32,7 +32,8 @@ onMounted(async () => {
     await time.enableServerTimeSync();
     await cache.getInitial();
     await synchronization.enableBackgroundUpload();
-    synchronization.syncAll().then(() => {});
+    synchronization.syncAll().then(() => {
+    });
     await synchronization.enableBackgroundSync();
   }
 });
@@ -92,7 +93,7 @@ export default {
   data() {
     return {
       spinnerSize: "96 px",
-      spinnerColor: "#382CDD",
+      spinnerColor: "#382CDD"
     };
   },
   computed: {
@@ -106,8 +107,8 @@ export default {
 
       return meta.requiresAuth === true;
     },
-    ...mapGetters("synchronization", ["isInitialLoaded"]),
-  },
+    ...mapGetters("synchronization", ["isInitialLoaded"])
+  }
 };
 </script>
 
@@ -140,5 +141,14 @@ button.p-button.p-component.p-confirm-dialog-accept.confirm-button-accept {
 button.p-button.p-component.p-confirm-dialog-accept.confirm-button-accept:enabled:hover {
   background-color: #dc2626 !important;
   border: none !important;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #6a707e;
+  border-radius: 4px;
 }
 </style>
