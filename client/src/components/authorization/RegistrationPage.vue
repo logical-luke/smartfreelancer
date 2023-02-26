@@ -3,8 +3,8 @@
     <div class="flex justify-center w-full">
       <transparent-logo-wide size="w-60" text-color="#410B01" />
     </div>
-    <div class="flex justify-center items-center px-4 md:px-0">
-      <form class="flex flex-col gap-3" @submit.prevent="register">
+    <div class="flex w-10/12 md:w-1/4 justify-center items-center">
+      <form class="flex w-full flex-col gap-3" @submit.prevent="register">
         <div>
           <label class="block text-sm font-medium mb-2" for="email">
             {{ $t("Email") }}
