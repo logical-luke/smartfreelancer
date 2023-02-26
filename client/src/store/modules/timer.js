@@ -1,5 +1,6 @@
 import api from "@/services/api";
 import getUuid from "@/services/uuidGenerator";
+import cache from "@/services/cache";
 
 const emptyTimer = {
   id: null,
@@ -20,6 +21,7 @@ const actions = {
       timer.projectId = projectId;
       timer.clientId = null;
       commit("setTimer", timer);
+      await cache.set("timer", JSON.stringify(timer));
     }
   },
   async setTaskId({ commit, state }, taskId) {
@@ -28,6 +30,7 @@ const actions = {
       timer.taskId = taskId;
       timer.clientId = null;
       commit("setTimer", timer);
+      await cache.set("timer", JSON.stringify(timer));
     }
   },
   async setClientId({ commit, state }, clientId) {
@@ -36,6 +39,7 @@ const actions = {
       timer.clientId = clientId;
       timer.projectId = null;
       commit("setTimer", timer);
+      await cache.set("timer", JSON.stringify(timer));
     }
   },
 };
@@ -50,30 +54,6 @@ const mutations = {
   },
   clearTimer(state) {
     state.current = JSON.parse(JSON.stringify(emptyTimer));
-  },
-  setProjectId({ state }, projectId) {
-    if (state.current.projectId !== projectId) {
-      const timer = JSON.parse(JSON.stringify(state.current));
-      timer.projectId = projectId;
-      timer.clientId = null;
-      state.current = timer;
-    }
-  },
-  setTaskId({ state }, taskId) {
-    if (state.current.taskId !== taskId) {
-      const timer = JSON.parse(JSON.stringify(state.current));
-      timer.taskId = taskId;
-      timer.clientId = null;
-      state.current = timer;
-    }
-  },
-  setClientId({ state }, clientId) {
-    if (state.current.clientId !== clientId) {
-      const timer = JSON.parse(JSON.stringify(state.current));
-      timer.clientId = clientId;
-      timer.projectId = null;
-      state.current = timer;
-    }
   },
 };
 
