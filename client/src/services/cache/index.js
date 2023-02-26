@@ -19,7 +19,7 @@ export default {
       await store.commit("tasks/setTasks", JSON.parse(await this.get("tasks")));
     }
     if (await this.exists("timer")) {
-      await store.commit("timer/setTimer", await this.get("timer"));
+      await store.commit("timer/setTimer", JSON.parse(await this.get("timer")));
     }
     await store.commit("synchronization/setInitialLoaded", true);
   },
