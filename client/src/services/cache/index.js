@@ -9,6 +9,15 @@ export default {
     if (await this.exists("navBarCollapsed")) {
       await store.commit("settings/setNavbarCollapsed", (await this.get("navBarCollapsed")) === "1");
     }
+    if (await this.exists("clients")) {
+      await store.commit("clients/setClients", JSON.parse(await this.get("clients")));
+    }
+    if (await this.exists("projects")) {
+      await store.commit("projects/setProjects", JSON.parse(await this.get("projects")));
+    }
+    if (await this.exists("tasks")) {
+      await store.commit("tasks/setTasks", JSON.parse(await this.get("tasks")));
+    }
     if (await this.exists("timer")) {
       await store.commit("timer/setTimer", await this.get("timer"));
     }
