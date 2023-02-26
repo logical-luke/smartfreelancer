@@ -15,6 +15,7 @@ import { mapGetters } from "vuex";
 import ArrowUpIcon from "vue-tabler-icons/icons/ArrowUpIcon";
 import store from "@/store";
 import ArrowDownIcon from "vue-tabler-icons/icons/ArrowDownIcon";
+import cache from "@/services/cache";
 
 export default {
   name: "CollapseNavBarButton",
@@ -31,6 +32,7 @@ export default {
   methods: {
     toggleCollapsed() {
       store.commit("settings/toggleNavBarCollapsed");
+      cache.set('navBarCollapsed', this.isNavBarCollapsed ? "1" : "0");
     },
   },
 };
