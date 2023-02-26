@@ -75,7 +75,6 @@ export default {
     await store.commit("synchronization/setBackgroundUploadInProgress", true);
 
     const queue = await store.getters["synchronization/getQueue"];
-    console.log(queue);
     for (let i = 0; i < queue.length; i++) {
       const queueItem = queue[i];
       if (!queueItem.queue in queues) {

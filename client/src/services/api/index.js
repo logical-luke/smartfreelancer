@@ -62,7 +62,6 @@ const postRequest = async function (url, data, headers, repeated = 0) {
     data = {};
   }
   try {
-    console.log(data);
     const response = axios.post(process.env.API_BASE_URL + url, data, {
       headers: {
         Authorization: `Bearer ${store.getters["authorization/getToken"]}`,

@@ -12,17 +12,17 @@ import synchronization from "@/services/synchronization";
 
 export default {
   name: "GoogleLoginPage",
-  data() {
-    return {
-      spinnerSize: "96 px",
-      spinnerColor: "#382CDD"
-    };
-  },
-  async beforeRouteEnter(to) {
-    const code = to.query.code;
-    const state = to.query.state;
+  async mounted() {
+    const code = this.$route.query.code;
+    const state = this.$route.query.state;
 
     if (!code || !state) {
+      this.$toast.add({
+        severity: "error",
+        summary: this.$i18n.t("Unable to sign in"),
+        detail: this.$i18n.t("Please try again"),
+        life: 5000,
+      });
       await router.push("/login");
 
       return;
@@ -32,6 +32,12 @@ export default {
       const token = response.token;
       const refreshToken = response.refreshToken;
       if (!token || !refreshToken) {
+        this.$toast.add({
+          severity: "error",
+          summary: this.$i18n.t("Unable to sign in"),
+          detail: this.$i18n.t("Please try again"),
+          life: 5000,
+        });
         await router.push("/login");
 
         return;
@@ -44,8 +50,17 @@ export default {
 
       await router.push("/");
     } catch (e) {
+      this.$toast.add({
+        severity: "error",
+        summary: this.$i18n.t("Unable to sign in"),
+        detail: this.$i18n.t("Please try again"),
+        life: 5000,
+      });
       await router.push("/login");
     }
+  },
+  beforeRouteEnter() {
+    store.commit("synchronization/setInitialLoaded", true);
   }
 };
 </script>

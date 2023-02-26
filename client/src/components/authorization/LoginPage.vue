@@ -26,7 +26,7 @@
             v-model="password"
             input-id="passwordInput"
             :toggle-mask="true"
-            autocomplete="password"
+            autocomplete="current-password"
             id="passwordPanel"
             :feedback="false"
           />

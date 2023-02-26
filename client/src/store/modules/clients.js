@@ -60,7 +60,6 @@ const actions = {
 
   async createClient({ commit, state }, newClient) {
     const client = await api.createClient(newClient);
-    console.log(client);
     let clients = JSON.parse(JSON.stringify(state.all));
     clients.unshift(client);
     commit("setClients", clients);
