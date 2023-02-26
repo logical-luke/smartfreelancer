@@ -21,7 +21,6 @@ const actions = {
       timer.projectId = projectId;
       timer.clientId = null;
       commit("setTimer", timer);
-      await cache.set("timer", JSON.stringify(timer));
     }
   },
   async setTaskId({ commit, state }, taskId) {
@@ -30,7 +29,6 @@ const actions = {
       timer.taskId = taskId;
       timer.clientId = null;
       commit("setTimer", timer);
-      await cache.set("timer", JSON.stringify(timer));
     }
   },
   async setClientId({ commit, state }, clientId) {
@@ -39,7 +37,6 @@ const actions = {
       timer.clientId = clientId;
       timer.projectId = null;
       commit("setTimer", timer);
-      await cache.set("timer", JSON.stringify(timer));
     }
   },
 };
@@ -51,9 +48,11 @@ const getters = {
 const mutations = {
   setTimer(state, timer) {
     state.current = timer;
+    cache.set("timer", JSON.stringify(timer)).then(() => {});
   },
   clearTimer(state) {
     state.current = JSON.parse(JSON.stringify(emptyTimer));
+    cache.set("timer", JSON.stringify(emptyTimer)).then(() => {});
   },
 };
 

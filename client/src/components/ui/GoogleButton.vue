@@ -4,9 +4,17 @@
     type="button"
     @click.prevent="loginWithGoogle"
   >
-    <brand-google-icon size="18" />
-    <span class="ml-2"> <slot></slot> {{ $t("with") }} Google </span>
+    <div class="flex items-center w-full">
+      <div class="flex items-center justify-start flex-grow-0">
+        <brand-google-icon size="18" />
+      </div>
+      <div class="flex items-center justify-center flex-grow">
+        <span><slot></slot> {{ $t("with") }} Google</span>
+      </div>
+    </div>
   </button>
+
+
 </template>
 
 <script>
