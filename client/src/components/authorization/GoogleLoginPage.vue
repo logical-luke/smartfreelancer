@@ -1,5 +1,13 @@
 <template>
-  <div></div>
+  <div class="grid h-screen place-items-center">
+    <div>
+      <moon-loader
+        :size="spinnerSize"
+        :color="spinnerColor"
+        :loading="true"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -9,9 +17,17 @@ import api from "@/services/api";
 import authorization from "@/services/authorization";
 import time from "@/services/synchronization/time";
 import synchronization from "@/services/synchronization";
+import { MoonLoader } from "vue3-spinner";
 
 export default {
   name: "GoogleLoginPage",
+  components: { MoonLoader },
+  data() {
+    return {
+      spinnerSize: "96 px",
+      spinnerColor: "#382CDD"
+    };
+  },
   async mounted() {
     const code = this.$route.query.code;
     const state = this.$route.query.state;
