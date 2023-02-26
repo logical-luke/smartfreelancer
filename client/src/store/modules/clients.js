@@ -1,4 +1,5 @@
 import api from "@/services/api";
+import cache from "@/services/cache";
 
 const state = () => ({
   all: [],
@@ -25,10 +26,12 @@ const actions = {
     let clients = JSON.parse(JSON.stringify(state.all));
     clients = clients.filter((client) => client.id !== id);
     commit("setClients", clients);
+    await cache.set("clients", JSON.stringify(clients));
     const timer = JSON.parse(JSON.stringify(rootGetters["timer/getTimer"]));
     if (timer.clientId === id) {
       timer.clientId = null;
       commit("timer/setTimer", timer, { root: true });
+      await cache.set("timer", JSON.stringify(timer));
     }
   },
 
@@ -38,10 +41,12 @@ const actions = {
     let clients = JSON.parse(JSON.stringify(state.all));
     clients = clients.filter((client) => !ids.includes(client.id));
     commit("setClients", clients);
+    await cache.set("clients", JSON.stringify(clients));
     const timer = JSON.parse(JSON.stringify(rootGetters["timer/getTimer"]));
     if (ids.includes(timer.clientId)) {
       timer.clientId = null;
       commit("timer/setTimer", timer, { root: true });
+      await cache.set("timer", JSON.stringify(timer));
     }
   },
 
@@ -56,6 +61,7 @@ const actions = {
       return client;
     });
     commit("setClients", clients);
+    await cache.set("clients", JSON.stringify(clients));
   },
 
   async createClient({ commit, state }, newClient) {
@@ -63,13 +69,13 @@ const actions = {
     let clients = JSON.parse(JSON.stringify(state.all));
     clients.unshift(client);
     commit("setClients", clients);
+    await cache.set("clients", JSON.stringify(clients));
   },
 };
 
 const mutations = {
   setClients(state, clients) {
     state.all = clients;
-    localStorage.setItem("clients", JSON.stringify(clients));
   },
 };
 

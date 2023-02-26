@@ -1,4 +1,5 @@
 import api from "@/services/api";
+import cache from "@/services/cache";
 
 const state = () => ({
   all: [],
@@ -17,10 +18,12 @@ const actions = {
     let tasks = JSON.parse(JSON.stringify(state.all));
     tasks = tasks.filter((task) => task.id !== id);
     commit("setTasks", tasks);
+    await cache.set("tasks", JSON.stringify(tasks));
     const timer = JSON.parse(JSON.stringify(rootGetters["timer/getTimer"]));
     if (timer.taskId === id) {
       timer.taskId = null;
       commit("timer/setTimer", timer, { root: true });
+      await cache.set("timer", JSON.stringify(timer));
     }
   },
 
@@ -30,10 +33,12 @@ const actions = {
     let tasks = JSON.parse(JSON.stringify(state.all));
     tasks = tasks.filter((task) => !ids.includes(task.id));
     commit("setTasks", tasks);
+    await cache.set("tasks", JSON.stringify(tasks));
     const timer = JSON.parse(JSON.stringify(rootGetters["timer/getTimer"]));
     if (ids.includes(timer.taskId)) {
       timer.taskId = null;
       commit("timer/setTimer", timer, { root: true });
+      await cache.set("timer", JSON.stringify(timer));
     }
   },
 
@@ -48,6 +53,7 @@ const actions = {
       return task;
     });
     commit("setTasks", tasks);
+    await cache.set("tasks", JSON.stringify(tasks));
   },
 
   async createTask({ commit, state }, task) {
@@ -56,13 +62,13 @@ const actions = {
     let tasks = JSON.parse(JSON.stringify(state.all));
     tasks.unshift(createdTask);
     commit("setTasks", tasks);
+    await cache.set("tasks", JSON.stringify(tasks));
   },
 };
 
 const mutations = {
   setTasks(state, tasks) {
     state.all = tasks;
-    localStorage.setItem("tasks", JSON.stringify(tasks));
   },
 };
 
