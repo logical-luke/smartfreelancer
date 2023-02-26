@@ -32,21 +32,27 @@
           />
         </div>
 
-          <submit-button>{{ $t("Log in") }}</submit-button>
+        <submit-button>{{ $t("Log in") }}</submit-button>
         <divider align="center">
-          <span>{{ $t("OR")}}</span>
+          <span>{{ $t("OR") }}</span>
         </divider>
 
-          <google-button>{{ $t("Log in") }}</google-button>
+        <google-button>{{ $t("Log in") }}</google-button>
         <div class="flex">
           <language-switcher />
         </div>
-        <p class="mb-2 font-medium text-gray-500">
-          {{ $t("Don't have an account") }}? {{ $t("Create a new account") }}
-          <router-link class="text-blue-500" to="/register">{{
-            $t("here")
-          }}</router-link>
-        </p>
+        <div>
+          <p class="font-medium text-gray-500">
+            {{ $t("Don't have an account") }}?
+          </p>
+          <p class="font-medium text-gray-500">
+            {{ $t("Create a new account") }}
+            <router-link class="text-blue-500 font-bold" to="/register">{{
+                $t("here")
+              }}
+            </router-link>
+          </p>
+        </div>
       </form>
     </div>
   </div>
@@ -64,7 +70,7 @@ import LanguageSwitcher from "@/components/ui/LanguageSwitcher.vue";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import time from "@/services/synchronization/time";
-import Divider from 'primevue/divider';
+import Divider from "primevue/divider";
 
 export default {
   name: "LoginPage",
@@ -75,20 +81,20 @@ export default {
     SubmitButton,
     Password,
     InputText,
-    Divider,
+    Divider
   },
   data: () => {
     return {
       email: "",
       password: "",
-      buttonTitle: "Log in",
+      buttonTitle: "Log in"
     };
   },
   methods: {
     async login() {
       try {
         this.$toast.removeAllGroups();
-        const {token, refreshToken} = await authorization.login(this.email, this.password);
+        const { token, refreshToken } = await authorization.login(this.email, this.password);
         await authorization.authorize(token, refreshToken);
         await store.commit("synchronization/setInitialLoaded", false);
         await time.enableServerTimeSync();
@@ -109,10 +115,10 @@ export default {
           severity: "error",
           summary: this.$i18n.t("Unable to sign in"),
           detail: message,
-          life: 5000,
+          life: 5000
         });
       }
-    },
+    }
   },
   beforeRouteEnter() {
     store.commit("synchronization/setInitialLoaded", true);
