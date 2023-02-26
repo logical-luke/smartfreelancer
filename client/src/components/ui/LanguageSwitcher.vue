@@ -10,7 +10,7 @@
         :country="getFlagCode(getLocale)"
       ></country-flag>
     </button>
-    <overlay-panel ref="op" :show-close-icon="true">
+    <overlay-panel ref="op" :show-close-icon="false">
       <button
         v-for="lang in languages"
         :key="lang"
