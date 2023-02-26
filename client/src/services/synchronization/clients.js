@@ -4,7 +4,10 @@ import cache from "@/services/cache";
 
 export default {
   async syncClients() {
-    const clients = await api.getClients();
+    let clients = await api.getClients();
+    if (!clients) {
+      clients = [];
+    }
 
     await store.commit("clients/setClients", clients);
     await cache.set("clients", JSON.stringify(clients));

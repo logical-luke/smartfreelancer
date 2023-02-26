@@ -4,8 +4,10 @@ import cache from "@/services/cache";
 
 export default {
   async syncProjects() {
-    const projects = await api.getProjects();
-
+    let projects = await api.getProjects();
+    if (!projects) {
+      projects = [];
+    }
     await store.commit("projects/setProjects", projects);
     await cache.set("projects", JSON.stringify(projects));
   },

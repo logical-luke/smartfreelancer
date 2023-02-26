@@ -4,8 +4,10 @@ import cache from "@/services/cache";
 
 export default {
   async syncTasks() {
-    const tasks = await api.getTasks();
-
+    let tasks = await api.getTasks();
+    if (!tasks) {
+      tasks = [];
+    }
     await store.commit("tasks/setTasks", tasks);
     await cache.set("tasks", JSON.stringify(tasks));
   },
