@@ -54,6 +54,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $loginType = LoginTypeEnum::EMAIL->value;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?SynchronizationStatus $synchronizationStatus = null;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
@@ -86,7 +89,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -289,6 +292,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLoginType(string $loginType): self
     {
         $this->loginType = $loginType;
+
+        return $this;
+    }
+
+    public function getSynchronizationStatus(): SynchronizationStatus
+    {
+        if (!$this->synchronizationStatus) {
+            $synchronizationStatus = (new SynchronizationStatus())
+                ->setUser($this);
+            $this->setSynchronizationStatus($synchronizationStatus);
+        }
+
+        return $this->synchronizationStatus;
+    }
+
+    public function setSynchronizationStatus(SynchronizationStatus $synchronizationStatus): self
+    {
+        // set the owning side of the relation if necessary
+        if ($synchronizationStatus->getUser() !== $this) {
+            $synchronizationStatus->setUser($this);
+        }
+
+        $this->synchronizationStatus = $synchronizationStatus;
 
         return $this;
     }

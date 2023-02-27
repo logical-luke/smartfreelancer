@@ -79,15 +79,8 @@ export default {
     if (queue.length > 0) {
       for (let i = 0; i < queue.length; i++) {
         const queueItem = queue[i];
-        if (!(queueItem.queue in queues)) {
-          continue;
-        }
-        const queueSyncer = queues[queueItem.queue];
-        if (!(queueItem.action in queueSyncer)) {
-          continue;
-        }
         try {
-          await queueSyncer[queueItem.action](queueItem.payload);
+          await api.pushSyncItem(queueItem);
           await store.dispatch("synchronization/removeFromQueue", queueItem);
         } catch (e) {
           await store.commit("synchronization/setSynchronizationFailed", true);
@@ -132,9 +125,11 @@ export default {
       clearInterval(store.state.synchronization.backgroundUploadIntervalId);
     }
   },
-  async pushToQueue(queue, action, payload) {
+  async pushToQueue(model, queue, action, payload) {
+    payload.ownerId = store.getters["getUserId"];
     await store.dispatch("synchronization/pushToQueue", {
       id: getUuid(),
+      model: model,
       queue: queue,
       action: action,
       payload: payload,

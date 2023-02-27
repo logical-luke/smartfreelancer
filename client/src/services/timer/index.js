@@ -4,8 +4,6 @@ import cache from "@/services/cache";
 import synchronization from "@/services/synchronization";
 import timeEntries from "@/services/timeEntries";
 
-const queueName = "timer";
-
 export default {
   async startTimer() {
     const startTime = store.getters["time/getServerTime"];
@@ -17,7 +15,7 @@ export default {
 
     await store.commit("timer/setTimer", newTimer);
     await cache.set("timer", JSON.stringify(newTimer));
-    await synchronization.pushToQueue(queueName, "startTimer", newTimer);
+    await synchronization.pushToQueue("Timer", "TimerCreator", "CreateTimer", newTimer);
   },
   async stopTimer() {
     const endTime = store.getters["time/getServerTime"];
@@ -27,7 +25,7 @@ export default {
     }
     await store.commit("timer/clearTimer");
     timer.endTime = endTime;
-    await synchronization.pushToQueue(queueName, "stopTimer", timer);
+    await synchronization.pushToQueue("Timer", "TimerStopper", "StopTimer", timer);
     await timeEntries.createTimeEntry(
       timer.ownerId,
       timer.clientId,

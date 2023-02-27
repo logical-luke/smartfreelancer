@@ -423,4 +423,10 @@ export default {
 
     return response.data;
   },
+
+  async pushSyncItem(payload) {
+      const response = await postRequest("/synchronization", payload);
+
+      return response.data;
+  }
 };

@@ -7,13 +7,13 @@ namespace App\Model\Project;
 use App\Exception\InvalidPayloadException;
 use Symfony\Component\Uid\Uuid;
 
-class CreateProjectPayload
+readonly class CreateProjectPayload
 {
     protected function __construct(
-        private readonly string $ownerId,
-        private readonly ?string $name,
-        private readonly ?string $description,
-        private readonly ?string $clientId,
+        private string $ownerId,
+        private ?string $name,
+        private ?string $description,
+        private ?string $clientId,
     ) {
     }
 

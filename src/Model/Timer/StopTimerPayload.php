@@ -10,7 +10,7 @@ use Symfony\Component\Uid\Uuid;
 class StopTimerPayload
 {
     protected function __construct(
-        private readonly string $timerId,
+        private readonly string $id,
         private readonly int $endTime,
         private readonly string $ownerId,
     ) {
@@ -18,7 +18,7 @@ class StopTimerPayload
 
     public static function from(array $payload): self
     {
-        if (!isset($payload['timerId'])) {
+        if (!isset($payload['id'])) {
             throw new InvalidPayloadException('Missing timer id');
         }
 
@@ -27,7 +27,7 @@ class StopTimerPayload
         }
 
         return new self(
-            $payload['timerId'],
+            $payload['id'],
             $payload['endTime'],
             $payload['ownerId'],
         );
@@ -35,7 +35,7 @@ class StopTimerPayload
 
     public function getId(): Uuid
     {
-        return Uuid::fromString($this->timerId);
+        return Uuid::fromString($this->id);
     }
 
     public function getEndTime(): \DateTimeImmutable

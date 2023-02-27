@@ -89,7 +89,7 @@ onMounted(async () => {
 
 <script>
 import { useRoute } from "vue-router";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "App",
@@ -98,6 +98,17 @@ export default {
       spinnerSize: "96 px",
       spinnerColor: "#382CDD",
     };
+  },
+  watch: {
+    queue() {
+      if (this.isQueueEmpty) {
+        synchronization.disableBackgroundUpload();
+        synchronization.enableBackgroundSync();
+      } else {
+        synchronization.disableBackgroundSync();
+        synchronization.enableBackgroundUpload();
+      }
+    }
   },
   computed: {
     path() {
@@ -110,7 +121,10 @@ export default {
 
       return meta.requiresAuth === true;
     },
-    ...mapGetters("synchronization", ["isInitialLoaded"]),
+    ...mapGetters("synchronization", ["isInitialLoaded", "isQueueEmpty"]),
+    ...mapState({
+      queue: (state) => state.synchronization.queue,
+    }),
   },
 };
 </script>

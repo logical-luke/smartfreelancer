@@ -1,3 +1,5 @@
+import cache from "@/services/cache";
+
 const state = () => ({
   initialLoaded: false,
   synchronizationTime: null,
@@ -39,6 +41,7 @@ const mutations = {
   },
   setQueue(state, queue) {
     state.queue = queue;
+    cache.set("queue", JSON.stringify(queue)).then();
   },
   setOffline(state, offline) {
     state.offline = offline;
@@ -57,6 +60,7 @@ const mutations = {
   },
   clearQueue(state) {
     state.queue = [];
+    cache.set("queue", JSON.stringify(queue)).then();
   },
   setSynchronizationFailed(state, synchronizationFailed) {
     state.synchronizationFailed = synchronizationFailed;

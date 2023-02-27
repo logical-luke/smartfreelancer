@@ -30,6 +30,9 @@ export default {
     if (await this.exists("timer")) {
       await store.commit("timer/setTimer", JSON.parse(await this.get("timer")));
     }
+    if (await this.exists("queue")) {
+      await store.commit("synchronization/setQueue", JSON.parse(await this.get("queue")));
+    }
     await store.commit("synchronization/setInitialLoaded", true);
   },
   async clear() {

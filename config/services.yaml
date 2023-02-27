@@ -27,3 +27,17 @@ services:
         arguments:
             $credentialsFile: '%kernel.project_dir%/config/google/client_secret.json'
             $feAppBaseUrl: '%env(FE_APP_BASE_URL)%'
+
+    App\Service\Synchronization\RabbitMQProducer:
+        arguments:
+            $host: '%env(RABBITMQ_HOST)%'
+            $port: '%env(RABBITMQ_PORT)%'
+            $user: '%env(RABBITMQ_USER)%'
+            $password: '%env(RABBITMQ_PASSWORD)%'
+
+    App\Service\Synchronization\RabbitMQConsumer:
+      arguments:
+        $host: '%env(RABBITMQ_HOST)%'
+        $port: '%env(RABBITMQ_PORT)%'
+        $user: '%env(RABBITMQ_USER)%'
+        $password: '%env(RABBITMQ_PASSWORD)%'
