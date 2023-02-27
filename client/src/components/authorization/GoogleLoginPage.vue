@@ -1,8 +1,10 @@
 <template>
-  <div class="grid h-screen place-items-center">
-    <div>
-      <moon-loader :size="spinnerSize" :color="spinnerColor" :loading="true" />
-    </div>
+  <div class="flex h-screen items-center justify-center">
+    <moon-loader
+      :size="spinnerSize"
+      :color="spinnerColor"
+      :loading="true"
+    />
   </div>
 </template>
 
