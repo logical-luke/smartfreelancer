@@ -2,7 +2,7 @@
   <transition name="fade" mode="in-out">
     <div v-if="isAuthorized" class="relative z-50">
       <nav class="lg:hidden py-6 px-6 bg-gray-800">
-        <div class="flex flex-row items-center justify-between">
+        <div class="flex flex-row items-center justify-between mr-2">
           <div class="flex mr-auto">
             <icon-only-logo />
           </div>
