@@ -105,7 +105,7 @@ export default {
       this.syncAll();
     }, milliseconds_in_minute);
     await store.commit(
-      "synchronization/setBackgroundDownloadId",
+      "synchronization/setBackgroundDownloadIntervalId",
       backgroundDownloadId
     );
   },
