@@ -40,6 +40,7 @@ export default {
     }
   },
   async logout() {
+    await store.commit("synchronization/setInitialLoaded", false);
     await store.commit("authorization/setToken", "");
     await store.commit("authorization/setRefreshToken", "");
     await store.commit("authorization/setAuthorized", false);

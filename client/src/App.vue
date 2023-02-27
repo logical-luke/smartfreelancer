@@ -13,6 +13,16 @@ import ConfirmDialog from "primevue/confirmdialog";
 import Toast from "primevue/toast";
 
 onMounted(async () => {
+  // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+  let vh = window.innerHeight * 0.01;
+  // Then we set the value in the --vh custom property to the root of the document
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+  // We listen to the resize event
+  window.addEventListener('resize', () => {
+    // We execute the same script as before
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  });
   let token = await cookies.get("api_token");
   if (token === "null" || token === "") {
     token = null;
@@ -52,7 +62,7 @@ onMounted(async () => {
     </div>
     <div v-else>
       <div
-        class="min-h-screen"
+        class="h-screen"
         :class="{ 'mx-auto lg:ml-80': isAuthorizedPage }"
       >
         <toast
@@ -150,5 +160,10 @@ button.p-button.p-component.p-confirm-dialog-accept.confirm-button-accept:enable
 ::-webkit-scrollbar-thumb {
   background-color: #6a707e;
   border-radius: 4px;
+}
+
+.h-screen {
+  height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+  height: calc(var(--vh, 1vh) * 100);
 }
 </style>
