@@ -50,7 +50,7 @@ export default {
           time.minutes = "00";
           time.seconds = "00";
         }
-      }, 100);
+      }, 500);
     },
   },
   mounted() {
