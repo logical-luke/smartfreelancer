@@ -75,26 +75,28 @@ export default {
     await store.commit("synchronization/setBackgroundUploadInProgress", true);
 
     const queue = await store.getters["synchronization/getQueue"];
-    for (let i = 0; i < queue.length; i++) {
-      const queueItem = queue[i];
-      if (!(queueItem.queue in queues)) {
-        continue;
+    if (queue.length > 0) {
+      for (let i = 0; i < queue.length; i++) {
+        const queueItem = queue[i];
+        if (!(queueItem.queue in queues)) {
+          continue;
+        }
+        const queueSyncer = queues[queueItem.queue];
+        if (!(queueItem.action in queueSyncer)) {
+          continue;
+        }
+        try {
+          await queueSyncer[queueItem.action](queueItem.payload);
+          await store.dispatch("synchronization/removeFromQueue", queueItem);
+        } catch (e) {
+          await store.commit("synchronization/setSynchronizationFailed", true);
+          await this.disableBackgroundUpload();
+          await this.disableBackgroundSync();
+        }
       }
-      const queueSyncer = queues[queueItem.queue];
-      if (!(queueItem.action in queueSyncer)) {
-        continue;
-      }
-      try {
-        await queueSyncer[queueItem.action](queueItem.payload);
-        await store.dispatch("synchronization/removeFromQueue", queueItem);
-      } catch (e) {
-        await store.commit("synchronization/setSynchronizationFailed", true);
-        await this.disableBackgroundUpload();
-        await this.disableBackgroundSync();
-      }
+      await store.commit("synchronization/setSynchronizationTime", new Date());
     }
 
-    await store.commit("synchronization/setSynchronizationTime", new Date());
     await store.commit("synchronization/setBackgroundUploadInProgress", false);
   },
   async enableBackgroundSync() {
