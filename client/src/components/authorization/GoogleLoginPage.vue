@@ -1,10 +1,6 @@
 <template>
   <div class="flex h-screen items-center justify-center">
-    <moon-loader
-      :size="spinnerSize"
-      :color="spinnerColor"
-      :loading="true"
-    />
+    <moon-loader :size="spinnerSize" :color="spinnerColor" :loading="true" />
   </div>
 </template>
 

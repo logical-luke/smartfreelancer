@@ -29,7 +29,11 @@ export default {
     timeEntries.unshift(timeEntry);
     await store.commit("timeEntries/setTimeEntries", timeEntries);
     if (pushSync) {
-      await synchronization.pushToQueue(queueName, 'createTimeEntry', timeEntry);
+      await synchronization.pushToQueue(
+        queueName,
+        "createTimeEntry",
+        timeEntry
+      );
     }
   },
 };

@@ -16,6 +16,9 @@ const getters = {
   getServerTime(state) {
     return state.serverTime;
   },
+  isServerTimeSyncEnabled(state) {
+    return !!state.serverTimeSyncId;
+  },
 };
 
 export default {

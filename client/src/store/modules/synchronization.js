@@ -22,7 +22,10 @@ const actions = {
     const queue = JSON.parse(
       JSON.stringify(rootGetters["synchronization/getQueue"])
     );
-    queue.splice(queue.findIndex(obj => obj.id === queueItem.id), 1);
+    queue.splice(
+      queue.findIndex((obj) => obj.id === queueItem.id),
+      1
+    );
     commit("setQueue", queue);
   },
 };
@@ -80,7 +83,7 @@ const getters = {
     return state.queue.length === 0;
   },
   getBackgroundUploadIntervalId(state) {
-    return state.backgroundSyncIntervalId;
+    return state.backgroundUploadIntervalId;
   },
   getBackgroundDownloadIntervalId(state) {
     return state.backgroundSyncIntervalId;
@@ -93,6 +96,12 @@ const getters = {
   },
   isSynchronizationFailed(state) {
     return state.synchronizationFailed;
+  },
+  isBackgroundUploadEnabled(state) {
+    return state.backgroundUploadIntervalId !== null;
+  },
+  isBackgroundSyncEnabled(state) {
+    return state.backgroundSyncIntervalId !== null;
   },
 };
 

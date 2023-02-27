@@ -50,12 +50,11 @@ onMounted(async () => {
 
 <template>
   <transition name="fade" mode="out-in">
-    <div class="flex h-screen items-center justify-center" v-if="!isInitialLoaded">
-        <moon-loader
-          :size="spinnerSize"
-          :color="spinnerColor"
-          :loading="true"
-        />
+    <div
+      class="flex h-screen items-center justify-center"
+      v-if="!isInitialLoaded"
+    >
+      <moon-loader :size="spinnerSize" :color="spinnerColor" :loading="true" />
     </div>
     <div v-else>
       <div class="h-screen" :class="{ 'mx-auto lg:ml-80': isAuthorizedPage }">

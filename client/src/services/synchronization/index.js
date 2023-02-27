@@ -101,28 +101,36 @@ export default {
     await store.commit("synchronization/setBackgroundUploadInProgress", false);
   },
   async enableBackgroundSync() {
-    const backgroundDownloadId = setInterval(() => {
-      this.syncAll();
-    }, milliseconds_in_minute);
-    await store.commit(
-      "synchronization/setBackgroundDownloadIntervalId",
-      backgroundDownloadId
-    );
+    if (!store.getters["synchronization/isBackgroundSyncEnabled"]) {
+      const backgroundDownloadId = setInterval(() => {
+        this.syncAll();
+      }, milliseconds_in_minute);
+      await store.commit(
+        "synchronization/setBackgroundDownloadIntervalId",
+        backgroundDownloadId
+      );
+    }
   },
   async disableBackgroundSync() {
-    clearInterval(store.state.synchronization.backgroundDownloadIntervalId);
+    if (store.getters["synchronization/isBackgroundSyncEnabled"]) {
+      clearInterval(store.state.synchronization.backgroundDownloadIntervalId);
+    }
   },
   async enableBackgroundUpload() {
-    const backgroundUploadId = setInterval(() => {
-      this.uploadQueue();
-    }, milliseconds_in_second);
-    store.commit(
-      "synchronization/setBackgroundUploadIntervalId",
-      backgroundUploadId
-    );
+    if (!store.getters["synchronization/isBackgroundUploadEnabled"]) {
+      const backgroundUploadId = setInterval(() => {
+        this.uploadQueue();
+      }, milliseconds_in_second * 2);
+      store.commit(
+        "synchronization/setBackgroundUploadIntervalId",
+        backgroundUploadId
+      );
+    }
   },
   async disableBackgroundUpload() {
-    clearInterval(store.state.synchronization.backgroundUploadIntervalId);
+    if (store.getters["synchronization/isBackgroundUploadEnabled"]) {
+      clearInterval(store.state.synchronization.backgroundUploadIntervalId);
+    }
   },
   async pushToQueue(queue, action, payload) {
     await store.dispatch("synchronization/pushToQueue", {
