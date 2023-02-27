@@ -1,8 +1,9 @@
 <template>
+
   <button
-    v-if="slideFinished"
     type="button"
-    class="inline-flex bg-white text-indigo-500 items-center justify-center items-center px-1 py-1 border-2 border-indigo-500 rounded-full"
+    v-if="slideFinished"
+    class="inline-flex bg-indigo-500 text-white items-center justify-center items-center px-1 py-1 border-2 border-indigo-500 rounded-full"
     @click.prevent="toggleCollapsed"
   >
     <arrow-down-icon :size="16" v-if="isNavBarCollapsed" />
@@ -34,6 +35,6 @@ export default {
       store.commit("settings/toggleNavBarCollapsed");
       cache.set('navBarCollapsed', this.isNavBarCollapsed ? "1" : "0");
     },
-  },
+  }
 };
 </script>

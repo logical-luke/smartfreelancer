@@ -28,7 +28,7 @@
       </div>
     </transition>
     <div
-      :class="isNavBarCollapsed ? 'mb-2' : '-mb-6'"
+      :class="isNavBarCollapsed ? 'mb-3' : '-mb-6'"
       class="absolute bottom-0 right-0 mr-3"
     >
       <collapse-nav-bar-button
@@ -97,7 +97,9 @@ export default {
       setTimeout(() => {
         el.style.opacity = 1;
         el.style.transform = "";
-        this.slideFinished = true;
+        setTimeout(() => {
+          this.slideFinished = true;
+        }, 400);
       }, 400);
     },
     leave(el, done) {
