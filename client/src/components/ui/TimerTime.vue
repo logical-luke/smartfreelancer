@@ -6,6 +6,7 @@
 <script>
 import { mapState } from "vuex";
 import getRelativeTime from "@/services/time/relativeTimeGetter";
+import store from "@/store";
 
 export default {
   name: "TimerTime",
@@ -39,7 +40,7 @@ export default {
     updateClock() {
       let time = this;
       setInterval(function () {
-        if (time.timer.id) {
+        if (time.timer.id && store.getters["time/getServerTime"]) {
           const { hours, minutes, seconds } = time.getRelativeTime();
           time.hours = hours;
           time.minutes = minutes;
