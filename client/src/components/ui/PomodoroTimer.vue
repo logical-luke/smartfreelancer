@@ -7,7 +7,7 @@
   >
     <hourglass-empty-icon :size="Math.ceil(size * 1.8)" />
   </button>
-  <overlay-panel ref="op" :show-close-icon="true">
+  <overlay-panel ref="op" :show-close-icon="false">
     <div class="flex gap-2 flex-col items-center justify-center">
       <select-button
         v-model="selectedMode"
