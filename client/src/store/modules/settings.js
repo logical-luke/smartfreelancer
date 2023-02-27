@@ -10,7 +10,7 @@ const actions = {
 };
 
 const mutations = {
-  setNavbarCollapsed: (state, collapsed) => state.navBarCollapsed = collapsed,
+  setNavbarCollapsed: (state, collapsed) => (state.navBarCollapsed = collapsed),
   toggleNavBarCollapsed: (state) =>
     (state.navBarCollapsed = !state.navBarCollapsed),
   setLocale(state, locale) {

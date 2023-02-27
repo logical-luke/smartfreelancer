@@ -1,5 +1,3 @@
-import api from "@/services/api";
-import getUuid from "@/services/uuidGenerator";
 import cache from "@/services/cache";
 
 const emptyTimer = {

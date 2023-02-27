@@ -11,16 +11,20 @@ const state = () => ({
 });
 
 const actions = {
-    pushToQueue({ commit, rootGetters }, queueItem) {
-        const queue = JSON.parse(JSON.stringify(rootGetters["synchronization/getQueue"]));
-        queue.push(queueItem);
-        commit("setQueue", queue);
-    },
-    removeFromQueue({ commit, rootGetters }, queueItem) {
-        const queue = JSON.parse(JSON.stringify(rootGetters["synchronization/getQueue"]));
-        queue.splice(queue.indexOf(queueItem), 1);
-        commit("setQueue", queue);
-    },
+  pushToQueue({ commit, rootGetters }, queueItem) {
+    const queue = JSON.parse(
+      JSON.stringify(rootGetters["synchronization/getQueue"])
+    );
+    queue.push(queueItem);
+    commit("setQueue", queue);
+  },
+  removeFromQueue({ commit, rootGetters }, queueItem) {
+    const queue = JSON.parse(
+      JSON.stringify(rootGetters["synchronization/getQueue"])
+    );
+    queue.splice(queue.findIndex(obj => obj.id === queueItem.id), 1);
+    commit("setQueue", queue);
+  },
 };
 
 const mutations = {
@@ -34,7 +38,7 @@ const mutations = {
     state.queue = queue;
   },
   setOffline(state, offline) {
-    state.offline = isOffline;
+    state.offline = offline;
   },
   setBackgroundUploadIntervalId(state, backgroundUploadIntervalId) {
     state.backgroundSyncIntervalId = backgroundUploadIntervalId;

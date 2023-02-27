@@ -11,7 +11,8 @@ export default {
     projectId,
     taskId,
     startTime,
-    endTime
+    endTime,
+    pushSync = true
   ) {
     const timeEntry = {
       id: getUuid(),
@@ -27,5 +28,8 @@ export default {
     );
     timeEntries.unshift(timeEntry);
     await store.commit("timeEntries/setTimeEntries", timeEntries);
+    if (pushSync) {
+      await synchronization.pushToQueue(queueName, 'createTimeEntry', timeEntry);
+    }
   },
 };

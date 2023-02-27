@@ -7,13 +7,22 @@ export default {
       await store.commit("settings/setLocale", await this.get("locale"));
     }
     if (await this.exists("navBarCollapsed")) {
-      await store.commit("settings/setNavbarCollapsed", (await this.get("navBarCollapsed")) === "1");
+      await store.commit(
+        "settings/setNavbarCollapsed",
+        (await this.get("navBarCollapsed")) === "1"
+      );
     }
     if (await this.exists("clients")) {
-      await store.commit("clients/setClients", JSON.parse(await this.get("clients")));
+      await store.commit(
+        "clients/setClients",
+        JSON.parse(await this.get("clients"))
+      );
     }
     if (await this.exists("projects")) {
-      await store.commit("projects/setProjects", JSON.parse(await this.get("projects")));
+      await store.commit(
+        "projects/setProjects",
+        JSON.parse(await this.get("projects"))
+      );
     }
     if (await this.exists("tasks")) {
       await store.commit("tasks/setTasks", JSON.parse(await this.get("tasks")));
@@ -30,7 +39,7 @@ export default {
     return await db.get(key);
   },
   async exists(key) {
-    return await db.get(key) !== null;
+    return (await db.get(key)) !== null;
   },
   async set(key, value) {
     return await db.set(key, value);

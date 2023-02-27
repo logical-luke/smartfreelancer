@@ -1,11 +1,7 @@
 <template>
   <div class="grid h-screen place-items-center">
     <div>
-      <moon-loader
-        :size="spinnerSize"
-        :color="spinnerColor"
-        :loading="true"
-      />
+      <moon-loader :size="spinnerSize" :color="spinnerColor" :loading="true" />
     </div>
   </div>
 </template>
@@ -25,7 +21,7 @@ export default {
   data() {
     return {
       spinnerSize: "96 px",
-      spinnerColor: "#382CDD"
+      spinnerColor: "#382CDD",
     };
   },
   async mounted() {
@@ -77,7 +73,7 @@ export default {
   },
   beforeRouteEnter() {
     store.commit("synchronization/setInitialLoaded", true);
-  }
+  },
 };
 </script>
 

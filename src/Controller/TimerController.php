@@ -37,7 +37,7 @@ class TimerController extends AbstractController
         return $this->json(TimerDTO::fromTimer($timer));
     }
 
-    #[Route('/create', name: 'create')]
+    #[Route('/create', name: 'create', methods: "POST")]
     public function create(Request $request, TimerRepository $timerRepository, TimerCreator $timerCreator): JsonResponse
     {
         /** @var User $user */
@@ -64,7 +64,7 @@ class TimerController extends AbstractController
         return $this->json(TimerDTO::fromTimer($timer));
     }
 
-    #[Route('/stop', name: 'stop')]
+    #[Route('/stop', name: 'stop', methods: "POST")]
     public function stop(TimerRepository $timerRepository, Request $request, TimerStopper $timerStopper): JsonResponse
     {
         /** @var User $user */

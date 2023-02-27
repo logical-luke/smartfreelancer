@@ -22,7 +22,11 @@
         v-tooltip.bottom="$t('Synchronization in progress') + '...'"
         class="inline-flex cursor-auto bg-yellow-600 items-center justify-center items-center p-2 text-sm font-medium text-white rounded-full transition duration-200"
       >
-        <cloud-download-icon v-if="isQueueEmpty" class="animate-pulse-slow" size="20" />
+        <cloud-download-icon
+          v-if="isQueueEmpty"
+          class="animate-pulse-slow"
+          size="20"
+        />
         <cloud-upload-icon v-else class="animate-pulse-slow" size="20" />
       </button>
       <overlay-panel class="lg:hidden" ref="opp">

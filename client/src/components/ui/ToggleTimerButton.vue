@@ -12,7 +12,7 @@
 
 <script>
 import PlayerPlayIcon from "vue-tabler-icons/icons/PlayerPlayIcon";
-import { mapActions, mapState } from "vuex";
+import { mapState } from "vuex";
 import PlayerStopIcon from "vue-tabler-icons/icons/PlayerStopIcon";
 import timer from "@/services/timer";
 

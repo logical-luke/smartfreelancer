@@ -15,7 +15,7 @@ const queues = {
   tasks: tasks,
   timer: timer,
   timeEntries: timeEntries,
-}
+};
 
 const milliseconds_in_second = 1000;
 const milliseconds_in_minute = milliseconds_in_second * 60;
@@ -41,9 +41,9 @@ export default {
   },
   async syncAll() {
     if (
-      store.getters["synchronization/isOffline"]
-      || store.getters["synchronization/isBackgroundUploadInProgress"]
-      || store.getters["synchronization/isBackgroundDownloadInProgress"]
+      store.getters["synchronization/isOffline"] ||
+      store.getters["synchronization/isBackgroundUploadInProgress"] ||
+      store.getters["synchronization/isBackgroundDownloadInProgress"]
     ) {
       return;
     }
@@ -65,9 +65,9 @@ export default {
   },
   async uploadQueue() {
     if (
-      store.getters["synchronization/isOffline"]
-      || store.getters["synchronization/isBackgroundUploadInProgress"]
-      || store.getters["synchronization/isBackgroundDownloadInProgress"]
+      store.getters["synchronization/isOffline"] ||
+      store.getters["synchronization/isBackgroundUploadInProgress"] ||
+      store.getters["synchronization/isBackgroundDownloadInProgress"]
     ) {
       return;
     }
@@ -77,16 +77,16 @@ export default {
     const queue = await store.getters["synchronization/getQueue"];
     for (let i = 0; i < queue.length; i++) {
       const queueItem = queue[i];
-      if (!queueItem.queue in queues) {
+      if (!(queueItem.queue in queues)) {
         continue;
       }
       const queueSyncer = queues[queueItem.queue];
-      if (!queueItem.action in queueSyncer) {
+      if (!(queueItem.action in queueSyncer)) {
         continue;
       }
       try {
         await queueSyncer[queueItem.action](queueItem.payload);
-        await store.dispatch("synchronization/removeFromQueue", queueItem)
+        await store.dispatch("synchronization/removeFromQueue", queueItem);
       } catch (e) {
         await store.commit("synchronization/setSynchronizationFailed", true);
         await this.disableBackgroundUpload();
@@ -98,28 +98,35 @@ export default {
     await store.commit("synchronization/setBackgroundUploadInProgress", false);
   },
   async enableBackgroundSync() {
-      const backgroundDownloadId = setInterval(() => {
-        this.syncAll();
-      }, milliseconds_in_minute)
+    const backgroundDownloadId = setInterval(() => {
+      this.syncAll();
+    }, milliseconds_in_minute);
+    await store.commit(
+      "synchronization/setBackgroundDownloadId",
+      backgroundDownloadId
+    );
   },
   async disableBackgroundSync() {
-      clearInterval(store.state.synchronization.backgroundDownloadIntervalId);
+    clearInterval(store.state.synchronization.backgroundDownloadIntervalId);
   },
   async enableBackgroundUpload() {
     const backgroundUploadId = setInterval(() => {
       this.uploadQueue();
     }, milliseconds_in_second);
-    store.commit("synchronization/setBackgroundUploadIntervalId", backgroundUploadId);
+    store.commit(
+      "synchronization/setBackgroundUploadIntervalId",
+      backgroundUploadId
+    );
   },
   async disableBackgroundUpload() {
     clearInterval(store.state.synchronization.backgroundUploadIntervalId);
   },
   async pushToQueue(queue, action, payload) {
-      await store.dispatch("synchronization/pushToQueue", {
-        id: getUuid(),
-        queue: queue,
-        action: action,
-        payload: payload,
-      });
+    await store.dispatch("synchronization/pushToQueue", {
+      id: getUuid(),
+      queue: queue,
+      action: action,
+      payload: payload,
+    });
   },
 };

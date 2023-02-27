@@ -8,6 +8,6 @@ export default {
     await store.commit("timeEntries/setTimeEntries", timeEntries);
   },
   async createTimeEntry(payload) {
-    const timeEntry = await api.createTimeEntry(payload);
+    await api.createTimeEntry(payload);
   },
 };

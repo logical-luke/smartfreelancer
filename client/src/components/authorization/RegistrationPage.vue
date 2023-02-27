@@ -34,7 +34,7 @@
             v-model="password"
           >
             <template #header
-            ><p class="mb-1">{{ $t("Enter a password") }}</p></template
+              ><p class="mb-1">{{ $t("Enter a password") }}</p></template
             >
             <template #footer="sp">
               {{ sp.level }}
@@ -80,9 +80,8 @@
           </p>
           <p class="font-medium text-gray-500">
             {{ $t("Log in") }}
-            <router-link class="text-blue-500 font-bold" to="/login">{{
-                $t("here")
-              }}
+            <router-link class="text-blue-500 font-bold" to="/login"
+              >{{ $t("here") }}
             </router-link>
           </p>
         </div>
@@ -111,7 +110,7 @@ export default {
     return {
       email: "",
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
     };
   },
   methods: {
@@ -123,7 +122,7 @@ export default {
           severity: "error",
           summary: this.$i18n.t("Unable to sign up"),
           detail: this.$i18n.t("The passwords given are not the same"),
-          life: 5000
+          life: 5000,
         });
 
         return;
@@ -132,9 +131,12 @@ export default {
         await authorization.register({
           email: this.email,
           password: this.password,
-          confirmPassword: this.confirmPassword
+          confirmPassword: this.confirmPassword,
         });
-        const { token, refreshToken } = await authorization.login(this.email, this.password);
+        const { token, refreshToken } = await authorization.login(
+          this.email,
+          this.password
+        );
         await authorization.authorize(token, refreshToken);
         await store.commit("synchronization/setInitialLoaded", false);
         await time.enableServerTimeSync();
@@ -151,10 +153,10 @@ export default {
           severity: "error",
           summary: this.$i18n.t("Unable to sign up"),
           detail: message,
-          life: 5000
+          life: 5000,
         });
       }
-    }
+    },
   },
   components: {
     LanguageSwitcher,
@@ -163,11 +165,11 @@ export default {
     SubmitButton,
     Password,
     Divider,
-    InputText
+    InputText,
   },
   beforeRouteEnter() {
     store.commit("synchronization/setInitialLoaded", true);
-  }
+  },
 };
 </script>
 

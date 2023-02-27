@@ -30,7 +30,7 @@
 import CountryFlag from "vue-country-flag-next";
 import { mapGetters } from "vuex";
 import store from "@/store";
-import cache from "@/services/cache"
+import cache from "@/services/cache";
 import OverlayPanel from "primevue/overlaypanel";
 
 export default {
@@ -88,5 +88,9 @@ export default {
 <style scoped>
 span.flag.normal-flag {
   margin: 0 -6px 0 -5px;
+}
+
+.flag {
+  backface-visibility: hidden;
 }
 </style>

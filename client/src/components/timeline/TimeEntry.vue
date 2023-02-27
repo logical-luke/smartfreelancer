@@ -3,7 +3,7 @@
     <div class="flex flex-wrap -mx-4 justify-between">
       <div class="mb-4 md:mb-0 px-4 flex">
         <h4 v-if="subject" class="font-medium">{{ subject }}</h4>
-        <h4 v-else class="font-medium">{{ $t("Unassigned")}}</h4>
+        <h4 v-else class="font-medium">{{ $t("Unassigned") }}</h4>
       </div>
       <div class="px-4 flex text-xs text-gray-500 items-center">
         <span class="mr-1">
@@ -11,10 +11,6 @@
         </span>
         <p>{{ duration }}</p>
       </div>
-      <!--      <div class="w-auto mr-16 px-4">-->
-      <!--      </div>-->
-      <!--      <div class="w-auto px-4">-->
-      <!--      </div>-->
     </div>
   </div>
 </template>
@@ -23,11 +19,10 @@
 import store from "@/store";
 import getRelativeTime from "@/services/time/relativeTimeGetter";
 import ClockHour4Icon from "vue-tabler-icons/icons/ClockHour4Icon";
-import TrackedSubject from "@/components/ui/TrackedSubject.vue";
 
 export default {
   name: "TimeEntry",
-  components: { TrackedSubject, ClockHour4Icon },
+  components: { ClockHour4Icon },
   computed: {
     subject() {
       const client = store.getters["clients/getClientById"](

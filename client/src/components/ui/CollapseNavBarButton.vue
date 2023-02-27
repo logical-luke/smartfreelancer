@@ -1,5 +1,4 @@
 <template>
-
   <button
     type="button"
     v-if="slideFinished"
@@ -33,8 +32,8 @@ export default {
   methods: {
     toggleCollapsed() {
       store.commit("settings/toggleNavBarCollapsed");
-      cache.set('navBarCollapsed', this.isNavBarCollapsed ? "1" : "0");
+      cache.set("navBarCollapsed", this.isNavBarCollapsed ? "1" : "0");
     },
-  }
+  },
 };
 </script>

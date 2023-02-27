@@ -13,14 +13,11 @@
       </div>
     </div>
   </button>
-
-
 </template>
 
 <script>
 import BrandGoogleIcon from "vue-tabler-icons/icons/BrandGoogleIcon";
 import api from "@/services/api";
-import store from "@/store";
 
 export default {
   name: "GoogleButton",
