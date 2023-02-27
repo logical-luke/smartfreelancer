@@ -13,6 +13,7 @@
         "gesdinet/jwt-refresh-token-bundle": "^1.1",
         "google/apiclient": "^2.13",
         "lexik/jwt-authentication-bundle": "^2.16",
+        "php-amqplib/php-amqplib": "^3.5",
         "sentry/sentry-symfony": "^4.5",
         "symfony/console": "6.2.*",
         "symfony/dotenv": "6.2.*",
