@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Model\Time\TimeDTO;
 use App\Model\User\UserDTO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,6 +20,9 @@ class MeController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        return $this->json(UserDTO::createFromUser($user));
+        return $this->json([
+            'user' => UserDTO::createFromUser($user),
+            'time' => TimeDTO::fromDateTime(new \DateTimeImmutable())->getTime(),
+        ]);
     }
 }

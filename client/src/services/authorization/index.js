@@ -3,7 +3,6 @@ import cache from "@/services/cache";
 import store from "@/store";
 import api from "@/services/api";
 import synchronization from "@/services/synchronization";
-import time from "@/services/synchronization/time";
 
 export default {
   async login(email, password) {
@@ -42,7 +41,6 @@ export default {
     }
   },
   async logout() {
-    await time.disableServerTimeSync();
     await synchronization.disableBackgroundSync();
     await synchronization.disableBackgroundUpload();
     await store.commit("synchronization/setInitialLoaded", false);

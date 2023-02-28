@@ -9,7 +9,6 @@ import router from "../../router";
 import store from "@/store";
 import api from "@/services/api";
 import authorization from "@/services/authorization";
-import time from "@/services/synchronization/time";
 import synchronization from "@/services/synchronization";
 import { MoonLoader } from "vue3-spinner";
 
@@ -55,7 +54,7 @@ export default {
       await authorization.authorize(token, refreshToken);
       await store.commit("synchronization/setInitialLoaded", false);
       await synchronization.syncUser();
-      await time.enableServerTimeSync();
+      await synchronization.syncAll();
       await store.commit("synchronization/setInitialLoaded", true);
 
       await router.push("/");

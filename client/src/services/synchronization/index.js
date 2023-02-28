@@ -3,29 +3,29 @@ import authorization from "@/services/authorization";
 import api from "@/services/api";
 import router from "@/router";
 import getUuid from "@/services/uuidGenerator";
-import clients from "@/services/synchronization/clients";
-import projects from "@/services/synchronization/projects";
-import tasks from "@/services/synchronization/tasks";
-import timer from "@/services/synchronization/timer";
-import timeEntries from "@/services/synchronization/timeEntries";
+import getUTCTimestampFromLocaltime from "@/services/time/getUTCTimestampFromLocaltime";
 
-const queues = {
-  clients: clients,
-  projects: projects,
-  tasks: tasks,
-  timer: timer,
-  timeEntries: timeEntries,
-};
-
-const milliseconds_in_second = 1000;
-const milliseconds_in_minute = milliseconds_in_second * 60;
+const millisecondsInSecond = 1000;
+const millisecondsInMinute = millisecondsInSecond * 60;
 
 export default {
   async syncUser() {
     let user = null;
-
+    let time = null;
     try {
-      user = await api.getUser();
+      const requestTime = Math.round(Date.now() / millisecondsInSecond);
+      const response = await api.getUser();
+      const responseTime = Math.round(Date.now() / millisecondsInSecond);
+
+      user = response.user;
+      time = response.time;
+
+      const returnTime = responseTime - requestTime;
+      const serverTime = time - returnTime;
+
+      const offset = serverTime - getUTCTimestampFromLocaltime();
+
+      await store.commit("time/setServerTimeOffset", offset);
       await store.commit("setUser", user);
     } catch (err) {
       await authorization.logout();
@@ -49,20 +49,31 @@ export default {
       return;
     }
     await store.commit("synchronization/setBackgroundDownloadInProgress", true);
-    const clientsFetched = await clients.syncClients();
-    const projectsFetched = await projects.syncProjects();
-    const tasksFetched = await tasks.syncTasks();
-    const timerFetched = await timer.syncTimer();
 
-    return Promise.all([
-      clientsFetched,
-      projectsFetched,
-      tasksFetched,
-      timerFetched,
-    ]).then(() => {
-      store.commit("synchronization/setSynchronizationTime", new Date());
-      store.commit("synchronization/setBackgroundDownloadInProgress", false);
-    });
+    const initial = await api.getInitial();
+
+    let { clients, projects, tasks, timer } = initial;
+
+    if (Array.isArray(clients) && clients.length > 0) {
+      await store.commit("clients/setClients", clients);
+    }
+    if (Array.isArray(projects) && projects.length > 0) {
+      await store.commit("projects/setProjects", projects);
+    }
+    if (Array.isArray(tasks) && tasks.length > 0) {
+      await store.commit("tasks/setTasks", tasks);
+    }
+
+    if (timer && timer.id) {
+      await store.commit("timer/setTimer", timer);
+    } else {
+      await store.commit("timer/clearTimer");
+    }
+
+    await store.commit(
+      "synchronization/setBackgroundDownloadInProgress",
+      false
+    );
   },
   async uploadQueue() {
     if (
@@ -97,7 +108,7 @@ export default {
     if (!store.getters["synchronization/isBackgroundSyncEnabled"]) {
       const backgroundDownloadId = setInterval(() => {
         this.syncAll();
-      }, milliseconds_in_minute);
+      }, millisecondsInMinute);
       await store.commit(
         "synchronization/setBackgroundDownloadIntervalId",
         backgroundDownloadId
@@ -113,7 +124,7 @@ export default {
     if (!store.getters["synchronization/isBackgroundUploadEnabled"]) {
       const backgroundUploadId = setInterval(() => {
         this.uploadQueue();
-      }, milliseconds_in_second * 2);
+      }, millisecondsInSecond * 2);
       store.commit(
         "synchronization/setBackgroundUploadIntervalId",
         backgroundUploadId

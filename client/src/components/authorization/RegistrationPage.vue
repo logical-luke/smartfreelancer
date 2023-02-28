@@ -100,7 +100,6 @@ import Password from "primevue/password";
 import Divider from "primevue/divider";
 import InputText from "primevue/inputtext";
 import authorization from "@/services/authorization";
-import time from "@/services/synchronization/time";
 import synchronization from "@/services/synchronization";
 import router from "@/router";
 
@@ -139,7 +138,6 @@ export default {
         );
         await authorization.authorize(token, refreshToken);
         await store.commit("synchronization/setInitialLoaded", false);
-        await time.enableServerTimeSync();
         await synchronization.syncAll();
         await store.commit("synchronization/setInitialLoaded", true);
 

@@ -26,12 +26,10 @@ const actions = {
     let projects = JSON.parse(JSON.stringify(state.all));
     projects = projects.filter((project) => project.id !== id);
     commit("setProjects", projects);
-    await cache.set("projects", JSON.stringify(projects));
     const timer = JSON.parse(JSON.stringify(rootGetters["timer/getTimer"]));
     if (timer.projectId === id) {
       timer.projectId = null;
       commit("timer/setTimer", timer, { root: true });
-      await cache.set("timer", JSON.stringify(timer));
     }
   },
 
@@ -41,12 +39,10 @@ const actions = {
     let projects = JSON.parse(JSON.stringify(state.all));
     projects = projects.filter((project) => !ids.includes(project.id));
     commit("setProjects", projects);
-    await cache.set("projects", JSON.stringify(projects));
     const timer = JSON.parse(JSON.stringify(rootGetters["timer/getTimer"]));
     if (ids.includes(timer.projectId)) {
       timer.projectId = null;
       commit("timer/setTimer", timer, { root: true });
-      await cache.set("timer", JSON.stringify(timer));
     }
   },
 
@@ -61,7 +57,6 @@ const actions = {
       return project;
     });
     commit("setProjects", projects);
-    await cache.set("projects", JSON.stringify(projects));
   },
 
   async createProject({ commit, state }, project) {
@@ -70,13 +65,17 @@ const actions = {
     let projects = JSON.parse(JSON.stringify(state.all));
     projects.unshift(createdProject);
     commit("setProjects", projects);
-    await cache.set("projects", JSON.stringify(projects));
   },
 };
 
 const mutations = {
   setProjects(state, projects) {
     state.all = projects;
+    if (Array.isArray(projects) && projects.length > 0) {
+      cache.set("projects", JSON.stringify(projects)).then();
+    } else {
+      cache.remove("projects").then();
+    }
   },
 };
 

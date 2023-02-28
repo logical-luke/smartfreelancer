@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Model\Time\TimeDTO;
 use App\Service\Synchronization\RabbitMQProducer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,7 +16,21 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/synchronization', name: 'app_synchronization_')]
 class SynchronizationController extends AbstractController
 {
-    #[Route('', name: 'collect', methods: "POST")]
+    #[Route('', name: 'initial', methods: "GET")]
+    public function initial(): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        return $this->json([
+            'clients' => $user->getClients(),
+            'projects' => $user->getProjects(),
+            'tasks' => $user->getTasks(),
+            'timer' => $user->getTimer(),
+        ]);
+    }
+
+    #[Route('/queue', name: 'collect', methods: "POST")]
     public function collect(Request $request, RabbitMQProducer $producer): JsonResponse
     {
         /** @var User $user */

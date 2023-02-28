@@ -68,7 +68,6 @@ import GoogleButton from "@/components/ui/GoogleButton.vue";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher.vue";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
-import time from "@/services/synchronization/time";
 import Divider from "primevue/divider";
 
 export default {
@@ -100,7 +99,7 @@ export default {
         await authorization.authorize(token, refreshToken);
         await store.commit("synchronization/setInitialLoaded", false);
         await synchronization.syncUser();
-        await time.enableServerTimeSync();
+        await synchronization.syncAll();
         await store.commit("synchronization/setInitialLoaded", true);
 
         await router.push("/");

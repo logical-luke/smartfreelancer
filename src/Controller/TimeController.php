@@ -15,6 +15,6 @@ class TimeController extends AbstractController
     #[Route('', name: 'index')]
     public function index(): JsonResponse
     {
-        return $this->json(TimeDTO::fromDateTime(new \DateTimeImmutable())->getTime());
+        return $this->json();
     }
 }

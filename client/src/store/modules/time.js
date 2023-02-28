@@ -1,23 +1,18 @@
+import getUTCTimestampFromLocaltime from "@/services/time/getUTCTimestampFromLocaltime";
+
 const state = () => ({
-  serverTime: null,
-  serverTimeSyncId: null,
+  serverTimeOffset: null,
 });
 
 const mutations = {
-  setServerTime(state, serverTime) {
-    state.serverTime = serverTime;
-  },
-  setServerTimeSyncId(state, serverTimeSyncId) {
-    state.serverTimeSyncId = serverTimeSyncId;
+  setServerTimeOffset(state, serverTimeOffset) {
+    state.serverTimeOffset = serverTimeOffset;
   },
 };
 
 const getters = {
   getServerTime(state) {
-    return state.serverTime;
-  },
-  isServerTimeSyncEnabled(state) {
-    return !!state.serverTimeSyncId;
+    return getUTCTimestampFromLocaltime() + state.serverTimeOffset;
   },
 };
 

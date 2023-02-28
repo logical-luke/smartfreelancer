@@ -1,53 +1,3 @@
-<script setup>
-import { onMounted } from "vue";
-import store from "@/store";
-import cookies from "@/services/cookies";
-import authorization from "@/services/authorization";
-import cache from "@/services/cache";
-import time from "@/services/synchronization/time";
-import synchronization from "@/services/synchronization";
-import SidebarNav from "@/components/ui/SidebarNav.vue";
-import HeaderNavbar from "@/components/ui/HeaderNavbar.vue";
-import { MoonLoader } from "vue3-spinner";
-import ConfirmDialog from "primevue/confirmdialog";
-import Toast from "primevue/toast";
-
-onMounted(async () => {
-  // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
-  let vh = window.innerHeight * 0.01;
-  // Then we set the value in the --vh custom property to the root of the document
-  document.documentElement.style.setProperty("--vh", `${vh}px`);
-  // We listen to the resize event
-  window.addEventListener("resize", () => {
-    // We execute the same script as before
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty("--vh", `${vh}px`);
-  });
-  let token = await cookies.get("api_token");
-  if (token === "null" || token === "") {
-    token = null;
-  }
-  if (!token) {
-    store.commit("synchronization/setInitialLoaded", true);
-  }
-
-  let refreshToken = await cookies.get("refresh_token");
-  if (refreshToken === "null" || refreshToken === "") {
-    refreshToken = null;
-  }
-
-  if (token && refreshToken) {
-    await authorization.authorize(token, refreshToken);
-    await synchronization.syncUser();
-    await time.enableServerTimeSync();
-    await cache.getInitial();
-    await synchronization.enableBackgroundUpload();
-    synchronization.syncAll().then(() => {});
-    await synchronization.enableBackgroundSync();
-  }
-});
-</script>
-
 <template>
   <transition name="fade" mode="out-in">
     <div
@@ -88,15 +38,33 @@ onMounted(async () => {
 </template>
 
 <script>
-import { useRoute } from "vue-router";
+import { onMounted } from "vue";
 import { mapGetters, mapState } from "vuex";
+import store from "@/store";
+import cookies from "@/services/cookies";
+import authorization from "@/services/authorization";
+import cache from "@/services/cache";
+import synchronization from "@/services/synchronization";
+import SidebarNav from "@/components/ui/SidebarNav.vue";
+import HeaderNavbar from "@/components/ui/HeaderNavbar.vue";
+import { MoonLoader } from "vue3-spinner";
+import ConfirmDialog from "primevue/confirmdialog";
+import Toast from "primevue/toast";
+import { useRoute } from "vue-router";
 
 export default {
   name: "App",
+  components: {
+    SidebarNav,
+    HeaderNavbar,
+    MoonLoader,
+    ConfirmDialog,
+    Toast
+  },
   data() {
     return {
       spinnerSize: "96 px",
-      spinnerColor: "#382CDD",
+      spinnerColor: "#382CDD"
     };
   },
   watch: {
@@ -123,9 +91,41 @@ export default {
     },
     ...mapGetters("synchronization", ["isInitialLoaded", "isQueueEmpty"]),
     ...mapState({
-      queue: (state) => state.synchronization.queue,
-    }),
+      queue: (state) => state.synchronization.queue
+    })
   },
+  setup() {
+    onMounted(async () => {
+      // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+      let vh = window.innerHeight * 0.01;
+      // Then we set the value in the --vh custom property to the root of the document
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+      // We listen to the resize event
+      window.addEventListener("resize", () => {
+        // We execute the same script as before
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty("--vh", `${vh}px`);
+      });
+      let token = await cookies.get("api_token");
+      if (token === "null" || token === "") {
+        token = null;
+      }
+      if (!token) {
+        store.commit("synchronization/setInitialLoaded", true);
+      }
+
+      let refreshToken = await cookies.get("refresh_token");
+      if (refreshToken === "null" || refreshToken === "") {
+        refreshToken = null;
+      }
+
+      if (token && refreshToken) {
+        await authorization.authorize(token, refreshToken);
+        await synchronization.syncUser();
+        await cache.getInitial();
+      }
+    });
+  }
 };
 </script>
 
