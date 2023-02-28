@@ -16,7 +16,6 @@ readonly class SynchronisationProcessor
         private UserRepository $userRepository,
         private SynchronizationStatusRepository $statusRepository,
         private SynchronizationQueueServiceFactory $queueServiceFactory,
-        private LoggerInterface $logger,
     ) {
     }
 
