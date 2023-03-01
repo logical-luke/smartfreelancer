@@ -2,17 +2,24 @@ import getUTCTimestampFromLocaltime from "@/services/time/getUTCTimestampFromLoc
 
 const state = () => ({
   serverTimeOffset: null,
+  serverTime: null,
 });
 
 const mutations = {
   setServerTimeOffset(state, serverTimeOffset) {
     state.serverTimeOffset = serverTimeOffset;
   },
+  setServerTime(state, serverTime) {
+    state.serverTime = serverTime;
+  },
 };
 
 const getters = {
   getServerTime(state) {
-    return getUTCTimestampFromLocaltime() + state.serverTimeOffset;
+    return state.serverTime;
+  },
+  getServerTimeOffset(state) {
+    return state.serverTimeOffset;
   },
 };
 

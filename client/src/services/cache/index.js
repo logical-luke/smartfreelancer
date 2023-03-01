@@ -33,6 +33,11 @@ export default {
     if (await this.exists("queue")) {
       await store.commit("synchronization/setQueue", JSON.parse(await this.get("queue")));
     }
+    if (await this.exists("synchronizationTime")) {
+      const syncTime = JSON.parse(await this.get("synchronizationTime"));
+      const syncTimeObject = new Date(syncTime);
+      await store.commit("synchronization/setSynchronizationTime", syncTimeObject);
+    }
     await store.commit("synchronization/setInitialLoaded", true);
   },
   async clear() {
@@ -47,4 +52,7 @@ export default {
   async set(key, value) {
     return await db.set(key, value);
   },
+  async remove(key) {
+    return await db.remove(key);
+  }
 };

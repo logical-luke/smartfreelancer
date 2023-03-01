@@ -1,0 +1,54 @@
+# Choose the base image
+FROM php:8.2-cli-alpine
+
+# Set the APP_ENV argument with a default value of 'prod'
+ARG APP_ENV=prod
+
+# Set the working directory
+WORKDIR /app
+
+# Update the package lists and install necessary packages
+RUN apk update \
+    && apk add --no-cache \
+        nginx \
+        git \
+        unzip \
+        libcurl \
+        linux-headers \
+        supervisor \
+    && apk add --no-cache --virtual .build-deps \
+        libzip-dev \
+        zlib-dev \
+        curl-dev \
+        oniguruma-dev \
+        $PHPIZE_DEPS \
+        && docker-php-ext-install -j$(nproc) pdo_mysql opcache sockets curl \
+    && apk del .build-deps \
+    && rm -rf /var/cache/apk/*
+
+# Copy the application files
+COPY . .
+
+# Install the Symfony application dependencies
+RUN if [ "$APP_ENV" = "dev" ]; then \
+        php composer.phar install --no-interaction --no-progress ; \
+    else \
+        php composer.phar install --no-dev --no-interaction --no-progress --optimize-autoloader ; \
+    fi
+
+# Create the cache and log directories and make them writable
+RUN mkdir -p var/cache var/log \
+    && chown -R www-data:www-data var \
+    && chmod -R 777 var
+
+# Copy the Supervisor configuration file
+COPY docker/consumer/supervisor.conf /etc/supervisor/conf.d/
+
+# Add the 'include' section to supervisord.conf
+RUN sed -i '/^;\[include\]/ s/^;//' /etc/supervisord.conf \
+    && echo '[include]' >> /etc/supervisord.conf \
+    && echo 'files = /etc/supervisor/conf.d/*.conf' >> /etc/supervisord.conf
+
+
+# Start Supervisor
+CMD ["supervisord", "--nodaemon", "--configuration", "/etc/supervisord.conf"]

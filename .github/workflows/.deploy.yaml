@@ -1,167 +1,181 @@
-name: Deploy
+name: Deploy to production
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ github.run_number }}-${{ github.sha }}
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
-      - name: Copy repository contents via scp to api temporary directory
-        uses: appleboy/scp-action@master
+      - name: Adjust Nginx config
         env:
-          HOST: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_API }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_API }}
-        with:
-          source: "."
-          target: "/home/smartfreelancer-api/tmp/build"
-
-      - name: Copy repository contents via scp to app temporary directory
-        uses: appleboy/scp-action@master
-        env:
-          HOST: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_APP }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_APP }}
-        with:
-          source: "."
-          target: "/home/smartfreelancer-app/tmp/build"
-
-      - name: Configure api local env files
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_API }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: cd /home/smartfreelancer-api/tmp/build && echo $'DATABASE_URL=mysql://${{ secrets.DATABASE_USER }}:${{ secrets.DATABASE_PASSWORD }}@${{ secrets.DATABASE_HOST }}:3306/${{ secrets.DATABASE_NAME }}?serverVersion=8\nFE_APP_BASE_URL=https://app.smartfreelancer.io\nAPP_ENV=prod\nSENTRY_DSN="${{ secrets.SENTRY_DNS }}"\nRABBITMQ_USER=${{ secrets.RABBITMQ_USER }}\nRABBITMQ_PASSWORD="${{ secrets.RABBITMQ_PASSWORD }}"'>.env.local
-
-      - name: Install api dependencies
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_API }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: cd /home/smartfreelancer-api/tmp/build && /usr/bin/php8.2 /usr/local/bin/composer install --no-ansi --no-interaction --no-progress --prefer-dist --no-scripts --classmap-authoritative --no-dev
-
-      - name: Apply database api migrations
-        uses: appleboy/ssh-action@master
-        env:
-          DATABASE_URL: mysql://${{ secrets.DATABASE_MIGRATION_USER }}:${{ secrets.DATABASE_MIGRATION_PASSWORD }}@${{ secrets.DATABASE_HOST }}:3306/${{ secrets.DATABASE_NAME }}?serverVersion=8
-        with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_API }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_API }}
-          envs: DATABASE_URL
-          script: /usr/bin/php8.2 /home/smartfreelancer-api/tmp/build/bin/console doctrine:migrations:migrate
-
-      - name: Generate JWT certs
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_API }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: /usr/bin/php8.2 /home/smartfreelancer-api/tmp/build/bin/console lexik:jwt:generate-keypair
-
-      - name: Clear cache
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_API }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: /usr/bin/php8.2 /home/smartfreelancer-api/tmp/build/bin/console cache:clear
-
-
-      - name: Copy new version to api directory
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_API }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: mv /home/smartfreelancer-api/public /home/smartfreelancer-api/tmp/build_old_$(date +%s) && mv /home/smartfreelancer-api/tmp/build /home/smartfreelancer-api/public
-
-      - name: Restart supervisor
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_API }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: supervisorctl reload
-
-
-      - name: Clear opcache
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_API }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: /usr/bin/php8.2 /home/smartfreelancer-api/public/tools/cachetools/cachetool.phar opcache:reset --fcgi=/run/php/php8.2-fpm.sock
-
-      - name: Configure app local env files
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_APP }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_APP }}
-          script: cd /home/smartfreelancer-app/tmp/build/client && echo $'API_BASE_URL=${{ secrets.API_BASE_URL }}\nNODE_ENV=production'>.env.local
-
-      - name: Install app dependencies
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_APP }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_APP }}
-          script: cd /home/smartfreelancer-app/tmp/build/client && npm install
-
-
-      - name: Build app
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_APP }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_APP }}
-          script: cd /home/smartfreelancer-app/tmp/build/client && npm run build
-
-      - name: Copy new version to app directory
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_APP }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_APP }}
-          script: mv /home/smartfreelancer-app/public/ /home/smartfreelancer-app/tmp/build_old_$(date +%s) && mv /home/smartfreelancer-app/tmp/build/client/dist /home/smartfreelancer-app/public/
-
-      - name: Remove temporary api build directory
-        if: always()
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_API }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_API }}
-          script: rm -rf /home/smartfreelancer-api/tmp/build
-
-      - name: Remove temporary app build directory
-        if: always()
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME_APP }}
-          PORT: ${{ secrets.PORT }}
-          PASSWORD: ${{ secrets.PASSWORD_APP }}
-          script: rm -rf /home/smartfreelancer-app/tmp/build
+          API_CONTAINER: smartfreelancer-api-${VERSION}
+          APP_CONTAINER: smartfreelancer-app-${VERSION}
+        run: |
+          sed -i "s/proxy_pass http:\/\/smartfreelancer-api-[^/]*/proxy_pass http:\/\/${API_CONTAINER}/g" /etc/nginx/conf.d/default.conf 
+          sed -i "s/proxy_pass http:\/\/smartfreelancer-app-[^/]*/proxy_pass http:\/\/${APP_CONTAINER}/g" /etc/nginx/conf.d/default.conf
+#
+#
+#      - name: Copy repository contents via scp to api temporary directory
+#        uses: appleboy/scp-action@master
+#        env:
+#          HOST: ${{ secrets.HOST }}
+#          USERNAME: ${{ secrets.USERNAME_API }}
+#          PORT: ${{ secrets.PORT }}
+#          PASSWORD: ${{ secrets.PASSWORD_API }}
+#        with:
+#          source: "."
+#          target: "/home/smartfreelancer-api/tmp/build"
+#
+#      - name: Copy repository contents via scp to app temporary directory
+#        uses: appleboy/scp-action@master
+#        env:
+#          HOST: ${{ secrets.HOST }}
+#          USERNAME: ${{ secrets.USERNAME_APP }}
+#          PORT: ${{ secrets.PORT }}
+#          PASSWORD: ${{ secrets.PASSWORD_APP }}
+#        with:
+#          source: "."
+#          target: "/home/smartfreelancer-app/tmp/build"
+#
+#      - name: Configure api local env files
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          USERNAME: ${{ secrets.USERNAME_API }}
+#          PORT: ${{ secrets.PORT }}
+#          PASSWORD: ${{ secrets.PASSWORD_API }}
+#          script: cd /home/smartfreelancer-api/tmp/build && echo $'DATABASE_URL=mysql://${{ secrets.DATABASE_USER }}:${{ secrets.DATABASE_PASSWORD }}@${{ secrets.DATABASE_HOST }}:3306/${{ secrets.DATABASE_NAME }}?serverVersion=8\nFE_APP_BASE_URL=https://app.smartfreelancer.io\nAPP_ENV=prod\nSENTRY_DSN="${{ secrets.SENTRY_DNS }}"\nRABBITMQ_USER=${{ secrets.RABBITMQ_USER }}\nRABBITMQ_PASSWORD="${{ secrets.RABBITMQ_PASSWORD }}"'>.env.local
+#
+#      - name: Install api dependencies
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          USERNAME: ${{ secrets.USERNAME_API }}
+#          PORT: ${{ secrets.PORT }}
+#          PASSWORD: ${{ secrets.PASSWORD_API }}
+#          script: cd /home/smartfreelancer-api/tmp/build && /usr/bin/php8.2 /usr/local/bin/composer install --no-ansi --no-interaction --no-progress --prefer-dist --no-scripts --classmap-authoritative --no-dev
+#
+#      - name: Apply database api migrations
+#        uses: appleboy/ssh-action@master
+#        env:
+#          DATABASE_URL: mysql://${{ secrets.DATABASE_MIGRATION_USER }}:${{ secrets.DATABASE_MIGRATION_PASSWORD }}@${{ secrets.DATABASE_HOST }}:3306/${{ secrets.DATABASE_NAME }}?serverVersion=8
+#        with:
+#          host: ${{ secrets.HOST }}
+#          USERNAME: ${{ secrets.USERNAME_API }}
+#          PORT: ${{ secrets.PORT }}
+#          PASSWORD: ${{ secrets.PASSWORD_API }}
+#          envs: DATABASE_URL
+#          script: /usr/bin/php8.2 /home/smartfreelancer-api/tmp/build/bin/console doctrine:migrations:migrate
+#
+#      - name: Generate JWT certs
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          USERNAME: ${{ secrets.USERNAME_API }}
+#          PORT: ${{ secrets.PORT }}
+#          PASSWORD: ${{ secrets.PASSWORD_API }}
+#          script: /usr/bin/php8.2 /home/smartfreelancer-api/tmp/build/bin/console lexik:jwt:generate-keypair
+#
+#      - name: Clear cache
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          USERNAME: ${{ secrets.USERNAME_API }}
+#          PORT: ${{ secrets.PORT }}
+#          PASSWORD: ${{ secrets.PASSWORD_API }}
+#          script: /usr/bin/php8.2 /home/smartfreelancer-api/tmp/build/bin/console cache:clear
+#
+#
+#      - name: Copy new version to api directory
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          USERNAME: ${{ secrets.USERNAME_API }}
+#          PORT: ${{ secrets.PORT }}
+#          PASSWORD: ${{ secrets.PASSWORD_API }}
+#          script: mv /home/smartfreelancer-api/public /home/smartfreelancer-api/tmp/build_old_$(date +%s) && mv /home/smartfreelancer-api/tmp/build /home/smartfreelancer-api/public
+#
+#      - name: Restart supervisor
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          USERNAME: ${{ secrets.USERNAME_API }}
+#          PORT: ${{ secrets.PORT }}
+#          PASSWORD: ${{ secrets.PASSWORD_API }}
+#          script: supervisorctl reload
+#
+#
+#      - name: Clear opcache
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          USERNAME: ${{ secrets.USERNAME_API }}
+#          PORT: ${{ secrets.PORT }}
+#          PASSWORD: ${{ secrets.PASSWORD_API }}
+#          script: /usr/bin/php8.2 /home/smartfreelancer-api/public/tools/cachetools/cachetool.phar opcache:reset --fcgi=/run/php/php8.2-fpm.sock
+#
+#      - name: Configure app local env files
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          USERNAME: ${{ secrets.USERNAME_APP }}
+#          PORT: ${{ secrets.PORT }}
+#          PASSWORD: ${{ secrets.PASSWORD_APP }}
+#          script: cd /home/smartfreelancer-app/tmp/build/client && echo $'API_BASE_URL=${{ secrets.API_BASE_URL }}\nNODE_ENV=production'>.env.local
+#
+#      - name: Install app dependencies
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          USERNAME: ${{ secrets.USERNAME_APP }}
+#          PORT: ${{ secrets.PORT }}
+#          PASSWORD: ${{ secrets.PASSWORD_APP }}
+#          script: cd /home/smartfreelancer-app/tmp/build/client && npm install
+#
+#
+#      - name: Build app
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          USERNAME: ${{ secrets.USERNAME_APP }}
+#          PORT: ${{ secrets.PORT }}
+#          PASSWORD: ${{ secrets.PASSWORD_APP }}
+#          script: cd /home/smartfreelancer-app/tmp/build/client && npm run build
+#
+#      - name: Copy new version to app directory
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          USERNAME: ${{ secrets.USERNAME_APP }}
+#          PORT: ${{ secrets.PORT }}
+#          PASSWORD: ${{ secrets.PASSWORD_APP }}
+#          script: mv /home/smartfreelancer-app/public/ /home/smartfreelancer-app/tmp/build_old_$(date +%s) && mv /home/smartfreelancer-app/tmp/build/client/dist /home/smartfreelancer-app/public/
+#
+#      - name: Remove temporary api build directory
+#        if: always()
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          USERNAME: ${{ secrets.USERNAME_API }}
+#          PORT: ${{ secrets.PORT }}
+#          PASSWORD: ${{ secrets.PASSWORD_API }}
+#          script: rm -rf /home/smartfreelancer-api/tmp/build
+#
+#      - name: Remove temporary app build directory
+#        if: always()
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          USERNAME: ${{ secrets.USERNAME_APP }}
+#          PORT: ${{ secrets.PORT }}
+#          PASSWORD: ${{ secrets.PASSWORD_APP }}
+#          script: rm -rf /home/smartfreelancer-app/tmp/build

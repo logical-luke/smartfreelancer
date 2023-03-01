@@ -70,6 +70,7 @@ export default {
       await store.commit("timer/clearTimer");
     }
 
+    await store.commit("synchronization/setSynchronizationTime", new Date());
     await store.commit(
       "synchronization/setBackgroundDownloadInProgress",
       false

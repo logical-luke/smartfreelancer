@@ -51,6 +51,7 @@ import { MoonLoader } from "vue3-spinner";
 import ConfirmDialog from "primevue/confirmdialog";
 import Toast from "primevue/toast";
 import { useRoute } from "vue-router";
+import getUTCTimestampFromLocaltime from "@/services/time/getUTCTimestampFromLocaltime";
 
 export default {
   name: "App",
@@ -124,6 +125,10 @@ export default {
         await synchronization.syncUser();
         await cache.getInitial();
       }
+
+      setInterval(() => {
+        store.commit("time/setServerTime", getUTCTimestampFromLocaltime() + store.getters["time/getServerTimeOffset"]);
+      }, 1000);
     });
   }
 };

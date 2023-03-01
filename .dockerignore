@@ -1,0 +1,6 @@
+client/node_modules
+vendor
+.idea
+config/jwt
+supervisord.log
+supervisord.pid

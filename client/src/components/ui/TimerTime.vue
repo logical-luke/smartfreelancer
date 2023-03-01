@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import getRelativeTime from "@/services/time/relativeTimeGetter";
 import store from "@/store";
 
@@ -24,6 +24,7 @@ export default {
       subjectName: (state) => state.timer.current.subjectName,
       serverTime: (state) => state.time.serverTime,
     }),
+    ...mapGetters("time", ["getServerTime"])
   },
   watch: {
     timer() {

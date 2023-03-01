@@ -1,0 +1,19 @@
+# Choose the base image
+FROM node:18
+
+# Set the APP_ENV argument with a default value of 'prod'
+ARG APP_ENV=prod
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the application files
+COPY client .
+
+# Install the dependencies
+RUN npm install
+
+EXPOSE 5173
+
+# Start the development server
+CMD ["npm", "run", "dev"]

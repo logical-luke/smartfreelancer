@@ -38,6 +38,7 @@ const mutations = {
   },
   setSynchronizationTime(state, synchronizationTime) {
     state.synchronizationTime = synchronizationTime;
+    cache.set("synchronizationTime", JSON.stringify(synchronizationTime)).then();
   },
   setQueue(state, queue) {
     state.queue = queue;
