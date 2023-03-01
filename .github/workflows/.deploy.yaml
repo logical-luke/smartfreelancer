@@ -14,7 +14,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
+        with:
+          node-version: '16'
 #
 #
 #      - name: Copy repository contents via scp to api temporary directory
