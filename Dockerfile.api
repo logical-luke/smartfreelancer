@@ -4,12 +4,6 @@ FROM php:8.2-fpm
 # Set the APP_ENV argument with a default value of 'prod'
 ARG APP_ENV=prod
 
-ARG DATABASE_URL
-RUN if [ -n "$DATABASE_URL" ]; then \
-        echo "DATABASE_URL is set to $DATABASE_URL"; \
-        export DATABASE_URL=$DATABASE_URL; \
-    fi
-
 # Set the working directory
 WORKDIR /var/www/api
 
