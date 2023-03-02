@@ -4,6 +4,12 @@ FROM php:8.2-fpm
 # Set the APP_ENV argument with a default value of 'prod'
 ARG APP_ENV=prod
 
+ARG DATABASE_URL
+RUN if [ -n "$DATABASE_URL" ]; then \
+        echo "DATABASE_URL is set to $DATABASE_URL"; \
+        export DATABASE_URL=$DATABASE_URL; \
+    fi
+
 # Set the working directory
 WORKDIR /var/www/api
 
@@ -46,7 +52,7 @@ COPY docker/api/www.conf /usr/local/etc/php-fpm.d/www.conf
 RUN if [ "$APP_ENV" = "dev" ]; then \
         php composer.phar install --no-interaction --no-progress ; \
     else \
-        php composer.phar install --no-dev --optimize-autoloader --prefer-dist --no-scripts --classmap-authoritative --no-dev ; \
+        php composer.phar install --no-dev --optimize-autoloader --prefer-dist --no-scripts --classmap-authoritative ; \
     fi
 
 # Generate JWT keys
