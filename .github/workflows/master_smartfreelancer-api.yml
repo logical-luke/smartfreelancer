@@ -31,7 +31,7 @@ jobs:
       with:
         push: true
         tags: docker.pkg.github.com/${{ secrets.AzureAppService_ContainerUsername_32312e8865c64d4f89e300209ec7664c }}/logical-luke/smartfreelancer/smartfreelancer-api:${{ github.sha }}
-        file: ./Dockerfile
+        file: ./Dockerfile.api
 
   deploy:
     runs-on: ubuntu-latest
