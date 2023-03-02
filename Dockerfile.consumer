@@ -29,6 +29,9 @@ RUN apk update \
 # Copy the application files
 COPY . .
 
+# Remove app
+RUN rm -rf client/
+
 # Install the Symfony application dependencies
 RUN if [ "$APP_ENV" = "dev" ]; then \
         php composer.phar install --no-interaction --no-progress ; \
