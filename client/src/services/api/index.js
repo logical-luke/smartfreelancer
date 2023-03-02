@@ -3,13 +3,9 @@ import store from "../../store";
 
 axios.defaults.withCredentials = true;
 
-const baseUrl = process.env.API_BASE_URL
-  ? process.env.API_BASE_URL
-  : "https://api.smartfreelancer.io/api";
-
 const getRequest = async function (url, params, headers, repeated = 0) {
   try {
-    const response = await axios.get(baseUrl + url, {
+    const response = await axios.get(process.env.API_BASE_URL + url, {
       params: params,
       headers: {
         Authorization: `Bearer ${store.getters["authorization/getToken"]}`,
@@ -66,7 +62,7 @@ const postRequest = async function (url, data, headers, repeated = 0) {
     data = {};
   }
   try {
-    const response = axios.post(baseUrl + url, data, {
+    const response = axios.post(process.env.API_BASE_URL + url, data, {
       headers: {
         Authorization: `Bearer ${store.getters["authorization/getToken"]}`,
       },
@@ -112,7 +108,7 @@ const deleteRequest = async function (url, data, headers, repeated = 0) {
     data = {};
   }
   try {
-    const response = axios.delete(baseUrl + url, {
+    const response = axios.delete(process.env.API_BASE_URL + url, {
       data: data,
       headers: {
         Authorization: `Bearer ${store.getters["authorization/getToken"]}`,
@@ -158,7 +154,7 @@ const refreshToken = async function () {
   let response = false;
   if (store.getters["authorization/getRefreshToken"]) {
     try {
-      response = await axios.post(baseUrl + "/token/refresh", {
+      response = await axios.post(process.env.API_BASE_URL + "/token/refresh", {
         refresh_token: store.getters["authorization/getRefreshToken"],
       });
     } catch (err) {
@@ -182,7 +178,7 @@ const refreshToken = async function () {
 export default {
   async login(email, password) {
     try {
-      const response = await axios.post(baseUrl + "/login", {
+      const response = await axios.post(process.env.API_BASE_URL + "/login", {
         email: email,
         password: password,
       });
@@ -205,7 +201,7 @@ export default {
   async register(email, password, confirmPassword) {
     try {
       const response = await axios.post(
-        baseUrl + "/register",
+        process.env.API_BASE_URL + "/register",
         {
           email: email,
           password: password,
@@ -416,7 +412,7 @@ export default {
 
   async postGoogleStart() {
     const response = await axios.post(
-      baseUrl + "/google/connect"
+      process.env.API_BASE_URL + "/google/connect"
     );
 
     return response.data.targetUrl;
@@ -424,7 +420,7 @@ export default {
 
   async postGoogleCheck(payload) {
     const response = await axios.post(
-      baseUrl + "/google/connect/check",
+      process.env.API_BASE_URL + "/google/connect/check",
       {
         code: payload.code,
         state: payload.state,
@@ -435,8 +431,8 @@ export default {
   },
 
   async pushSyncItem(payload) {
-    const response = await postRequest("/synchronization/queue", payload);
+      const response = await postRequest("/synchronization/queue", payload);
 
-    return response.data;
-  },
+      return response.data;
+  }
 };
