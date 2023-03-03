@@ -43,11 +43,11 @@ COPY docker/api/php.ini /usr/local/etc/php/php.ini
 COPY docker/api/www.conf /usr/local/etc/php-fpm.d/www.conf
 
 # Install the Symfony application dependencies
-RUN if [ "$APP_ENV" = "dev" ]; then \
-        php composer.phar install --no-interaction --no-progress ; \
-    else \
-        php composer.phar install --no-dev --optimize-autoloader --prefer-dist --no-scripts --classmap-authoritative ; \
-    fi
+#RUN if [ "$APP_ENV" = "dev" ]; then \
+RUN php composer.phar install --no-interaction --no-progress --optimize-autoloader
+#    else \
+#        php composer.phar install --no-dev --optimize-autoloader --prefer-dist --no-scripts --classmap-authoritative ; \
+#    fi
 
 # Generate JWT keys
 RUN bin/console lexik:jwt:generate-keypair
