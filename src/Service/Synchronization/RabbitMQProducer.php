@@ -11,9 +11,9 @@ class RabbitMQProducer
 {
     private AMQPStreamConnection $connection;
 
-    public function __construct(string $host, string $port, string $user, string $password)
+    public function __construct(string $host, string $port, string $user, string $password, string $vhost)
     {
-        $this->connection = new AMQPStreamConnection($host, (int)$port, $user, $password);
+        $this->connection = new AMQPStreamConnection($host, (int)$port, $user, $password, $vhost, $vhost);
     }
 
     public function publishMessage(string $message, string $queueName): void
