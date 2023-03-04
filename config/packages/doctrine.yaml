@@ -3,8 +3,6 @@ doctrine:
         url: null
         server_version: '8'
         dbname: '%env(DATABASE_NAME)%'
-        host: '%env(DATABASE_HOST)%'
-        port: '%env(DATABASE_PORT)%'
         user: '%env(DATABASE_USER)%'
         password: '%env(DATABASE_PASSWORD)%'
         unix_socket: '%env(DATABASE_SOCKET)%'
