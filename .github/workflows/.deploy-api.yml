@@ -12,16 +12,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up SSH environment
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VPS_IP_ADDRESS }}
-          username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
-            echo ${{ secrets.DOCKER_PASSWORD }} | docker login ghcr.io -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-
       - name: Set up Docker environment
         uses: docker/setup-buildx-action@v1
 
