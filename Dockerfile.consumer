@@ -57,7 +57,7 @@ RUN sed -i '/^;\[include\]/ s/^;//' /etc/supervisord.conf \
     && echo 'files = /etc/supervisor/conf.d/*.conf' >> /etc/supervisord.conf
 
 # Set the container to listen on port 80
-EXPOSE 80
+EXPOSE 8080
 
 # Start Supervisor
 CMD ["supervisord", "--nodaemon", "--configuration", "/etc/supervisord.conf"]
