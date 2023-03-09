@@ -5,8 +5,7 @@ doctrine:
         dbname: '%env(DATABASE_NAME)%'
         user: '%env(DATABASE_USER)%'
         password: '%env(DATABASE_PASSWORD)%'
-        host: '%env(DATABASE_HOST)%'
-        port: '%env(DATABASE_PORT)%'
+        unix_socket: '%env(DATABASE_SOCKET)%'
         driver: pdo_mysql
     orm:
         auto_generate_proxy_classes: true
