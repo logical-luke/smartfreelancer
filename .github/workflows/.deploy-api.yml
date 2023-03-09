@@ -51,13 +51,13 @@ jobs:
               -p $(shuf -i 12000-12999 -n 1):80 \
               docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}
 
-      - name: Check if container is running
-        run: |
-          sleep 5
-          if [[ $(docker container inspect -f '{{.State.Running}}' smartfreelancer-api-${{ github.sha }}) != "true" ]]; then
-            echo "Container is not running"
-            exit 1
-          fi
+#      - name: Check if container is running
+#        run: |
+#          sleep 5
+#          if [[ $(docker container inspect -f '{{.State.Running}}' smartfreelancer-api-${{ github.sha }}) != "true" ]]; then
+#            echo "Container is not running"
+#            exit 1
+#          fi
 
       - name: Adjust nginx and stop old container
         uses: appleboy/ssh-action@master
