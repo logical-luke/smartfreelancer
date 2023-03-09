@@ -17,7 +17,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io${{ secrets.GITHUB_REPOSITORY }}/smartfreelancer:$GITHUB_SHA -f Dockerfile.api .
+          docker build -t docker.pkg.github.com/${{ github.repository }}/smartfreelancer:$GITHUB_SHA -f Dockerfile.api .
 
       - name: Push Docker image to registry
         uses: docker/build-push-action@v2
@@ -34,7 +34,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            docker pull ghcr.io/${{ secrets.GITHUB_REPOSITORY }}/smartfreelancer:$GITHUB_SHA
+            docker pull docker.pkg.github.com/${{ github.repository }}/smartfreelancer:$GITHUB_SHA
             docker stop smartfreelancer-$GITHUB_SHA || true
             docker rm smartfreelancer-$GITHUB_SHA || true
             docker run -d --name smartfreelancer-$GITHUB_SHA \
@@ -42,10 +42,10 @@ jobs:
               -e DATABASE_PORT=$DATABASE_PORT \
               -e RABBITMQ_HOST=$RABBITMQ_HOST \
               -p $(shuf -i 12000-12999 -n 1):80 \
-              ghcr.io/${{ secrets.GITHUB_REPOSITORY }}/smartfreelancer:$GITHUB_SHA
+              smartfreelancer:$GITHUB_SHA
             port=$(docker inspect -f '{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}' smartfreelancer-$GITHUB_SHA | grep ' 80/tcp' | awk '{print $3}')
             python3 -c "import fileinput, re; [print(re.sub(r'proxy_pass http://localhost:\d+;', f'proxy_pass http://localhost:{port};', line.rstrip())) if 'proxy_pass http://localhost:' in line else print(line.rstrip()) for line in fileinput.input('/etc/nginx/sites-available/default', inplace=True)]"
             nginx -s reload
             docker stop $(docker ps -q --filter "name=smartfreelancer" --filter "not name=smartfreelancer-$GITHUB_SHA")
             docker rm $(docker ps -aq --filter "name=smartfreelancer" --filter "not name=smartfreelancer-$GITHUB_SHA")
-            docker images ghcr.io/${{ secrets.GITHUB_REPOSITORY }}/smartfreelancer --format '{{.Repository}}:{{.Tag}}' | grep -v "$GITHUB_SHA" | xargs docker image rm --force || true
+            docker images docker.pkg.github.com/${{ github.repository }}/smartfreelancer --format '{{.Repository}}:{{.Tag}}' | grep -v "$GITHUB_SHA" | xargs docker image rm --force || true
