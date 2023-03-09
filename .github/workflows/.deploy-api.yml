@@ -45,7 +45,7 @@ jobs:
               -p $(shuf -i 12000-12999 -n 1):80 \
               docker.pkg.github.com/${{ github.repository }}/smartfreelancer:${{ github.sha }}
             port=$(docker inspect -f '{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}' smartfreelancer-${{ github.sha }} | grep ' 80/tcp' | awk '{print $3}')
-            python3 -c "import fileinput, re; [print(re.sub(r'proxy_pass http://localhost:\d+;', f'proxy_pass http://localhost:{port};', line.rstrip())) if 'proxy_pass http://localhost:' in line else print(line.rstrip()) for line in fileinput.input('/etc/nginx/sites-available/default', inplace=True)]"
+            python3 -c "import fileinput, re; [print(re.sub(r'proxy_pass http://localhost:\d+;', f'proxy_pass http://localhost:{port};', line.rstrip())) if 'proxy_pass http://localhost:' in line else print(line.rstrip()) for line in fileinput.input('/etc/nginx/default.conf', inplace=True)]"
             nginx -s reload
             docker stop $(docker ps -q --filter "name=smartfreelancer" --filter "not name=smartfreelancer-${{ github.sha }}")
             docker rm $(docker ps -aq --filter "name=smartfreelancer" --filter "not name=smartfreelancer-${{ github.sha }}")
