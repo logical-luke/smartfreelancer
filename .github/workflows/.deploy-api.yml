@@ -49,7 +49,7 @@ jobs:
               -e RABBITMQ_PASSWORD=${{ secrets.RABBITMQ_PASSWORD }} \
               -e FE_BASE_URL=${{ secrets.FE_BASE_URL }} \
               -p $(shuf -i 12000-12999 -n 1):80 \
-              docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }} \
+              docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}
 
       - name: Check if container is running
         run: |
