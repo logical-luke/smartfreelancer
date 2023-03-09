@@ -43,10 +43,10 @@ jobs:
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-        env:
-          DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
-          DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
-          RABBITMQ_HOST: ${{ secrets.RABBITMQ_HOST }}
+          env:
+            DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+            DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+            RABBITMQ_HOST: ${{ secrets.RABBITMQ_HOST }}
         script: |
           docker pull ghcr.io/${{ secrets.GITHUB_REPOSITORY }}/smartfreelancer:$GITHUB_SHA
           docker stop smartfreelancer-$GITHUB_SHA || true
