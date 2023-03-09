@@ -17,7 +17,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ secrets.GITHUB_REPOSITORY }}/smartfreelancer:$GITHUB_SHA -f Dockerfile.api .
+          docker build -t ghcr.io${{ secrets.GITHUB_REPOSITORY }}/smartfreelancer:$GITHUB_SHA -f Dockerfile.api .
 
       - name: Push Docker image to registry
         uses: docker/build-push-action@v2
