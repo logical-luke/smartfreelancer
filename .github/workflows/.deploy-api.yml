@@ -41,7 +41,9 @@ jobs:
               -e DATABASE_PORT=$DATABASE_PORT \
               -e RABBITMQ_HOST=$RABBITMQ_HOST \
               -p $(shuf -i 12000-12999 -n 1):80 \
-              docker.pkg.github.com/${{ github.repository }}/smartfreelancer:${{ github.sha }}
+              docker.pkg.github.com/${{ github.repository }}/smartfreelancer:${{ github.sha }} \
+              sleep 5
+            
 
       - name: SSH into VPS and deploy container
         uses: appleboy/ssh-action@master
