@@ -26,6 +26,10 @@ RUN apk update \
     && apk del .build-deps \
     && rm -rf /var/cache/apk/*
 
+# Replace the contents of config/packages/doctrine.yaml with TCP/IP configuration
+RUN sed -i 's/unix_socket/host/g' config/packages/doctrine.yaml \
+    && sed -i 's/^        port:/        port: "%env(DATABASE_PORT)%"/' config/packages/doctrine.yaml
+
 # Copy the application files
 COPY . .
 
@@ -51,7 +55,6 @@ COPY docker/consumer/supervisor.conf /etc/supervisor/conf.d/
 RUN sed -i '/^;\[include\]/ s/^;//' /etc/supervisord.conf \
     && echo '[include]' >> /etc/supervisord.conf \
     && echo 'files = /etc/supervisor/conf.d/*.conf' >> /etc/supervisord.conf
-
 
 # Set the container to listen on port 80
 EXPOSE 80
