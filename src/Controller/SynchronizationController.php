@@ -4,8 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Client;
+use App\Entity\Project;
+use App\Entity\Task;
 use App\Entity\User;
+use App\Model\Client\ClientDTO;
+use App\Model\Project\ProjectDTO;
+use App\Model\Task\TaskDTO;
 use App\Model\Time\TimeDTO;
+use App\Model\Timer\TimerDTO;
 use App\Service\Synchronization\RabbitMQProducer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,10 +30,10 @@ class SynchronizationController extends AbstractController
         $user = $this->getUser();
 
         return $this->json([
-            'clients' => $user->getClients(),
-            'projects' => $user->getProjects(),
-            'tasks' => $user->getTasks(),
-            'timer' => $user->getTimer(),
+            'clients' => array_map(static function (Client $client) { return ClientDTO::fromClient($client); }, $user->getClients()->toArray()),
+            'projects' => array_map(static function (Project $project) { return ProjectDTO::fromProject($project); }, $user->getProjects()->toArray()),
+            'tasks' => array_map(static function (Task $task) { return TaskDTO::fromTask($task); }, $user->getTasks()->toArray()),
+            'timer' => $user->getTimer() ? TimerDTO::fromTimer($user->getTimer()) : null,
         ]);
     }
 
