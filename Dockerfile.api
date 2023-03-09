@@ -63,9 +63,9 @@ RUN php composer.phar install --no-interaction --no-progress --optimize-autoload
 RUN mkdir -p var/cache var/log \
     && chown -R www-data:www-data var \
     && chmod -R 777 var \
-    && mkdir -p /run/php && \
-        chown -R www-data:www-data /run/php && \
-        chmod -R 755 /run/php \
+    && mkdir -p /run/php \
+    && chown -R www-data:www-data /run/php \
+    && chmod -R 755 /run/php \
     && chown -R www-data:www-data /var/lib/nginx \
     && chown -R www-data:www-data /var/log/nginx \
     && chmod -R 777 /run

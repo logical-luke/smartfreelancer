@@ -27,7 +27,7 @@ jobs:
           docker build -t docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }} -f Dockerfile.api .
           docker push docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}
 
-      - name: SSH into VPS and deploy container
+      - name: Run container
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_IP_ADDRESS }}
@@ -38,21 +38,28 @@ jobs:
             docker pull docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}
             docker run -d --name smartfreelancer-api-${{ github.sha }} \
               -e DATABASE_HOST=${{ secrets.DATABASE_HOST }} \
-              -e DATABASE_PORT=${{ secrets.DATABASE_PASSWORD }} \
+              -e DATABASE_PORT=${{ secrets.DATABASE_PORT }} \
+              -e DATABASE_NAME=${{ secrets.DATABASE_NAME }} \
               -e DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }} \
               -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
               -e SENTRY_DNS=${{ secrets.SENTRY_DNS }} \
-              -e SENTRY_DNS=${{ secrets.SENTRY_DNS }} \
               -e RABBITMQ_HOST=${{ secrets.RABBITMQ_HOST }} \
+              -e RABBITMQ_PORT=${{ secrets.RABBITMQ_PORT }} \
+              -e RABBITMQ_USERNAME=${{ secrets.RABBITMQ_USERNAME }} \
+              -e RABBITMQ_PASSWORD=${{ secrets.RABBITMQ_PASSWORD }} \
               -e FE_BASE_URL=${{ secrets.FE_BASE_URL }} \
-              -e RABBITMQ_PORT=${{ secrets.RABBITMQ_PORT }} \
-              -e RABBITMQ_PORT=${{ secrets.RABBITMQ_PORT }} \
               -p $(shuf -i 12000-12999 -n 1):80 \
               docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }} \
               sleep 5
-            
 
-      - name: SSH into VPS and deploy container
+      - name: Check if container is running
+        run: |
+          if [[ $(docker container inspect -f '{{.State.Running}}' smartfreelancer-api-${{ github.sha }}) != "true" ]]; then
+            echo "Container is not running"
+            exit 1
+          fi
+
+      - name: Adjust nginx and stop old container
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_IP_ADDRESS }}
