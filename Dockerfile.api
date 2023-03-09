@@ -17,18 +17,18 @@ RUN rm -rf client/
 RUN apt-get update \
     && apt-get install -y \
         nginx \
-        git \
-        unzip \
         libcurl4-openssl-dev \
         supervisor \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Update PEAR to version 1.10.12
-RUN curl -sSL https://pear.php.net/install-pear-nozlib.phar -o /tmp/install-pear-nozlib.phar \
-    && php /tmp/install-pear-nozlib.phar \
-    && pear upgrade --force PEAR-1.10.12 \
-    && rm /tmp/install-pear-nozlib.phar
+RUN if [ "$APP_ENV" = "dev" ]; then \
+    curl -sSL https://pear.php.net/install-pear-nozlib.phar -o /tmp/install-pear-nozlib.phar \
+        && php /tmp/install-pear-nozlib.phar \
+        && pear upgrade --force PEAR-1.10.12 \
+        && rm /tmp/install-pear-nozlib.phar \
+    ;fi
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql opcache sockets curl
@@ -42,6 +42,13 @@ COPY docker/api/php.ini /usr/local/etc/php/php.ini
 # Copy the FPM configuration files to the container
 COPY docker/api/www.conf /usr/local/etc/php-fpm.d/www.conf
 
+# Copy the JWT keys
+COPY docker/api/private.pem /var/www/api/config/jwt/private.pem
+COPY docker/api/public.pem /var/www/api/config/jwt/public.pem
+
+# Copy the supervisor configuration file to the container
+COPY docker/api/supervisor.conf /etc/supervisor/conf.d/
+
 # Install the Symfony application dependencies
 #RUN if [ "$APP_ENV" = "dev" ]; then \
 RUN php composer.phar install --no-interaction --no-progress --optimize-autoloader
@@ -49,27 +56,17 @@ RUN php composer.phar install --no-interaction --no-progress --optimize-autoload
 #        php composer.phar install --no-dev --optimize-autoloader --prefer-dist --no-scripts --classmap-authoritative ; \
 #    fi
 
-# Generate JWT keys
-RUN bin/console lexik:jwt:generate-keypair
 
 # Create the cache and log directories and make them writable
 RUN mkdir -p var/cache var/log \
     && chown -R www-data:www-data var \
-    && chmod -R 777 var
-
-# Create a directory for the PHP-FPM socket and make it writable by the PHP-FPM process
-RUN mkdir -p /run/php && \
-    chown -R www-data:www-data /run/php && \
-    chmod -R 755 /run/php
-
-# Make the Nginx directories writable by the www-data user
-RUN chown -R www-data:www-data /var/lib/nginx
-
-# Make the Nginx log directory writable by the www-data user
-RUN chown -R www-data:www-data /var/log/nginx
-
-# Make the run directory writable by the www-data user
-RUN chmod -R 777 /run
+    && chmod -R 777 var \
+    && mkdir -p /run/php && \
+        chown -R www-data:www-data /run/php && \
+        chmod -R 755 /run/php \
+    && chown -R www-data:www-data /var/lib/nginx \
+    && chown -R www-data:www-data /var/log/nginx \
+    && chmod -R 777 /run
 
 # If the environment is set to development, enable xdebug
 RUN if [ "$APP_ENV" = "dev" ]; then \
@@ -80,11 +77,6 @@ RUN if [ "$APP_ENV" = "dev" ]; then \
             && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
             && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     ;fi
-
-
-# Copy the supervisor configuration file to the container
-COPY docker/api/supervisor.conf /etc/supervisor/conf.d/
-
 
 # Expose the port 80 for Nginx
 EXPOSE 80

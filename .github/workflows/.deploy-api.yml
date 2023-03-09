@@ -24,8 +24,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t docker.pkg.github.com/${{ github.repository }}/smartfreelancer:${{ github.sha }} -f Dockerfile.api .
-          docker push docker.pkg.github.com/${{ github.repository }}/smartfreelancer:${{ github.sha }}
+          docker build -t docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }} -f Dockerfile.api .
+          docker push docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}
 
       - name: SSH into VPS and deploy container
         uses: appleboy/ssh-action@master
@@ -35,13 +35,20 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            docker pull docker.pkg.github.com/${{ github.repository }}/smartfreelancer:${{ github.sha }}
-            docker run -d --name smartfreelancer-${{ github.sha }} \
-              -e DATABASE_HOST=$DATABASE_HOST \
-              -e DATABASE_PORT=$DATABASE_PORT \
-              -e RABBITMQ_HOST=$RABBITMQ_HOST \
+            docker pull docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}
+            docker run -d --name smartfreelancer-api-${{ github.sha }} \
+              -e DATABASE_HOST=${{ secrets.DATABASE_HOST }} \
+              -e DATABASE_PORT=${{ secrets.DATABASE_PASSWORD }} \
+              -e DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }} \
+              -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
+              -e SENTRY_DNS=${{ secrets.SENTRY_DNS }} \
+              -e SENTRY_DNS=${{ secrets.SENTRY_DNS }} \
+              -e RABBITMQ_HOST=${{ secrets.RABBITMQ_HOST }} \
+              -e FE_BASE_URL=${{ secrets.FE_BASE_URL }} \
+              -e RABBITMQ_PORT=${{ secrets.RABBITMQ_PORT }} \
+              -e RABBITMQ_PORT=${{ secrets.RABBITMQ_PORT }} \
               -p $(shuf -i 12000-12999 -n 1):80 \
-              docker.pkg.github.com/${{ github.repository }}/smartfreelancer:${{ github.sha }} \
+              docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }} \
               sleep 5
             
 
@@ -56,6 +63,6 @@ jobs:
             port=$(docker inspect --format='{{(index (index .NetworkSettings.Ports "80/tcp") 0).HostPort}}' smartfreelancer-${{ github.sha }})
             sed -i "s/proxy_pass http:\/\/localhost:[0-9]\{5\}/proxy_pass http:\/\/localhost:$port/g" /etc/nginx/conf.d/default.conf
             nginx -s reload
-            docker stop $(docker ps -q --filter "name=smartfreelancer" | grep -v $(docker container ls -aqf name=smartfreelancer-${{ github.sha }}))
-            docker rm $(docker ps -aq --filter "name=smartfreelancer" | grep -v $(docker container ls -aqf name=smartfreelancer-${{ github.sha }}))
+            docker stop $(docker ps -q --filter "name=smartfreelancer-api" | grep -v $(docker container ls -aqf name=smartfreelancer-api-${{ github.sha }}))
+            docker rm $(docker ps -aq --filter "name=smartfreelancer-api" | grep -v $(docker container ls -aqf name=smartfreelancer-api-${{ github.sha }}))
 
