@@ -51,14 +51,6 @@ jobs:
               -p $(shuf -i 12000-12999 -n 1):80 \
               docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}
 
-#      - name: Check if container is running
-#        run: |
-#          sleep 5
-#          if [[ $(docker container inspect -f '{{.State.Running}}' smartfreelancer-api-${{ github.sha }}) != "true" ]]; then
-#            echo "Container is not running"
-#            exit 1
-#          fi
-
       - name: Adjust nginx and stop old container
         uses: appleboy/ssh-action@master
         with:
@@ -67,7 +59,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            port=$(docker inspect --format='{{(index (index .NetworkSettings.Ports "80/tcp") 0).HostPort}}' smartfreelancer-${{ github.sha }})
+            port=$(docker inspect --format='{{(index (index .NetworkSettings.Ports "80/tcp") 0).HostPort}}' smartfreelancer-api-${{ github.sha }})
             sed -i "s/proxy_pass http:\/\/localhost:[0-9]\{5\}/proxy_pass http:\/\/localhost:$port/g" /etc/nginx/conf.d/default.conf
             nginx -s reload
             docker stop $(docker ps -q --filter "name=smartfreelancer-api" | grep -v $(docker container ls -aqf name=smartfreelancer-api-${{ github.sha }}))
