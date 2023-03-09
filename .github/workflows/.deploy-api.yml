@@ -36,8 +36,6 @@ jobs:
           port: 22
           script: |
             docker pull docker.pkg.github.com/${{ github.repository }}/smartfreelancer:${{ github.sha }}
-            docker stop smartfreelancer-${{ github.sha }} || true
-            docker rm smartfreelancer-${{ github.sha }} || true
             docker run -d --name smartfreelancer-${{ github.sha }} \
               -e DATABASE_HOST=$DATABASE_HOST \
               -e DATABASE_PORT=$DATABASE_PORT \
