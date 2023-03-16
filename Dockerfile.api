@@ -60,10 +60,9 @@ RUN php composer.phar install --no-interaction --no-progress --optimize-autoload
 
 
 # Create the cache and log directories and make them writable
-RUN mkdir -p var/cache var/log \
-    && mkdir -p /run/php \
-    && chmod -R 777 /var \
-    && chmod -R 777 /run
+RUN mkdir -p /var/cache /var/log \
+    && chmod -R 777 /var/cache \
+    && chmod -R 777 /var/log
 
 # If the environment is set to development, enable xdebug
 RUN if [ "$APP_ENV" = "dev" ]; then \
