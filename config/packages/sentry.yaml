@@ -2,10 +2,3 @@ when@prod:
     sentry:
         dsn: '%env(SENTRY_DSN)%'
         register_error_listener: false
-
-    monolog:
-        handlers:
-            sentry:
-                type: sentry
-                level: !php/const Monolog\Logger::ERROR
-                hub_id: Sentry\State\HubInterface
