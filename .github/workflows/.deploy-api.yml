@@ -69,4 +69,5 @@ jobs:
             nginx -s reload
             docker stop $(docker ps -q --filter "name=smartfreelancer-api" | grep -v $(docker container ls -aqf name=smartfreelancer-api-${{ github.sha }}-${{ env.TIMESTAMP }}))
             docker rm $(docker ps -aq --filter "name=smartfreelancer-api" | grep -v $(docker container ls -aqf name=smartfreelancer-api-${{ github.sha }}-${{ env.TIMESTAMP }}))
+            docker image prune --all --force
 
