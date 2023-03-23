@@ -1,4 +1,4 @@
-name: Deploy to VPS
+name: Deploy consumer
 
 on:
   push:
@@ -53,7 +53,6 @@ jobs:
               -e RABBITMQ_USER=${{ secrets.RABBITMQ_USER }} \
               -e RABBITMQ_PASSWORD=${{ secrets.RABBITMQ_PASSWORD }} \
               -e FE_BASE_URL=${{ secrets.FE_BASE_URL }} \
-              -p $(shuf -i 12000-12999 -n 1):80 \
               docker.pkg.github.com/${{ github.repository }}/smartfreelancer-consumer:${{ github.sha }}-${{ env.TIMESTAMP }}
 
       - name: Adjust nginx and stop old container
