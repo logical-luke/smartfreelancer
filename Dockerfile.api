@@ -53,10 +53,10 @@ COPY docker/api/supervisor.conf /etc/supervisor/conf.d/
 
 # Install the Symfony application dependencies
 RUN if [ "$APP_ENV" = "dev" ]; then \
+        php composer.phar install --no-interaction --no-progress --optimize-autoloader; \
     else \
         php composer.phar install --no-dev --optimize-autoloader --prefer-dist --no-scripts --classmap-authoritative ; \
     fi
-#RUN php composer.phar install --no-interaction --no-progress --optimize-autoloader
 
 
 # Create the cache and log directories and make them writable
