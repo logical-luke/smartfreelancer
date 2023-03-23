@@ -60,7 +60,6 @@ when@prod:
                 type: stream
                 channels: [deprecation]
                 path: php://stderr
-            handlers:
-                sentry:
-                    type: service
-                    id: Sentry\Monolog\Handler
+            sentry:
+                type: service
+                id: Sentry\Monolog\Handler
