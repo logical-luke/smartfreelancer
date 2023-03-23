@@ -8,12 +8,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      TIMESTAMP: ${{ steps.current-time.outputs.time }}
     steps:
-      - name: Get current time
-        id: current-time
-        run: echo "::set-output name=time::$(date +%Y%m%d%H%M%S)"
+      - name: Set timestamp
+        run: echo "TIMESTAMP=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
 
       - name: Checkout code
         uses: actions/checkout@v2
