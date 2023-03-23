@@ -44,7 +44,7 @@ jobs:
               -e DATABASE_NAME=${{ secrets.DATABASE_NAME }} \
               -e DATABASE_USER=${{ secrets.DATABASE_USER }} \
               -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
-              -e SENTRY_DNS=${{ secrets.SENTRY_DNS }} \
+              -e SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
               -e RABBITMQ_HOST=${{ secrets.RABBITMQ_HOST }} \
               -e RABBITMQ_PORT=${{ secrets.RABBITMQ_PORT }} \
               -e RABBITMQ_USERNAME=${{ secrets.RABBITMQ_USERNAME }} \
