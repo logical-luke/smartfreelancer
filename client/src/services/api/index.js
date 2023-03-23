@@ -400,7 +400,7 @@ export default {
   },
 
   async getTimeEntries(payload) {
-    const response = await getRequest("/time-entry/", payload);
+    const response = await getRequest("/time-entry", payload);
 
     return response.data;
   },
