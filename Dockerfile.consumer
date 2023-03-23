@@ -52,6 +52,11 @@ RUN sed -i '/^;\[include\]/ s/^;//' /etc/supervisord.conf \
     && echo '[include]' >> /etc/supervisord.conf \
     && echo 'files = /etc/supervisor/conf.d/*.conf' >> /etc/supervisord.conf
 
+# Clear cache
+RUN php bin/console cache:clear --env=prod \
+    && php bin/console cache:warmup --env=prod
+
+
 # Set the container to listen on port 80
 EXPOSE 80
 
