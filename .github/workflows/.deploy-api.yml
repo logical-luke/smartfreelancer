@@ -8,7 +8,13 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      TIMESTAMP: ${{ steps.current-time.outputs.time }}
     steps:
+      - name: Get current time
+        id: current-time
+        run: echo "::set-output name=time::$(date +%Y%m%d%H%M%S)"
+
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -24,8 +30,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }} -f Dockerfile.api .
-          docker push docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}
+          docker build -t docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}-${{ env.TIMESTAMP }} -f Dockerfile.api .
+          docker push docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}-${{ env.TIMESTAMP }}
 
       - name: Run container
         uses: appleboy/ssh-action@master
@@ -35,8 +41,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            docker pull docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}
-            docker run -d --name smartfreelancer-api-${{ github.sha }} \
+            docker pull docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}-${{ env.TIMESTAMP }}
+            docker run -d --name smartfreelancer-api-${{ github.sha }}-${{ env.TIMESTAMP }} \
               -e DATABASE_HOST=${{ secrets.DATABASE_HOST }} \
               -e APP_ENV=prod \
               -e APP_DEBUG=0 \
@@ -51,7 +57,7 @@ jobs:
               -e RABBITMQ_PASSWORD=${{ secrets.RABBITMQ_PASSWORD }} \
               -e FE_BASE_URL=${{ secrets.FE_BASE_URL }} \
               -p $(shuf -i 12000-12999 -n 1):80 \
-              docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}
+              docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}-${{ env.TIMESTAMP }}
 
       - name: Adjust nginx and stop old container
         uses: appleboy/ssh-action@master
@@ -61,9 +67,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            port=$(docker inspect --format='{{(index (index .NetworkSettings.Ports "80/tcp") 0).HostPort}}' smartfreelancer-api-${{ github.sha }})
+            port=$(docker inspect --format='{{(index (index .NetworkSettings.Ports "80/tcp") 0).HostPort}}' smartfreelancer-api-${{ github.sha }}-${{ env.TIMESTAMP }})
             sed -i "s/proxy_pass http:\/\/localhost:[0-9]\{5\}/proxy_pass http:\/\/localhost:$port/g" /etc/nginx/conf.d/default.conf
             nginx -s reload
-            docker stop $(docker ps -q --filter "name=smartfreelancer-api" | grep -v $(docker container ls -aqf name=smartfreelancer-api-${{ github.sha }}))
-            docker rm $(docker ps -aq --filter "name=smartfreelancer-api" | grep -v $(docker container ls -aqf name=smartfreelancer-api-${{ github.sha }}))
+            docker stop $(docker ps -q --filter "name=smartfreelancer-api" | grep -v $(docker container ls -aqf name=smartfreelancer-api-${{ github.sha }}-${{ env.TIMESTAMP }}))
+            docker rm $(docker ps -aq --filter "name=smartfreelancer-api" | grep -v $(docker container ls -aqf name=smartfreelancer-api-${{ github.sha }}-${{ env.TIMESTAMP }}))
 
