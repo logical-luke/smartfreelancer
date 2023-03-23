@@ -76,6 +76,10 @@ RUN if [ "$APP_ENV" = "dev" ]; then \
             && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     ;fi
 
+
+# Clear cache
+RUN php bin/console cache:clear
+
 # Expose the port 80 for Nginx
 EXPOSE 80
 
