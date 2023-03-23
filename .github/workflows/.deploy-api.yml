@@ -38,6 +38,7 @@ jobs:
             docker pull docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}
             docker run -d --name smartfreelancer-api-${{ github.sha }} \
               -e DATABASE_HOST=${{ secrets.DATABASE_HOST }} \
+              -e APP_ENV=prod \
               -e DATABASE_PORT=${{ secrets.DATABASE_PORT }} \
               -e DATABASE_NAME=${{ secrets.DATABASE_NAME }} \
               -e DATABASE_USER=${{ secrets.DATABASE_USER }} \
