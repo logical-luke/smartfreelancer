@@ -40,9 +40,9 @@ jobs:
           script: |
             docker pull docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}-${{ env.TIMESTAMP }}
             docker run -d --name smartfreelancer-api-${{ github.sha }}-${{ env.TIMESTAMP }} \
-              -e DATABASE_HOST=${{ secrets.DATABASE_HOST }} \
               -e APP_ENV=prod \
               -e APP_DEBUG=0 \
+              -e DATABASE_HOST=${{ secrets.DATABASE_HOST }} \
               -e DATABASE_PORT=${{ secrets.DATABASE_PORT }} \
               -e DATABASE_NAME=${{ secrets.DATABASE_NAME }} \
               -e DATABASE_USER=${{ secrets.DATABASE_USER }} \
@@ -52,7 +52,7 @@ jobs:
               -e RABBITMQ_PORT=${{ secrets.RABBITMQ_PORT }} \
               -e RABBITMQ_USER=${{ secrets.RABBITMQ_USER }} \
               -e RABBITMQ_PASSWORD=${{ secrets.RABBITMQ_PASSWORD }} \
-              -e FE_BASE_URL=${{ secrets.FE_BASE_URL }} \
+              -e FE_APP_BASE_URL=${{ secrets.FE_APP_BASE_URL }} \
               -p $(shuf -i 12000-12999 -n 1):80 \
               docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}-${{ env.TIMESTAMP }}
 
