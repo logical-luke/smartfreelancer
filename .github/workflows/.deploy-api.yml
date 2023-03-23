@@ -40,7 +40,7 @@ jobs:
               -e DATABASE_HOST=${{ secrets.DATABASE_HOST }} \
               -e DATABASE_PORT=${{ secrets.DATABASE_PORT }} \
               -e DATABASE_NAME=${{ secrets.DATABASE_NAME }} \
-              -e DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }} \
+              -e DATABASE_USER=${{ secrets.DATABASE_USER }} \
               -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
               -e SENTRY_DNS=${{ secrets.SENTRY_DNS }} \
               -e RABBITMQ_HOST=${{ secrets.RABBITMQ_HOST }} \
