@@ -25,7 +25,8 @@ services:
 
     App\Service\External\GoogleClient:
         arguments:
-            $credentialsFile: '%kernel.project_dir%/config/google/client_secret.json'
+            $clientId: '%env(GOOGLE_CLIENT_ID))%'
+            $clientSecret: '%env(GOOGLE_CLIENT_SECRET))%'
             $feAppBaseUrl: '%env(FE_APP_BASE_URL)%'
 
     App\Service\Synchronization\RabbitMQProducer:

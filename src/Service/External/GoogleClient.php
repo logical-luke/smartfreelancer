@@ -7,16 +7,17 @@ namespace App\Service\External;
 use App\Model\External\GoogleUserDTO;
 use Google\Client;
 use Google\Service\Oauth2;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 readonly class GoogleClient
 {
     public function __construct(
-        private string $credentialsFile,
+        private string $clientId,
+        private string $clientSecret,
         private string $feAppBaseUrl,
         private Client $client,
     ) {
-        $this->client->setAuthConfig($this->credentialsFile);
+        $this->client->setClientId($this->clientId);
+        $this->client->setClientSecret($this->clientSecret);
         $this->client->setApplicationName('SmartFreelancer');
         $this->setRedirectUri(sprintf('%s/google/login', $this->feAppBaseUrl));
     }
