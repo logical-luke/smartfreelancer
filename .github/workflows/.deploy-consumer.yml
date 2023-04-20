@@ -54,7 +54,7 @@ jobs:
               -e RABBITMQ_PASSWORD=${{ secrets.RABBITMQ_PASSWORD }} \
               docker.pkg.github.com/${{ github.repository }}/smartfreelancer-consumer:${{ github.sha }}-${{ env.TIMESTAMP }}
 
-      - name: Adjust nginx and stop old container
+      - name: Stop old container
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_IP_ADDRESS }}
