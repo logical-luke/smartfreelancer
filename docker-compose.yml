@@ -29,6 +29,7 @@ services:
       dockerfile: Dockerfile.api
       args:
         APP_ENV: dev
+        ALLOW_ORIGIN: http://localhost:5173
     restart: always
     environment:
       APP_ENV: dev
