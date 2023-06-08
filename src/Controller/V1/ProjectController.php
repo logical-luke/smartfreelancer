@@ -1,47 +1,46 @@
 <?php
 
-declare(strict_types=1);
-
-namespace App\Controller;
+namespace App\Controller\V1;
 
 use App\Entity\User;
 use App\Exception\InvalidPayloadException;
-use App\Model\Client\ClientDTO;
-use App\Model\Client\CreateClientPayload;
-use App\Model\Client\DeleteClientPayload;
-use App\Model\Client\UpdateClientPayload;
-use App\Repository\ClientRepository;
-use App\Service\Client\ClientCreator;
-use App\Service\Client\ClientDeleter;
-use App\Service\Client\ClientUpdater;
+use App\Model\Project\CreateProjectPayload;
+use App\Model\Project\DeleteProjectPayload;
+use App\Model\Project\ProjectDTO;
+use App\Model\Project\UpdateProjectPayload;
+use App\Repository\ProjectRepository;
+use App\Service\Project\ProjectCreator;
+use App\Service\Project\ProjectDeleter;
+use App\Service\Project\ProjectUpdater;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/client', name: 'app_client_')]
-class ClientController extends AbstractController
+#[Route('/project', name: 'app_project_')]
+class ProjectController extends AbstractController
 {
     #[Route('', name: 'all')]
-    public function index(ClientRepository $clientRepository): JsonResponse
+    public function index(ProjectRepository $projectRepository): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
 
-        return $this->json(array_map(static function ($client) {
-            return ClientDTO::fromClient($client);
-        }, $clientRepository->findByUser($user)));
+        return $this->json(array_map(static function ($project) {
+            return ProjectDTO::fromProject($project);
+        }, $projectRepository->findByUser($user)));
     }
 
     #[Route('/create', name: 'create', methods: 'POST')]
-    public function create(ClientCreator $clientCreator, Request $request): JsonResponse
+    public function create(ProjectCreator $projectCreator, Request $request): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
+
         try {
             $payload = array_merge([
-                'ownerId' => $user->getId()->toRfc4122(),
+                'ownerId' => $user->getId()?->toRfc4122(),
             ], json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR));
         } catch (\JsonException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
@@ -49,8 +48,8 @@ class ClientController extends AbstractController
 
         try {
             return $this->json(
-                ClientDTO::fromClient(
-                    $clientCreator(CreateClientPayload::from($payload))
+                ProjectDTO::fromProject(
+                    $projectCreator(CreateProjectPayload::from($payload))
                 )
             );
         } catch (InvalidPayloadException $e) {
@@ -59,30 +58,32 @@ class ClientController extends AbstractController
     }
 
     #[Route('/delete', name: 'delete_bulk', methods: 'DELETE')]
-    public function deleteBulk(Request $request, ClientDeleter $clientDeleter): JsonResponse
+    public function deleteBulk(Request $request, ProjectDeleter $projectDeleter): JsonResponse
     {
-        // todo Add check if user is eligible to delete client
+        // todo Add check if user is eligible to delete project
         try {
             $ids = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
-        array_walk($ids, static fn ($id) => $clientDeleter(DeleteClientPayload::from(['id' => $id])));
+        array_walk($ids, static fn ($id) => $projectDeleter(DeleteProjectPayload::from(['id' => $id])));
 
         return $this->json([]);
     }
 
     #[Route('/delete/{id}', name: 'delete', methods: 'DELETE')]
-    public function delete(string $id, ClientDeleter $clientDeleter): JsonResponse
+    public function delete(string $id, ProjectDeleter $projectDeleter): JsonResponse
     {
-        $clientDeleter(DeleteClientPayload::from(['id' => $id]));
+        // todo Add check if user is eligible to delete project
+
+        $projectDeleter(DeleteProjectPayload::from(['id' => $id]));
 
         return $this->json([]);
     }
 
     #[Route('/update/{id}', name: 'update', methods: 'POST')]
-    public function update(string $id, ClientUpdater $clientUpdater, Request $request): JsonResponse
+    public function update(string $id, ProjectUpdater $projectUpdater, Request $request): JsonResponse
     {
         try {
             $payload = array_merge([
@@ -92,20 +93,20 @@ class ClientController extends AbstractController
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
-        $client = $clientUpdater(UpdateClientPayload::from($payload));
+        $project = $projectUpdater(UpdateProjectPayload::from($payload));
 
         return $this->json(
-            ClientDTO::fromClient($client)
+            ProjectDTO::fromProject($project)
         );
     }
 
-    #[Route('/{id}', name: 'show')]
-    public function show(string $id, ClientRepository $clientRepository): Response
+    #[Route('/{id}', name: 'show', methods: 'GET')]
+    public function show(string $id, ProjectRepository $projectRepository): Response
     {
-        if (!$client = $clientRepository->find($id)) {
+        if (!$project = $projectRepository->find($id)) {
             return $this->json([], Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json(ClientDTO::fromClient($client));
+        return $this->json(ProjectDTO::fromProject($project));
     }
 }

@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\V1;
 
-use App\Model\Time\TimeDTO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;

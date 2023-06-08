@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\V1;
 
 use App\Entity\Client;
 use App\Entity\Project;
@@ -11,7 +11,6 @@ use App\Entity\User;
 use App\Model\Client\ClientDTO;
 use App\Model\Project\ProjectDTO;
 use App\Model\Task\TaskDTO;
-use App\Model\Time\TimeDTO;
 use App\Model\Timer\TimerDTO;
 use App\Service\Synchronization\RabbitMQProducer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

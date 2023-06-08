@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\V1;
 
 use App\Exception\InvalidPayloadException;
 use App\Exception\UserAlreadyExistsException;
