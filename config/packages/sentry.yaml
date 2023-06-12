@@ -17,10 +17,3 @@ when@prod:
                 type: sentry
                 level: !php/const Monolog\Logger::ERROR
                 hub_id: Sentry\State\HubInterface
-
-    services:
-        Sentry\Monolog\Handler:
-            arguments:
-                $hub: '@Sentry\State\HubInterface'
-                $level: !php/const Monolog\Logger::ERROR
-                $bubble: false
