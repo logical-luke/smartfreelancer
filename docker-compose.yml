@@ -4,7 +4,6 @@ services:
   db:
     image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
-    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: example
       MYSQL_DATABASE: myapp
@@ -15,7 +14,6 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management
-    restart: always
     environment:
       RABBITMQ_DEFAULT_USER: rabbitmq
       RABBITMQ_DEFAULT_PASS: rabbitmq
@@ -30,7 +28,6 @@ services:
       args:
         APP_ENV: dev
         ALLOW_ORIGIN: http://localhost:5173
-    restart: always
     environment:
       APP_ENV: dev
       DATABASE_HOST: db
@@ -57,7 +54,6 @@ services:
       dockerfile: Dockerfile.devapp
       args:
         APP_ENV: dev
-    restart: always
     environment:
       APP_ENV: dev
       API_BASE_URL: http://127.0.0.1:8080/api/v1
@@ -86,6 +82,5 @@ services:
       RABBITMQ_PASSWORD: rabbitmq
       RABBITMQ_HOST: rabbitmq
       RABBITMQ_PORT: 5672
-    restart: always
     volumes:
       - ./:/app
