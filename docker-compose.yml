@@ -9,6 +9,8 @@ services:
       MYSQL_DATABASE: myapp
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
+    volumes:
+      - db_data:/var/lib/mysql
     ports:
       - 3306:3306
 
@@ -84,3 +86,6 @@ services:
       RABBITMQ_PORT: 5672
     volumes:
       - ./:/app
+
+volumes:
+  db_data:
