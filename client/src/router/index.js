@@ -1,28 +1,23 @@
 import { createRouter, createWebHistory } from "vue-router";
-import ProjectsPage from "@/components/project/ProjectsPage.vue";
 import LoginPage from "@/components/authorization/LoginPage.vue";
 import store from "../store";
 import ProjectEditPage from "@/components/project/ProjectEditPage.vue";
 import ProjectCreatePage from "@/components/project/ProjectCreatePage.vue";
-import TasksPage from "@/components/task/TasksPage.vue";
-import ClientsPage from "@/components/client/ClientsPage.vue";
 import ClientCreatePage from "@/components/client/ClientCreatePage.vue";
 import ClientEditPage from "@/components/client/ClientEditPage.vue";
 import TaskEditPage from "@/components/task/TaskEditPage.vue";
 import TaskCreatePage from "@/components/task/TaskCreatePage.vue";
 import TodayPage from "@/components/today/TodayPage.vue";
-import MetricsPage from "@/components/metric/MetricsPage.vue";
-import TimelinePage from "@/components/timeline/TimelinePage.vue";
+import ReportsPage from "@/components/report/ReportsPage.vue";
 import RegistrationPage from "@/components/authorization/RegistrationPage.vue";
 import NotFoundPage from "@/components/NotFoundPage.vue";
 import GoogleLoginPage from "@/components/authorization/GoogleLoginPage.vue";
 import AutomationsPage from "@/components/automation/AutomationsPage.vue";
 import CalendarPage from "@/components/calendar/CalendarPage.vue";
 import ExpensesPage from "@/components/expense/ExpensesPage.vue";
-import ForecastsPage from "@/components/forecast/ForecastsPage.vue";
 import SettingsPage from "@/components/setting/SettingsPage.vue";
 import InvoicesPage from "@/components/invoice/InvoicesPage.vue";
-import ShareableReportsPage from "@/components/shareable-reports/ShareableReportsPage.vue";
+import WorkHubPage from "@/components/workhub/WorkHubPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -54,28 +49,12 @@ const router = createRouter({
       },
     },
     {
-      path: "/metrics",
-      name: "MetricsPage",
-      component: MetricsPage,
+      path: "/reports",
+      name: "ReportsPage",
+      component: ReportsPage,
       meta: {
         requiresAuth: true,
       },
-    },
-    {
-      path: "/clients",
-      name: "ClientsPage",
-      meta: {
-        requiresAuth: true,
-      },
-      component: ClientsPage,
-    },
-    {
-      path: "/projects",
-      name: "ProjectsPage",
-      meta: {
-        requiresAuth: true,
-      },
-      component: ProjectsPage,
     },
     {
       path: "/project/edit/:id",
@@ -110,12 +89,12 @@ const router = createRouter({
       component: ClientEditPage,
     },
     {
-      path: "/tasks",
-      name: "TasksPage",
+      path: "/work-hub",
+      name: "WorkHubPage",
       meta: {
         requiresAuth: true,
       },
-      component: TasksPage,
+      component: WorkHubPage,
     },
     {
       path: "/task/edit/:id",
@@ -132,14 +111,6 @@ const router = createRouter({
         requiresAuth: true,
       },
       component: TaskCreatePage,
-    },
-    {
-      path: "/timeline",
-      name: "TimelinePage",
-      meta: {
-        requiresAuth: true,
-      },
-      component: TimelinePage,
     },
     {
       path: "/automations",
@@ -166,14 +137,6 @@ const router = createRouter({
       component: ExpensesPage,
     },
     {
-      path: "/forecasts",
-      name: "ForecastsPage",
-      meta: {
-        requiresAuth: true,
-      },
-      component: ForecastsPage,
-    },
-    {
       path: "/settings",
       name: "SettingsPage",
       meta: {
@@ -188,14 +151,6 @@ const router = createRouter({
         requiresAuth: true,
       },
       component: InvoicesPage,
-    },
-    {
-      path: "/shareable-reports",
-      name: "ShareableReportsPage",
-      meta: {
-        requiresAuth: true,
-      },
-      component: ShareableReportsPage,
     },
     {
       path: "/:pathMatch(.*)*",

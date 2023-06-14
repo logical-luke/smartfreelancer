@@ -53,44 +53,20 @@
                   <sun-high-icon />
                 </template>
               </sidebar-item>
-              <sidebar-item go-to="/timeline">
-                {{ $t("Timeline") }}
-                <template #icon>
-                  <clock-hour4-icon />
-                </template>
-              </sidebar-item>
-              <sidebar-item go-to="/clients">
-                {{ $t("Clients") }}
-                <template #icon>
-                  <users-icon />
-                </template>
-              </sidebar-item>
-              <sidebar-item go-to="/projects">
-                {{ $t("Projects") }}
-                <template #icon>
-                  <briefcase-icon />
-                </template>
-              </sidebar-item>
-              <sidebar-item go-to="/tasks">
-                {{ $t("Tasks") }}
-                <template #icon>
-                  <checklist-icon />
-                </template>
-              </sidebar-item>
               <sidebar-item go-to="/calendar">
                 {{ $t("Calendar") }}
                 <template #icon>
                   <calendar-icon />
                 </template>
               </sidebar-item>
-              <sidebar-item go-to="/metrics">
-                {{ $t("Metrics") }}
+              <sidebar-item go-to="/work-hub">
+                {{ $t("Work Hub") }}
                 <template #icon>
-                  <chart-bar-icon />
+                  <users-icon />
                 </template>
               </sidebar-item>
-              <sidebar-item go-to="/shareable-reports">
-                {{ $t("Shareable Reports") }}
+              <sidebar-item go-to="/reports">
+                {{ $t("Reports") }}
                 <template #icon>
                   <report-icon />
                 </template>
@@ -111,12 +87,6 @@
                 {{ $t("Automations") }}
                 <template #icon>
                   <bolt-icon />
-                </template>
-              </sidebar-item>
-              <sidebar-item go-to="/forecasts">
-                {{ $t("Forecasts") }}
-                <template #icon>
-                  <robot-icon />
                 </template>
               </sidebar-item>
               <sidebar-item go-to="/settings">
