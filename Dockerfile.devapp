@@ -1,8 +1,8 @@
 # Choose the base image
 FROM node:18
 
-# Set the APP_ENV argument with a default value of 'prod'
-ARG APP_ENV=prod
+# Set the APP_ENV argument with a default value of 'dev'
+ARG APP_ENV=dev
 
 # Set the working directory
 WORKDIR /app

@@ -62,7 +62,7 @@
               <sidebar-item go-to="/work-hub">
                 {{ $t("Work Hub") }}
                 <template #icon>
-                  <users-icon />
+                  <folder-check-icon />
                 </template>
               </sidebar-item>
               <sidebar-item go-to="/reports">
@@ -109,7 +109,6 @@ import { mapGetters } from "vuex";
 import SidebarItem from "@/components/ui/SidebarItem.vue";
 import BriefcaseIcon from "vue-tabler-icons/icons/BriefcaseIcon";
 import SidebarLogout from "@/components/ui/SidebarLogout.vue";
-import UsersIcon from "vue-tabler-icons/icons/UsersIcon";
 import Menu2Icon from "vue-tabler-icons/icons/Menu2Icon";
 import XIcon from "vue-tabler-icons/icons/XIcon";
 import SunHighIcon from "vue-tabler-icons/icons/SunHighIcon";
@@ -126,10 +125,12 @@ import RobotIcon from "vue-tabler-icons/icons/RobotIcon";
 import IconOnlyLogo from "@/components/ui/IconOnlyLogo.vue";
 import ReportIcon from "vue-tabler-icons/icons/ReportIcon";
 import SynchronizationStatus from "@/components/ui/SynchronizationStatus.vue";
+import FolderCheckIcon from "vue-tabler-icons/icons/FolderCheckIcon";
 
 export default {
   name: "SidebarNav",
   components: {
+    FolderCheckIcon,
     SynchronizationStatus,
     ReportIcon,
     IconOnlyLogo,
@@ -146,7 +147,6 @@ export default {
     SunHighIcon,
     XIcon,
     Menu2Icon,
-    UsersIcon,
     SidebarLogout,
     BriefcaseIcon,
     SidebarItem,
