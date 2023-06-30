@@ -1,28 +1,30 @@
 <template>
   <div class="container px-4 mx-auto">
     <div class="flex flex-wrap items-center mb-6">
-      <h3 class="text-xl font-bold">{{ $t('Work Hub') }}</h3>
+      <h3 class="text-xl font-bold">{{ $t("Work Hub") }}</h3>
     </div>
-    <!-- Include dialog components here for add/edit/delete functionality -->
-
-    <!-- Pagination, filtering and bulk actions components -->
-
+    <div class="flex justify-between gap-4 flex-wrap items-center">
+      <div class="flex flex-wrap gap-2 flex-wrap">
+        <new-button go-to="/client/create/">client</new-button>
+        <new-button go-to="/project/create/">project</new-button>
+        <new-button go-to="/task/create/">task</new-button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useStore } from 'vuex';
-import TreeTable from 'primevue/treetable';
-import Column from 'primevue/column';
-import Card from 'primevue/card';
-import Button from 'primevue/button';
+import { ref } from "vue";
+import TreeTable from "primevue/treetable";
+import Column from "primevue/column";
+import Card from "primevue/card";
+import Button from "primevue/button";
+import NewButton from "@/components/ui/NewButton.vue";
 
 export default {
-  name: 'WorkHubPage',
-  components: { Button, Card, TreeTable, Column },
+  name: "WorkHubPage",
+  components: { NewButton, Button, Card, TreeTable, Column },
   setup() {
-    const store = useStore();
     const nestedItems = ref([]);
 
     // Get nestedItems from store for clients, projects and tasks
