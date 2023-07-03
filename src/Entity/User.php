@@ -57,12 +57,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?SynchronizationStatus $synchronizationStatus = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: SynchronizationLog::class)]
+    private Collection $synchronizationLogs;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
         $this->clients = new ArrayCollection();
         $this->tasks = new ArrayCollection();
         $this->timeEntries = new ArrayCollection();
+        $this->synchronizationLogs = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -315,6 +319,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->synchronizationStatus = $synchronizationStatus;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SynchronizationLog>
+     */
+    public function getSynchronizationLogs(): Collection
+    {
+        return $this->synchronizationLogs;
+    }
+
+    public function addSynchronizationLog(SynchronizationLog $synchronizationLog): self
+    {
+        if (!$this->synchronizationLogs->contains($synchronizationLog)) {
+            $this->synchronizationLogs->add($synchronizationLog);
+            $synchronizationLog->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSynchronizationLog(SynchronizationLog $synchronizationLog): self
+    {
+        if ($this->synchronizationLogs->removeElement($synchronizationLog)) {
+            // set the owning side to null (unless already changed)
+            if ($synchronizationLog->getUser() === $this) {
+                $synchronizationLog->setUser(null);
+            }
+        }
 
         return $this;
     }
