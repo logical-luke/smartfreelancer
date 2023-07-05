@@ -4,9 +4,9 @@
       type="button"
       class="inline-flex text-center items-center w-full px-3 flex-nowrap py-3 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
     >
-      <plus-icon size="20" />
+      <slot name="icon"><plus-icon size="20" /></slot>
       <span class="ml-2">
-        New
+        Add
         <slot></slot>
       </span>
     </button>

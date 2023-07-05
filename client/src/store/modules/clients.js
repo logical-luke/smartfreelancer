@@ -17,6 +17,7 @@ const getters = {
   getClientById: (state) => (id) => {
     return state.all.filter((client) => client.id === id).pop();
   },
+  getClients: (state) => state.all,
 };
 
 const actions = {
