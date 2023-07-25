@@ -19,12 +19,14 @@ fs.readFile(
     console.log(en);
 
     for (const lang of languages) {
+      console.log('Translating to '+ lang);
       let translated = {};
       const langFileName = path.join(__dirname, `../src/locale/${lang}.json`);
       fs.access(langFileName, fs.constants.F_OK, (err) => {
         if (err) {
           // If the file doesn't exist, create it and write some data to it
           fs.writeFile(langFileName, JSON.stringify(translated), (err) => {
+            console.log('Error writing to langFileName');
             if (err) {
               console.error(err);
               return;
@@ -36,8 +38,13 @@ fs.readFile(
         fs.readFile(langFileName, "utf8", (err, data) => {
           translated = JSON.parse(data);
 
+          console.log('Already existing translation for ' + langFileName + ':');
+          console.log(translated);
+
           for (const [key, value] of Object.entries(en)) {
+
             if (!translated[key]) {
+              console.log('Translating '+ key +' to '+ lang);
               const url = `https://api-free.deepl.com/v2/translate?auth_key=${apiKey}&text=${encodeURIComponent(
                 value
               )}&target_lang=${lang.toUpperCase()}`;
