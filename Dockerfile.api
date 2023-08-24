@@ -84,8 +84,14 @@ RUN if [ "$APP_ENV" = "dev" ]; then \
 
 
 # Clear cache
-RUN php bin/console cache:clear --env=prod \
-    && php bin/console cache:warmup --env=prod
+RUN if [ "$APP_ENV" = "dev" ]; then \
+        php bin/console cache:clear --env=dev \
+            && php bin/console cache:warmup --env=dev; \
+    else \
+        php bin/console cache:clear --env=prod \
+            && php bin/console cache:warmup --env=prod; \
+    fi
+
 
 # Expose the port 80 for Nginx
 EXPOSE 80

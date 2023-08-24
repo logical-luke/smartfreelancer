@@ -86,6 +86,7 @@ services:
       RABBITMQ_PORT: 5672
     volumes:
       - ./:/app
+      - /app/vendor
 
 volumes:
   db_data:

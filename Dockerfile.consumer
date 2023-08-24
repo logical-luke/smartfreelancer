@@ -34,15 +34,19 @@ RUN rm -rf client/
 
 # Install the Symfony application dependencies
 RUN if [ "$APP_ENV" = "dev" ]; then \
-        php composer.phar install --no-interaction --no-progress ; \
+        php composer.phar install --no-interaction --no-progress --optimize-autoloader; \
     else \
-        php composer.phar install --no-dev --no-interaction --no-progress --optimize-autoloader ; \
+        php composer.phar install --no-dev --optimize-autoloader --prefer-dist --no-scripts --classmap-authoritative ; \
     fi
 
+
 # Create the cache and log directories and make them writable
-RUN mkdir -p var/cache var/log \
-    && chown -R www-data:www-data var \
-    && chmod -R 777 var
+RUN mkdir -p /var/cache /var/log var/log var/cache \
+    && chmod -R 777 /var/cache \
+    && chmod -R 777 /var/log \
+    && chmod -R 777 var/log \
+    && chmod -R 777 var/cache
+
 
 # Copy the Supervisor configuration file
 COPY docker/consumer/supervisor.conf /etc/supervisor/conf.d/
@@ -53,8 +57,14 @@ RUN sed -i '/^;\[include\]/ s/^;//' /etc/supervisord.conf \
     && echo 'files = /etc/supervisor/conf.d/*.conf' >> /etc/supervisord.conf
 
 # Clear cache
-RUN php bin/console cache:clear --env=prod \
-    && php bin/console cache:warmup --env=prod
+RUN if [ "$APP_ENV" = "dev" ]; then \
+        php bin/console cache:clear --env=dev \
+            && php bin/console cache:warmup --env=dev; \
+    else \
+        php bin/console cache:clear --env=prod \
+            && php bin/console cache:warmup --env=prod; \
+    fi
+
 
 
 # Set the container to listen on port 80
