@@ -43,7 +43,7 @@ export default {
     async submitForm() {
       await this.$store.dispatch("clients/createClient", this.client);
 
-      this.$router.push("/clients");
+      this.$router.push("/workhub");
     },
   },
 };

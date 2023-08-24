@@ -41,7 +41,7 @@ export default {
     async submitForm() {
       await this.$store.dispatch("projects/createProject", this.project);
 
-      this.$router.push("/projects");
+      this.$router.push("/workhub");
     },
   },
 };

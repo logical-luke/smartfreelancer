@@ -36,4 +36,28 @@ export default {
       false
     );
   },
+  async setSubject(value) {
+    if (value == null) {
+      await store.dispatch("timer/setProjectId", null);
+      await store.dispatch("timer/setClientId", null);
+      await store.dispatch("timer/setTaskId", null);
+
+      return;
+    }
+
+    let id = value.slice(2);
+    if (value.startsWith("p-")) {
+      await store.dispatch("timer/setProjectId", id);
+    }
+    if (value.startsWith("c-")) {
+      await store.dispatch("timer/setClientId", id);
+    }
+    if (value.startsWith("t-")) {
+      await store.dispatch("timer/setTaskId", id);
+    }
+
+    const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
+
+    await synchronization.pushToQueue("Timer", "TimerUpdater", "UpdateTimer", timer);
+  }
 };

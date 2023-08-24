@@ -59,7 +59,7 @@
                   <calendar-icon />
                 </template>
               </sidebar-item>
-              <sidebar-item go-to="/work-hub">
+              <sidebar-item go-to="/workhub">
                 {{ $t("Work Hub") }}
                 <template #icon>
                   <folder-check-icon />

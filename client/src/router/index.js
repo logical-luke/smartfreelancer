@@ -89,7 +89,7 @@ const router = createRouter({
       component: ClientEditPage,
     },
     {
-      path: "/work-hub",
+      path: "/workhub",
       name: "WorkHubPage",
       meta: {
         requiresAuth: true,

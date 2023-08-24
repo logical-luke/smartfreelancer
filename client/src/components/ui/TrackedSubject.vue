@@ -18,6 +18,7 @@ import { mapState } from "vuex";
 import Treeselect from "vue3-acies-treeselect";
 import "vue3-acies-treeselect/dist/vue3-treeselect.css";
 import store from "@/store";
+import timer from "@/services/timer";
 
 export default {
   name: "TrackedSubject",
@@ -91,24 +92,7 @@ export default {
       this.subject = null;
     },
     async setSubject(value) {
-      if (value == null) {
-        await store.dispatch("timer/setProjectId", null);
-        await store.dispatch("timer/setClientId", null);
-        await store.dispatch("timer/setTaskId", null);
-
-        return;
-      }
-
-      let id = value.slice(2);
-      if (value.startsWith("p-")) {
-        await store.dispatch("timer/setProjectId", id);
-      }
-      if (value.startsWith("c-")) {
-        await store.dispatch("timer/setClientId", id);
-      }
-      if (value.startsWith("t-")) {
-        await store.dispatch("timer/setTaskId", id);
-      }
+      await timer.setSubject(value);
     },
     updateSubjectOptions() {
       let options = [];

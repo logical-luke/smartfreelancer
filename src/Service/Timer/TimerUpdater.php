@@ -29,9 +29,8 @@ class TimerUpdater
             throw new \RuntimeException('Timer not found');
         }
 
-        // todo Add check if user is eligible to update timer
-
         $timer->setProject(null);
+
         if (
             ($projectId = $payload->getProjectId())
             && ($project = $this->projectRepository->find($projectId))
