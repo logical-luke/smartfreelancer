@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Service\Synchronization;
 
 use App\Model\Synchronization\SynchronizationPayload;
-use App\Repository\SynchronizationStatusRepository;
 use App\Repository\UserRepository;
 use Psr\Log\LoggerInterface;
 
@@ -14,7 +13,6 @@ readonly class SynchronisationProcessor
 
     public function __construct(
         private UserRepository $userRepository,
-        private SynchronizationStatusRepository $statusRepository,
         private SynchronizationQueueServiceFactory $queueServiceFactory,
     ) {
     }
@@ -43,13 +41,12 @@ readonly class SynchronisationProcessor
 
         $actionPayload = forward_static_call([$actionPayloadClassname, "from"], $payload->getPayload());
 
-
         $queue->__invoke($actionPayload);
 
-        $synchronizationStatus = $user
-            ->getSynchronizationStatus()
-            ->setTime(new \DateTimeImmutable());
+        $user = $this->userRepository->find($payload->getUserId());
 
-        $this->statusRepository->save($synchronizationStatus, true);
+        $user->setSynchronizationTime(new \DateTimeImmutable());
+
+        $this->userRepository->save($user, true);
     }
 }

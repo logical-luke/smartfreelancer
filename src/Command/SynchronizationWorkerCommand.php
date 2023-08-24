@@ -69,10 +69,4 @@ class SynchronizationWorkerCommand extends Command
 
         return Command::SUCCESS;
     }
-
-    private function processMessage(string $message): void
-    {
-
-    }
-
 }

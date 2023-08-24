@@ -44,6 +44,7 @@ services:
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       FE_APP_BASE_URL: http://localhost:5173
+      PHP_IDE_CONFIG: serverName=smartfreelancer
     ports:
       - 8080:80
     volumes:

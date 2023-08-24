@@ -9,6 +9,7 @@ use App\Exception\InvalidPayloadException;
 use App\Model\TimeEntry\CreateTimeEntryPayload;
 use App\Model\Timer\StopTimerPayload;
 use App\Repository\TimerRepository;
+use App\Repository\UserRepository;
 use App\Service\TimeEntry\TimeEntryCreator;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
@@ -17,7 +18,8 @@ class TimerStopper
 {
     public function __construct(
         private readonly TimerRepository $timerRepository,
-        private readonly TimeEntryCreator $timeEntryCreator
+        private readonly TimeEntryCreator $timeEntryCreator,
+        private readonly UserRepository $userRepository,
     ) {
     }
 
@@ -27,10 +29,18 @@ class TimerStopper
             throw new InvalidPayloadException('Invalid timer id');
         }
 
+        if (!$timerOwner = $timer->getOwner()) {
+            throw new InvalidPayloadException('Invalid timer owner');
+        }
+
         $timeEntry = ($this->timeEntryCreator)(CreateTimeEntryPayload::from([
             'timerId' => $timer->getId()?->toRfc4122(),
             'endTime' => $payload->getEndTime()->getTimestamp(),
         ]));
+
+        $timerOwner->setTimer(null);
+
+        $this->userRepository->save($timerOwner, true);
 
         $this->timerRepository->remove($timer, true);
 

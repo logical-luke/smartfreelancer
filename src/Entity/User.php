@@ -54,11 +54,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $loginType = LoginTypeEnum::EMAIL->value;
 
-    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
-    private ?SynchronizationStatus $synchronizationStatus = null;
-
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: SynchronizationLog::class)]
     private Collection $synchronizationLogs;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $synchronizationTime = null;
 
     public function __construct()
     {
@@ -246,10 +246,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->timer;
     }
 
-    public function setTimer(Timer $timer): self
+    public function setTimer(?Timer $timer): self
     {
         // set the owning side of the relation if necessary
-        if ($timer->getOwner() !== $this) {
+        if ($timer && $timer->getOwner() !== $this) {
             $timer->setOwner($this);
         }
 
@@ -300,29 +300,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSynchronizationStatus(): SynchronizationStatus
-    {
-        if (!$this->synchronizationStatus) {
-            $synchronizationStatus = (new SynchronizationStatus())
-                ->setUser($this);
-            $this->setSynchronizationStatus($synchronizationStatus);
-        }
-
-        return $this->synchronizationStatus;
-    }
-
-    public function setSynchronizationStatus(SynchronizationStatus $synchronizationStatus): self
-    {
-        // set the owning side of the relation if necessary
-        if ($synchronizationStatus->getUser() !== $this) {
-            $synchronizationStatus->setUser($this);
-        }
-
-        $this->synchronizationStatus = $synchronizationStatus;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, SynchronizationLog>
      */
@@ -349,6 +326,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $synchronizationLog->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSynchronizationTime(): ?\DateTimeImmutable
+    {
+        return $this->synchronizationTime;
+    }
+
+    public function setSynchronizationTime(?\DateTimeImmutable $synchronizationTime): static
+    {
+        $this->synchronizationTime = $synchronizationTime;
 
         return $this;
     }

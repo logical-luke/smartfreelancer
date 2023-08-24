@@ -56,8 +56,11 @@ class TimerCreator
             $timer->setTask($task);
         }
 
-        $this->timerRepository->persist($timer);
-        $this->timerRepository->flush();
+        $this->timerRepository->save($timer, true);
+
+        $user->setTimer($timer);
+
+        $this->userRepository->save($user, true);
 
         return $timer;
     }
