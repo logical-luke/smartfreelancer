@@ -29,7 +29,7 @@
           class="flex fixed top-0 left-0 bottom-0 flex-col w-full lg:max-w-xs lg:w-3/4 pt-6 pb-8 bg-gray-800 overflow-y-auto"
         >
           <div
-            class="flex flex-row justify-between items-center px-6 pb-6 mb-6 lg:border-b border-gray-700"
+            class="flex flex-row justify-between items-center px-6 pb-6 mr-2 lg:mr-0 mb-6 lg:border-b border-gray-700"
           >
             <div class="flex mr-auto">
               <icon-only-logo />
