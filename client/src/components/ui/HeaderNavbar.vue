@@ -11,20 +11,21 @@
       >
         <div class="flex items-center gap-3">
           <toggle-timer-button :size="12" :global="true" />
-          <pomodoro-timer />
+          <pomodoro-timer :size="12" />
           <timer-time />
         </div>
         <div class="flex items-center gap-3">
           <start-time />
           <end-time />
         </div>
-        <div class="flex max-w-24 items-center gap-3">
-          <tracked-subject />
+        <div class="flex items-center gap-3">
+            <tracked-subject />
         </div>
       </div>
       <div v-else class="flex gap-3 items-center">
         <toggle-timer-button :size="8" :global="true" />
         <pomodoro-timer :size="8" />
+        <tracked-subject :size="8" :width="w-3/4" />
       </div>
     </transition>
     <div

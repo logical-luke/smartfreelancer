@@ -29,6 +29,8 @@ class ClientCreator
 
         $client->setName($payload->getName());
         $client->setDescription($payload->getDescription());
+        $client->setIndustry($payload->getIndustry());
+        $client->setEmail($payload->getEmail());
 
         $this->clientRepository->save($client, true);
 

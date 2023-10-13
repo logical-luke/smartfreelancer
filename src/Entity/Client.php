@@ -40,6 +40,12 @@ class Client
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Task::class)]
     private Collection $tasks;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $industry = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $email = null;
+
     protected function __construct(User $user)
     {
         $this->owner = $user;
@@ -202,6 +208,30 @@ class Client
                 $task->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIndustry(): ?string
+    {
+        return $this->industry;
+    }
+
+    public function setIndustry(?string $industry): static
+    {
+        $this->industry = $industry;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): static
+    {
+        $this->email = $email;
 
         return $this;
     }

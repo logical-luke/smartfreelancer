@@ -125,7 +125,7 @@ import ToggleTimerButton from "@/components/ui/ToggleTimerButton.vue";
 import {mapActions} from "vuex";
 
 export default {
-  name: "ClientListItem",
+  name: "ClientItem",
   components: {ToggleTimerButton, EditButton, DeleteButton},
   props: {
     name: {
@@ -142,10 +142,6 @@ export default {
     id: {
       type: String,
       required: true,
-    },
-    greyBackground: {
-      type: Boolean,
-      default: false,
     },
     bulkMode: {
       type: Boolean,

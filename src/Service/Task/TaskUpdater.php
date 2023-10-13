@@ -33,8 +33,13 @@ class TaskUpdater
         $task->setName($payload->getName());
         $task->setDescription($payload->getDescription());
         $task->setProject(null);
-        if ($projectId = $payload->getProjectId()) {
-            $task->setProject($this->projectRepository->find($projectId));
+
+        if ($payload->getProjectId() && $project = $this->projectRepository->find($payload->getProjectId())) {
+            $task->setProject($project);
+        }
+
+        if ($payload->getTaskId() && $parentTask = $this->taskRepository->find($payload->getTaskId())) {
+            $parentTask->addSubtask($task);
         }
 
         $this->taskRepository->flush();

@@ -6,13 +6,15 @@ namespace App\Model\Client;
 
 use App\Entity\Client;
 
-class ClientDTO
+readonly class ClientDTO
 {
     protected function __construct(
-        public readonly string $id,
-        public readonly string $ownerId,
-        public readonly ?string $name,
-        public readonly ?string $description,
+        public string  $id,
+        public string  $ownerId,
+        public ?string $name,
+        public ?string $description,
+        public ?string $email,
+        public ?string $industry,
     ) {
     }
 
@@ -23,6 +25,8 @@ class ClientDTO
             $client->getOwner()?->getId()?->toRfc4122(),
             $client->getName(),
             $client->getDescription(),
+            $client->getEmail(),
+            $client->getIndustry(),
         );
     }
 }

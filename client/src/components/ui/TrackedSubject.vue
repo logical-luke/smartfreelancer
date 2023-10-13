@@ -1,32 +1,49 @@
 <template>
-  <treeselect
-    v-model="subject"
-    :multiple="false"
-    :options="options"
-    :noOptionsText="$t('No tasks/projects/clients')"
-    :noResultsText="$t('No results found')"
-    zIndex="10"
-    :show-count="true"
-    search-nested
-    @update:modelValue="setSubject"
-    :placeholder="$t('Select task/project/client') + '...'"
-  />
+  <button
+      type="button"
+      @click="toggle"
+      class="inline-flex bg-indigo-500 hover:bg-indigo-600 items-center justify-center items-center px-2 py-2 text-sm font-medium text-white rounded-full transition duration-200"
+  >
+    <folder-share-icon :size="Math.ceil(size * 1.8)"/>
+  </button>
+  <overlay-panel ref="op">
+    <div :class="width">
+      <treeselect
+          v-model="subject"
+          :multiple="false"
+          :options="options"
+          :noOptionsText="$t('No tasks/projects/clients')"
+          :noResultsText="$t('No results found')"
+          zIndex="10"
+          :show-count="true"
+          search-nested
+          @update:modelValue="setSubject"
+          :placeholder="$t('Select task/project/client') + '...'"
+      />
+    </div>
+  </overlay-panel>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import {mapState} from "vuex";
 import Treeselect from "vue3-acies-treeselect";
 import "vue3-acies-treeselect/dist/vue3-treeselect.css";
 import store from "@/store";
 import timer from "@/services/timer";
+import OverlayPanel from 'primevue/overlaypanel';
+import FolderShareIcon from "vue-tabler-icons/icons/FolderShareIcon";
 
 export default {
   name: "TrackedSubject",
-  components: { Treeselect },
+  components: {FolderShareIcon, Treeselect, OverlayPanel},
   props: {
     width: {
       type: String,
       default: "w-auto",
+    },
+    size: {
+      type: Number,
+      default: 12,
     },
   },
   data() {
@@ -60,11 +77,11 @@ export default {
       if (this.timer.projectId) {
         this.subject = "p-" + this.timer.projectId;
         const project = store.getters["projects/getProjectById"](
-          this.timer.projectId
+            this.timer.projectId
         );
         if (project.clientId) {
           const clientOption = this.options.find(
-            (option) => option.id.slice(2) === project.clientId
+              (option) => option.id.slice(2) === project.clientId
           );
           if (clientOption) {
             clientOption.isDefaultExpanded = true;
@@ -79,7 +96,7 @@ export default {
         const task = store.getters["tasks/getTaskById"](this.timer.taskId);
         if (task.projectId) {
           const projectOption = this.options.find(
-            (option) => option.id.slice(2) === task.projectId
+              (option) => option.id.slice(2) === task.projectId
           );
           if (projectOption) {
             projectOption.isDefaultExpanded = true;
@@ -99,36 +116,36 @@ export default {
 
       if (this.tasks) {
         this.tasks
-          .filter((task) => !task.projectId)
-          .forEach((task) => {
-            options.push({
-              id: "t-" + task.id,
-              label: "📋 " + task.name,
+            .filter((task) => !task.projectId)
+            .forEach((task) => {
+              options.push({
+                id: "t-" + task.id,
+                label: "📋 " + task.name,
+              });
             });
-          });
       }
 
       if (this.projects) {
         this.projects
-          .filter((project) => !project.clientId)
-          .forEach((project) => {
-            const projectOption = {
-              id: "p-" + project.id,
-              label: "💼 " + project.name,
-            };
-            const children = this.tasks
-              .filter((task) => task.projectId === project.id)
-              .map((task) => {
-                return {
-                  id: "t-" + task.id,
-                  label: "📋 " + task.name,
-                };
-              });
-            if (children.length > 0) {
-              projectOption.children = children;
-            }
-            options.push(projectOption);
-          });
+            .filter((project) => !project.clientId)
+            .forEach((project) => {
+              const projectOption = {
+                id: "p-" + project.id,
+                label: "💼 " + project.name,
+              };
+              const children = this.tasks
+                  .filter((task) => task.projectId === project.id)
+                  .map((task) => {
+                    return {
+                      id: "t-" + task.id,
+                      label: "📋 " + task.name,
+                    };
+                  });
+              if (children.length > 0) {
+                projectOption.children = children;
+              }
+              options.push(projectOption);
+            });
       }
 
       if (this.clients) {
@@ -138,26 +155,26 @@ export default {
             label: "👤 " + client.name,
           };
           const children = this.projects
-            .filter((project) => project.clientId === client.id)
-            .map((project) => {
-              const projectOption = {
-                id: "p-" + project.id,
-                label: "💼 " + project.name,
-              };
-              const children = this.tasks
-                .filter((task) => task.projectId === project.id)
-                .map((task) => {
-                  return {
-                    id: "t-" + task.id,
-                    label: "📝 " + task.name,
-                  };
-                });
-              if (children.length > 0) {
-                projectOption.children = children;
-              }
+              .filter((project) => project.clientId === client.id)
+              .map((project) => {
+                const projectOption = {
+                  id: "p-" + project.id,
+                  label: "💼 " + project.name,
+                };
+                const children = this.tasks
+                    .filter((task) => task.projectId === project.id)
+                    .map((task) => {
+                      return {
+                        id: "t-" + task.id,
+                        label: "📝 " + task.name,
+                      };
+                    });
+                if (children.length > 0) {
+                  projectOption.children = children;
+                }
 
-              return projectOption;
-            });
+                return projectOption;
+              });
           if (children.length > 0) {
             clientOption.children = children;
           }
@@ -166,6 +183,9 @@ export default {
       }
 
       this.options = options;
+    },
+    toggle(event) {
+      this.$refs.op.toggle(event);
     },
   },
   computed: {

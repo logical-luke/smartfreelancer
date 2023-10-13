@@ -28,18 +28,17 @@
 <!--          :limit="limit"-->
 <!--          :total="filteredClients.length"-->
 <!--      />-->
-      <paginator :rows="10" :totalRecords="3" :rowsPerPageOptions="[10, 20, 30]"></paginator>
+      <paginator :rows="10" :totalRecords="filteredClients.length" :rowsPerPageOptions="[10, 20, 30]"></paginator>
       <div class="flex flex-wrap -m-4">
         <transition-group name="fade-slower" class="transition-element">
           <template
               v-for="(client, index) in paginatedClients"
               :key="client.id"
           >
-            <client-list-item
+            <client-item
                 :bulkMode="bulkMode"
                 @toggle-select="updateBulkItems"
                 :selected="isSelected(client.id)"
-                :grey-background="index % 2 === 0"
                 :id="client.id"
                 :name="client.name"
             />
@@ -53,7 +52,7 @@
 <script>
 import {mapActions, mapState} from "vuex";
 import NewButton from "@/components/ui/NewButton.vue";
-import ClientListItem from "@/components/client/ClientListItem.vue";
+import ClientItem from "@/components/client/ClientItem.vue";
 // import PaginationControls from "@/components/ui/PaginationControls.vue";
 import SearchControls from "@/components/ui/SearchControls.vue";
 import BulkEditButton from "@/components/ui/BulkEditButton.vue";
@@ -67,7 +66,7 @@ export default {
     BulkEditButton,
     SearchControls,
     // PaginationControls,
-    ClientListItem,
+    ClientItem,
     NewButton,
     Paginator
   },

@@ -7,16 +7,30 @@ namespace App\Model\Client;
 use App\Exception\InvalidPayloadException;
 use Symfony\Component\Uid\Uuid;
 
-class CreateClientPayload
+readonly class CreateClientPayload
 {
     protected function __construct(
-        private readonly string $ownerId,
-        private readonly ?string $name,
-        private readonly ?string $description
-    ) {
+        private string  $ownerId,
+        private ?string $name,
+        private ?string $description,
+        private ?string $email,
+        private ?string $industry,
+    )
+    {
     }
 
-    public static function from(array $payload): self
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function getIndustry(): ?string
+    {
+        return $this->industry;
+    }
+
+    public
+    static function from(array $payload): self
     {
         if (!isset($payload['ownerId'])) {
             throw new InvalidPayloadException('Missing owner id');
@@ -32,20 +46,23 @@ class CreateClientPayload
             'ownerId' => null,
         ], $payload);
 
-        return new self($payload['ownerId'], $payload['name'], $payload['description']);
+        return new self($payload['ownerId'], $payload['name'], $payload['description'], $payload['email'], $payload['industry']);
     }
 
-    public function getOwnerId(): Uuid
+    public
+    function getOwnerId(): Uuid
     {
         return Uuid::fromString($this->ownerId);
     }
 
-    public function getName(): ?string
+    public
+    function getName(): ?string
     {
         return $this->name;
     }
 
-    public function getDescription(): ?string
+    public
+    function getDescription(): ?string
     {
         return $this->description;
     }

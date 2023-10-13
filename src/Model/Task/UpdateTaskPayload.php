@@ -6,14 +6,21 @@ namespace App\Model\Task;
 
 use Symfony\Component\Uid\Uuid;
 
-class UpdateTaskPayload
+readonly class UpdateTaskPayload
 {
     protected function __construct(
-        private readonly string $id,
-        private readonly ?string $name,
-        private readonly ?string $description,
-        private readonly ?string $projectId,
-    ) {
+        private string  $id,
+        private ?string $name,
+        private ?string $description,
+        private ?string $projectId,
+        private ?string $taskId,
+    )
+    {
+    }
+
+    public function getTaskId(): ?string
+    {
+        return $this->taskId;
     }
 
     public static function from(array $payload): self
@@ -25,6 +32,7 @@ class UpdateTaskPayload
             $payload['name'] ?? null,
             $payload['description'] ?? null,
             $payload['projectId'] ?? null,
+            $payload['taskId'] ?? null,
         );
     }
 

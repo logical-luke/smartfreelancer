@@ -33,6 +33,8 @@ class ClientUpdater
             $client->setDescription($description);
         }
 
+
+
         $this->clientRepository->flush();
 
         return $client;
