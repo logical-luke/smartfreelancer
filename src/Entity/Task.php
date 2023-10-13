@@ -40,10 +40,20 @@ class Task
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $scheduledDate = null;
 
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    private ?Client $client = null;
+
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'subtasks')]
+    private ?self $task = null;
+
+    #[ORM\OneToMany(mappedBy: 'task', targetEntity: self::class)]
+    private Collection $subtasks;
+
     protected function __construct(User $user)
     {
         $this->owner = $user;
         $this->timeEntries = new ArrayCollection();
+        $this->subtasks = new ArrayCollection();
     }
 
     public static function fromUser(User $user): self
@@ -164,6 +174,60 @@ class Task
     public function setScheduledDate(?\DateTimeImmutable $scheduledDate): self
     {
         $this->scheduledDate = $scheduledDate;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    public function getTask(): ?self
+    {
+        return $this->task;
+    }
+
+    public function setTask(?self $task): self
+    {
+        $this->task = $task;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getSubtasks(): Collection
+    {
+        return $this->subtasks;
+    }
+
+    public function addSubtask(self $subtask): self
+    {
+        if (!$this->subtasks->contains($subtask)) {
+            $this->subtasks->add($subtask);
+            $subtask->setTask($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubtask(self $subtask): self
+    {
+        if ($this->subtasks->removeElement($subtask)) {
+            // set the owning side to null (unless already changed)
+            if ($subtask->getTask() === $this) {
+                $subtask->setTask(null);
+            }
+        }
 
         return $this;
     }

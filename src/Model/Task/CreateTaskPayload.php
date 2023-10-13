@@ -7,13 +7,15 @@ namespace App\Model\Task;
 use App\Exception\InvalidPayloadException;
 use Symfony\Component\Uid\Uuid;
 
-class CreateTaskPayload
+readonly class CreateTaskPayload
 {
     protected function __construct(
-        private readonly string $ownerId,
-        private readonly ?string $name,
-        private readonly ?string $description,
-        private readonly ?string $projectId,
+        private string $ownerId,
+        private ?string $name,
+        private ?string $description,
+        private ?string $projectId,
+        private ?string $clientId,
+        private ?string $taskId,
     ) {
     }
 
@@ -34,7 +36,14 @@ class CreateTaskPayload
             'projectId' => null,
         ], $payload);
 
-        return new self($payload['ownerId'], $payload['name'], $payload['description'], $payload['projectId']);
+        return new self(
+            $payload['ownerId'],
+            $payload['name'],
+            $payload['description'],
+            $payload['projectId'],
+            $payload['clientId'],
+            $payload['taskId'],
+        );
     }
 
     public function getOwnerId(): Uuid
@@ -55,5 +64,15 @@ class CreateTaskPayload
     public function getProjectId(): ?Uuid
     {
         return $this->projectId ? Uuid::fromString($this->projectId) : null;
+    }
+
+    public function getClientId(): ?string
+    {
+        return $this->clientId;
+    }
+
+    public function getTaskId(): ?string
+    {
+        return $this->taskId;
     }
 }

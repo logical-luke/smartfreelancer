@@ -17,6 +17,7 @@ const getters = {
       };
     });
   },
+  getProjects: (state) => [...state.all],
 };
 
 const actions = {

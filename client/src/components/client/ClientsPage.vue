@@ -4,82 +4,61 @@
       <h3 class="text-xl font-bold">{{ $t("Clients") }}</h3>
     </div>
     <div class="flex justify-between gap-4 flex-wrap items-center">
-      <div class="flex flex-wrap gap-2 flex-wrap">
-        <new-button go-to="/client/create/">client</new-button>
-        <bulk-edit-button :active="bulkMode" @toggle-bulk="toggleBulk" />
-        <transition name="fade" mode="out-in">
-          <div v-if="bulkMode">
-            <button
-              type="button"
-              @click="deleteSelected"
-              class="inline-flex text-center items-center w-full px-3 py-3 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded transition duration-200"
-            >
-              <trash-icon size="20" />
-              <span class="ml-2"> Delete selected </span>
-            </button>
-          </div>
-        </transition>
+      <div class="flex flex-wrap gap-2">
+        <new-button go-to="/client/create/">{{ $t("client")}}</new-button>
+<!--        <bulk-edit-button :active="bulkMode" @toggle-bulk="toggleBulk"/>-->
+<!--        <transition name="fade" mode="out-in">-->
+<!--          <div v-if="bulkMode">-->
+<!--            <button-->
+<!--                type="button"-->
+<!--                @click="deleteSelected"-->
+<!--                class="inline-flex text-center items-center w-full px-3 py-3 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded transition duration-200"-->
+<!--            >-->
+<!--              <trash-icon size="20"/>-->
+<!--              <span class="ml-2"> Delete selected </span>-->
+<!--            </button>-->
+<!--          </div>-->
+<!--        </transition>-->
       </div>
-      <search-controls @pattern-changed="setSearchPattern" />
-      <pagination-controls
-        @limit-change="setLimit"
-        :page="currentPage"
-        @page-change="setPage"
-        :limit="limit"
-        :total="filteredClients.length"
-      />
-    </div>
-    <div class="container px-4 mx-auto">
-      <div class="bg-white rounded">
-        <div class="pt-4 px-4 overflow-x-auto">
-          <table class="table-auto w-full">
-            <thead>
-              <tr class="text-sm text-gray-500 text-left">
-                <th v-if="bulkMode" class="font-medium w-8">
-                  <div class="flex items-center justify-center">
-                    <input
-                      :checked="allSelected"
-                      @click="toggleAll"
-                      type="checkbox"
-                    />
-                  </div>
-                </th>
-                <th class="font-medium">Name</th>
-                <th class="font-medium">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <transition-group name="fade-slower" class="transition-element">
-                <template
-                  v-for="(client, index) in paginatedClients"
-                  :key="client.id"
-                >
-                  <client-list-item
-                    :bulkMode="bulkMode"
-                    @toggle-select="updateBulkItems"
-                    :selected="isSelected(client.id)"
-                    :grey-background="index % 2 === 0"
-                    :id="client.id"
-                    :name="client.name"
-                  />
-                </template>
-              </transition-group>
-            </tbody>
-          </table>
-        </div>
+<!--      <search-controls @pattern-changed="setSearchPattern"/>-->
+<!--      <pagination-controls-->
+<!--          @limit-change="setLimit"-->
+<!--          :page="currentPage"-->
+<!--          @page-change="setPage"-->
+<!--          :limit="limit"-->
+<!--          :total="filteredClients.length"-->
+<!--      />-->
+      <paginator :rows="10" :totalRecords="3" :rowsPerPageOptions="[10, 20, 30]"></paginator>
+      <div class="flex flex-wrap -m-4">
+        <transition-group name="fade-slower" class="transition-element">
+          <template
+              v-for="(client, index) in paginatedClients"
+              :key="client.id"
+          >
+            <client-list-item
+                :bulkMode="bulkMode"
+                @toggle-select="updateBulkItems"
+                :selected="isSelected(client.id)"
+                :grey-background="index % 2 === 0"
+                :id="client.id"
+                :name="client.name"
+            />
+          </template>
+        </transition-group>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import {mapActions, mapState} from "vuex";
 import NewButton from "@/components/ui/NewButton.vue";
 import ClientListItem from "@/components/client/ClientListItem.vue";
-import PaginationControls from "@/components/ui/PaginationControls.vue";
+// import PaginationControls from "@/components/ui/PaginationControls.vue";
 import SearchControls from "@/components/ui/SearchControls.vue";
 import BulkEditButton from "@/components/ui/BulkEditButton.vue";
 import TrashIcon from "vue-tabler-icons/icons/TrashIcon";
+import Paginator from 'primevue/paginator';
 
 export default {
   name: "ClientsPage",
@@ -87,9 +66,10 @@ export default {
     TrashIcon,
     BulkEditButton,
     SearchControls,
-    PaginationControls,
+    // PaginationControls,
     ClientListItem,
     NewButton,
+    Paginator
   },
   data() {
     return {
@@ -104,7 +84,7 @@ export default {
     clients: (state) => state.clients.all,
     filteredClients() {
       return this.clients.filter((client) =>
-        client.name.toLowerCase().includes(this.searchPattern.toLowerCase())
+          client.name.toLowerCase().includes(this.searchPattern.toLowerCase())
       );
     },
     paginatedClients() {
@@ -150,9 +130,9 @@ export default {
       }
       this.$confirm.require({
         message:
-          "Are you sure you want to delete " +
-          this.selectedClients.length +
-          " clients?",
+            "Are you sure you want to delete " +
+            this.selectedClients.length +
+            " clients?",
         header: "Delete clients",
         acceptClass: "confirm-button-accept",
         icon: "pi pi-exclamation-triangle",

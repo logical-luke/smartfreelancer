@@ -59,10 +59,22 @@
                   <calendar-icon />
                 </template>
               </sidebar-item>
-              <sidebar-item go-to="/workhub">
-                {{ $t("Work Hub") }}
+              <sidebar-item go-to="/tasks">
+                {{ $t("Tasks") }}
                 <template #icon>
-                  <folder-check-icon />
+                  <checklist-icon />
+                </template>
+              </sidebar-item>
+              <sidebar-item go-to="/projects">
+                {{ $t("Projects") }}
+                <template #icon>
+                  <briefcase-icon />
+                </template>
+              </sidebar-item>
+              <sidebar-item go-to="/clients">
+                {{ $t("Clients") }}
+                <template #icon>
+                  <friends-icon />
                 </template>
               </sidebar-item>
               <sidebar-item go-to="/reports">
@@ -125,12 +137,12 @@ import RobotIcon from "vue-tabler-icons/icons/RobotIcon";
 import IconOnlyLogo from "@/components/ui/IconOnlyLogo.vue";
 import ReportIcon from "vue-tabler-icons/icons/ReportIcon";
 import SynchronizationStatus from "@/components/ui/SynchronizationStatus.vue";
-import FolderCheckIcon from "vue-tabler-icons/icons/FolderCheckIcon";
+import FriendsIcon from "vue-tabler-icons/icons/FriendsIcon";
 
 export default {
   name: "SidebarNav",
   components: {
-    FolderCheckIcon,
+    FriendsIcon,
     SynchronizationStatus,
     ReportIcon,
     IconOnlyLogo,

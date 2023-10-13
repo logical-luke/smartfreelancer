@@ -43,7 +43,7 @@ export default {
     async submitForm() {
       await this.$store.dispatch("tasks/createTask", this.task);
 
-      this.$router.push("/workhub");
+      this.$router.push("/tasks");
     },
   },
 };

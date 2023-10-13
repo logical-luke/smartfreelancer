@@ -17,7 +17,9 @@ import CalendarPage from "@/components/calendar/CalendarPage.vue";
 import ExpensesPage from "@/components/expense/ExpensesPage.vue";
 import SettingsPage from "@/components/setting/SettingsPage.vue";
 import InvoicesPage from "@/components/invoice/InvoicesPage.vue";
-import WorkHubPage from "@/components/workhub/WorkHubPage.vue";
+import ClientsPage from "../components/client/ClientsPage.vue";
+import ProjectsPage from "../components/project/ProjectsPage.vue";
+import TasksPage from "../components/task/TasksPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -89,14 +91,6 @@ const router = createRouter({
       component: ClientEditPage,
     },
     {
-      path: "/workhub",
-      name: "WorkHubPage",
-      meta: {
-        requiresAuth: true,
-      },
-      component: WorkHubPage,
-    },
-    {
       path: "/task/edit/:id",
       name: "TaskEditPage",
       meta: {
@@ -153,10 +147,34 @@ const router = createRouter({
       component: InvoicesPage,
     },
     {
+      path: "/clients",
+      name: "ClientsPage",
+      meta: {
+        requiresAuth: true,
+      },
+      component: ClientsPage,
+    },
+    {
+      path: "/projects",
+      name: "ProjectsPage",
+      meta: {
+        requiresAuth: true,
+      },
+      component: ProjectsPage,
+    },
+    {
+      path: "/tasks",
+      name: "TasksPage",
+      meta: {
+        requiresAuth: true,
+      },
+      component: TasksPage,
+    },
+    {
       path: "/:pathMatch(.*)*",
       name: "NotFoundPage",
       component: NotFoundPage,
-    },
+    }
   ],
 });
 

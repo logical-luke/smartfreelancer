@@ -50,7 +50,7 @@ export default {
   methods: {
     async submitForm() {
       await store.dispatch("tasks/updateTask", this.task);
-      await router.push("/workhub");
+      await router.push("/tasks");
     },
   },
   setup() {

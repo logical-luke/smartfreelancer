@@ -6,6 +6,7 @@ namespace App\Service\Task;
 
 use App\Entity\Task;
 use App\Model\Task\CreateTaskPayload;
+use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
@@ -18,6 +19,7 @@ class TaskCreator
         private readonly TaskRepository $taskRepository,
         private readonly UserRepository $userRepository,
         private readonly ProjectRepository $projectRepository,
+        private readonly ClientRepository $clientRepository,
     ) {
     }
 
@@ -34,6 +36,14 @@ class TaskCreator
 
         if ($payload->getProjectId() && $project = $this->projectRepository->find($payload->getProjectId())) {
             $task->setProject($project);
+        }
+
+        if ($payload->getClientId() && $client = $this->clientRepository->find($payload->getClientId())) {
+            $task->setClient($client);
+        }
+
+        if ($payload->getTaskId() && $parentTask = $this->taskRepository->find($payload->getTaskId())) {
+            $parentTask->addSubtask($task);
         }
 
         $this->taskRepository->save($task, true);

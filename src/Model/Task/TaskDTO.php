@@ -6,14 +6,16 @@ namespace App\Model\Task;
 
 use App\Entity\Task;
 
-class TaskDTO
+readonly class TaskDTO
 {
     protected function __construct(
-        public readonly string $id,
-        public readonly string $ownerId,
-        public readonly ?string $name,
-        public readonly ?string $description,
-        public readonly ?string $projectId,
+        public string $id,
+        public string $ownerId,
+        public ?string $name,
+        public ?string $description,
+        public ?string $projectId,
+        public ?string $clientId,
+        public ?string $taskId,
     ) {
     }
 
@@ -25,6 +27,8 @@ class TaskDTO
             $task->getName(),
             $task->getDescription(),
             $task->getProject()?->getId()?->toRfc4122(),
+            $task->getClient()?->getId()?->toRfc4122(),
+            $task->getTask()?->getId()?->toRfc4122(),
         );
     }
 }

@@ -24,18 +24,28 @@
     ></textarea>
   </div>
   <div class="mb-6">
+    <label class="block text-sm font-medium mb-2" for="">Client:</label>
+    <SelectClient :selected="task.clientId" @updated="updateClientId" />
+  </div>
+  <div class="mb-6">
     <label class="block text-sm font-medium mb-2" for="">Project:</label>
     <SelectProject :selected="task.projectId" @updated="updateProjectId" />
+  </div>
+  <div class="mb-6">
+    <label class="block text-sm font-medium mb-2" for="">Task:</label>
+    <SelectTask :selected="task.taskId" @updated="updateTaskId" />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import SelectProject from "@/components/ui/SelectProject.vue";
+import SelectClient from "../ui/SelectClient.vue";
+import SelectTask from "../ui/SelectTask.vue";
 
 export default {
   name: "TaskForm",
-  components: { SelectProject },
+  components: {SelectTask, SelectClient, SelectProject },
   computed: mapState({
     task: (state) => state.task.current,
   }),
@@ -48,6 +58,12 @@ export default {
     },
     updateProjectId(projectId) {
       this.$store.dispatch("task/setProjectId", projectId);
+    },
+    updateClientId(clientId) {
+      this.$store.dispatch("task/setClientId", clientId);
+    },
+    updateTaskId(taskId) {
+      this.$store.dispatch("task/setTaskId", taskId);
     },
   },
 };

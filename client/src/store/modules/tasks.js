@@ -9,6 +9,15 @@ const getters = {
   getTaskById: (state) => (id) => {
     return state.all.filter((task) => task.id === id).pop();
   },
+  getTasks: (state) => [...state.all],
+  getTasksOptions(state) {
+    return state.all.map((task) => {
+      return {
+        id: task.id,
+        label: task.name,
+      };
+    });
+  },
 };
 
 const actions = {

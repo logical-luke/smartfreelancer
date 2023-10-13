@@ -2,6 +2,8 @@ const emptyTask = {
   name: "",
   description: "",
   projectId: null,
+  clientId: null,
+  taskId: null,
 };
 
 const state = () => ({
@@ -18,6 +20,12 @@ const actions = {
   setProjectId({ commit }, projectId) {
     commit("setProjectId", projectId);
   },
+  setClientId({ commit }, clientId) {
+    commit("setClientId", clientId);
+  },
+  setTaskId({ commit }, taskId) {
+    commit("setTaskId", taskId);
+  },
   clearTask({ commit }) {
     commit("setTask", JSON.parse(JSON.stringify(emptyTask)));
   },
@@ -32,6 +40,12 @@ const mutations = {
   },
   setProjectId(state, projectId) {
     state.current.projectId = projectId;
+  },
+  setClientId(state, clientId) {
+    state.current.clientId = clientId;
+  },
+  setTaskId(state, taskId) {
+    state.current.taskId = taskId;
   },
   setDescription(state, description) {
     state.current.description = description;
