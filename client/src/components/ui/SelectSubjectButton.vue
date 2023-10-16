@@ -162,7 +162,7 @@ export default {
       this.options = [{
         key: '0',
         data: null,
-        label: this.$t('No Subject'),
+        label: this.$t('No target'),
         type: 'noSubject',
       }, ...formatNodes(store.getters["getWorkHubTree"], '', true, 0)];
     },
