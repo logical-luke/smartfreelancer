@@ -6,6 +6,7 @@ const emptyTimer = {
   projectId: null,
   clientId: null,
   taskId: null,
+  description: "",
 };
 
 const state = () => ({
@@ -17,7 +18,6 @@ const actions = {
     if (state.current.projectId !== projectId) {
       const timer = JSON.parse(JSON.stringify(state.current));
       timer.projectId = projectId;
-      timer.clientId = null;
       commit("setTimer", timer);
     }
   },
@@ -25,7 +25,6 @@ const actions = {
     if (state.current.taskId !== taskId) {
       const timer = JSON.parse(JSON.stringify(state.current));
       timer.taskId = taskId;
-      timer.clientId = null;
       commit("setTimer", timer);
     }
   },
@@ -33,10 +32,16 @@ const actions = {
     if (state.current.clientId !== clientId) {
       const timer = JSON.parse(JSON.stringify(state.current));
       timer.clientId = clientId;
-      timer.projectId = null;
       commit("setTimer", timer);
     }
   },
+  async setDescription({ commit, state }, description) {
+    if (state.current.description!== description) {
+      const timer = JSON.parse(JSON.stringify(state.current));
+      timer.description = description;
+      commit("setTimer", timer);
+    }
+  }
 };
 
 const getters = {

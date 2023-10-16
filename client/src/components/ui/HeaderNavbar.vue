@@ -18,14 +18,15 @@
           <start-time />
           <end-time />
         </div>
-        <div class="flex items-center gap-3">
-            <tracked-subject />
+        <div class="flex items-center w-1/2 gap-3">
+            <select-subject-button />
+            <description-input />
         </div>
       </div>
       <div v-else class="flex gap-3 items-center">
         <toggle-timer-button :size="8" :global="true" />
         <pomodoro-timer :size="8" />
-        <tracked-subject :size="8" :width="w-3/4" />
+        <select-subject-button :size="8" />
       </div>
     </transition>
     <div
@@ -70,13 +71,14 @@ nav {
 
 <script>
 import ToggleTimerButton from "@/components/ui/ToggleTimerButton.vue";
-import TrackedSubject from "@/components/ui/TrackedSubject.vue";
+import SelectSubjectButton from "@/components/ui/SelectSubjectButton.vue";
 import TimerTime from "@/components/ui/TimerTime.vue";
 import { mapGetters } from "vuex";
 import StartTime from "@/components/ui/StartTime.vue";
 import EndTime from "@/components/ui/EndTime.vue";
 import PomodoroTimer from "@/components/ui/PomodoroTimer.vue";
 import CollapseNavBarButton from "@/components/ui/CollapseNavBarButton.vue";
+import DescriptionInput from "./DescriptionInput.vue";
 
 export default {
   name: "HeaderNavbar",
@@ -118,12 +120,13 @@ export default {
     },
   },
   components: {
+    DescriptionInput,
     CollapseNavBarButton,
     PomodoroTimer,
     EndTime,
     StartTime,
     TimerTime,
-    TrackedSubject,
+    SelectSubjectButton,
     ToggleTimerButton,
   },
 };

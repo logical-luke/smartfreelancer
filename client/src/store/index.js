@@ -12,7 +12,7 @@ import tasks from "@/store/modules/tasks";
 import time from "@/store/modules/time";
 import timeEntries from "@/store/modules/timeEntries";
 import timer from "@/store/modules/timer";
-
+import buildWorkHubTree from "@/services/treeBuilder";
 const debug = process.env.NODE_ENV !== "production";
 
 export default createStore({
@@ -41,6 +41,9 @@ export default createStore({
   getters: {
     getUserId(state) {
       return state.user.id;
+    },
+    getWorkHubTree(state, getters, rootState, rootGetters) {
+      return buildWorkHubTree(rootGetters['clients/getClients'], rootGetters['projects/getProjects'], rootGetters['tasks/getTasks']);
     },
   },
   strict: debug,

@@ -5,59 +5,94 @@ import synchronization from "@/services/synchronization";
 import timeEntries from "@/services/timeEntries";
 
 export default {
-  async startTimer() {
-    const startTime = store.getters["time/getServerTime"];
-    const newTimer = JSON.parse(
-      JSON.stringify(store.getters["timer/getTimer"])
-    );
-    newTimer.startTime = startTime;
-    newTimer.id = getUuid();
+    async startTimer() {
+        const startTime = store.getters["time/getServerTime"];
+        const newTimer = JSON.parse(
+            JSON.stringify(store.getters["timer/getTimer"])
+        );
+        newTimer.startTime = startTime;
+        newTimer.id = getUuid();
 
-    await store.commit("timer/setTimer", newTimer);
-    await cache.set("timer", JSON.stringify(newTimer));
-    await synchronization.pushToQueue("Timer", "TimerCreator", "CreateTimer", newTimer);
-  },
-  async stopTimer() {
-    const endTime = store.getters["time/getServerTime"];
-    const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
-    if (!timer.id) {
-      return;
-    }
-    await store.commit("timer/clearTimer");
-    timer.endTime = endTime;
-    await synchronization.pushToQueue("Timer", "TimerStopper", "StopTimer", timer);
-    await timeEntries.createTimeEntry(
-      timer.ownerId,
-      timer.clientId,
-      timer.projectId,
-      timer.taskId,
-      timer.startTime,
-      timer.endTime,
-      false
-    );
-  },
-  async setSubject(value) {
-    if (value == null) {
-      await store.dispatch("timer/setProjectId", null);
-      await store.dispatch("timer/setClientId", null);
-      await store.dispatch("timer/setTaskId", null);
+        await store.commit("timer/setTimer", newTimer);
+        await cache.set("timer", JSON.stringify(newTimer));
+        await synchronization.pushToQueue("Timer", "TimerCreator", "CreateTimer", newTimer);
+    },
+    async stopTimer() {
+        const endTime = store.getters["time/getServerTime"];
+        const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
+        if (!timer.id) {
+            return;
+        }
+        await store.commit("timer/clearTimer");
+        timer.endTime = endTime;
+        await synchronization.pushToQueue("Timer", "TimerStopper", "StopTimer", timer);
+        await timeEntries.createTimeEntry(
+            timer.ownerId,
+            timer.clientId,
+            timer.projectId,
+            timer.taskId,
+            timer.startTime,
+            timer.endTime,
+            false
+        );
+    },
+    async setProject(id) {
+        const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
 
-      return;
-    }
+        if (timer.projectId === id) {
+            return;
+        }
 
-    let id = value.slice(2);
-    if (value.startsWith("p-")) {
-      await store.dispatch("timer/setProjectId", id);
-    }
-    if (value.startsWith("c-")) {
-      await store.dispatch("timer/setClientId", id);
-    }
-    if (value.startsWith("t-")) {
-      await store.dispatch("timer/setTaskId", id);
-    }
+        await store.dispatch("timer/setClientId", null);
+        await store.dispatch("timer/setProjectId", id);
+        await store.dispatch("timer/setTaskId", null);
 
-    const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
+        await synchronization.pushToQueue("Timer", "TimerUpdater", "UpdateTimer", timer);
+    },
+    async setClient(id) {
+        const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
 
-    await synchronization.pushToQueue("Timer", "TimerUpdater", "UpdateTimer", timer);
-  }
+        if (timer.clientId === id) {
+            return;
+        }
+
+        await store.dispatch("timer/setClientId", id);
+        await store.dispatch("timer/setProjectId", null);
+        await store.dispatch("timer/setTaskId", null);
+
+        await synchronization.pushToQueue("Timer", "TimerUpdater", "UpdateTimer", timer);
+    },
+    async setTask(id) {
+        const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
+
+        if (timer.taskId === id) {
+            return;
+        }
+
+        await store.dispatch("timer/setClientId", null);
+        await store.dispatch("timer/setProjectId", null);
+        await store.dispatch("timer/setTaskId", id);
+
+        await synchronization.pushToQueue("Timer", "TimerUpdater", "UpdateTimer", timer);
+    },
+    async setEmptySubject(){
+        const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
+
+        await store.dispatch("timer/setClientId", null);
+        await store.dispatch("timer/setProjectId", null);
+        await store.dispatch("timer/setTaskId", null);
+
+        await synchronization.pushToQueue("Timer", "TimerUpdater", "UpdateTimer", timer);
+    },
+    async setDescription(description) {
+        const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
+
+        if (timer.description === description) {
+            return;
+        }
+
+        await store.dispatch("timer/setDescription", description);
+
+        await synchronization.pushToQueue("Timer", "TimerUpdater", "UpdateTimer", timer);
+    }
 };
