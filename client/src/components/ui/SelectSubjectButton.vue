@@ -65,7 +65,7 @@ export default {
       this.updateSubjectOptions();
     },
     locale() {
-      this.options[0].label = this.$t('No Subject');
+      this.options[0].label = this.$t('No target');
     }
   },
   methods: {
