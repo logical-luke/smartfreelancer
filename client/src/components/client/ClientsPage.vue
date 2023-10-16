@@ -6,30 +6,10 @@
     <div class="flex justify-between gap-4 flex-wrap items-center">
       <div class="flex flex-wrap gap-2">
         <new-button go-to="/client/create/">{{ $t("client")}}</new-button>
-<!--        <bulk-edit-button :active="bulkMode" @toggle-bulk="toggleBulk"/>-->
-<!--        <transition name="fade" mode="out-in">-->
-<!--          <div v-if="bulkMode">-->
-<!--            <button-->
-<!--                type="button"-->
-<!--                @click="deleteSelected"-->
-<!--                class="inline-flex text-center items-center w-full px-3 py-3 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded transition duration-200"-->
-<!--            >-->
-<!--              <trash-icon size="20"/>-->
-<!--              <span class="ml-2"> Delete selected </span>-->
-<!--            </button>-->
-<!--          </div>-->
-<!--        </transition>-->
       </div>
 <!--      <search-controls @pattern-changed="setSearchPattern"/>-->
-<!--      <pagination-controls-->
-<!--          @limit-change="setLimit"-->
-<!--          :page="currentPage"-->
-<!--          @page-change="setPage"-->
-<!--          :limit="limit"-->
-<!--          :total="filteredClients.length"-->
-<!--      />-->
       <paginator :rows="10" :totalRecords="filteredClients.length" :rowsPerPageOptions="[10, 20, 30]"></paginator>
-      <div class="flex flex-wrap -m-4">
+      <div class="flex w-full flex-wrap -m-4">
         <transition-group name="fade-slower" class="transition-element">
           <template
               v-for="(client, index) in paginatedClients"
@@ -53,7 +33,6 @@
 import {mapActions, mapState} from "vuex";
 import NewButton from "@/components/ui/NewButton.vue";
 import ClientItem from "@/components/client/ClientItem.vue";
-// import PaginationControls from "@/components/ui/PaginationControls.vue";
 import SearchControls from "@/components/ui/SearchControls.vue";
 import BulkEditButton from "@/components/ui/BulkEditButton.vue";
 import TrashIcon from "vue-tabler-icons/icons/TrashIcon";
@@ -65,7 +44,6 @@ export default {
     TrashIcon,
     BulkEditButton,
     SearchControls,
-    // PaginationControls,
     ClientItem,
     NewButton,
     Paginator

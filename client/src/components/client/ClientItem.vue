@@ -3,15 +3,13 @@
     <div class="p-6 bg-white shadow rounded">
       <div class="flex justify-between mb-4">
         <div class="flex items-center">
-          <img class="w-20 h-20 p-1 mr-4 rounded-full border border-indigo-50"
-               src="https://i.pravatar.cc/800"
-               alt="">
+          <avatar icon="pi pi-user" class="w-20 h-20 p-1 mr-4 rounded-full border border-indigo-50" shape="circle" size="xlarge" />
           <div>
             <div class="flex mb-2">
-              <span class="inline-block py-1 px-2 mr-2 text-xs bg-blue-50 text-blue-500 rounded">72 Tasks</span>
+              <span v-if="tasksCounter > 0" class="inline-block py-1 px-2 mr-2 text-xs bg-blue-50 text-blue-500 rounded">{{ tasksCounter }}</span>
               <h3 class="font-medium">{{ name }}</h3>
             </div>
-            <p class="text-sm text-gray-500">Marketing Manager</p>
+            <p class="text-sm text-gray-500">{{ industry }}</p>
           </div>
         </div>
         <button class="self-start mt-6 focus:outline-none">
@@ -23,8 +21,7 @@
         </button>
       </div>
       <div class="mb-7">
-        <p class="text-sm">She has worked with major companies for years. She has won numerous awards. She runs her
-          website and is willing to support the marketing activities of any company.</p>
+        <p class="text-sm">{{ description }}</p>
       </div>
       <div class="flex mb-4 justify-between items-center">
         <div class="flex items-center">
@@ -37,7 +34,7 @@
               </span>
           <h4 class="text-sm text-gray-500">Location</h4>
         </div>
-        <span class="text-sm">Warsaw, Poland</span>
+        <span class="text-sm">{{ location }}</span>
       </div>
       <div class="flex mb-4 justify-between items-center">
         <div class="flex items-center">
@@ -48,35 +45,11 @@
                       fill="#C2C9D2"></path>
                 </svg>
               </span>
-          <h4 class="text-sm text-gray-500">Email Address</h4>
+          <h4 class="text-sm text-gray-500">Email</h4>
         </div>
-        <span class="text-sm">moniquesmith@example.com</span>
-      </div>
-      <div class="flex mb-6 justify-between items-center">
-        <div class="flex items-center">
-              <span class="inline-block mr-2">
-                <svg width="18" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                      d="M14.8332 3.41665H12.3332V2.58331C12.3332 1.92027 12.0698 1.28439 11.6009 0.815546C11.1321 0.346705 10.4962 0.083313 9.83317 0.083313H8.1665C7.50346 0.083313 6.86758 0.346705 6.39874 0.815546C5.9299 1.28439 5.6665 1.92027 5.6665 2.58331V3.41665H3.1665C2.50346 3.41665 1.86758 3.68004 1.39874 4.14888C0.929896 4.61772 0.666504 5.2536 0.666504 5.91665V13.4166C0.666504 14.0797 0.929896 14.7156 1.39874 15.1844C1.86758 15.6533 2.50346 15.9166 3.1665 15.9166H14.8332C15.4962 15.9166 16.1321 15.6533 16.6009 15.1844C17.0698 14.7156 17.3332 14.0797 17.3332 13.4166V5.91665C17.3332 5.2536 17.0698 4.61772 16.6009 4.14888C16.1321 3.68004 15.4962 3.41665 14.8332 3.41665ZM7.33317 2.58331C7.33317 2.3623 7.42097 2.15034 7.57725 1.99406C7.73353 1.83778 7.94549 1.74998 8.1665 1.74998H9.83317C10.0542 1.74998 10.2661 1.83778 10.4224 1.99406C10.5787 2.15034 10.6665 2.3623 10.6665 2.58331V3.41665H7.33317V2.58331ZM15.6665 13.4166C15.6665 13.6377 15.5787 13.8496 15.4224 14.0059C15.2661 14.1622 15.0542 14.25 14.8332 14.25H3.1665C2.94549 14.25 2.73353 14.1622 2.57725 14.0059C2.42097 13.8496 2.33317 13.6377 2.33317 13.4166V9.20831H4.83317V10.0833C4.83317 10.3043 4.92097 10.5163 5.07725 10.6726C5.23353 10.8288 5.44549 10.9166 5.6665 10.9166C5.88752 10.9166 6.09948 10.8288 6.25576 10.6726C6.41204 10.5163 6.49984 10.3043 6.49984 10.0833V9.20831H11.4998V10.0833C11.4998 10.3043 11.5876 10.5163 11.7439 10.6726C11.9002 10.8288 12.1122 10.9166 12.3332 10.9166C12.5542 10.9166 12.7661 10.8288 12.9224 10.6726C13.0787 10.5163 13.1665 10.3043 13.1665 10.0833V9.20831H15.6665V13.4166ZM15.6665 7.58331H2.33317V5.91665C2.33317 5.69563 2.42097 5.48367 2.57725 5.32739C2.73353 5.17111 2.94549 5.08331 3.1665 5.08331H14.8332C15.0542 5.08331 15.2661 5.17111 15.4224 5.32739C15.5787 5.48367 15.6665 5.69563 15.6665 5.91665V7.58331Z"
-                      fill="#C2C9D2"></path>
-                </svg>
-              </span>
-          <h4 class="text-sm text-gray-500">Company Name</h4>
-        </div>
-        <span class="text-sm">Shuffle</span>
+        <span class="text-sm">{{ email }}</span>
       </div>
       <div class="flex flex-wrap -mx-2">
-        <div class="w-full md:w-1/2 px-2 mb-2 md:mb-0">
-          <a class="flex justify-center py-2 text-sm text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
-             href="#">
-            <svg class="mr-2" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                  d="M8.99989 0.666687C7.90554 0.666687 6.82191 0.882235 5.81086 1.30102C4.79981 1.71981 3.88115 2.33364 3.10733 3.10746C1.54453 4.67027 0.666555 6.78988 0.666555 9.00002C0.65927 10.9243 1.32555 12.7905 2.54989 14.275L0.883222 15.9417C0.76759 16.0589 0.68926 16.2077 0.658115 16.3693C0.62697 16.531 0.644405 16.6983 0.708222 16.85C0.777437 17 0.889642 17.126 1.03059 17.212C1.17155 17.2981 1.33489 17.3403 1.49989 17.3334H8.99989C11.21 17.3334 13.3296 16.4554 14.8924 14.8926C16.4552 13.3298 17.3332 11.2102 17.3332 9.00002C17.3332 6.78988 16.4552 4.67027 14.8924 3.10746C13.3296 1.54466 11.21 0.666687 8.99989 0.666687V0.666687ZM8.99989 15.6667H3.50822L4.28322 14.8917C4.43843 14.7356 4.52555 14.5243 4.52555 14.3042C4.52555 14.084 4.43843 13.8728 4.28322 13.7167C3.19204 12.6267 2.51253 11.1921 2.36046 9.65735C2.20839 8.12256 2.59317 6.58253 3.44924 5.29962C4.30531 4.01672 5.57971 3.07032 7.05532 2.62166C8.53092 2.17301 10.1164 2.24986 11.5417 2.83911C12.967 3.42837 14.1439 4.49358 14.8719 5.85326C15.5999 7.21294 15.8339 8.78297 15.5342 10.2959C15.2344 11.8087 14.4193 13.1709 13.2278 14.1502C12.0364 15.1295 10.5422 15.6655 8.99989 15.6667V15.6667ZM13.1666 8.16669H4.83322C4.61221 8.16669 4.40025 8.25448 4.24397 8.41076C4.08769 8.56704 3.99989 8.77901 3.99989 9.00002C3.99989 9.22103 4.08769 9.433 4.24397 9.58928C4.40025 9.74556 4.61221 9.83335 4.83322 9.83335H13.1666C13.3876 9.83335 13.5995 9.74556 13.7558 9.58928C13.9121 9.433 13.9999 9.22103 13.9999 9.00002C13.9999 8.77901 13.9121 8.56704 13.7558 8.41076C13.5995 8.25448 13.3876 8.16669 13.1666 8.16669ZM11.4999 11.5H6.49989C6.27887 11.5 6.06691 11.5878 5.91063 11.7441C5.75435 11.9004 5.66655 12.1123 5.66655 12.3334C5.66655 12.5544 5.75435 12.7663 5.91063 12.9226C6.06691 13.0789 6.27887 13.1667 6.49989 13.1667H11.4999C11.7209 13.1667 11.9329 13.0789 12.0891 12.9226C12.2454 12.7663 12.3332 12.5544 12.3332 12.3334C12.3332 12.1123 12.2454 11.9004 12.0891 11.7441C11.9329 11.5878 11.7209 11.5 11.4999 11.5ZM6.49989 6.50002H11.4999C11.7209 6.50002 11.9329 6.41222 12.0891 6.25594C12.2454 6.09966 12.3332 5.8877 12.3332 5.66669C12.3332 5.44567 12.2454 5.23371 12.0891 5.07743C11.9329 4.92115 11.7209 4.83335 11.4999 4.83335H6.49989C6.27887 4.83335 6.06691 4.92115 5.91063 5.07743C5.75435 5.23371 5.66655 5.44567 5.66655 5.66669C5.66655 5.8877 5.75435 6.09966 5.91063 6.25594C6.06691 6.41222 6.27887 6.50002 6.49989 6.50002V6.50002Z"
-                  fill="#8880EB"></path>
-            </svg>
-            <span>Message</span>
-          </a>
-        </div>
         <div class="w-full md:w-1/2 px-2">
           <a class="flex justify-center py-2 text-sm text-indigo-500 bg-indigo-100 hover:bg-indigo-200 rounded transition duration-200"
              href="#">
@@ -91,42 +64,18 @@
       </div>
     </div>
   </div>
-  <!--  <tr :class="greyBackground ? 'bg-gray-50' : ''" class="text-xs">-->
-  <!--    <td v-if="bulkMode">-->
-  <!--      <div class="flex items-center justify-center">-->
-  <!--        <input @click="toggleSelect" :checked="selected" type="checkbox" />-->
-  <!--      </div>-->
-  <!--    </td>-->
-  <!--    <td class="p-2">-->
-  <!--      <p class="font-medium text-sm">{{ name }}</p>-->
-  <!--    </td>-->
-  <!--    <td class="p-2">-->
-  <!--      <div class="flex items-center space-x-2">-->
-  <!--        <toggle-timer-button :size="8" :client-id="id" />-->
-  <!--        <edit-button-->
-  <!--          class="mt-1"-->
-  <!--          :goTo="`/client/edit/${id}`"-->
-  <!--          :icon-only="true"-->
-  <!--        />-->
-  <!--        <delete-button-->
-  <!--          @delete="deleteClient(id)"-->
-  <!--          :subject="name"-->
-  <!--          :icon-only="true"-->
-  <!--        />-->
-  <!--      </div>-->
-  <!--    </td>-->
-  <!--  </tr>-->
 </template>
 
 <script>
 import DeleteButton from "@/components/ui/DeleteButton.vue";
 import EditButton from "@/components/ui/EditButton.vue";
 import ToggleTimerButton from "@/components/ui/ToggleTimerButton.vue";
+import Avatar from "primevue/avatar";
 import {mapActions} from "vuex";
 
 export default {
   name: "ClientItem",
-  components: {ToggleTimerButton, EditButton, DeleteButton},
+  components: {ToggleTimerButton, EditButton, DeleteButton, Avatar},
   props: {
     name: {
       type: String,
