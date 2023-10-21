@@ -3,6 +3,7 @@ import store from "@/store";
 import cache from "@/services/cache";
 import synchronization from "@/services/synchronization";
 import timeEntries from "@/services/timeEntries";
+import getSecondsTimestampFromDate from "../time/getSecondsTimestampFromDate";
 
 export default {
     async startTimer() {
@@ -92,6 +93,32 @@ export default {
         }
 
         await store.dispatch("timer/setDescription", description);
+
+        await synchronization.pushToQueue("Timer", "TimerUpdater", "UpdateTimer", timer);
+    },
+    async setStartTime(startTime) {
+        const startTimeTimestamp = getSecondsTimestampFromDate(startTime);
+
+        const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
+
+        if (timer.startTime === startTimeTimestamp) {
+            return;
+        }
+
+        await store.dispatch("timer/setStartTime", startTimeTimestamp);
+
+        await synchronization.pushToQueue("Timer", "TimerUpdater", "UpdateTimer", timer);
+    },
+    async setEndTime(endTime) {
+        const endTimeTimestamp = getSecondsTimestampFromDate(endTime);
+
+        const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
+
+        if (timer.endTime === endTimeTimestamp) {
+            return;
+        }
+
+        await store.dispatch("timer/setEndTime", endTimeTimestamp);
 
         await synchronization.pushToQueue("Timer", "TimerUpdater", "UpdateTimer", timer);
     }

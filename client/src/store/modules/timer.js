@@ -41,6 +41,20 @@ const actions = {
       timer.description = description;
       commit("setTimer", timer);
     }
+  },
+  async setStartTime({ commit, state }, startTime) {
+    if (state.current.startTime!== startTime) {
+      const timer = JSON.parse(JSON.stringify(state.current));
+      timer.startTime = startTime;
+      commit("setTimer", timer);
+    }
+  },
+  async setEndTime({ commit, state }, endTime) {
+    if (state.current.endTime!== endTime) {
+      const timer = JSON.parse(JSON.stringify(state.current));
+      timer.endTime = endTime;
+      commit("setTimer", timer);
+    }
   }
 };
 

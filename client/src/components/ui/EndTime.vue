@@ -1,34 +1,37 @@
 <template>
-  <div class="w-[4.1rem]">
-    <datepicker
-      v-model="time"
-      time-picker
-      auto-apply
-      hide-input-icon
-      :clearable="false"
-      :disabled="disabled"
-      show-now-button
+  <div class="w-[4.3rem]">
+    <calendar
+        id="end-time"
+        v-model="time"
+        @update:model-value="updateEndTime"
+        :disabled="true"
+        timeOnly
     />
   </div>
 </template>
 
 <script>
 import Datepicker from "@vuepic/vue-datepicker";
-import "@vuepic/vue-datepicker/dist/main.css";
-import { mapState } from "vuex";
+import Calendar from "primevue/calendar";
+import {mapState} from "vuex";
 import getDateFromSecondsTimestamp from "@/services/time/getDateFromSecondsTimestamp";
+import timer from "../../services/timer";
 
 export default {
   name: "EndTime",
-  components: { Datepicker },
+  components: {Datepicker, Calendar},
   data() {
     return {
-      time: {
-        hours: null,
-        minutes: null,
-      },
-      disabled: false,
+      time: null,
     };
+  },
+  watch: {
+    timer() {
+      this.updateTime();
+    },
+    serverTime() {
+      this.updateTime();
+    },
   },
   computed: {
     ...mapState({
@@ -37,30 +40,23 @@ export default {
     }),
   },
   methods: {
+    updateEndTime(endTime) {
+      // timer.setEndTime(endTime)
+    },
     setTime(timestamp) {
-      const date = getDateFromSecondsTimestamp(timestamp);
-      this.time = {
-        hours: date.getHours(),
-        minutes: date.getMinutes(),
-      };
+      this.time = getDateFromSecondsTimestamp(timestamp);
     },
     updateTime() {
-      this.setTime(this.serverTime);
+      if (this.timer.endTime) {
+        this.setTime(this.timer.endTime);
+
+        return;
+      }
+
+      if (this.serverTime) {
+        this.setTime(this.serverTime);
+      }
     },
-    setStatus() {
-      this.disabled = !!this.timer.id;
-    },
-  },
-  watch: {
-    timer() {
-      this.setStatus();
-    },
-    serverTime() {
-      this.updateTime();
-    },
-  },
-  mounted() {
-    this.setStatus();
   },
 };
 </script>

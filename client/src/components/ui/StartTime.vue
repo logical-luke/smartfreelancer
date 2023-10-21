@@ -1,32 +1,27 @@
 <template>
-  <div class="w-[4.1rem]">
-    <datepicker
-      v-model="time"
-      time-picker
-      auto-apply
-      @update:model-value="updateStartTime"
-      hide-input-icon
-      :clearable="false"
-      show-now-button
+  <div class="w-[4.3rem]">
+    <calendar
+        id="start-time"
+        v-model="time"
+        @update:model-value="updateStartTime"
+        timeOnly
     />
   </div>
 </template>
 
 <script>
 import Datepicker from "@vuepic/vue-datepicker";
-import "@vuepic/vue-datepicker/dist/main.css";
-import { mapState } from "vuex";
+import Calendar from "primevue/calendar";
+import {mapState} from "vuex";
 import getDateFromSecondsTimestamp from "@/services/time/getDateFromSecondsTimestamp";
+import timer from "../../services/timer";
 
 export default {
   name: "StartTime",
-  components: { Datepicker },
+  components: {Datepicker, Calendar},
   data() {
     return {
-      time: {
-        hours: null,
-        minutes: null,
-      },
+      time: null,
     };
   },
   watch: {
@@ -44,15 +39,11 @@ export default {
     }),
   },
   methods: {
-    updateStartTime() {
-      // store.dispatch("timer/setStartTime", )
+    updateStartTime(startTime) {
+      timer.setStartTime(startTime)
     },
     setTime(timestamp) {
-      const date = getDateFromSecondsTimestamp(timestamp);
-      this.time = {
-        hours: date.getHours(),
-        minutes: date.getMinutes(),
-      };
+      this.time = getDateFromSecondsTimestamp(timestamp);
     },
     updateTime() {
       if (this.timer.startTime) {
