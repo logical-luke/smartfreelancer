@@ -21,6 +21,9 @@
                 :selected="isSelected(client.id)"
                 :id="client.id"
                 :name="client.name"
+                :email="client.email"
+                :industry="client.industry"
+                :description="client.description"
             />
           </template>
         </transition-group>

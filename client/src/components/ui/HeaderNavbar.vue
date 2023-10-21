@@ -18,7 +18,7 @@
           <start-time />
           <end-time />
         </div>
-        <div class="flex items-center w-1/2 gap-3">
+        <div class="flex items-center w-auto gap-3">
             <select-subject-button />
             <description-input />
         </div>

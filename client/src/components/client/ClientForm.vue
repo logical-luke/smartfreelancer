@@ -1,46 +1,50 @@
 <template>
   <div class="mb-6">
-    <label class="block text-sm font-medium mb-2" for="">Name:</label>
+    <label class="block text-sm font-medium mb-2" for="name">Name:</label>
     <input
       class="block w-full px-4 py-3 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
       type="text"
       id="name"
       name="name"
-      :value="client.name"
-      @input="updateName"
+      v-model="client.name"
       placeholder="Breathtaking Application"
     />
   </div>
   <div class="mb-6">
-    <label class="block text-sm font-medium mb-2" for="">Description:</label>
+    <label class="block text-sm font-medium mb-2" for="description">Description:</label>
     <textarea
       class="block w-full px-4 py-3 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
-      id="name"
+      id="description"
       name="description"
-      :value="client.description"
-      @input="updateDescription"
+      v-model="client.description"
       rows="5"
       placeholder="Write something..."
     ></textarea>
+  </div>
+  <div class="mb-6">
+    <label class="block text-sm font-medium mb-2" for="email">Email:</label>
+    <span class="p-input-icon-left ">
+      <mail-icon class="pb-2" />
+      <input-text
+          v-model="client.email"
+          name="email"
+          id="email"
+          placeholder="name@domain.com" />
+    </span>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import InputText from "primevue/inputtext";
+import MailIcon from "vue-tabler-icons/icons/MailIcon";
 
 export default {
   name: "ClientForm",
+  components: {MailIcon, InputText },
   computed: mapState({
     client: (state) => state.client.current,
   }),
-  methods: {
-    updateName(event) {
-      this.$store.dispatch("client/setName", event.target.value);
-    },
-    updateDescription(event) {
-      this.$store.dispatch("client/setDescription", event.target.value);
-    },
-  },
 };
 </script>
 

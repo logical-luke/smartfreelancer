@@ -15,6 +15,7 @@
         selectionMode="single"
         :filter="true"
         filterMode="lenient"
+        v-model:selectionKeys="selectedKeys"
         :value="options"
         class="w-full md:w-30rem"
         @nodeSelect="onNodeSelect"
@@ -49,6 +50,7 @@ export default {
     return {
       subject: null,
       options: [],
+      selectedKeys: [],
     };
   },
   watch: {
@@ -111,6 +113,9 @@ export default {
     async onNodeSelect(node) {
       this.$refs.op.hide();
       await this.setTimerSubject(node)
+      if (node.type === "noSubject") {
+        this.selectedKeys = null;
+      }
     },
     async setTimerSubject(value) {
       if (value.type === "project") {
@@ -125,6 +130,13 @@ export default {
       if (value.type === "noSubject") {
         await timer.setEmptySubject();
       }
+    },
+    findKeyById(id) {
+      let matchById = (options) => {
+        return options.filter((option) => option.id === id).pop()
+      };
+
+      return matchById(this.options).key;
     },
     updateSubjectOptions() {
       const formatNodes = (nodes, prefix = '', isFirstIteration = true, depth = 0) => {
@@ -154,6 +166,7 @@ export default {
             label: node.name,
             type: node.type,
             icon: 'pi pi-fw ' + icon,
+            selectable: true,
             children: formatNodes(node.children, newPrefix, false, depth + 1),
           };
         });
@@ -164,6 +177,7 @@ export default {
         data: null,
         label: this.$t('No target'),
         type: 'noSubject',
+        selectable: true,
       }, ...formatNodes(store.getters["getWorkHubTree"], '', true, 0)];
     },
     toggle(event) {

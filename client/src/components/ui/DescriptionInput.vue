@@ -1,5 +1,7 @@
 <template>
-  <input-text @update:model-value="setDescription" v-model="description" :placeholder="$t('Description')" />
+  <div class="max-w-fit ">
+    <input-text @update:model-value="setDescription" v-model="description" :placeholder="$t('Description')"/>
+  </div>
 </template>
 
 <style scoped>
