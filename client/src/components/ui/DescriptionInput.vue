@@ -1,11 +1,18 @@
 <template>
   <div class="max-w-fit ">
-    <input-text @update:model-value="setDescription" v-model="description" :placeholder="$t('Describe your efforts')"/>
+    <input-text class="borderless-input font-bold" @update:model-value="setDescription" v-model="description" :placeholder="$t('Describe your efforts')"/>
   </div>
 </template>
 
 <style scoped>
+.borderless-input {
+  border: none;
+  box-shadow: none;
+}
 
+.p-inputtext {
+  font-weight: 700;
+}
 </style>
 
 
