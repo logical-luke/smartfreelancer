@@ -4,7 +4,14 @@
       class="flex h-screen items-center justify-center"
       v-if="!isInitialLoaded"
     >
-      <moon-loader :size="spinnerSize" :color="spinnerColor" :loading="true" />
+
+      <div class="flex flex-col items-center justify-center">
+        <div><moon-loader :size="spinnerSize" :color="spinnerColor" :loading="true" />
+        </div>
+        <div class="flex items-center justify-center mt-4 p-6">
+          <span class="text-center"><random-loading-text /></span>
+        </div>
+      </div>
     </div>
     <div v-else>
       <div class="h-screen" :class="{ 'mx-auto lg:ml-80': isAuthorizedPage }">
@@ -52,10 +59,12 @@ import ConfirmDialog from "primevue/confirmdialog";
 import Toast from "primevue/toast";
 import { useRoute } from "vue-router";
 import getUTCTimestampFromLocaltime from "@/services/time/getUTCTimestampFromLocaltime";
+import RandomLoadingText from "./components/ui/RandomLoadingText.vue";
 
 export default {
   name: "App",
   components: {
+    RandomLoadingText,
     SidebarNav,
     HeaderNavbar,
     MoonLoader,
