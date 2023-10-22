@@ -5,8 +5,8 @@
   </div>
   <overlay-panel v-if="includeStartEndTimeButtons" ref="op">
     <div class="flex items-center justify-center">
-      <start-time />
-      <end-time />
+      <start-time :clock-icon-margin="includeStartEndTimeButtons" />
+      <end-time :clock-icon-margin="includeStartEndTimeButtons" />
     </div>
   </overlay-panel>
 </template>

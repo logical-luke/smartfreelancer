@@ -1,4 +1,5 @@
 <template>
+  <clock-play-icon class="mx-1" />
   <div class="w-[4.3rem]">
     <calendar
         id="start-time"
@@ -16,15 +17,23 @@ import Calendar from "primevue/calendar";
 import {mapState} from "vuex";
 import getDateFromSecondsTimestamp from "@/services/time/getDateFromSecondsTimestamp";
 import timer from "../../services/timer";
+import ClockPlayIcon from "vue-tabler-icons/icons/ClockPlayIcon";
 
 export default {
   name: "StartTime",
-  components: {Datepicker, Calendar},
+  components: {ClockPlayIcon, Datepicker, Calendar},
   data() {
     return {
       time: null,
       loaded: false
     };
+  },
+  props: {
+    clockIconMargin: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
   },
   watch: {
     timer() {
