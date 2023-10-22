@@ -27,6 +27,7 @@
         <toggle-timer-button :size="8" :global="true" />
         <pomodoro-timer :size="8" />
         <select-subject-button :size="8" />
+        <timer-time :include-start-end-time-buttons="isNavBarCollapsed" />
       </div>
     </transition>
     <div

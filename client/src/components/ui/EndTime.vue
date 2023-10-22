@@ -4,7 +4,7 @@
         id="end-time"
         v-model="time"
         @update:model-value="updateEndTime"
-        :disabled="true"
+        :disabled="isDisabled()"
         timeOnly
     />
   </div>
@@ -23,6 +23,7 @@ export default {
   data() {
     return {
       time: null,
+      loaded: false
     };
   },
   watch: {
@@ -46,9 +47,14 @@ export default {
     setTime(timestamp) {
       this.time = getDateFromSecondsTimestamp(timestamp);
     },
+    isDisabled() {
+      return this.time === null || !this.loaded || true;
+    },
     updateTime() {
       if (this.timer.endTime) {
         this.setTime(this.timer.endTime);
+
+        this.loaded = true;
 
         return;
       }
@@ -56,7 +62,12 @@ export default {
       if (this.serverTime) {
         this.setTime(this.serverTime);
       }
+
+      this.loaded = true;
     },
+  },
+  created() {
+    this.time = new Date(new Date().setHours(0,0,0,0));
   },
 };
 </script>

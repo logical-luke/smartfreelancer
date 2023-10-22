@@ -1,15 +1,27 @@
 <template>
-  <p class="text-gray-300" v-if="!isRunning">00:00:00</p>
-  <p v-else>{{ hours }}:{{ minutes }}:{{ seconds }}</p>
+  <div @click="toggle" class="px-2">
+    <p class="text-gray-300" v-if="!isRunning">00:00:00</p>
+    <p v-else>{{ hours }}:{{ minutes }}:{{ seconds }}</p>
+  </div>
+  <overlay-panel v-if="includeStartEndTimeButtons" ref="op">
+    <div class="flex items-center justify-center">
+      <start-time />
+      <end-time />
+    </div>
+  </overlay-panel>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
 import getRelativeTime from "@/services/time/relativeTimeGetter";
 import store from "@/store";
+import StartTime from "./StartTime.vue";
+import EndTime from "./EndTime.vue";
+import OverlayPanel from 'primevue/overlaypanel';
 
 export default {
   name: "TimerTime",
+  components: {EndTime, StartTime, OverlayPanel},
   data() {
     return {
       isRunning: false,
@@ -17,6 +29,13 @@ export default {
       minutes: "00",
       seconds: "00",
     };
+  },
+  props: {
+    includeStartEndTimeButtons: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   computed: {
     ...mapState({
@@ -52,6 +71,9 @@ export default {
           time.seconds = "00";
         }
       }, 500);
+    },
+    toggle(event) {
+      this.$refs.op.toggle(event);
     },
   },
   mounted() {

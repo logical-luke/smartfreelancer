@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-fit ">
-    <input-text @update:model-value="setDescription" v-model="description" :placeholder="$t('Description')"/>
+    <input-text @update:model-value="setDescription" v-model="description" :placeholder="$t('Describe your efforts')"/>
   </div>
 </template>
 
