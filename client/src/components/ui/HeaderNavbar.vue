@@ -12,11 +12,7 @@
         <div class="flex items-center gap-3">
           <toggle-timer-button :size="12" :global="true" />
           <pomodoro-timer :size="12" />
-          <timer-time />
-        </div>
-        <div class="flex items-center gap-3">
-          <start-time />
-          <end-time />
+          <duration-input />
         </div>
         <div class="flex items-center w-auto gap-3">
             <select-subject-button />
@@ -27,7 +23,7 @@
         <toggle-timer-button :size="8" :global="true" />
         <pomodoro-timer :size="8" />
         <select-subject-button :size="8" />
-        <timer-time :include-start-end-time-buttons="isNavBarCollapsed" />
+        <duration-input />
       </div>
     </transition>
     <div
@@ -73,7 +69,7 @@ nav {
 <script>
 import ToggleTimerButton from "@/components/ui/ToggleTimerButton.vue";
 import SelectSubjectButton from "@/components/ui/SelectSubjectButton.vue";
-import TimerTime from "@/components/ui/TimerTime.vue";
+import DurationInput from "@/components/ui/DurationInput.vue";
 import { mapGetters } from "vuex";
 import StartTime from "@/components/ui/StartTime.vue";
 import EndTime from "@/components/ui/EndTime.vue";
@@ -126,7 +122,7 @@ export default {
     PomodoroTimer,
     EndTime,
     StartTime,
-    TimerTime,
+    DurationInput,
     SelectSubjectButton,
     ToggleTimerButton,
   },

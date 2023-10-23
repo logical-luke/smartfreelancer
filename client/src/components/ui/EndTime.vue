@@ -1,12 +1,13 @@
 <template>
   <clock-stop-icon class="mx-2" />
-  <div class="w-[4.3rem]">
+  <div class="w-[4.8rem]">
     <calendar
         id="end-time"
         v-model="time"
         @update:model-value="updateEndTime"
         :disabled="isDisabled()"
-        timeOnly
+        dateFormat="&#x200b;"
+        showTime
     />
   </div>
 </template>

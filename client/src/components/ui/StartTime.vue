@@ -1,11 +1,12 @@
 <template>
   <clock-play-icon class="mx-1" />
-  <div class="w-[4.3rem]">
+  <div class="w-[4.8rem]">
     <calendar
         id="start-time"
         v-model="time"
         @update:model-value="updateStartTime"
-        timeOnly
+        dateFormat="&#x200b;"
+        showTime
         :disabled="isDisabled()"
     />
   </div>
