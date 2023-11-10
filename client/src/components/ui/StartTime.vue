@@ -1,5 +1,5 @@
 <template>
-  <clock-play-icon class="mx-1" />
+  <clock-play-icon class="mr-2" />
   <div class="w-[4.8rem]">
     <calendar
         id="start-time"
