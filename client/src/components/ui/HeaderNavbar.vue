@@ -27,8 +27,8 @@
       </div>
     </transition>
     <div
-      :class="isNavBarCollapsed ? 'mb-3' : '-mb-6'"
-      class="absolute bottom-0 right-0 mr-3"
+      :class="isNavBarCollapsed ? '-mb-3' : '-mb-4'"
+      class="md:hidden absolute bottom-0 right-0 mr-3"
     >
       <collapse-nav-bar-button
         @click="slideFinished = !slideFinished"
