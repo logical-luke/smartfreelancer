@@ -39,7 +39,7 @@ jobs:
           port: 22
           script: |
             docker pull docker.pkg.github.com/${{ github.repository }}/smartfreelancer-api:${{ github.sha }}-${{ env.TIMESTAMP }}
-            docker run -d --name smartfreelancer-api-${{ github.sha }}-${{ env.TIMESTAMP }} \
+            docker run -d --restart unless-stopped --name smartfreelancer-api-${{ github.sha }}-${{ env.TIMESTAMP }} \
               -e APP_ENV=prod \
               -e APP_DEBUG=0 \
               -e DATABASE_HOST=${{ secrets.DATABASE_HOST }} \
