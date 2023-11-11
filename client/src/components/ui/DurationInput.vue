@@ -40,6 +40,8 @@ import StartTime from "./StartTime.vue";
 import EndTime from "./EndTime.vue";
 import OverlayPanel from 'primevue/overlaypanel';
 import InputText from 'primevue/inputtext';
+import durationInputToSecondsParser from "../../services/timer/durationInputToSecondsParser";
+import timer from "../../services/timer";
 
 export default {
   name: "DurationInput",
@@ -97,8 +99,8 @@ export default {
         }
       }, 500);
     },
-    updateDuration(value) {
-
+    async updateDuration(value) {
+      await timer.adjustStartTimeUsingDurationSeconds(durationInputToSecondsParser(value));
     },
     show(event) {
       this.$refs.op.show(event);

@@ -121,5 +121,19 @@ export default {
         await store.dispatch("timer/setEndTime", endTimeTimestamp);
 
         await synchronization.pushToQueue("Timer", "TimerUpdater", "UpdateTimer", timer);
+    },
+    async adjustStartTimeUsingDurationSeconds(durationSeconds) {
+        const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
+
+        const adjustedStartTime = this.endTime ?
+            timer.endTime - durationSeconds : store.getters["time/getServerTime"] - durationSeconds;
+
+        if (timer.startTime === adjustedStartTime) {
+            return;
+        }
+
+        await store.dispatch("timer/setStartTime", adjustedStartTime);
+
+        await synchronization.pushToQueue("Timer", "TimerUpdater", "UpdateTimer", timer);
     }
 };
