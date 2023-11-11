@@ -4,8 +4,7 @@
     <calendar
         id="end-time"
         v-model="time"
-        @update:model-value="updateEndTime"
-        :disabled="isDisabled()"
+        :disabled="true"
         dateFormat="&#x200b;"
         showTime
     />
@@ -26,7 +25,6 @@ export default {
   data() {
     return {
       time: null,
-      loaded: false
     };
   },
   props: {
@@ -34,15 +32,16 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    endTime: {
+      type: Number,
+      required: true,
     }
   },
   watch: {
-    timer() {
-      this.updateTime();
-    },
-    serverTime() {
-      this.updateTime();
-    },
+    endTime() {
+     this.setTime(this.endTime);
+    }
   },
   computed: {
     ...mapState({
@@ -51,33 +50,12 @@ export default {
     }),
   },
   methods: {
-    updateEndTime(endTime) {
-      // timer.setEndTime(endTime)
-    },
     setTime(timestamp) {
       this.time = getDateFromSecondsTimestamp(timestamp);
     },
-    isDisabled() {
-      return this.time === null || !this.loaded || true;
-    },
-    updateTime() {
-      if (this.timer.endTime) {
-        this.setTime(this.timer.endTime);
-
-        this.loaded = true;
-
-        return;
-      }
-
-      if (this.serverTime) {
-        this.setTime(this.serverTime);
-      }
-
-      this.loaded = true;
-    },
   },
   created() {
-    this.time = new Date(new Date().setHours(0,0,0,0));
+    this.setTime(this.endTime);
   },
 };
 </script>

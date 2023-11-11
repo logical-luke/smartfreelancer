@@ -13,8 +13,8 @@
       @hide="setFocus(false)"
   >
     <div class="flex items-center justify-center">
-      <start-time />
-      <end-time />
+      <start-time :start-time="this.startTime" />
+      <end-time :end-time="this.endTime" />
     </div>
   </overlay-panel>
 </template>
@@ -53,6 +53,8 @@ export default {
       minutes: "00",
       seconds: "00",
       isFocused: false,
+      startTime: null,
+      endTime: null,
     };
   },
   props: {
@@ -73,6 +75,12 @@ export default {
   watch: {
     timer() {
       this.isRunning = this.checkCurrentTimer();
+      this.updateStartTime();
+      this.updateEndTime();
+    },
+    serverTime() {
+      this.updateStartTime();
+      this.updateEndTime();
     },
   },
   methods: {
@@ -81,6 +89,22 @@ export default {
     },
     getRelativeTime() {
       return getRelativeTime(this.timer.startTime, this.serverTime);
+    },
+    updateStartTime() {
+      if (this.timer.startTime) {
+        this.startTime = this.timer.startTime;
+
+        return;
+      }
+
+      if (this.serverTime) {
+        this.startTime = this.serverTime;
+      }
+    },
+    updateEndTime() {
+      if (this.serverTime) {
+        this.endTime = this.serverTime;
+      }
     },
     updateClock() {
       let time = this;
@@ -111,6 +135,8 @@ export default {
   },
   mounted() {
     this.isRunning = this.checkCurrentTimer();
+    this.updateStartTime();
+    this.updateEndTime();
 
     this.updateClock();
   },
