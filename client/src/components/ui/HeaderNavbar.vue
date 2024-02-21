@@ -10,6 +10,7 @@
         class="flex flex-wrap gap-3 content-start items-center"
       >
         <div class="flex items-center gap-3">
+          <timer-mode-toggle />
           <toggle-timer-button :size="12" :global="true" />
           <pomodoro-timer :size="12" />
           <duration-input />
@@ -20,6 +21,7 @@
         </div>
       </div>
       <div v-else class="flex gap-3 items-center">
+        <timer-mode-toggle />
         <toggle-timer-button :size="8" :global="true" />
         <pomodoro-timer :size="8" />
         <select-subject-button :size="8" />
@@ -76,6 +78,7 @@ import EndTime from "@/components/ui/EndTime.vue";
 import PomodoroTimer from "@/components/ui/PomodoroTimer.vue";
 import CollapseNavBarButton from "@/components/ui/CollapseNavBarButton.vue";
 import DescriptionInput from "./DescriptionInput.vue";
+import TimerModeToggle from "@/components/ui/TimerModeToggle.vue";
 
 export default {
   name: "HeaderNavbar",
@@ -117,6 +120,7 @@ export default {
     },
   },
   components: {
+    TimerModeToggle,
     DescriptionInput,
     CollapseNavBarButton,
     PomodoroTimer,

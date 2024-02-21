@@ -12,6 +12,12 @@ export default {
         (await this.get("navBarCollapsed")) === "1"
       );
     }
+    if (await this.exists("timerMode")) {
+      await store.commit(
+          "settings/setTimerMode",
+          (await this.get("timerMode"))
+      );
+    }
     if (await this.exists("clients")) {
       await store.commit(
         "clients/setClients",

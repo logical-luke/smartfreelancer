@@ -6,7 +6,7 @@
         v-model="time"
         :disabled="true"
         dateFormat="&#x200b;"
-        showTime
+        timeOnly
     />
   </div>
 </template>

@@ -12,9 +12,14 @@
       @show="setFocus(true)"
       @hide="setFocus(false)"
   >
-    <div class="flex items-center justify-center">
-      <start-time :start-time="this.startTime" />
-      <end-time :end-time="this.endTime" />
+    <div class="flex flex-row">
+      <div class="flex items-center justify-center">
+        <start-time :start-time="this.startTime"/>
+        <end-time :end-time="this.endTime"/>
+      </div>
+      <div class="flex items-center justify-center">
+        <start-time :start-time="this.startTime" :show-time="false" :show-calendar="true"/>
+      </div>
     </div>
   </overlay-panel>
 </template>
@@ -25,15 +30,15 @@
   box-shadow: none;
 }
 
- .p-inputtext {
-   width: 100%;
-   font-weight: 500;
-   text-align:center;
- }
+.p-inputtext {
+  width: 100%;
+  font-weight: 500;
+  text-align: center;
+}
 </style>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import {mapGetters, mapState} from "vuex";
 import getRelativeTime from "@/services/time/relativeTimeGetter";
 import store from "@/store";
 import StartTime from "./StartTime.vue";
