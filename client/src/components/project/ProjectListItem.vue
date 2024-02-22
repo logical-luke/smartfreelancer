@@ -10,7 +10,7 @@
     </td>
     <td class="p-2">
       <div class="flex items-center space-x-2">
-        <toggle-timer-button :size="8" :project-id="id" />
+        <timer-button :size="8" :project-id="id" />
         <edit-button
           class="mt-1"
           :goTo="`/project/edit/${id}`"
@@ -29,12 +29,12 @@
 <script>
 import DeleteButton from "@/components/ui/DeleteButton.vue";
 import EditButton from "@/components/ui/EditButton.vue";
-import ToggleTimerButton from "@/components/ui/ToggleTimerButton.vue";
+import TimerButton from "@/components/ui/TimerButton.vue";
 import { mapActions } from "vuex";
 
 export default {
   name: "ProjectListItem",
-  components: { ToggleTimerButton, EditButton, DeleteButton },
+  components: { TimerButton, EditButton, DeleteButton },
   props: {
     name: {
       type: String,

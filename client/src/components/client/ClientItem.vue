@@ -56,13 +56,13 @@
 <script>
 import DeleteButton from "@/components/ui/DeleteButton.vue";
 import EditButton from "@/components/ui/EditButton.vue";
-import ToggleTimerButton from "@/components/ui/ToggleTimerButton.vue";
+import TimerButton from "@/components/ui/TimerButton.vue";
 import Avatar from "primevue/avatar";
 import {mapActions} from "vuex";
 
 export default {
   name: "ClientItem",
-  components: {ToggleTimerButton, EditButton, DeleteButton, Avatar},
+  components: {TimerButton, EditButton, DeleteButton, Avatar},
   props: {
     name: {
       type: String,

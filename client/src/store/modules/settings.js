@@ -25,6 +25,8 @@ const getters = {
     isNavBarCollapsed: (state) => state.navBarCollapsed,
     getLocale: (state) => state.locale,
     getTimerMode: (state) => state.timerMode,
+    isManualMode: (state) => state.timerMode === "manual",
+    isTimerMode: (state) => state.timerMode === "timer",
 };
 
 export default {

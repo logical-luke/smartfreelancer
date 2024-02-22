@@ -5,7 +5,7 @@
         type="button"
         class="inline-flex bg-indigo-500 hover:bg-indigo-600 justify-center items-center px-2 py-2 text-sm font-medium text-white rounded-full transition duration-200"
     >
-      <folder-share-icon :size="Math.ceil(size * 1.8)"/>
+      <folder-share-icon :size="Math.ceil(size * 1.9)"/>
     </button>
     <tag v-else :icon="getSubjectIcon()">{{ this.subject.name }}</tag>
   </div>

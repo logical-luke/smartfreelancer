@@ -5,20 +5,26 @@
     class="inline-flex bg-indigo-500 hover:bg-indigo-600 items-center justify-center px-2 py-2 text-sm font-medium text-white rounded-full transition duration-200"
     @click.prevent="toggleTimer"
   >
-    <player-play-icon :size="Math.ceil(size * 1.8)" v-if="!isRunning" />
-    <player-stop-icon :size="Math.ceil(size * 1.8)" v-else />
+    <template v-if="this.isManualMode">
+      <plus-icon :size="Math.ceil(size * 1.8)" />
+    </template>
+    <template v-else>
+      <player-play-icon :size="Math.ceil(size * 1.8)" v-if="!isRunning" />
+      <player-stop-icon :size="Math.ceil(size * 1.8)" v-else />
+    </template>
   </button>
 </template>
 
 <script>
 import PlayerPlayIcon from "vue-tabler-icons/icons/PlayerPlayIcon";
-import { mapState } from "vuex";
+import {mapGetters, mapState} from "vuex";
 import PlayerStopIcon from "vue-tabler-icons/icons/PlayerStopIcon";
+import PlusIcon from "vue-tabler-icons/icons/PlusIcon";
 import timer from "@/services/timer";
 
 export default {
-  name: "ToggleTimerButton",
-  components: { PlayerStopIcon, PlayerPlayIcon },
+  name: "TimerButton",
+  components: { PlayerStopIcon, PlayerPlayIcon, PlusIcon },
   props: {
     projectId: {
       type: String,
@@ -46,6 +52,7 @@ export default {
     ...mapState({
       timer: (state) => state.timer.current,
     }),
+    ...mapGetters("settings", ["isManualMode"]),
     sizeClasses() {
       return `w-${this.size} h-${this.size}`;
     },
@@ -57,6 +64,10 @@ export default {
   },
   methods: {
     async toggleTimer() {
+      if (this.isManualMode) {
+        return;
+      }
+
       if (!this.isRunning && this.timer && this.timer.id) {
         await timer.stopTimer();
       }
