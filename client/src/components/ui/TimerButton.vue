@@ -5,7 +5,7 @@
     class="inline-flex bg-indigo-500 hover:bg-indigo-600 items-center justify-center px-2 py-2 text-sm font-medium text-white rounded-full transition duration-200"
     @click.prevent="toggleTimer"
   >
-    <template v-if="this.isManualMode">
+    <template v-if="isManualMode">
       <plus-icon :size="Math.ceil(size * 1.8)" />
     </template>
     <template v-else>
@@ -46,25 +46,29 @@ export default {
   data() {
     return {
       isRunning: false,
+      isManualMode: false,
     };
   },
   computed: {
     ...mapState({
       timer: (state) => state.timer.current,
+      timerMode: (state) => state.timer.timerMode,
     }),
-    ...mapGetters("settings", ["isManualMode"]),
     sizeClasses() {
       return `w-${this.size} h-${this.size}`;
     },
   },
   watch: {
-    timer() {
-      this.isRunning = this.checkCurrentTimer();
+    async timer() {
+      this.isRunning = await this.checkCurrentTimer();
+    },
+    async timerMode() {
+      this.isManualMode = await timer.isManualMode();
     },
   },
   methods: {
     async toggleTimer() {
-      if (this.isManualMode) {
+      if (await timer.isManualMode()) {
         return;
       }
 
@@ -90,20 +94,13 @@ export default {
         }
       }
     },
-    checkCurrentTimer() {
-      return (
-        (this.timer &&
-          this.timer.startTime &&
-          this.projectId &&
-          this.timer.projectId === this.projectId) ||
-        (this.taskId && this.timer.taskId === this.taskId) ||
-        (this.clientId && this.timer.clientId === this.clientId) ||
-        (this.timer.id && this.global)
-      );
+    async checkCurrentTimer() {
+      return await timer.isCurrentRunningTimer(this.taskId, this.projectId, this.clientId, this.global);
     },
   },
-  mounted() {
-    this.isRunning = this.checkCurrentTimer();
+  async mounted() {
+    this.isRunning = await this.checkCurrentTimer();
+    this.isManualMode = await timer.isManualMode();
   },
 };
 </script>

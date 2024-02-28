@@ -4,7 +4,8 @@
     <calendar
         id="end-time"
         v-model="time"
-        :disabled="true"
+        @update:model-value="updateEndTime"
+        :disabled="!isManualMode"
         dateFormat="&#x200b;"
         timeOnly
     />
@@ -14,44 +15,42 @@
 <script>
 import Datepicker from "@vuepic/vue-datepicker";
 import Calendar from "primevue/calendar";
-import {mapState} from "vuex";
+import {mapGetters, mapState} from "vuex";
 import getDateFromSecondsTimestamp from "@/services/time/getDateFromSecondsTimestamp";
 import timer from "../../services/timer";
 import ClockStopIcon from "vue-tabler-icons/icons/ClockStopIcon";
 
 export default {
   name: "EndTime",
-  components: {ClockStopIcon, Datepicker, Calendar},
+  components: {ClockStopIcon, Calendar},
   data() {
     return {
       time: null,
+      manuallySet: false,
     };
   },
-  props: {
-    clockIconMargin: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    endTime: {
-      type: Number,
-      required: true,
-    }
-  },
   watch: {
-    endTime() {
-     this.setTime(this.endTime);
+    async serverTime() {
+      this.setTime(await this.serverTime);
     }
   },
   computed: {
     ...mapState({
-      timer: (state) => state.timer.current,
       serverTime: (state) => state.time.serverTime,
     }),
+    ...mapGetters("settings", ["isManualMode"]),
   },
   methods: {
     setTime(timestamp) {
-      this.time = getDateFromSecondsTimestamp(timestamp);
+      if (this.manuallySet) {
+        this.time = getDateFromSecondsTimestamp(timestamp);
+      } else {
+
+      }
+    },
+    updateEndTime(endTime) {
+      this.manuallySet = true;
+      timer.setEndTime(endTime)
     },
   },
   created() {

@@ -4,6 +4,7 @@ import cache from "@/services/cache";
 import synchronization from "@/services/synchronization";
 import timeEntries from "@/services/timeEntries";
 import getSecondsTimestampFromDate from "../time/getSecondsTimestampFromDate";
+import getRelativeTime from "@/services/time/relativeTimeGetter";
 
 export default {
     async startTimer() {
@@ -122,11 +123,11 @@ export default {
 
         await synchronization.pushToQueue("Timer", "TimerUpdater", "UpdateTimer", timer);
     },
-    async adjustStartTimeUsingDurationSeconds(durationSeconds) {
+    async setDuration(duration) {
         const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
 
         const adjustedStartTime = this.endTime ?
-            timer.endTime - durationSeconds : store.getters["time/getServerTime"] - durationSeconds;
+            timer.endTime - duration : store.getters["time/getServerTime"] - duration;
 
         if (timer.startTime === adjustedStartTime) {
             return;
@@ -135,5 +136,61 @@ export default {
         await store.dispatch("timer/setStartTime", adjustedStartTime);
 
         await synchronization.pushToQueue("Timer", "TimerUpdater", "UpdateTimer", timer);
-    }
+    },
+    async isTimerRunning(){
+        const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
+
+        return timer && null !== timer.id;
+    },
+    async getStartTime(){
+        const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
+
+        if (timer.startTime) {
+            return timer.startTime;
+        }
+
+        return store.getters["time/getServerTime"];
+    },
+    async getEndTime(){
+        const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
+
+        if (timer.endTime) {
+            return timer.endTime;
+        }
+
+        return store.getters["time/getServerTime"];
+    },
+    async getTimerDurations(){
+        let time = [];
+
+        if (await this.isTimerRunning()) {
+            const {hours, minutes, seconds} = getRelativeTime(await this.getStartTime(), store.getters["time/getServerTime"]);
+            time.hours = hours;
+            time.minutes = minutes;
+            time.seconds = seconds;
+        } else {
+            time.hours = "00";
+            time.minutes = "00";
+            time.seconds = "00";
+        }
+
+        return time;
+    },
+    async isManualMode(){
+        return store.getters["timer/getTimerMode"] === "manual";
+    },
+    async isTimerMode(){
+        return store.getters["timer/getTimerMode"] === "timer";
+    },
+    async toggleTimerMode(){
+        store.commit("settings/toggleTimerMode");
+        await cache.set("timerMode", store.getters["timer/getTimerMode"]);
+    },
+    async isCurrentRunningTimer(taskId, projectId, clientId, global) {
+        const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
+        return (projectId && timer.projectId === projectId)
+            || (taskId && timer.taskId === taskId)
+            || (clientId && timer.clientId === clientId)
+            || (timer.id && global);
+    },
 };

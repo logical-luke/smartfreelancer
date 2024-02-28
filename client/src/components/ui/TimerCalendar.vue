@@ -1,17 +1,17 @@
 <template>
-  <clock-play-icon class="mr-2"/>
-  <div class="w-[4.8rem]">
+  <div>
     <calendar
         id="start-time"
         v-model="time"
+        inline showWeek
         @update:model-value="updateStartTime"
         dateFormat="&#x200b;"
-        timeOnly
     />
   </div>
 </template>
 
 <script>
+import Datepicker from "@vuepic/vue-datepicker";
 import Calendar from "primevue/calendar";
 import {mapState} from "vuex";
 import getDateFromSecondsTimestamp from "@/services/time/getDateFromSecondsTimestamp";
@@ -19,16 +19,22 @@ import timer from "../../services/timer";
 import ClockPlayIcon from "vue-tabler-icons/icons/ClockPlayIcon";
 
 export default {
-  name: "StartTime",
-  components: {ClockPlayIcon, Calendar},
+  name: "TimerCalendar",
+  components: {Datepicker, Calendar},
   data() {
     return {
       time: null,
     };
   },
+  props: {
+    startTime: {
+      type: Number,
+      required: true,
+    },
+  },
   watch: {
-    async serverTime() {
-      this.time = getDateFromSecondsTimestamp(await timer.getStartTime());
+    startTime() {
+      this.time = getDateFromSecondsTimestamp(this.startTime);
     },
   },
   computed: {
@@ -40,6 +46,9 @@ export default {
   methods: {
     updateStartTime(startTime) {
       timer.setStartTime(startTime)
+    },
+    setTime(timestamp) {
+      this.time = getDateFromSecondsTimestamp(timestamp);
     },
   },
   created() {

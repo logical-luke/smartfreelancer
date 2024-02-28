@@ -14,7 +14,7 @@ export default {
     }
     if (await this.exists("timerMode")) {
       await store.commit(
-          "settings/setTimerMode",
+          "timer/setTimerMode",
           (await this.get("timerMode"))
       );
     }
