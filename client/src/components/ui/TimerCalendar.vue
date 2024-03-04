@@ -24,13 +24,8 @@ export default {
   data() {
     return {
       time: null,
+      startTime: null,
     };
-  },
-  props: {
-    startTime: {
-      type: Number,
-      required: true,
-    },
   },
   watch: {
     startTime() {

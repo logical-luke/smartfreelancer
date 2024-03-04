@@ -77,7 +77,7 @@ export default {
 
         await synchronization.pushToQueue("Timer", "TimerUpdater", "UpdateTimer", timer);
     },
-    async setEmptySubject(){
+    async setEmptySubject() {
         const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
 
         await store.dispatch("timer/setClientId", null);
@@ -137,12 +137,12 @@ export default {
 
         await synchronization.pushToQueue("Timer", "TimerUpdater", "UpdateTimer", timer);
     },
-    async isTimerRunning(){
+    async isTimerRunning() {
         const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
 
         return timer && null !== timer.id;
     },
-    async getStartTime(){
+    async getStartTime() {
         const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
 
         if (timer.startTime) {
@@ -151,20 +151,26 @@ export default {
 
         return store.getters["time/getServerTime"];
     },
-    async getEndTime(){
-        const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
+    async getEndTime() {
+        if (await this.isEndTimeManuallySet()) {
+            const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
 
-        if (timer.endTime) {
-            return timer.endTime;
+            if (timer.endTime) {
+                return timer.endTime;
+            }
         }
 
         return store.getters["time/getServerTime"];
     },
-    async getTimerDurations(){
+    async getTimerDurations() {
         let time = [];
 
         if (await this.isTimerRunning()) {
-            const {hours, minutes, seconds} = getRelativeTime(await this.getStartTime(), store.getters["time/getServerTime"]);
+            const {
+                hours,
+                minutes,
+                seconds
+            } = getRelativeTime(await this.getStartTime(), store.getters["time/getServerTime"]);
             time.hours = hours;
             time.minutes = minutes;
             time.seconds = seconds;
@@ -176,15 +182,17 @@ export default {
 
         return time;
     },
-    async isManualMode(){
+    async isManualMode() {
         return store.getters["timer/getTimerMode"] === "manual";
     },
-    async isTimerMode(){
+    async isTimerMode() {
         return store.getters["timer/getTimerMode"] === "timer";
     },
-    async toggleTimerMode(){
-        store.commit("settings/toggleTimerMode");
-        await cache.set("timerMode", store.getters["timer/getTimerMode"]);
+    async toggleTimerMode() {
+        const currentTimerMode = await store.getters["timer/getTimerMode"];
+        const newTimerMode = currentTimerMode === "timer" ? "manual" : "timer";
+        store.commit("timer/setTimerMode", newTimerMode);
+        await cache.set("timerMode", newTimerMode);
     },
     async isCurrentRunningTimer(taskId, projectId, clientId, global) {
         const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
@@ -193,4 +201,17 @@ export default {
             || (clientId && timer.clientId === clientId)
             || (timer.id && global);
     },
+    async isEndTimeManuallySet() {
+        return store.getters["timer/isEndTimeManuallySet"];
+    },
+    async markEndTimeAsManuallySet() {
+        store.commit("timer/setEndTimeManuallySet", true);
+        await cache.set("endTimeManuallySet", true);
+    },
+    async toggleEndTimeManuallySet() {
+        const currentEndTimeManuallySet = await store.getters["timer/isEndTimeManuallySet"];
+        const newEndTimeManuallySet = !currentEndTimeManuallySet;
+        store.commit("timer/setEndTimeManuallySet", newEndTimeManuallySet);
+        await cache.set("endTimeManuallySet", newEndTimeManuallySet);
+    }
 };

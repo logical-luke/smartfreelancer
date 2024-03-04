@@ -3,7 +3,7 @@
     <input-text
         class="borderless-input"
         placeholder="00:00:00"
-        :value="timer.isTimerRunning() ? `${hours}:${minutes}:${seconds}` : '' "
+        :value="this.timerRunning ? `${hours}:${minutes}:${seconds}` : '' "
         @update:model-value="updateDuration"
     />
   </div>
@@ -57,6 +57,7 @@ export default {
       minutes: "00",
       seconds: "00",
       isFocused: false,
+      timerRunning: false,
     };
   },
   props: {
@@ -67,8 +68,11 @@ export default {
     },
   },
   watch: {
-    serverTime() {
-        this.updateClock();
+    async serverTime() {
+        await this.updateClock();
+    },
+    async timer() {
+      this.timerRunning = await timer.isTimerRunning();
     }
   },
   computed: {
@@ -86,11 +90,14 @@ export default {
     },
   },
   methods: {
-    updateClock() {
+    async updateClock() {
       let time = this;
-      setInterval(function () {
+      setInterval(async function () {
         if (!time.isFocused) {
-          time = timer.getTimerDurations();
+          const timerDuration = await timer.getTimerDurations();
+          time.hours = timerDuration.hours;
+          time.minutes = timerDuration.minutes;
+          time.seconds = timerDuration.seconds;
         }
       }, 500);
     },
@@ -104,8 +111,9 @@ export default {
       this.isFocused = isFocused;
     },
   },
-  mounted() {
+  async mounted() {
     this.updateClock();
+    this.timerRunning = await timer.isTimerRunning();
   },
 };
 </script>

@@ -23,6 +23,7 @@ export default {
   watch: {
     async timer() {
       this.disabled = await timer.isTimerRunning();
+      this.checked = await timer.isTimerMode();
     }
   },
   methods: {
@@ -34,7 +35,9 @@ export default {
     },
   },
   computed: {
-    ...mapState("timer", ["current"]),
+    ...mapState({
+      timer: (state) => state.timer.current,
+    }),
   },
   async created() {
     this.checked = await timer.isTimerMode();

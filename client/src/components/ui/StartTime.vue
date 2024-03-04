@@ -33,7 +33,6 @@ export default {
   },
   computed: {
     ...mapState({
-      timer: (state) => state.timer.current,
       serverTime: (state) => state.time.serverTime,
     }),
   },
@@ -42,8 +41,8 @@ export default {
       timer.setStartTime(startTime)
     },
   },
-  created() {
-    this.time = getDateFromSecondsTimestamp(this.startTime);
+  async created() {
+    this.time = getDateFromSecondsTimestamp(await timer.getStartTime());
   },
 };
 </script>
