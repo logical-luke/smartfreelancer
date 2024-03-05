@@ -135,6 +135,8 @@ export default {
         await cache.getInitial();
       }
 
+      store.commit("time/setServerTime", getUTCTimestampFromLocaltime() + store.getters["time/getServerTimeOffset"]);
+
       setInterval(() => {
         store.commit("time/setServerTime", getUTCTimestampFromLocaltime() + store.getters["time/getServerTimeOffset"]);
       }, 1000);

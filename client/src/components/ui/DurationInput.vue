@@ -32,8 +32,9 @@
 
 .p-inputtext {
   width: 100%;
-  font-weight: 500;
+  font-weight: 600;
   text-align: center;
+  color: black;
 }
 </style>
 
@@ -91,15 +92,12 @@ export default {
   },
   methods: {
     async updateClock() {
-      let time = this;
-      setInterval(async function () {
-        if (!time.isFocused) {
-          const timerDuration = await timer.getTimerDurations();
-          time.hours = timerDuration.hours;
-          time.minutes = timerDuration.minutes;
-          time.seconds = timerDuration.seconds;
-        }
-      }, 500);
+      if (!this.isFocused) {
+        const timerDuration = await timer.getTimerDurations();
+        this.hours = timerDuration.hours;
+        this.minutes = timerDuration.minutes;
+        this.seconds = timerDuration.seconds;
+      }
     },
     async updateDuration(value) {
       await timer.setDuration(durationInputToSecondsParser(value));
@@ -112,7 +110,7 @@ export default {
     },
   },
   async mounted() {
-    this.updateClock();
+    await this.updateClock();
     this.timerRunning = await timer.isTimerRunning();
   },
 };
