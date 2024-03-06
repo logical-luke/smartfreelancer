@@ -42,7 +42,6 @@ export default {
   async created() {
     this.checked = await timer.isTimerMode();
     this.disabled = await timer.isTimerRunning();
-    console.log(this.disabled);
   }
 }
 </script>

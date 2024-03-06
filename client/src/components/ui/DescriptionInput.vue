@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-fit ">
-    <input-text class="borderless-input font-bold" @update:model-value="setDescription" v-model="description" :placeholder="$t('Describe your efforts')"/>
+    <input-text class="borderless-input font-bold" @update:model-value="setDescription" v-model="description" :placeholder="$t('Log your magic moment! 🚀')"/>
   </div>
 </template>
 
@@ -12,6 +12,7 @@
 
 .p-inputtext {
   font-weight: 700;
+  color: black;
 }
 </style>
 

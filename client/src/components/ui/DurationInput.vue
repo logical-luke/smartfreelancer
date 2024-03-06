@@ -1,9 +1,9 @@
 <template>
   <div @click="show" class="w-28">
     <input-text
-        class="borderless-input"
+        class="borderless-input placeholder-gray-500"
         placeholder="00:00:00"
-        :value="this.timerRunning ? `${hours}:${minutes}:${seconds}` : '' "
+        :value="this.hasDuration ? `${hours}:${minutes}:${seconds}` : '' "
         @update:model-value="updateDuration"
     />
   </div>
@@ -14,11 +14,11 @@
   >
     <div class="flex flex-col">
       <div class="flex items-center justify-center">
-        <start-time />
-        <end-time />
+        <start-time/>
+        <end-time/>
       </div>
       <div class="flex mt-4 items-center justify-center">
-        <timer-calendar />
+        <timer-calendar/>
       </div>
     </div>
   </overlay-panel>
@@ -58,7 +58,7 @@ export default {
       minutes: "00",
       seconds: "00",
       isFocused: false,
-      timerRunning: false,
+      hasDuration: false,
     };
   },
   props: {
@@ -70,15 +70,21 @@ export default {
   },
   watch: {
     async serverTime() {
-        await this.updateClock();
+      await this.updateClock();
     },
     async timer() {
       this.timerRunning = await timer.isTimerRunning();
+      await this.updateClock();
+      await this.updateIfHasDuration();
+    },
+    async timerMode() {
+      await this.updateIfHasDuration();
     }
   },
   computed: {
     ...mapState({
       timer: (state) => state.timer.current,
+      timerMode: (state) => state.timer.timerMode,
       subjectName: (state) => state.timer.current.subjectName,
       serverTime: (state) => state.time.serverTime,
     }),
@@ -92,12 +98,15 @@ export default {
   },
   methods: {
     async updateClock() {
-      if (!this.isFocused) {
+      if (await timer.isManualMode() || !this.isFocused) {
         const timerDuration = await timer.getTimerDurations();
         this.hours = timerDuration.hours;
         this.minutes = timerDuration.minutes;
         this.seconds = timerDuration.seconds;
       }
+    },
+    async updateIfHasDuration() {
+      this.hasDuration = (await timer.isTimerMode() && await timer.isTimerRunning()) || await timer.isManualMode();
     },
     async updateDuration(value) {
       await timer.setDuration(durationInputToSecondsParser(value));
@@ -111,6 +120,7 @@ export default {
   },
   async mounted() {
     await this.updateClock();
+    await this.updateIfHasDuration();
     this.timerRunning = await timer.isTimerRunning();
   },
 };

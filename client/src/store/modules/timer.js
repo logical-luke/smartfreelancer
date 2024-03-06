@@ -12,7 +12,6 @@ const emptyTimer = {
 const state = () => ({
     current: JSON.parse(JSON.stringify(emptyTimer)),
     timerMode: "timer",
-    endTimeManuallySet: false,
 });
 
 const actions = {
@@ -63,7 +62,6 @@ const actions = {
 const getters = {
     getTimer: (state) => state.current,
     getTimerMode: (state) => state.timerMode,
-    isEndTimeManuallySet: (state) => state.endTimeManuallySet,
 };
 
 const mutations = {
@@ -78,7 +76,6 @@ const mutations = {
         });
     },
     setTimerMode: (state, mode) => (state.timerMode = mode),
-    setEndTimeManuallySet: (state, endTimeManuallySet) => (state.endTimeManuallySet = endTimeManuallySet),
 };
 
 export default {

@@ -44,7 +44,6 @@ export default {
   },
   methods: {
     async updateEndTime(endTime) {
-      await timer.markEndTimeAsManuallySet();
       await timer.setEndTime(endTime)
     },
   },
