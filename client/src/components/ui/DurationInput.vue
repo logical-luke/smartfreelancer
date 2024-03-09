@@ -72,6 +72,11 @@ export default {
     async serverTime() {
       await this.updateClock();
     },
+    async startTime() {
+      if (await timer.isTimerMode()) {
+        await this.updateClock(true);
+      }
+    },
     async timer() {
       this.timerRunning = await timer.isTimerRunning();
       await this.updateClock();
@@ -87,6 +92,7 @@ export default {
       timerMode: (state) => state.timer.timerMode,
       subjectName: (state) => state.timer.current.subjectName,
       serverTime: (state) => state.time.serverTime,
+      startTime: (state) => state.timer.current.startTime,
     }),
     ...mapGetters("time", ["getServerTime"]),
     async startTime() {
@@ -97,8 +103,8 @@ export default {
     },
   },
   methods: {
-    async updateClock() {
-      if (await timer.isManualMode() || !this.isFocused) {
+    async updateClock(forced) {
+      if (await timer.isManualMode() || !this.isFocused || forced) {
         const timerDuration = await timer.getTimerDurations();
         this.hours = timerDuration.hours;
         this.minutes = timerDuration.minutes;

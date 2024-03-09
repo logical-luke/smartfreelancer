@@ -5,6 +5,7 @@ import synchronization from "@/services/synchronization";
 import timeEntries from "@/services/timeEntries";
 import getSecondsTimestampFromDate from "../time/getSecondsTimestampFromDate";
 import getRelativeTime from "@/services/time/relativeTimeGetter";
+import getDateFromSecondsTimestamp from "@/services/time/getDateFromSecondsTimestamp";
 
 export default {
     async startTimer() {
@@ -210,5 +211,50 @@ export default {
             || (taskId && timer.taskId === taskId)
             || (clientId && timer.clientId === clientId)
             || (timer.id && global);
+    },
+    async adjustDays(startDay, endDay) {
+        const timerStartTime = getDateFromSecondsTimestamp(await this.getStartTime());
+
+        if (!startDay instanceof Date) {
+            startDay = new Date(startDay);
+        }
+
+        if (timerStartTime.getDate() !== startDay.getDate()) {
+            timerStartTime.setDate(startDay.getDate());
+        }
+
+        if (timerStartTime.getMonth() !== startDay.getMonth()) {
+            timerStartTime.setMonth(startDay.getMonth());
+        }
+
+        if (timerStartTime.getFullYear() !== startDay.getFullYear()) {
+            timerStartTime.setFullYear(startDay.getFullYear());
+        }
+
+        await this.setStartTime(timerStartTime);
+
+        if (!endDay) {
+            return;
+        }
+
+        const timerEndTime = getDateFromSecondsTimestamp(await this.getEndTime());
+
+        if (endDay instanceof Date) {
+            endDay = new Date(endDay);
+        }
+
+        if (timerEndTime.getDate()!== endDay.getDate()) {
+            timerEndTime.setDate(endDay.getDate());
+        }
+
+        if (timerEndTime.getMonth()!== endDay.getMonth()) {
+            timerEndTime.setMonth(endDay.getMonth());
+        }
+
+        if (timerEndTime.getFullYear()!== endDay.getFullYear()) {
+            timerEndTime.setFullYear(endDay.getFullYear());
+        }
+
+        await this.setEndTime(timerEndTime);
     }
 };

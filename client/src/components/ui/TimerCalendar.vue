@@ -3,34 +3,45 @@
     <calendar
         id="start-time"
         v-model="time"
-        inline showWeek
-        @update:model-value="updateStartTime"
+        inline
+        :pt="{
+          clearButton: {
+            root: 'invisible'
+          }
+        }"
+        selectionMode="range" :manualInput="false"
+        showButtonBar
+        :maxDate="this.maxDate"
+        @update:model-value="updateTimer"
         dateFormat="&#x200b;"
     />
   </div>
 </template>
 
 <script>
-import Datepicker from "@vuepic/vue-datepicker";
 import Calendar from "primevue/calendar";
 import {mapState} from "vuex";
 import getDateFromSecondsTimestamp from "@/services/time/getDateFromSecondsTimestamp";
 import timer from "../../services/timer";
 import ClockPlayIcon from "vue-tabler-icons/icons/ClockPlayIcon";
+import getSecondsTimestampFromDate from "@/services/time/getSecondsTimestampFromDate";
 
 export default {
   name: "TimerCalendar",
-  components: {Datepicker, Calendar},
+  components: {Calendar},
   data() {
     return {
       time: null,
-      startTime: null,
+      maxDate: null,
     };
   },
   watch: {
-    startTime() {
-      this.time = getDateFromSecondsTimestamp(this.startTime);
+    async timer() {
+      this.setTime(await timer.getStartTime(), await timer.getEndTime());
     },
+    async serverTime() {
+      await this.updateMaxDate();
+    }
   },
   computed: {
     ...mapState({
@@ -39,15 +50,34 @@ export default {
     }),
   },
   methods: {
-    updateStartTime(startTime) {
-      timer.setStartTime(startTime)
+    async updateTimer(time) {
+      if (await timer.isManualMode()
+          && time[1] !== null
+          && time[0].getTime() > time[1].getTime()
+      ) {
+        const temp = time[0];
+        time[0] = time[1];
+        time[1] = temp;
+      }
+      await timer.adjustDays(time[0], time[1])
     },
-    setTime(timestamp) {
-      this.time = getDateFromSecondsTimestamp(timestamp);
+    setTime(startTimeTimestamp, endTimeTimestamp) {
+      this.time = [
+        getDateFromSecondsTimestamp(startTimeTimestamp),
+        getDateFromSecondsTimestamp(endTimeTimestamp),
+      ];
     },
+    async updateMaxDate() {
+      if (await timer.isManualMode()) {
+        return this.maxDate = null;
+      }
+
+      return this.maxDate = new Date();
+    }
   },
-  created() {
-    this.time = getDateFromSecondsTimestamp(this.startTime);
+  async created() {
+    this.setTime(await timer.getStartTime(), await timer.getEndTime());
+    await this.updateMaxDate();
   },
 };
 </script>
