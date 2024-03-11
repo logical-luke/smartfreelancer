@@ -1,12 +1,10 @@
 import getUuid from "@/services/uuidGenerator";
 import store from "@/store";
 import synchronization from "@/services/synchronization";
-
-const queueName = "timeEntries";
+import timer from "@/services/timer";
 
 export default {
   async createTimeEntry(
-    ownerId,
     clientId,
     projectId,
     taskId,
@@ -16,7 +14,6 @@ export default {
   ) {
     const timeEntry = {
       id: getUuid(),
-      ownerId: ownerId,
       clientId: clientId,
       projectId: projectId,
       taskId: taskId,
@@ -30,10 +27,21 @@ export default {
     await store.commit("timeEntries/setTimeEntries", timeEntries);
     if (pushSync) {
       await synchronization.pushToQueue(
-        queueName,
+        'TimeEntry',
+        'TimeEntryCreator',
         "createTimeEntry",
         timeEntry
       );
     }
   },
+  async createTimeEntryFromCurrentTimer() {
+    const currentTimer = await timer.getCurrentTimer();
+    await this.createTimeEntry(
+        currentTimer.clientId,
+        currentTimer.projectId,
+        currentTimer.taskId,
+        currentTimer.startTime,
+        currentTimer.endTime
+    );
+  }
 };

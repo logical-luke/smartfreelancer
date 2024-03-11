@@ -17,9 +17,9 @@ use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 class TimerStopper
 {
     public function __construct(
-        private readonly TimerRepository $timerRepository,
-        private readonly TimeEntryCreator $timeEntryCreator,
-        private readonly UserRepository $userRepository,
+        private TimerRepository $timerRepository,
+        private TimeEntryCreator $timeEntryCreator,
+        private UserRepository $userRepository,
     ) {
     }
 

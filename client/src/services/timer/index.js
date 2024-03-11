@@ -30,7 +30,7 @@ export default {
         timer.endTime = endTime;
         await synchronization.pushToQueue("Timer", "TimerStopper", "StopTimer", timer);
         await timeEntries.createTimeEntry(
-            timer.ownerId,
+            store.getters["getUserId"],
             timer.clientId,
             timer.projectId,
             timer.taskId,
@@ -201,9 +201,19 @@ export default {
         const newTimerMode = currentTimerMode === "timer" ? "manual" : "timer";
         store.commit("timer/setTimerMode", newTimerMode);
         await cache.set("timerMode", newTimerMode);
+        if (newTimerMode === "manual") {
+            await this.setNewManualTimerStartEndTime();
+        } else {
+            await this.clearTimer();
+        }
+    },
+    async setNewManualTimerStartEndTime() {
         const secondsInFifteenMinutes = 15 * 60;
-        await this.setStartTime(newTimerMode === "manual" ? store.getters["time/getServerTime"] - secondsInFifteenMinutes : store.getters["time/getServerTime"])
-        await this.setEndTime(newTimerMode === "manual" ? store.getters["time/getServerTime"] : null)
+        await this.setStartTime(store.getters["time/getServerTime"] - secondsInFifteenMinutes)
+        await this.setEndTime(store.getters["time/getServerTime"])
+    },
+    async clearTimer() {
+        await store.commit("timer/clearTimer");
     },
     async isCurrentRunningTimer(taskId, projectId, clientId, global) {
         const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
@@ -258,5 +268,8 @@ export default {
 
             await this.setEndTime(timerEndTime);
         }
-    }
+    },
+    async getCurrentTimer() {
+        return JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
+    },
 };

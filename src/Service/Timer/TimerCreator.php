@@ -18,11 +18,11 @@ use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 class TimerCreator
 {
     public function __construct(
-        private readonly TimerRepository $timerRepository,
-        private readonly UserRepository $userRepository,
-        private readonly ProjectRepository $projectRepository,
-        private readonly ClientRepository $clientRepository,
-        private readonly TaskRepository $taskRepository,
+        private TimerRepository $timerRepository,
+        private UserRepository $userRepository,
+        private ProjectRepository $projectRepository,
+        private ClientRepository $clientRepository,
+        private TaskRepository $taskRepository,
     ) {
     }
 

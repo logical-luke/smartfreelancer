@@ -15,16 +15,15 @@ use App\Repository\TimerRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
-#[Autoconfigure(lazy: true)]
-class TimeEntryCreator
+readonly class TimeEntryCreator
 {
     public function __construct(
         private TimeEntryRepository $timeEntryRepository,
-        private readonly UserRepository $userRepository,
-        private readonly ClientRepository $clientRepository,
-        private readonly ProjectRepository $projectRepository,
-        private readonly TaskRepository $taskRepository,
-        private readonly TimerRepository $timerRepository,
+        private UserRepository $userRepository,
+        private ClientRepository $clientRepository,
+        private ProjectRepository $projectRepository,
+        private TaskRepository $taskRepository,
+        private TimerRepository $timerRepository,
     ) {
     }
 
@@ -37,7 +36,7 @@ class TimeEntryCreator
         return $this->createTimeEntryFromPayload($payload);
     }
 
-    private function createTimeEntryFromPayload(CreateTimeEntryPayload $payload): ?TimeEntry
+    private function createTimeEntryFromPayload(CreateTimeEntryPayload $payload): TimeEntry
     {
         if (!$owner = $this->userRepository->find($payload->getOwnerId())) {
             throw new InvalidPayloadException('User not found');

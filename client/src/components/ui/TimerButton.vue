@@ -3,14 +3,15 @@
     type="button"
     :class="sizeClasses"
     class="inline-flex bg-indigo-500 hover:bg-indigo-600 items-center justify-center px-2 py-2 text-sm font-medium text-white rounded-full transition duration-200"
-    @click.prevent="toggleTimer"
   >
     <template v-if="isManualMode">
-      <plus-icon :size="Math.ceil(size * 1.8)" />
+      <plus-icon @click.prevent="addTimeEntry" :size="Math.ceil(size * 1.8)" />
     </template>
     <template v-else>
-      <player-play-icon :size="Math.ceil(size * 1.8)" v-if="!isRunning" />
-      <player-stop-icon :size="Math.ceil(size * 1.8)" v-else />
+      <div @click.prevent="toggleTimer">
+        <player-play-icon :size="Math.ceil(size * 1.8)" v-if="!isRunning" />
+        <player-stop-icon :size="Math.ceil(size * 1.8)" v-else />
+      </div>
     </template>
   </button>
 </template>
@@ -21,6 +22,8 @@ import {mapGetters, mapState} from "vuex";
 import PlayerStopIcon from "vue-tabler-icons/icons/PlayerStopIcon";
 import PlusIcon from "vue-tabler-icons/icons/PlusIcon";
 import timer from "@/services/timer";
+import timeEntries from "@/services/timeEntries";
+import store from "@/store";
 
 export default {
   name: "TimerButton",
@@ -97,6 +100,10 @@ export default {
     async checkCurrentTimer() {
       return await timer.isCurrentRunningTimer(this.taskId, this.projectId, this.clientId, this.global);
     },
+    async addTimeEntry() {
+      await timeEntries.createTimeEntryFromCurrentTimer();
+      await timer.setNewManualTimerStartEndTime();
+    }
   },
   async mounted() {
     this.isRunning = await this.checkCurrentTimer();
