@@ -51,20 +51,21 @@ export default {
   },
   methods: {
     async updateTimer(time) {
-      if (await timer.isManualMode()
-          && time[1] !== null
-          && time[0].getTime() > time[1].getTime()
-      ) {
-        const temp = time[0];
-        time[0] = time[1];
-        time[1] = temp;
-      }
       await timer.adjustDays(time[0], time[1])
     },
     setTime(startTimeTimestamp, endTimeTimestamp) {
+      const startTimeDate = startTimeTimestamp ? getDateFromSecondsTimestamp(startTimeTimestamp) : null;
+      let endTimeDate = endTimeTimestamp? getDateFromSecondsTimestamp(endTimeTimestamp) : null;
+      if (startTimeDate
+          && startTimeDate.getDate() === endTimeDate.getDate()
+          && startTimeDate.getMonth() === endTimeDate.getMonth()
+          && startTimeDate.getFullYear() === endTimeDate.getFullYear()) {
+        endTimeDate = null;
+      }
+
       this.time = [
-        getDateFromSecondsTimestamp(startTimeTimestamp),
-        getDateFromSecondsTimestamp(endTimeTimestamp),
+        startTimeDate,
+        endTimeDate,
       ];
     },
     async updateMaxDate() {
@@ -76,6 +77,10 @@ export default {
     }
   },
   async created() {
+    this.setTime(await timer.getStartTime(), await timer.getEndTime());
+    await this.updateMaxDate();
+  },
+  async mounted() {
     this.setTime(await timer.getStartTime(), await timer.getEndTime());
     await this.updateMaxDate();
   },

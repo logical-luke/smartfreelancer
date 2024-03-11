@@ -233,28 +233,30 @@ export default {
 
         await this.setStartTime(timerStartTime);
 
-        if (!endDay) {
-            return;
+        if (await this.isManualMode()) {
+            if (!endDay) {
+                endDay = startDay;
+            }
+
+            const timerEndTime = getDateFromSecondsTimestamp(await this.getEndTime());
+
+            if (endDay instanceof Date) {
+                endDay = new Date(endDay);
+            }
+
+            if (timerEndTime.getDate() !== endDay.getDate()) {
+                timerEndTime.setDate(endDay.getDate());
+            }
+
+            if (timerEndTime.getMonth() !== endDay.getMonth()) {
+                timerEndTime.setMonth(endDay.getMonth());
+            }
+
+            if (timerEndTime.getFullYear() !== endDay.getFullYear()) {
+                timerEndTime.setFullYear(endDay.getFullYear());
+            }
+
+            await this.setEndTime(timerEndTime);
         }
-
-        const timerEndTime = getDateFromSecondsTimestamp(await this.getEndTime());
-
-        if (endDay instanceof Date) {
-            endDay = new Date(endDay);
-        }
-
-        if (timerEndTime.getDate()!== endDay.getDate()) {
-            timerEndTime.setDate(endDay.getDate());
-        }
-
-        if (timerEndTime.getMonth()!== endDay.getMonth()) {
-            timerEndTime.setMonth(endDay.getMonth());
-        }
-
-        if (timerEndTime.getFullYear()!== endDay.getFullYear()) {
-            timerEndTime.setFullYear(endDay.getFullYear());
-        }
-
-        await this.setEndTime(timerEndTime);
     }
 };
