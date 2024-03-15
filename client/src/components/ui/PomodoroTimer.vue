@@ -45,7 +45,8 @@
               type="button"
               @click="toggle"
               :class="sizeClasses"
-              class="inline-flex bg-indigo-500 hover:bg-indigo-600 items-center justify-center px-2 py-2 text-sm font-medium text-white rounded-full transition duration-200"
+              class="inline-flex mx-2 bg-indigo-500 hover:bg-indigo-600 items-center justify-center px-2 py-2 text-sm
+      font-medium text-white rounded-full transition duration-200"
           >
             <img src="/tomato-icon.svg" alt="Pomodoro Timer Tomato"/>
           </button>
@@ -53,55 +54,85 @@
               type="button"
               @click="toggle"
               :class="sizeClasses"
-              class="inline-flex bg-indigo-500 hover:bg-indigo-600 items-center justify-center px-2 py-2 text-sm font-medium text-white rounded-full transition duration-200"
+              class="inline-flex mx-2 bg-indigo-500 hover:bg-indigo-600 items-center justify-center px-2 py-2 text-sm
+       font-medium text-white rounded-full transition duration-200"
           >
             <hourglass-icon/>
           </button>
         </div>
-        <div class="flex-auto mt-2">
+        <div class="flex-auto my-2">
           <label for="work-duration" class="font-bold block mb-2"> {{ $t("Work duration") }}: </label>
           <input-number
               :min="1"
               inputId="work-duration"
               showButtons
               inputClass="w-16"
+              :useGrouping="false"
               :step="1"
               v-model="workDuration"
-              placeholder="25"
+              :allowEmpty="false"
           />
           {{ $t("min") }}
-
+          <div class="flex mt-2 space-x-4">
+            <p v-for="n in [20, 25, 30, 55]"
+               :key="n"
+               :class="{ 'font-bold': this.workDuration === n }"
+               @click="this.workDuration = n">{{n}}
+            </p>
+          </div>
         </div>
-        <div class="flex-auto">
+        <div class="flex-auto my-2">
           <label for="break-duration" class="font-bold block mb-2"> {{ $t("Break") }}: </label>
           <input-number
               :min="0"
               inputId="break-duration"
               :step="1"
               inputClass="w-16"
+              :useGrouping="false"
               showButtons
               v-model="breakDuration"
-              placeholder="5"
+              :allowEmpty="false"
           />
           {{ $t("min") }}
+          <div class="flex mt-2 space-x-4">
+            <div class="flex mt-2 space-x-4">
+              <p
+                  v-for="n in [5, 6, 10]"
+                  :key="n"
+                  :class="{ 'font-bold': this.breakDuration === n }"
+                  @click="this.breakDuration = n">{{n}}
+              </p>
+            </div>
+          </div>
         </div>
-        <div class="flex-auto">
+        <div class="flex-auto my-2">
           <label for="repeat" class="font-bold block mb-2"> {{ $t("Repeat") }}: </label>
           <input-number
               :min="0"
               inputId="repeat"
               :step="1"
               inputClass="w-16"
+              :useGrouping="false"
               showButtons
               v-model="repeat"
-              placeholder="4"
+              :allowEmpty="false"
           />
           {{ $t("times") }}
+          <div class="flex mt-2 space-x-4">
+            <div class="flex mt-2 space-x-4">
+              <p
+                  v-for="n in [2, 4, 6]"
+                  :key="n"
+                  :class="{ 'font-bold': this.repeat === n }"
+                  @click="this.repeat = n">{{n}}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </overlay-panel>
-</template>
+</template>j
 
 <script>
 import OverlayPanel from "primevue/overlaypanel";
@@ -183,6 +214,21 @@ export default {
     },
     toggleSettingsExpanded() {
       this.settingsExpanded = !this.settingsExpanded;
+    },
+    setDefaultWorkDuration(value) {
+      if (value === '') {
+        this.workDuration = 25;
+      }
+    },
+    setDefaultBreakDuration(value) {
+      if (value === '') {
+        this.breakDuration = 5;
+      }
+    },
+    setDefaultRepeat(value) {
+      if (value === '') {
+        this.repeat = 4;
+      }
     },
   },
   mounted() {
