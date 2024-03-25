@@ -16,11 +16,22 @@
         </p>
         <div class="flex flex-row gap-2">
           <button
+              v-if="!this.isRunning"
               type="button"
               :class="sizeClasses"
+              @click="startPomodoro"
               class="inline-flex bg-indigo-500 hover:bg-indigo-600 items-center justify-center px-2 py-2 text-sm font-medium text-white rounded-full transition duration-200"
           >
             <player-play-icon/>
+          </button>
+          <button
+              v-if="this.isRunning"
+              type="button"
+              :class="sizeClasses"
+              @click="pausePomodoro"
+              class="inline-flex bg-indigo-500 hover:bg-indigo-600 items-center justify-center px-2 py-2 text-sm font-medium text-white rounded-full transition duration-200"
+          >
+            <player-pause-icon/>
           </button>
           <button
               type="button"
@@ -144,10 +155,14 @@ import PlayerPlayIcon from "vue-tabler-icons/icons/PlayerPlayIcon";
 import SettingsIcon from "vue-tabler-icons/icons/SettingsIcon";
 import RotateIcon from "vue-tabler-icons/icons/RotateIcon";
 import HourglassIcon from "vue-tabler-icons/icons/HourglassIcon";
+import pomodoro from "@/services/pomodoro";
+import {mapState} from "vuex";
+import PlayerPauseIcon from "vue-tabler-icons/icons/PlayerPauseIcon";
 
 export default {
   name: "PomodoroTimer",
   components: {
+    PlayerPauseIcon,
     HourglassIcon,
     RotateIcon,
     SettingsIcon,
@@ -158,16 +173,22 @@ export default {
     InputText,
     InputNumber,
   },
+  watch: {
+    serverTime() {
+      this.updateTimeLeft();
+    },
+    async pomodoro() {
+      this.isRunning = await pomodoro.isRunning()
+    }
+  },
   computed: {
     sizeClasses() {
       return `w-${this.size} h-${this.size}`;
     },
-    modes() {
-      return [
-        {name: this.$t("Pomodoro"), code: "p"},
-        {name: this.$t("Fixed"), code: "f"},
-      ];
-    },
+    ...mapState({
+      serverTime: (state) => state.time.serverTime,
+      pomodoro: (state) => state.pomodoro.current,
+    })
   },
   props: {
     size: {
@@ -177,16 +198,7 @@ export default {
   },
   data() {
     return {
-      selectedMode: null,
-      selectedTime: null,
-      selectedBreak: null,
-      selectedRepeat: null,
-      times: [
-        {name: "20m", code: "20"},
-        {name: "25m", code: "25"},
-        {name: "30m", code: "30"},
-        {name: "55m", code: "55"},
-      ],
+      mode: 'pomodoro',
       workDuration: 25,
       breakDuration: 5,
       repeat: 4,
@@ -195,17 +207,8 @@ export default {
         minutes: "00",
         seconds: "00"
       },
-      breaks: [
-        {name: "5m", code: "5"},
-        {name: "6m", code: "6"},
-        {name: "10m", code: "10"},
-      ],
-      repeats: [
-        {name: "2x", code: "2"},
-        {name: "4x", code: "4"},
-        {name: "6x", code: "6"},
-      ],
       settingsExpanded: false,
+      isRunning: false,
     };
   },
   methods: {
@@ -215,24 +218,24 @@ export default {
     toggleSettingsExpanded() {
       this.settingsExpanded = !this.settingsExpanded;
     },
-    setDefaultWorkDuration(value) {
-      if (value === '') {
-        this.workDuration = 25;
-      }
+    async startPomodoro() {
+      await pomodoro.startPomodoro(
+          this.workDuration,
+          this.breakDuration,
+          this.repeat,
+          this.mode
+      );
     },
-    setDefaultBreakDuration(value) {
-      if (value === '') {
-        this.breakDuration = 5;
-      }
+    async pausePomodoro() {
+      // await pomodoro.startPomodoro(this.workDuration, this.breakDuration, this.repeat);
     },
-    setDefaultRepeat(value) {
-      if (value === '') {
-        this.repeat = 4;
-      }
-    },
+    async updateTimeLeft() {
+      this.timeLeft = await pomodoro.getDurations();
+    }
   },
-  mounted() {
-    this.selectedMode = {name: this.$t("Pomodoro"), code: "p"};
+  async mounted() {
+    await this.updateTimeLeft();
+    this.isRunning = await pomodoro.isRunning();
   },
 };
 </script>

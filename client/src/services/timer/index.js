@@ -30,7 +30,6 @@ export default {
         timer.endTime = endTime;
         await synchronization.pushToQueue("Timer", "TimerStopper", "StopTimer", timer);
         await timeEntries.createTimeEntry(
-            store.getters["getUserId"],
             timer.clientId,
             timer.projectId,
             timer.taskId,
