@@ -1,7 +1,7 @@
 <template>
   <li>
     <router-link
-      class="flex items-center pl-3 py-3 pr-4 hover:bg-gray-900 text-gray-50 rounded"
+      class="flex items-center pl-3 py-4 pr-4 hover:bg-gray-900 text-gray-50 rounded"
       :to="goTo"
       active-class="bg-indigo-500"
       exact

@@ -2,7 +2,7 @@
   <div class="mb-6">
     <label class="block text-sm font-medium mb-2" for="name">Name:</label>
     <input
-      class="block w-full px-4 py-3 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
+      class="block w-full px-4 py-4 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
       type="text"
       id="name"
       name="name"
@@ -15,7 +15,7 @@
       >Description:</label
     >
     <textarea
-      class="block w-full px-4 py-3 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
+      class="block w-full px-4 py-4 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
       id="description"
       name="description"
       v-model="client.description"

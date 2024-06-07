@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center bg-white border rounded">
     <input
-      class="pl-2 py-3 text-sm"
+      class="pl-2 py-4 text-sm"
       @input="setPattern"
       type="text"
       placeholder="Type to search..."

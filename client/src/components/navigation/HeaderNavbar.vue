@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="sticky top-0 py-3 px-4 bg-white shadow"
+    class="sticky top-0 py-4 px-8 bg-white shadow"
     :class="{ 'transition-all duration-700 ease-linear': true }"
     :style="{ height: navHeight }"
   >

@@ -1,9 +1,9 @@
 <template>
   <transition name="fade" mode="in-out">
     <div v-if="isAuthorized" class="relative z-50">
-      <nav class="lg:hidden py-6 px-6 bg-gray-800">
+      <nav class="lg:hidden py-6 px-4 bg-gray-800">
         <div class="flex flex-row items-center justify-between mr-2">
-          <div class="flex mr-auto">
+          <div class="flex">
             <icon-only-logo />
           </div>
           <div class="flex-row flex items-center justify-end gap-2">
@@ -29,9 +29,9 @@
           class="flex fixed top-0 left-0 bottom-0 flex-col w-full lg:max-w-xs lg:w-3/4 pt-6 pb-8 bg-gray-800 overflow-y-auto"
         >
           <div
-            class="flex flex-row justify-between items-center px-6 pb-6 mr-2 lg:mr-0 mb-6"
+            class="flex flex-row justify-between items-center px-4 pb-6 mr-2 lg:mr-0 mb-6"
           >
-            <div class="flex mr-auto">
+            <div class="flex">
               <icon-only-logo />
             </div>
             <div class="flex flex-row items-center justify-end gap-2">
@@ -48,9 +48,9 @@
           <div class="px-4 pb-6">
             <ul class="mb-8 text-sm font-medium">
               <sidebar-item go-to="/">
-                {{ $t("Today") }}
+                {{ $t("Deep Work Hub") }}
                 <template #icon>
-                  <sun-high-icon />
+                  <target-icon />
                 </template>
               </sidebar-item>
               <sidebar-item go-to="/calendar">
@@ -123,7 +123,6 @@ import BriefcaseIcon from "vue-tabler-icons/icons/BriefcaseIcon";
 import SidebarLogout from "@/components/navigation/SidebarLogout.vue";
 import Menu2Icon from "vue-tabler-icons/icons/Menu2Icon";
 import XIcon from "vue-tabler-icons/icons/XIcon";
-import SunHighIcon from "vue-tabler-icons/icons/SunHighIcon";
 import ChecklistIcon from "vue-tabler-icons/icons/ChecklistIcon";
 import FileDollarIcon from "vue-tabler-icons/icons/FileDollarIcon";
 import ShoppingCartIcon from "vue-tabler-icons/icons/ShoppingCartIcon";
@@ -135,6 +134,7 @@ import IconOnlyLogo from "@/components/IconOnlyLogo.vue";
 import ReportIcon from "vue-tabler-icons/icons/ReportIcon";
 import SynchronizationStatus from "@/components/SynchronizationStatus.vue";
 import FriendsIcon from "vue-tabler-icons/icons/FriendsIcon";
+import TargetIcon from "vue-tabler-icons/icons/TargetIcon";
 
 export default {
   name: "SidebarNav",
@@ -150,12 +150,12 @@ export default {
     ShoppingCartIcon,
     FileDollarIcon,
     ChecklistIcon,
-    SunHighIcon,
     XIcon,
     Menu2Icon,
     SidebarLogout,
     BriefcaseIcon,
     SidebarItem,
+    TargetIcon,
   },
   data() {
     return {

@@ -35,7 +35,7 @@
           <router-view v-slot="{ Component }">
             <transition name="fade" mode="out-in">
               <div
-                :class="isAuthorizedPage ? 'py-4 md:py-8 px-6' : ''"
+                :class="isAuthorizedPage ? 'py-4 md:py-8 px-8' : ''"
                 :key="path"
               >
                 <component :is="Component"></component>

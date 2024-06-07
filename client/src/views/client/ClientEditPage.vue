@@ -1,40 +1,36 @@
 <template>
-  <section class="py-8">
-    <div class="container px-4">
-      <h1 class="mb-2 text-2xl font-bold font-heading">Edit client</h1>
-      <form @submit.prevent="submitForm">
-        <client-form />
-        <div class="flex flex-wrap space-x-4">
-          <div>
-            <submit-button>
-              Save
-              <template #icon>
-                <device-floppy-icon />
-              </template>
-            </submit-button>
-          </div>
-          <div>
-            <back-button />
-          </div>
-        </div>
-      </form>
+  <h1 class="mb-2 text-2xl font-bold font-heading">Edit client</h1>
+  <form @submit.prevent="submitForm">
+    <client-form/>
+    <div class="flex flex-wrap space-x-4">
+      <div>
+        <submit-button>
+          Save
+          <template #icon>
+            <device-floppy-icon/>
+          </template>
+        </submit-button>
+      </div>
+      <div>
+        <back-button/>
+      </div>
     </div>
-  </section>
+  </form>
 </template>
 
 <script>
 import ClientForm from "@/components/client/ClientForm.vue";
-import { mapState } from "vuex";
+import {mapState} from "vuex";
 import BackButton from "@/components/BackButton.vue";
 import SubmitButton from "@/components/SubmitButton.vue";
 import DeviceFloppyIcon from "vue-tabler-icons/icons/DeviceFloppyIcon";
-import { useRoute } from "vue-router";
+import {useRoute} from "vue-router";
 import store from "@/store";
 import router from "@/router";
 
 export default {
   name: "ClientEditPage",
-  components: { DeviceFloppyIcon, SubmitButton, BackButton, ClientForm },
+  components: {DeviceFloppyIcon, SubmitButton, BackButton, ClientForm},
   data() {
     return {
       buttonTitle: "Save",
@@ -45,7 +41,7 @@ export default {
   }),
   async created() {
     const client = await store.getters["clients/getClientById"](
-      this.route.params.id
+        this.route.params.id
     );
     this.$store.commit("client/setClient", client);
   },
@@ -58,7 +54,7 @@ export default {
   setup() {
     const route = useRoute();
 
-    return { route };
+    return {route};
   },
 };
 </script>

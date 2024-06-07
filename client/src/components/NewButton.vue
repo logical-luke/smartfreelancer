@@ -2,7 +2,7 @@
   <router-link class="flex items-center" :to="goTo">
     <button
       type="button"
-      class="inline-flex border-3 border-indigo-900 shadow text-center items-center w-full px-3 flex-nowrap py-3 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
+      class="inline-flex border-3 border-indigo-900 shadow text-center items-center w-full px-4 flex-nowrap py-4 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
     >
       <slot name="icon"><plus-icon size="20" /></slot>
       <span class="ml-2">

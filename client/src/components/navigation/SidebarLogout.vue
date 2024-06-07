@@ -1,6 +1,6 @@
 <template>
   <a
-    class="flex cursor-pointer items-center pl-3 py-3 pr-2 text-gray-50 hover:bg-gray-900 rounded"
+    class="flex cursor-pointer items-center pl-3 py-4 pr-2 text-gray-50 hover:bg-gray-900 rounded"
     @click="logout()"
   >
     <span class="inline-block mr-3">

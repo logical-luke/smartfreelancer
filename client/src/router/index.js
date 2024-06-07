@@ -7,7 +7,7 @@ import ClientCreatePage from "@/views/client/ClientCreatePage.vue";
 import ClientEditPage from "@/views/client/ClientEditPage.vue";
 import TaskEditPage from "@/views/task/TaskEditPage.vue";
 import TaskCreatePage from "@/views/task/TaskCreatePage.vue";
-import TodayPage from "@/views/today/TodayPage.vue";
+import DeepWorkHubPage from "@/views/deepWorkHub/DeepWorkHubPage.vue";
 import ReportsPage from "@/views/report/ReportsPage.vue";
 import RegistrationPage from "@/views/authorization/RegistrationPage.vue";
 import NotFoundPage from "@/views/NotFoundPage.vue";
@@ -44,8 +44,8 @@ const router = createRouter({
     },
     {
       path: "/",
-      name: "TodayPage",
-      component: TodayPage,
+      name: "DeepWorkHubPage",
+      component: DeepWorkHubPage,
       meta: {
         requiresAuth: true,
       },

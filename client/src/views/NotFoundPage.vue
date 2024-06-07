@@ -12,7 +12,7 @@
     <div>
       <router-link
         to="/"
-        class="block md:inline-block px-5 py-3 md:mr-3 mb-3 md:mb-0 text-sm bg-indigo-500 hover:bg-indigo-600 text-white font-semibold border border-indigo-500 hover:border-indigo-600 rounded transition duration-200"
+        class="block md:inline-block px-5 py-4 md:mr-3 mb-3 md:mb-0 text-sm bg-indigo-500 hover:bg-indigo-600 text-white font-semibold border border-indigo-500 hover:border-indigo-600 rounded transition duration-200"
       >
         {{ $t("Return to homepage") }}
       </router-link>
