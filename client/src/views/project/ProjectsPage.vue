@@ -1,5 +1,5 @@
 <template>
-  <div class="container px-4 mx-auto">
+  <div class="container px-4">
     <div class="flex flex-wrap items-center mb-6">
       <h3 class="text-xl font-bold">{{ $t("Projects") }}</h3>
     </div>
@@ -29,7 +29,7 @@
         :total="filteredProjects.length"
       />
     </div>
-    <div class="container px-4 mx-auto">
+    <div class="container px-4">
       <div class="bg-white rounded">
         <div class="pt-4 px-4 overflow-x-auto">
           <table class="table-auto w-full">

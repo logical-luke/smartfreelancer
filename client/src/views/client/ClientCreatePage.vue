@@ -1,6 +1,6 @@
 <template>
   <section class="py-8">
-    <div class="container px-4 mx-auto">
+    <div class="container px-4">
       <h1 class="mb-2 text-2xl font-bold font-heading">Add client</h1>
       <form @submit.prevent="submitForm">
         <client-form />

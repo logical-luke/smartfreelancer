@@ -75,7 +75,7 @@ import DurationInput from "@/components/DurationInput.vue";
 import { mapGetters } from "vuex";
 import PomodoroTimer from "@/components/PomodoroTimer.vue";
 import CollapseNavBarButton from "@/components/CollapseNavBarButton.vue";
-import DescriptionInput from "../DescriptionInput.vue";
+import DescriptionInput from "@/components/DescriptionInput.vue";
 import TimerModeToggle from "@/components/timer/TimerModeToggle.vue";
 
 export default {

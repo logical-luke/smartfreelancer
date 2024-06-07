@@ -27,7 +27,7 @@
         <confirm-dialog />
         <sidebar-nav v-if="isAuthorizedPage" />
         <transition name="fade" mode="out-in">
-          <div v-if="isAuthorizedPage" class="fixed z-20 top-0 w-full">
+          <div v-if="isAuthorizedPage" class="sticky z-20 top-0 w-full">
             <header-navbar />
           </div>
         </transition>
