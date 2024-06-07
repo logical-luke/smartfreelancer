@@ -36,6 +36,15 @@ export default {
     if (await this.exists("timer")) {
       await store.commit("timer/setTimer", JSON.parse(await this.get("timer")));
     }
+    if (await this.exists("pomodoro")) {
+      await store.commit("pomodoro/setPomodoro", JSON.parse(await this.get("pomodoro")));
+    }
+    if (await this.exists("planned")) {
+      await store.commit("pomodoro/setPlanned", JSON.parse(await this.get("planned")));
+    }
+    if (await this.exists("pomodoro-configuration")) {
+      await store.commit("pomodoro/setConfiguration", JSON.parse(await this.get("pomodoro-configuration")));
+    }
     if (await this.exists("queue")) {
       await store.commit("synchronization/setQueue", JSON.parse(await this.get("queue")));
     }

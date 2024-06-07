@@ -5,19 +5,29 @@ import cache from "@/services/cache";
 import synchronization from "@/services/synchronization";
 
 export default {
-    async getDurations(){
+    async getDurations() {
         let time = {
             hours: "00",
             minutes: "00",
             seconds: "00"
         };
 
-        if (await this.getStartTime() && await this.getEndTime()) {
+        if (await this.getEndTime()) {
             const {
                 hours,
                 minutes,
                 seconds
-            } = getRelativeTime(await this.getStartTime(), await this.getEndTime());
+            } = getRelativeTime(await store.getters["time/getServerTime"], await this.getEndTime());
+
+            time.hours = hours;
+            time.minutes = minutes;
+            time.seconds = seconds;
+        } else if (await this.doesCurrentPomodoroExist()) {
+            const {
+                hours,
+                minutes,
+                seconds
+            } = getRelativeTime(await store.getters["time/getServerTime"], await store.getters["time/getServerTime"] + await this.getDuration());
 
             time.hours = hours;
             time.minutes = minutes;
@@ -29,17 +39,39 @@ export default {
     async getStartTime() {
         const pomodoro = JSON.parse(JSON.stringify(store.getters["pomodoro/getPomodoro"]));
 
-        return pomodoro.startTime;
+        if (pomodoro) {
+            return pomodoro.startTime;
+        }
+
+        return null;
     },
     async getEndTime() {
         const pomodoro = JSON.parse(JSON.stringify(store.getters["pomodoro/getPomodoro"]));
 
-        return pomodoro.startTime + pomodoro.duration;
+        if (pomodoro) {
+            return pomodoro.endTime;
+
+        }
+
+        return null;
+    },
+    async getDuration() {
+        const pomodoro = JSON.parse(JSON.stringify(store.getters["pomodoro/getPomodoro"]));
+
+        if (pomodoro) {
+            return pomodoro.duration;
+
+        }
+
+        return null;
     },
     async isRunning() {
         const pomodoro = JSON.parse(JSON.stringify(store.getters["pomodoro/getPomodoro"]));
+        if (pomodoro) {
+            return pomodoro.id && pomodoro.isRunning;
+        }
 
-        return pomodoro.id && pomodoro.isRunning;
+        return false;
     },
     async startPomodoro(workDuration, breakDuration, repeat, type) {
         if (await this.isRunning()) {
@@ -52,9 +84,10 @@ export default {
 
         let newPomodoro = this.createNewPomodoro(workDuration, type);
         newPomodoro.isRunning = true;
+        newPomodoro.startTime = await store.getters["time/getServerTime"];
+        newPomodoro.endTime = newPomodoro.startTime + newPomodoro.duration;
 
         await store.commit("pomodoro/setPomodoro", newPomodoro);
-        await cache.set("pomodoro", JSON.stringify(newPomodoro));
         // await synchronization.pushToQueue("Pomodoro", "PomodoroCreator", "CreatePomodoro", newPomodoro);
 
         if (repeat > 0) {
@@ -67,17 +100,26 @@ export default {
                 }
             }
             await store.commit("pomodoro/setPlanned", planned);
-            await cache.set("planned", JSON.stringify(planned));
             // await synchronization.pushToQueue("Pomodoro", "PomodoroCreator", "CreatePomodoro", newPomodoro);
         }
     },
     getEmptyPomodoro() {
         return {
             id: null,
-            remainingTime: null,
             duration: null,
+            startTime: null,
+            endTime: null,
             isRunning: false,
             type: 'pomodoro',
+        };
+    },
+    getDefaultConfiguration() {
+        return {
+            workDuration: 25,
+            breakDuration: 5,
+            repeat: 4,
+            type: 'pomodoro',
+            settingsExpanded: false,
         };
     },
     createNewPomodoro(duration, type) {
@@ -88,5 +130,69 @@ export default {
         pomodoro.type = type;
 
         return pomodoro;
-    }
+    },
+    async hasPomodoroEnded() {
+        return await this.getEndTime() <= await store.getters["time/getServerTime"];
+    },
+    async pickNextPomodoro() {
+        if (store.getters["pomodoro/getPlanned"].length > 0) {
+            const planned = JSON.parse(JSON.stringify(store.getters["pomodoro/getPlanned"]));
+
+            const nextPomodoro = planned.shift();
+            await store.commit("pomodoro/setPlanned", planned);
+            // await synchronization.pushToQueue("Pomodoro", "PomodoroCreator", "CreatePomodoro", nextPomodoro);
+
+            nextPomodoro.isRunning = true;
+            nextPomodoro.startTime = await store.getters["time/getServerTime"];
+            nextPomodoro.endTime = nextPomodoro.startTime + nextPomodoro.duration;
+
+            await store.commit("pomodoro/setPomodoro", nextPomodoro);
+            // await synchronization.pushToQueue("Pomodoro", "PomodoroCreator", "CreatePomodoro", pomodoro);
+
+            return nextPomodoro;
+        }
+    },
+    async pausePomodoro() {
+        const pomodoro = JSON.parse(JSON.stringify(store.getters["pomodoro/getPomodoro"]));
+
+        if (pomodoro) {
+            const remainingTime = pomodoro.endTime - await store.getters["time/getServerTime"];
+
+            if (remainingTime > 0) {
+                pomodoro.duration = remainingTime;
+                pomodoro.endTime = null;
+            }
+
+            pomodoro.isRunning = false;
+            await store.commit("pomodoro/setPomodoro", pomodoro);
+            // await synchronization.pushToQueue("Pomodoro", "PomodoroUpdater", "UpdatePomodoro", pomodoro);
+        }
+    },
+    async resumePomodoro() {
+        const pomodoro = JSON.parse(JSON.stringify(store.getters["pomodoro/getPomodoro"]));
+
+        if (pomodoro) {
+            pomodoro.endTime = await store.getters["time/getServerTime"] + pomodoro.duration;
+            pomodoro.isRunning = true;
+            await store.commit("pomodoro/setPomodoro", pomodoro);
+            // await synchronization.pushToQueue("Pomodoro", "PomodoroUpdater", "UpdatePomodoro", pomodoro);
+        }
+    },
+    async doesCurrentPomodoroExist() {
+        const pomodoro = JSON.parse(JSON.stringify(store.getters["pomodoro/getPomodoro"]));
+
+        return !!pomodoro;
+    },
+    async getConfiguration() {
+        const configuration = JSON.parse(JSON.stringify(store.getters["pomodoro/getConfiguration"]));
+
+        if (!configuration) {
+            return this.getDefaultConfiguration();
+        }
+
+        return configuration;
+    },
+    async updateConfiguration(configuration) {
+        await store.commit("pomodoro/setConfiguration", configuration);
+    },
 }

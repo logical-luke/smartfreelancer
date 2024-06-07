@@ -3,7 +3,7 @@
     <button
       type="button"
       @click="toggle"
-      class="navbar-burger bg-indigo-500 text-white flex items-center rounded focus:outline-none"
+      class="navbar-burger border-indigo-900 border-3 shadow bg-indigo-500 text-white flex items-center rounded focus:outline-none"
     >
       <country-flag
         :size="size"

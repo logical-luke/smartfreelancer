@@ -4,7 +4,7 @@
       <h3 class="text-xl font-bold">{{ $t("Tasks") }}</h3>
     </div>
     <div class="flex justify-between gap-4 flex-wrap items-center">
-      <div class="flex flex-wrap gap-2 flex-wrap">
+      <div class="flex flex-wrap gap-2">
         <new-button go-to="/task/create/">task</new-button>
         <bulk-edit-button :active="bulkMode" @toggle-bulk="toggleBulk" />
         <transition name="fade" mode="out-in">
