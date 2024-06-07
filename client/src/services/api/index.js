@@ -431,8 +431,8 @@ export default {
   },
 
   async pushSyncItem(payload) {
-      const response = await postRequest("/synchronization/queue", payload);
+    const response = await postRequest("/synchronization/queue", payload);
 
-      return response.data;
-  }
+    return response.data;
+  },
 };

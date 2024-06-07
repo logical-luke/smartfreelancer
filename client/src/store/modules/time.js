@@ -1,5 +1,3 @@
-import getUTCTimestampFromLocaltime from "@/services/time/getUTCTimestampFromLocaltime";
-
 const state = () => ({
   serverTimeOffset: null,
   serverTime: null,

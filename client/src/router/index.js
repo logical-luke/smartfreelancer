@@ -1,25 +1,25 @@
 import { createRouter, createWebHistory } from "vue-router";
-import LoginPage from "@/components/authorization/LoginPage.vue";
+import LoginPage from "@/views/authorization/LoginPage.vue";
 import store from "../store";
-import ProjectEditPage from "@/components/project/ProjectEditPage.vue";
-import ProjectCreatePage from "@/components/project/ProjectCreatePage.vue";
-import ClientCreatePage from "@/components/client/ClientCreatePage.vue";
-import ClientEditPage from "@/components/client/ClientEditPage.vue";
-import TaskEditPage from "@/components/task/TaskEditPage.vue";
-import TaskCreatePage from "@/components/task/TaskCreatePage.vue";
-import TodayPage from "@/components/today/TodayPage.vue";
-import ReportsPage from "@/components/report/ReportsPage.vue";
-import RegistrationPage from "@/components/authorization/RegistrationPage.vue";
-import NotFoundPage from "@/components/NotFoundPage.vue";
-import GoogleLoginPage from "@/components/authorization/GoogleLoginPage.vue";
-import AutomationsPage from "@/components/automation/AutomationsPage.vue";
-import CalendarPage from "@/components/calendar/CalendarPage.vue";
-import ExpensesPage from "@/components/expense/ExpensesPage.vue";
-import SettingsPage from "@/components/setting/SettingsPage.vue";
-import InvoicesPage from "@/components/invoice/InvoicesPage.vue";
-import ClientsPage from "../components/client/ClientsPage.vue";
-import ProjectsPage from "../components/project/ProjectsPage.vue";
-import TasksPage from "../components/task/TasksPage.vue";
+import ProjectEditPage from "@/views/project/ProjectEditPage.vue";
+import ProjectCreatePage from "@/views/project/ProjectCreatePage.vue";
+import ClientCreatePage from "@/views/client/ClientCreatePage.vue";
+import ClientEditPage from "@/views/client/ClientEditPage.vue";
+import TaskEditPage from "@/views/task/TaskEditPage.vue";
+import TaskCreatePage from "@/views/task/TaskCreatePage.vue";
+import TodayPage from "@/views/today/TodayPage.vue";
+import ReportsPage from "@/views/report/ReportsPage.vue";
+import RegistrationPage from "@/views/authorization/RegistrationPage.vue";
+import NotFoundPage from "@/views/NotFoundPage.vue";
+import GoogleLoginPage from "@/views/authorization/GoogleLoginPage.vue";
+import AutomationsPage from "@/views/automation/AutomationsPage.vue";
+import CalendarPage from "@/views/calendar/CalendarPage.vue";
+import ExpensesPage from "@/views/expense/ExpensesPage.vue";
+import SettingsPage from "@/views/setting/SettingsPage.vue";
+import InvoicesPage from "@/views/invoice/InvoicesPage.vue";
+import ClientsPage from "../views/client/ClientsPage.vue";
+import ProjectsPage from "../views/project/ProjectsPage.vue";
+import TasksPage from "../views/task/TasksPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -174,7 +174,7 @@ const router = createRouter({
       path: "/:pathMatch(.*)*",
       name: "NotFoundPage",
       component: NotFoundPage,
-    }
+    },
   ],
 });
 

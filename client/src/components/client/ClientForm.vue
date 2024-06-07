@@ -11,7 +11,9 @@
     />
   </div>
   <div class="mb-6">
-    <label class="block text-sm font-medium mb-2" for="description">Description:</label>
+    <label class="block text-sm font-medium mb-2" for="description"
+      >Description:</label
+    >
     <textarea
       class="block w-full px-4 py-3 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
       id="description"
@@ -23,13 +25,14 @@
   </div>
   <div class="mb-6">
     <label class="block text-sm font-medium mb-2" for="email">Email:</label>
-    <span class="p-input-icon-left ">
+    <span class="p-input-icon-left">
       <mail-icon class="pb-2" />
       <input-text
-          v-model="client.email"
-          name="email"
-          id="email"
-          placeholder="name@domain.com" />
+        v-model="client.email"
+        name="email"
+        id="email"
+        placeholder="name@domain.com"
+      />
     </span>
   </div>
 </template>
@@ -41,7 +44,7 @@ import MailIcon from "vue-tabler-icons/icons/MailIcon";
 
 export default {
   name: "ClientForm",
-  components: {MailIcon, InputText },
+  components: { MailIcon, InputText },
   computed: mapState({
     client: (state) => state.client.current,
   }),

@@ -27,9 +27,9 @@
 </template>
 
 <script>
-import DeleteButton from "@/components/ui/DeleteButton.vue";
-import EditButton from "@/components/ui/EditButton.vue";
-import TimerButton from "@/components/ui/TimerButton.vue";
+import DeleteButton from "@/components/DeleteButton.vue";
+import EditButton from "@/components/EditButton.vue";
+import TimerButton from "@/components/timer/TimerButton.vue";
 import { mapActions } from "vuex";
 
 export default {

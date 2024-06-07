@@ -81,8 +81,8 @@ export default {
     if (
       store.getters["synchronization/isOffline"] ||
       store.getters["synchronization/isBackgroundUploadInProgress"] ||
-      store.getters["synchronization/isBackgroundDownloadInProgress"]
-      || queue.length < 1
+      store.getters["synchronization/isBackgroundDownloadInProgress"] ||
+      queue.length < 1
     ) {
       return;
     }

@@ -4,9 +4,13 @@
       class="flex h-screen items-center justify-center"
       v-if="!isInitialLoaded"
     >
-
       <div class="flex flex-col items-center justify-center">
-        <div><moon-loader :size="spinnerSize" :color="spinnerColor" :loading="true" />
+        <div>
+          <moon-loader
+            :size="spinnerSize"
+            :color="spinnerColor"
+            :loading="true"
+          />
         </div>
         <div class="flex items-center justify-center mt-4 p-6">
           <span class="text-center"><random-loading-text /></span>
@@ -23,7 +27,7 @@
         <confirm-dialog />
         <sidebar-nav v-if="isAuthorizedPage" />
         <transition name="fade" mode="out-in">
-          <div v-if="isAuthorizedPage" class="fixed z-20 sticky top-0 w-full">
+          <div v-if="isAuthorizedPage" class="fixed z-20 top-0 w-full">
             <header-navbar />
           </div>
         </transition>
@@ -52,14 +56,14 @@ import cookies from "@/services/cookies";
 import authorization from "@/services/authorization";
 import cache from "@/services/cache";
 import synchronization from "@/services/synchronization";
-import SidebarNav from "@/components/ui/SidebarNav.vue";
-import HeaderNavbar from "@/components/ui/HeaderNavbar.vue";
+import SidebarNav from "@/components/navigation/SidebarNav.vue";
+import HeaderNavbar from "@/components/navigation/HeaderNavbar.vue";
 import { MoonLoader } from "vue3-spinner";
 import ConfirmDialog from "primevue/confirmdialog";
 import Toast from "primevue/toast";
 import { useRoute } from "vue-router";
 import getUTCTimestampFromLocaltime from "@/services/time/getUTCTimestampFromLocaltime";
-import RandomLoadingText from "./components/ui/RandomLoadingText.vue";
+import RandomLoadingText from "./components/RandomLoadingText.vue";
 
 export default {
   name: "App",
@@ -69,12 +73,12 @@ export default {
     HeaderNavbar,
     MoonLoader,
     ConfirmDialog,
-    Toast
+    Toast,
   },
   data() {
     return {
       spinnerSize: "96 px",
-      spinnerColor: "#382CDD"
+      spinnerColor: "#382CDD",
     };
   },
   watch: {
@@ -86,7 +90,7 @@ export default {
         synchronization.disableBackgroundSync();
         synchronization.enableBackgroundUpload();
       }
-    }
+    },
   },
   computed: {
     path() {
@@ -101,8 +105,8 @@ export default {
     },
     ...mapGetters("synchronization", ["isInitialLoaded", "isQueueEmpty"]),
     ...mapState({
-      queue: (state) => state.synchronization.queue
-    })
+      queue: (state) => state.synchronization.queue,
+    }),
   },
   setup() {
     onMounted(async () => {
@@ -135,13 +139,21 @@ export default {
         await cache.getInitial();
       }
 
-      store.commit("time/setServerTime", getUTCTimestampFromLocaltime() + store.getters["time/getServerTimeOffset"]);
+      store.commit(
+        "time/setServerTime",
+        getUTCTimestampFromLocaltime() +
+          store.getters["time/getServerTimeOffset"]
+      );
 
       setInterval(() => {
-        store.commit("time/setServerTime", getUTCTimestampFromLocaltime() + store.getters["time/getServerTimeOffset"]);
+        store.commit(
+          "time/setServerTime",
+          getUTCTimestampFromLocaltime() +
+            store.getters["time/getServerTimeOffset"]
+        );
       }, 1000);
     });
-  }
+  },
 };
 </script>
 

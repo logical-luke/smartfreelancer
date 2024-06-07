@@ -27,8 +27,8 @@ export default {
     await store.commit("timeEntries/setTimeEntries", timeEntries);
     if (pushSync) {
       await synchronization.pushToQueue(
-        'TimeEntry',
-        'TimeEntryCreator',
+        "TimeEntry",
+        "TimeEntryCreator",
         "createTimeEntry",
         timeEntry
       );
@@ -37,11 +37,11 @@ export default {
   async createTimeEntryFromCurrentTimer() {
     const currentTimer = await timer.getCurrentTimer();
     await this.createTimeEntry(
-        currentTimer.clientId,
-        currentTimer.projectId,
-        currentTimer.taskId,
-        currentTimer.startTime,
-        currentTimer.endTime
+      currentTimer.clientId,
+      currentTimer.projectId,
+      currentTimer.taskId,
+      currentTimer.startTime,
+      currentTimer.endTime
     );
-  }
+  },
 };

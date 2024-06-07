@@ -13,10 +13,7 @@ export default {
       );
     }
     if (await this.exists("timerMode")) {
-      await store.commit(
-          "timer/setTimerMode",
-          (await this.get("timerMode"))
-      );
+      await store.commit("timer/setTimerMode", await this.get("timerMode"));
     }
     if (await this.exists("clients")) {
       await store.commit(
@@ -37,21 +34,36 @@ export default {
       await store.commit("timer/setTimer", JSON.parse(await this.get("timer")));
     }
     if (await this.exists("pomodoro")) {
-      await store.commit("pomodoro/setPomodoro", JSON.parse(await this.get("pomodoro")));
+      await store.commit(
+        "pomodoro/setPomodoro",
+        JSON.parse(await this.get("pomodoro"))
+      );
     }
     if (await this.exists("planned")) {
-      await store.commit("pomodoro/setPlanned", JSON.parse(await this.get("planned")));
+      await store.commit(
+        "pomodoro/setPlanned",
+        JSON.parse(await this.get("planned"))
+      );
     }
     if (await this.exists("pomodoro-configuration")) {
-      await store.commit("pomodoro/setConfiguration", JSON.parse(await this.get("pomodoro-configuration")));
+      await store.commit(
+        "pomodoro/setConfiguration",
+        JSON.parse(await this.get("pomodoro-configuration"))
+      );
     }
     if (await this.exists("queue")) {
-      await store.commit("synchronization/setQueue", JSON.parse(await this.get("queue")));
+      await store.commit(
+        "synchronization/setQueue",
+        JSON.parse(await this.get("queue"))
+      );
     }
     if (await this.exists("synchronizationTime")) {
       const syncTime = JSON.parse(await this.get("synchronizationTime"));
       const syncTimeObject = new Date(syncTime);
-      await store.commit("synchronization/setSynchronizationTime", syncTimeObject);
+      await store.commit(
+        "synchronization/setSynchronizationTime",
+        syncTimeObject
+      );
     }
     await store.commit("synchronization/setInitialLoaded", true);
   },
@@ -69,5 +81,5 @@ export default {
   },
   async remove(key) {
     return await db.remove(key);
-  }
+  },
 };

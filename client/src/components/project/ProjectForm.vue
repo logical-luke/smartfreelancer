@@ -31,7 +31,7 @@
 
 <script>
 import { mapState } from "vuex";
-import SelectClient from "@/components/ui/SelectClient.vue";
+import SelectClient from "@/components/SelectClient.vue";
 
 export default {
   name: "ProjectForm",

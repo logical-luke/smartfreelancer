@@ -45,7 +45,11 @@ export default createStore({
       return state.user.id;
     },
     getWorkHubTree(state, getters, rootState, rootGetters) {
-      return buildWorkHubTree(rootGetters['clients/getClients'], rootGetters['projects/getProjects'], rootGetters['tasks/getTasks']);
+      return buildWorkHubTree(
+        rootGetters["clients/getClients"],
+        rootGetters["projects/getProjects"],
+        rootGetters["tasks/getTasks"]
+      );
     },
   },
   strict: debug,

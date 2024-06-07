@@ -39,13 +39,13 @@
 
 <script>
 import { mapState } from "vuex";
-import SelectProject from "@/components/ui/SelectProject.vue";
-import SelectClient from "../ui/SelectClient.vue";
-import SelectTask from "../ui/SelectTask.vue";
+import SelectProject from "@/components/SelectProject.vue";
+import SelectClient from "@/components/SelectClient.vue";
+import SelectTask from "@/components/SelectTask.vue";
 
 export default {
   name: "TaskForm",
-  components: {SelectTask, SelectClient, SelectProject },
+  components: { SelectTask, SelectClient, SelectProject },
   computed: mapState({
     task: (state) => state.task.current,
   }),
