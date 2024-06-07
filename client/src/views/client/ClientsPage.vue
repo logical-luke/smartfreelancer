@@ -7,10 +7,10 @@
       <transition-group name="fade-slower" class="transition-element">
         <template v-for="client in clients" :key="client.id">
           <client-item
-              :id="client.id"
-              :name="client.name"
-              :email="client.email"
-              :description="client.description"
+            :id="client.id"
+            :name="client.name"
+            :email="client.email"
+            :description="client.description"
           />
         </template>
       </transition-group>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import {mapActions, mapState} from "vuex";
+import { mapState } from "vuex";
 import ClientItem from "@/components/client/ClientItem.vue";
 
 export default {
@@ -30,9 +30,5 @@ export default {
   computed: mapState({
     clients: (state) => state.clients.all,
   }),
-  methods: {
-    ...mapActions("clients", ["deleteClient", "deleteClients"]),
-  }
 };
 </script>
-
