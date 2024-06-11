@@ -1,20 +1,35 @@
 <template>
-  <router-link :to="goTo">
+  <router-link class="flex items-center" :to="goTo">
     <button
-      type="button"
-      class="flex h-full justify-center items-center w-full md:w-auto px-8 py-4 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200"
+        type="button"
+        class="inline-flex
+          shadow
+          px-4
+          flex-nowrap
+          py-4
+          text-sm
+          font-medium
+          text-white
+          bg-indigo-500
+          hover:bg-indigo-700
+          rounded-md
+          transition
+          duration-200"
     >
-      <slot></slot>
+      <span>
+        <slot></slot>
+      </span>
     </button>
   </router-link>
 </template>
 
 <script>
+
 export default {
   name: "LinkButton",
   props: {
     goTo: {
-      type: String,
+      type: [Object, String],
       required: true,
     },
   },

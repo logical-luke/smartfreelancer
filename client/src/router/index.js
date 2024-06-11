@@ -75,8 +75,8 @@ const router = createRouter({
       component: ProjectCreatePage,
     },
     {
-      path: "/client/create",
-      name: "ClientCreatePage",
+      path: "/client/add",
+      name: "ClientAddPage",
       meta: {
         requiresAuth: true,
       },

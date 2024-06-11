@@ -12,7 +12,7 @@
             :loading="true"
           />
         </div>
-        <div class="flex items-center justify-center mt-4 p-6">
+        <div class="flex items-center justify-center mt-4 p-4">
           <span class="text-center"><random-loading-text /></span>
         </div>
       </div>
