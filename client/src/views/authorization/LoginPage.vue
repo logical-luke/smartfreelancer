@@ -1,61 +1,57 @@
 <template>
   <div class="flex flex-col justify-center items-center h-screen">
-    <div class="flex justify-center w-full">
-      <transparent-logo-wide size="w-60" text-color="#410B01" />
-    </div>
-    <div class="flex w-10/12 md:w-1/4 justify-center items-center">
-      <form class="flex w-3/4 flex-col gap-3" @submit.prevent="login">
-        <div>
-          <label class="block text-sm font-medium mb-2" for="email">
-            {{ $t("Email") }}
-          </label>
-          <input-text
-            class="w-full p-inputtext-sm"
-            type="email"
-            v-model="email"
-            autocomplete="email"
-          />
-        </div>
+    <div class="border-2 rounded-md p-8 shadow">
+      <div class="flex justify-center w-full mb-4">
+        <transparent-logo-wide size="w-60" text-color="#410B01"/>
+      </div>
+      <div class="flex w-full max-w-md justify-center items-center">
+        <div class="flex flex-col gap-4 w-full">
+          <div>
+            <label class="block text-sm font-medium mb-1" for="email">
+              {{ $t("EMAIL") }}
+            </label>
+            <input-text
+                class="w-full"
+                type="email"
+                v-model="email"
+                autocomplete="email"
+            />
+          </div>
 
-        <div>
-          <label class="block text-sm font-medium" for="password">
-            {{ $t("Password") }}
-          </label>
-          <password
-            class="p-inputtext-sm"
-            v-model="password"
-            input-id="passwordInput"
-            :toggle-mask="true"
-            autocomplete="current-password"
-            id="passwordPanel"
-            :feedback="false"
-          />
-        </div>
+          <div>
+            <label class="block text-sm font-medium mb-1" for="password">
+              {{ $t("PASSWORD") }}
+            </label>
+            <password
+                class="w-full"
+                v-model="password"
+                input-id="passwordInput"
+                :toggle-mask="true"
+                autocomplete="current-password"
+                id="passwordPanel"
+                :feedback="false"
+            />
+          </div>
 
-        <submit-button>{{ $t("Log in") }}</submit-button>
-        <divider align="center">
-          <span>{{ $t("OR") }}</span>
-        </divider>
+          <main-action-button @click="login()">{{ $t("Log In") }}</main-action-button>
 
-        <google-button>{{ $t("Log in") }}</google-button>
-        <div class="flex">
-          <language-switcher />
+          <divider align="center" class="py-2">
+            <span>{{ $t("OR") }}</span>
+          </divider>
+
+          <main-action-button @click="loginWithGoogle()">{{ $t("Log In with Google") }}</main-action-button>
+
+          <action-button @click="goToRegistration()">{{ $t("Sign Up for an Account") }}</action-button>
+
+          <div class="flex justify-center mt-4">
+            <language-switcher/>
+          </div>
         </div>
-        <div>
-          <p class="font-medium text-gray-500">
-            {{ $t("Don't have an account") }}?
-          </p>
-          <p class="font-medium text-gray-500">
-            {{ $t("Create a new account") }}
-            <router-link class="text-blue-500 font-bold" to="/register"
-              >{{ $t("here") }}
-            </router-link>
-          </p>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
+
 
 <script>
 import store from "@/store";
@@ -69,10 +65,15 @@ import LanguageSwitcher from "@/components/LanguageSwitcher.vue";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Divider from "primevue/divider";
+import ActionButton from "@/components/ActionButton.vue";
+import MainActionButton from "@/components/MainActionButton.vue";
+import api from "@/services/api";
 
 export default {
   name: "LoginPage",
   components: {
+    MainActionButton,
+    ActionButton,
     LanguageSwitcher,
     GoogleButton,
     TransparentLogoWide,
@@ -92,9 +93,9 @@ export default {
     async login() {
       try {
         this.$toast.removeAllGroups();
-        const { token, refreshToken } = await authorization.login(
-          this.email,
-          this.password
+        const {token, refreshToken} = await authorization.login(
+            this.email,
+            this.password
         );
         await authorization.authorize(token, refreshToken);
         await store.commit("synchronization/setInitialLoaded", false);
@@ -106,9 +107,9 @@ export default {
       } catch (err) {
         this.password = "";
         let message =
-          this.$i18n.t("Unknown error") +
-          ". " +
-          this.$i18n.t("Please try again");
+            this.$i18n.t("Unknown error") +
+            ". " +
+            this.$i18n.t("Please try again");
         if (err.message === "Invalid username or password") {
           message = this.$i18n.t("Invalid email or password");
         }
@@ -119,6 +120,12 @@ export default {
           life: 5000,
         });
       }
+    },
+    async loginWithGoogle() {
+      window.location.href = await api.postGoogleStart()
+    },
+    async goToRegistration() {
+      await router.push("/register");
     },
   },
   beforeRouteEnter() {

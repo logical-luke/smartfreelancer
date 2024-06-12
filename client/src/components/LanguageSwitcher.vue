@@ -1,96 +1,84 @@
 <template>
-  <div class="relative flex justify-center">
-    <button
-      type="button"
-      @click="toggle"
-      class="navbar-burger border-indigo-900 border-3 shadow bg-indigo-500 text-white flex items-center rounded focus:outline-none"
-    >
-      <country-flag
-        :size="size"
-        :country="getFlagCode(getLocale)"
-      ></country-flag>
-    </button>
-    <overlay-panel ref="op" :show-close-icon="false">
-      <button
-        v-for="lang in languages"
-        :key="lang"
-        class="w-full flex text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-        @click="setLanguage(lang)"
-      >
-        <country-flag
-          :shadow="true"
-          :country="getFlagCode(lang)"
-        ></country-flag>
-      </button>
-    </overlay-panel>
-  </div>
+  <dropdown v-model="selected"
+            :options="languages"
+            optionLabel="name"
+            class="w-full"
+            @update:model-value="setLanguage"
+  />
 </template>
 
 <script>
-import CountryFlag from "vue-country-flag-next";
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
 import store from "@/store";
 import cache from "@/services/cache";
-import OverlayPanel from "primevue/overlaypanel";
+import Dropdown from 'primevue/dropdown';
 
 export default {
   name: "LanguageSwitcher",
-  components: { CountryFlag, OverlayPanel },
-  props: {
-    size: {
-      type: String,
-      default: "normal",
-    },
+  components: {
+    Dropdown,
   },
   data() {
     return {
-      showList: false,
+      selected: {
+        name: "English",
+        code: "en"
+      },
+      languages: [
+        {
+          name: "čeština",
+          code: "cs"
+        },
+        {
+          name: "Deutsch",
+          code: "de"
+        },
+        {
+          name: "English",
+          code: "en"
+        },
+        {
+          name: "Española",
+          code: "es"
+        },
+        {
+          name: "Français",
+          code: "fr"
+        },
+        {
+          name: "Italiano",
+          code: "it"
+        },
+        {
+          name: "Polski",
+          code: "pl"
+        },
+        {
+          name: "українська мова",
+          code: "uk"
+        },
+      ]
     };
   },
   computed: {
     ...mapGetters("settings", ["getLocale"]),
-    languages() {
-      return ["pl", "en", "de", "fr", "pt", "ru", "uk", "it", "cs"].sort();
-    },
   },
   methods: {
     setLanguage(language) {
-      this.$i18n.locale = language;
-      store.dispatch("settings/setLocale", language);
-      cache.set("locale", language);
-      this.toggle();
-    },
-    toggle(event) {
-      this.$refs.op.toggle(event);
-    },
-    getFlagCode(country) {
-      const mapping = {
-        pl: "pl",
-        de: "de",
-        fr: "fr",
-        pt: "pt",
-        ru: "ru",
-        uk: "ua",
-        it: "it",
-        cs: "cz",
-        en: "gb",
-      };
-
-      return mapping[country];
+      const code = language.code;
+      console.log(code);
+      this.$i18n.locale = code;
+      store.dispatch("settings/setLocale", code);
+      cache.set("locale", code);
     },
   },
   mounted() {
-    this.$i18n.locale = this.getLocale;
+    const locale = this.getLocale;
+    const selectedLanguage = this.languages.find(lang => lang.code === locale);
+    if (selectedLanguage) {
+      this.selected = selectedLanguage;
+    }
+    this.$i18n.locale = locale;
   },
 };
 </script>
-
-<style scoped>
-span.flag.normal-flag {
-  margin: 0 -6px 0 -5px;
-}
-
-.flag {
-  backface-visibility: hidden;
-}
-</style>

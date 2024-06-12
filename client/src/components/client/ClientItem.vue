@@ -24,15 +24,15 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-8 mb-8">
-      <div class="p-4 bg-gray-100 rounded">
+    <div class="flex flex-wrap mb-8">
+      <div class="p-4 w-1/2 bg-gray-100 rounded">
         <div class="flex items-center gap-4 mb-2">
           <coins-icon class="text-yellow-500"/>
           <p class="text-xs font-medium">{{ $t("Revenue") }}</p>
         </div>
         <span>$12,500</span>
       </div>
-      <div class="p-4 bg-gray-100 rounded">
+      <div class="p-4 bg-gray-100 rounded w-1/2">
         <div class="flex items-center gap-4 mb-2">
           <clock-icon class="text-blue-500"/>
           <p class="text-xs font-medium">{{ $t("Time Tracked") }}</p>
@@ -41,29 +41,29 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-4 gap-8 mb-8">
-      <div class="p-4 bg-gray-100 rounded">
+    <div class="flex flex-wrap gap-4 mb-8">
+      <div class="p-4 bg-gray-100 rounded flex-auto">
         <div class="flex items-center gap-4 mb-2">
           <progress-icon class="text-amber-500"/>
           <p class="text-xs font-medium">{{ $t("Ongoing Tasks") }}</p>
         </div>
         <span>2</span>
       </div>
-      <div class="p-4 bg-gray-100 rounded">
+      <div class="p-4 bg-gray-100 rounded flex-auto">
         <div class="flex items-center gap-4 mb-2">
           <calendar-icon class="text-blue-400"/>
           <p class="text-xs font-medium">{{ $t("Planned Tasks") }}</p>
         </div>
         <span>14</span>
       </div>
-      <div class="p-4 bg-gray-100 rounded">
+      <div class="p-4 bg-gray-100 rounded flex-auto">
         <div class="flex items-center gap-4 mb-2">
           <progress-check-icon class="text-green-500"/>
           <p class="text-xs font-medium">{{ $t("Finished Tasks") }}</p>
         </div>
         <span>3</span>
       </div>
-      <div class="p-4 bg-gray-100 rounded">
+      <div class="p-4 bg-gray-100 rounded flex-auto">
         <div class="flex items-center gap-4 mb-2">
           <progress-x-icon class="text-red-500"/>
           <p class="text-xs font-medium">{{ $t("Blocked Tasks") }}</p>
@@ -72,10 +72,10 @@
       </div>
     </div>
 
-    <div class="flex justify-end gap-4">
-      <action-button>View details</action-button>
-      <action-button>Edit</action-button>
-      <action-button>Archive</action-button>
+    <div class="flex gap-4 flex-col items-center md:flex-row">
+      <action-button>{{ $t("View Details") }}</action-button>
+      <action-button>{{ $t("Edit") }}</action-button>
+      <action-button>{{ $t("Archive") }}</action-button>
     </div>
   </div>
 </template>

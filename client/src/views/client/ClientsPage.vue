@@ -1,10 +1,12 @@
 <template>
-  <div class="flex flex-wrap items-center gap-4 mb-6">
+  <div class="flex flex-wrap items-center gap-4 mb-8">
     <div>
       <h3 class="text-xl font-bold">{{ $t("Clients") }}</h3>
     </div>
     <div>
-      <link-button :go-to="this.addClientRoute">{{ $t("Add Client") }}</link-button>
+      <router-link :to="this.addClientRoute">
+        <main-action-button>{{ $t("Add Client") }}</main-action-button>
+      </router-link>
     </div>
   </div>
   <div class="flex container flex-wrap gap-8">
@@ -25,18 +27,18 @@
 <script>
 import {mapState} from "vuex";
 import ClientItem from "@/components/client/ClientItem.vue";
-import LinkButton from "@/components/LinkButton.vue";
+import MainActionButton from "@/components/MainActionButton.vue";
 
 export default {
   name: "ClientsPage",
   components: {
-    LinkButton,
+    MainActionButton,
     ClientItem,
   },
   data() {
     return {
       addClientRoute: {
-        name: "ClientAddPage",
+        name: "AddClientPage",
       }
     }
   },

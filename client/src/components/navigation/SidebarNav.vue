@@ -8,7 +8,6 @@
           </div>
           <div class="flex-row flex items-center justify-end gap-2">
             <synchronization-status />
-            <language-switcher />
             <button
               @click="toggle"
               class="navbar-burger p-2 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
@@ -36,7 +35,6 @@
             </div>
             <div class="flex flex-row items-center justify-end gap-2">
               <synchronization-status />
-              <language-switcher />
               <button
                 @click="toggle"
                 class="lg:hidden navbar-burger p-2 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
@@ -109,6 +107,7 @@
               </sidebar-item>
               <sidebar-logout />
             </ul>
+            <language-switcher />
           </div>
         </nav>
       </div>

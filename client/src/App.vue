@@ -26,11 +26,6 @@
         />
         <confirm-dialog />
         <sidebar-nav v-if="isAuthorizedPage" />
-        <transition name="fade" mode="out-in">
-          <div v-if="isAuthorizedPage" class="sticky z-20 top-0 w-full">
-            <header-navbar />
-          </div>
-        </transition>
         <div v-if="isInitialLoaded">
           <router-view v-slot="{ Component }">
             <transition name="fade" mode="out-in">
@@ -57,7 +52,7 @@ import authorization from "@/services/authorization";
 import cache from "@/services/cache";
 import synchronization from "@/services/synchronization";
 import SidebarNav from "@/components/navigation/SidebarNav.vue";
-import HeaderNavbar from "@/components/navigation/HeaderNavbar.vue";
+import TimeTrackingSection from "@/components/timer/TimeTrackingSection.vue";
 import { MoonLoader } from "vue3-spinner";
 import ConfirmDialog from "primevue/confirmdialog";
 import Toast from "primevue/toast";
@@ -70,7 +65,7 @@ export default {
   components: {
     RandomLoadingText,
     SidebarNav,
-    HeaderNavbar,
+    TimeTrackingSection,
     MoonLoader,
     ConfirmDialog,
     Toast,
@@ -94,14 +89,10 @@ export default {
   },
   computed: {
     path() {
-      const route = useRoute();
-
-      return route.name;
+      return this.route.name;
     },
     isAuthorizedPage() {
-      const { meta } = useRoute();
-
-      return meta.requiresAuth === true;
+      return this.route.meta && this.route.meta.requiresAuth === true;
     },
     ...mapGetters("synchronization", ["isInitialLoaded", "isQueueEmpty"]),
     ...mapState({
@@ -109,6 +100,7 @@ export default {
     }),
   },
   setup() {
+    const route = useRoute();
     onMounted(async () => {
       // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
       let vh = window.innerHeight * 0.01;
@@ -133,6 +125,8 @@ export default {
         refreshToken = null;
       }
 
+      await cache.loadLocale();
+
       if (token && refreshToken) {
         await authorization.authorize(token, refreshToken);
         await synchronization.syncUser();
@@ -153,6 +147,7 @@ export default {
         );
       }, 1000);
     });
+    return { route };
   },
 };
 </script>

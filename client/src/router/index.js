@@ -3,7 +3,7 @@ import LoginPage from "@/views/authorization/LoginPage.vue";
 import store from "../store";
 import ProjectEditPage from "@/views/project/ProjectEditPage.vue";
 import ProjectCreatePage from "@/views/project/ProjectCreatePage.vue";
-import ClientCreatePage from "@/views/client/ClientCreatePage.vue";
+import AddClientPage from "@/views/client/AddClientPage.vue";
 import ClientEditPage from "@/views/client/ClientEditPage.vue";
 import TaskEditPage from "@/views/task/TaskEditPage.vue";
 import TaskCreatePage from "@/views/task/TaskCreatePage.vue";
@@ -76,11 +76,11 @@ const router = createRouter({
     },
     {
       path: "/client/add",
-      name: "ClientAddPage",
+      name: "AddClientPage",
       meta: {
         requiresAuth: true,
       },
-      component: ClientCreatePage,
+      component: AddClientPage,
     },
     {
       path: "/client/edit/:id",

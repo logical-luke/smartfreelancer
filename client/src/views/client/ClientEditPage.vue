@@ -12,7 +12,6 @@
         </submit-button>
       </div>
       <div>
-        <back-button/>
       </div>
     </div>
   </form>
@@ -21,7 +20,6 @@
 <script>
 import ClientForm from "@/components/client/ClientForm.vue";
 import {mapState} from "vuex";
-import BackButton from "@/components/BackButton.vue";
 import SubmitButton from "@/components/SubmitButton.vue";
 import DeviceFloppyIcon from "vue-tabler-icons/icons/DeviceFloppyIcon";
 import {useRoute} from "vue-router";
@@ -30,7 +28,7 @@ import router from "@/router";
 
 export default {
   name: "ClientEditPage",
-  components: {DeviceFloppyIcon, SubmitButton, BackButton, ClientForm},
+  components: {DeviceFloppyIcon, SubmitButton, ClientForm},
   data() {
     return {
       buttonTitle: "Save",

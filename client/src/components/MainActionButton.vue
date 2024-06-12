@@ -10,12 +10,9 @@
         items-center
         text-sm
         font-medium
-        bg-white
-        border-2
-        border-indigo-500
-        text-black
-        hover:bg-indigo-500
-        hover:text-white
+        text-white
+        bg-indigo-500
+        hover:bg-indigo-700
         rounded-md
         transition
         duration-200"
@@ -29,7 +26,7 @@
 <script>
 
 export default {
-  name: "ActionButton",
+  name: "MainActionButton",
   props: {
     type: {
       type: String,

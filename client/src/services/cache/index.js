@@ -2,16 +2,12 @@ import db from "@/services/cache/db";
 import store from "@/store";
 
 export default {
-  async getInitial() {
+  async loadLocale(){
     if (await this.exists("locale")) {
       await store.commit("settings/setLocale", await this.get("locale"));
     }
-    if (await this.exists("navBarCollapsed")) {
-      await store.commit(
-        "settings/setNavbarCollapsed",
-        (await this.get("navBarCollapsed")) === "1"
-      );
-    }
+  },
+  async getInitial() {
     if (await this.exists("timerMode")) {
       await store.commit("timer/setTimerMode", await this.get("timerMode"));
     }
