@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap items-center mb-8">
+  <div class="flex mb-8">
     <h3 class="text-xl font-bold">{{ $t("Deep Work Hub") }}</h3>
   </div>
   <time-tracking-section />

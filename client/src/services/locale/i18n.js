@@ -4,8 +4,7 @@ import en from "@/locale/en.json";
 import fr from "@/locale/fr.json";
 import it from "@/locale/it.json";
 import pl from "@/locale/pl.json";
-import pt from "@/locale/pt.json";
-import ru from "@/locale/ru.json";
+import es from "@/locale/es.json";
 import uk from "@/locale/uk.json";
 import { createI18n } from "vue-i18n";
 
@@ -16,8 +15,7 @@ const messages = {
   fr: fr,
   it: it,
   pl: pl,
-  pt: pt,
-  ru: ru,
+  es: es,
   uk: uk,
 };
 

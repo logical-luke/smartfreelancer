@@ -4,7 +4,7 @@ const path = require("path");
 // get your Deepl API key from their website
 const apiKey = "21c74419-4d32-bafb-387d-899a0e6cc67a:fx";
 
-const languages = ["pl", "de", "fr", "pt", "ru", "uk", "it", "cs"];
+const languages = ["pl", "de", "fr", "es", "uk", "it", "cs"];
 
 fs.readFile(
   path.join(__dirname, "../src/locale/en.json"),
@@ -19,6 +19,7 @@ fs.readFile(
     console.log(en);
 
     for (const lang of languages) {
+        
       console.log("Translating to " + lang);
       let translated = {};
       const langFileName = path.join(__dirname, `../src/locale/${lang}.json`);

@@ -1,17 +1,17 @@
 <template>
-  <div class="flex flex-col justify-center items-center h-screen">
-    <div class="border-2 rounded-md p-8 shadow">
+  <div class="flex flex-col justify-center items-center h-full min-h-screen p-4 overflow-auto">
+    <div class="md:border-2 rounded-md p-8 md:shadow w-full max-w-sm md:max-w-lg lg:max-w-xl">
       <div class="flex justify-center w-full mb-4">
-        <transparent-logo-wide size="w-60" text-color="#410B01"/>
+        <transparent-logo-wide size="w-60" text-color="#410B01" />
       </div>
-      <div class="flex w-full max-w-md justify-center items-center">
+      <div class="flex w-full justify-center items-center">
         <div class="flex flex-col gap-4 w-full">
           <div>
             <label class="block text-sm font-medium mb-1" for="email">
               {{ $t("EMAIL") }}
             </label>
             <input-text
-                class="w-full"
+                class="w-full p-inputtext-sm"
                 type="email"
                 v-model="email"
                 autocomplete="email"
@@ -23,7 +23,7 @@
               {{ $t("PASSWORD") }}
             </label>
             <password
-                class="w-full"
+                class="w-full p-inputtext-sm"
                 v-model="password"
                 input-id="passwordInput"
                 :toggle-mask="true"
@@ -33,18 +33,18 @@
             />
           </div>
 
-          <main-action-button @click="login()">{{ $t("Log In") }}</main-action-button>
+          <main-action-button @click="login">{{ $t("Log In") }}</main-action-button>
 
           <divider align="center" class="py-2">
             <span>{{ $t("OR") }}</span>
           </divider>
 
-          <main-action-button @click="loginWithGoogle()">{{ $t("Log In with Google") }}</main-action-button>
+          <main-action-button @click="loginWithGoogle">{{ $t("Log In with Google") }}</main-action-button>
 
-          <action-button @click="goToRegistration()">{{ $t("Sign Up for an Account") }}</action-button>
+          <action-button @click="goToRegistration">{{ $t("Sign Up for an Account") }}</action-button>
 
           <div class="flex justify-center mt-4">
-            <language-switcher/>
+            <language-switcher />
           </div>
         </div>
       </div>
@@ -80,7 +80,7 @@ export default {
     SubmitButton,
     Password,
     InputText,
-    Divider,
+    Divider
   },
   data: () => {
     return {
@@ -93,7 +93,7 @@ export default {
     async login() {
       try {
         this.$toast.removeAllGroups();
-        const {token, refreshToken} = await authorization.login(
+        const { token, refreshToken } = await authorization.login(
             this.email,
             this.password
         );

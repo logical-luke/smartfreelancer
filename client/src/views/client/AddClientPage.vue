@@ -1,14 +1,14 @@
 <template>
-  <div class="flex flex-wrap items-center gap-4 mb-8">
+  <div class="flex mb-8">
     <div>
       <h3 class="text-xl font-bold">{{ $t("Add Client") }}</h3>
     </div>
   </div>
   <div class="flex container">
-    <form class="flex flex-col gap-4 w-full" @submit.prevent="submitForm">
+    <div class="flex flex-col gap-4 w-full">
       <div>
         <label class="flex flex-col text-sm font-medium gap-2" for="name">
-          Name
+          {{ $t("Name") }}
           <input-text
               class="block w-full md:w-1/2 px-4 py-4 text-sm placeholder-gray-500 bg-white border rounded"
               id="name"
@@ -20,7 +20,7 @@
       </div>
 
       <div class="w-full md:w-1/2">
-        <label class="flex flex-col gap-2 text-sm font-medium" for="email">Email
+        <label class="flex flex-col gap-2 text-sm font-medium" for="email">{{ $t("Email") }}
           <input-group>
             <input-group-addon>
               <mail-icon/>
@@ -31,7 +31,7 @@
       </div>
 
       <div class="w-full md:w-1/2">
-        <label class="flex flex-col gap-2 text-sm font-medium" for="phone">Phone
+        <label class="flex flex-col gap-2 text-sm font-medium" for="phone">{{ $t("Phone") }}
           <input-group>
             <input-group-addon>
               <phone-icon/>
@@ -44,7 +44,7 @@
 
       <div>
         <label class="flex flex-col gap-2 text-sm font-medium" for="description">
-          Description
+          {{ $t("Description") }}
           <textarea
               class="block w-full md:w-1/2 px-4 py-4 text-sm placeholder-gray-500 bg-white border rounded"
               id="description"
@@ -57,14 +57,14 @@
       </div>
 
       <div class="flex gap-4 justify-center md:justify-start w-full md:w-1/2">
-        <main-action-button class="w-1/2 md:w-auto">
-          Add
+        <main-action-button @click="submitForm" class="w-1/2 md:w-auto">
+          {{ $t("Add Client") }}
         </main-action-button>
         <router-link :to="this.clientsPageRoute">
-          <action-button class="w-1/2 md:w-auto">Back</action-button>
+          <action-button class="w-1/2 md:w-auto">{{ $t("Cancel") }}</action-button>
         </router-link>
       </div>
-    </form>
+    </div>
   </div>
 </template>
 

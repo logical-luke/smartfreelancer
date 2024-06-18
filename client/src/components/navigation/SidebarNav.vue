@@ -28,7 +28,7 @@
           class="flex fixed top-0 left-0 bottom-0 flex-col w-full lg:max-w-xs lg:w-3/4 pt-6 pb-8 bg-gray-800 overflow-y-auto"
         >
           <div
-            class="flex flex-row justify-between items-center px-4 pb-6 mr-2 lg:mr-0 mb-6"
+            class="flex flex-row justify-between items-center px-4 pb-8 mr-2 lg:mr-0 mb-8"
           >
             <div class="flex">
               <icon-only-logo />
@@ -43,7 +43,7 @@
               </button>
             </div>
           </div>
-          <div class="px-4 pb-6">
+          <div class="px-4 pb-8">
             <ul class="mb-8 text-sm font-medium">
               <sidebar-item go-to="/">
                 {{ $t("Deep Work Hub") }}

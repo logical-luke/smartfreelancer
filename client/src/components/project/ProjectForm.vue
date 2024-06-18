@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-6">
+  <div class="mb-8">
     <label class="block text-sm font-medium mb-2" for="">Name:</label>
     <input
       class="block w-full px-4 py-4 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
@@ -11,7 +11,7 @@
       placeholder="Breathtaking Application"
     />
   </div>
-  <div class="mb-6">
+  <div class="mb-8">
     <label class="block text-sm font-medium mb-2" for="">Description:</label>
     <textarea
       class="block w-full px-4 py-4 mb-2 text-sm placeholder-gray-500 bg-white border rounded"
@@ -23,7 +23,7 @@
       placeholder="Write something..."
     ></textarea>
   </div>
-  <div class="mb-6">
+  <div class="mb-8">
     <label class="block text-sm font-medium mb-2" for="">Client:</label>
     <SelectClient :selected="project.clientId" @updated="updateClientId" />
   </div>

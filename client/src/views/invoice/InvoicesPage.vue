@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap items-center mb-6">
+  <div class="flex mb-8">
     <h3 class="text-xl font-bold">{{ $t("Invoices") }}</h3>
   </div>
 </template>

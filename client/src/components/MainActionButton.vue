@@ -15,6 +15,8 @@
         hover:bg-indigo-700
         rounded-md
         transition
+        disabled:bg-slate-50
+        disabled:text-slate-500
         duration-200"
   >
     <span>

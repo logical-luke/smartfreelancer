@@ -17,6 +17,8 @@
         hover:bg-indigo-500
         hover:text-white
         rounded-md
+        disabled:bg-slate-50
+        disabled:text-slate-500
         transition
         duration-200"
   >

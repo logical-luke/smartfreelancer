@@ -183,7 +183,7 @@ router.beforeEach((to, from, next) => {
     (to.name === "LoginPage" || to.name === "RegistrationPage") &&
     store.getters["authorization/isAuthorized"]
   ) {
-    next({ name: "TodayPage" });
+    next({ name: "DeepWorkHubPage" });
   } else {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       // this route requires auth, check if logged in
