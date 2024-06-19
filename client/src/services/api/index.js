@@ -1,5 +1,6 @@
 import axios from "axios";
 import store from "../../store";
+import authorization from "@/services/authorization";
 
 axios.defaults.withCredentials = true;
 
@@ -18,9 +19,7 @@ const getRequest = async function (url, params, headers, repeated = 0) {
 
     if (response.status === 401) {
       if (repeated > 0) {
-        await store.dispatch("authorization/logout");
-
-        return { data: {} };
+        return await authorization.logout();
       }
 
       await refreshToken();
@@ -37,9 +36,7 @@ const getRequest = async function (url, params, headers, repeated = 0) {
 
     if (err.response.status === 401) {
       if (repeated > 0) {
-        await store.dispatch("authorization/logout");
-
-        return { data: {} };
+        return await authorization.logout();
       }
 
       await refreshToken();
@@ -70,9 +67,7 @@ const postRequest = async function (url, data, headers, repeated = 0) {
 
     if (response.status === 401) {
       if (repeated > 0) {
-        await store.dispatch("authorization/logout");
-
-        return { data: {} };
+        return await authorization.logout();
       }
       await refreshToken();
 
@@ -84,9 +79,7 @@ const postRequest = async function (url, data, headers, repeated = 0) {
   } catch (err) {
     if (err.response.status === 401) {
       if (repeated > 0) {
-        await store.dispatch("authorization/logout");
-
-        return { data: {} };
+        return await authorization.logout();
       }
       await refreshToken();
 
@@ -117,9 +110,7 @@ const deleteRequest = async function (url, data, headers, repeated = 0) {
 
     if (response.status === 401) {
       if (repeated > 0) {
-        await store.dispatch("authorization/logout");
-
-        return { data: {} };
+        return await authorization.logout();
       }
       await refreshToken();
 
@@ -131,9 +122,7 @@ const deleteRequest = async function (url, data, headers, repeated = 0) {
   } catch (err) {
     if (err.response.status === 401) {
       if (repeated > 0) {
-        await store.dispatch("authorization/logout");
-
-        return { data: {} };
+        return await authorization.logout();
       }
       await refreshToken();
 
@@ -158,21 +147,17 @@ const refreshToken = async function () {
         refresh_token: store.getters["authorization/getRefreshToken"],
       });
     } catch (err) {
-      await store.dispatch("authorization/logout");
+      await authorization.logout();
 
       return;
     }
     if (response && response.status === 200) {
-      await store.dispatch("authorization/setToken", response.data.token);
-      await store.dispatch(
-        "authorization/setRefreshToken",
-        response.data.refresh_token
-      );
+      await authorization.authorize(response.data.token, response.data.refresh_token)
 
       return;
     }
   }
-  await store.dispatch("authorization/logout");
+  await authorization.logout();
 };
 
 export default {

@@ -3,6 +3,7 @@ import cache from "@/services/cache";
 import store from "@/store";
 import api from "@/services/api";
 import synchronization from "@/services/synchronization";
+import router from "@/router";
 
 export default {
   async login(email, password) {
@@ -27,7 +28,9 @@ export default {
       true,
       "Strict"
     );
-    store.commit("authorization/setAuthorized", true);
+    if (token) {
+      store.commit("authorization/setAuthorized", true);
+    }
   },
   async register(credentials) {
     try {
@@ -44,8 +47,8 @@ export default {
     await synchronization.disableBackgroundSync();
     await synchronization.disableBackgroundUpload();
     await store.commit("synchronization/setInitialLoaded", false);
-    await store.commit("authorization/setToken", "");
-    await store.commit("authorization/setRefreshToken", "");
+    await store.commit("authorization/setToken", null);
+    await store.commit("authorization/setRefreshToken", null);
     await store.commit("authorization/setAuthorized", false);
     await store.commit("setUser", {});
     await store.commit("clients/setClients", []);
@@ -53,8 +56,24 @@ export default {
     await store.commit("tasks/setTasks", []);
     await store.commit("timer/clearTimer");
     await store.commit("synchronization/setSynchronizationTime", null);
-    await cookies.remove("token");
+    await cookies.remove("api_token");
     await cookies.remove("refresh_token");
     await cache.clear();
+  },
+  async getTokensFromCookies() {
+    let token = await cookies.get("api_token");
+    if (token === "null" || token === "") {
+      token = null;
+    }
+    if (!token) {
+      store.commit("synchronization/setInitialLoaded", true);
+    }
+
+    let refreshToken = await cookies.get("refresh_token");
+    if (refreshToken === "null" || refreshToken === "") {
+      refreshToken = null;
+    }
+
+    return { token, refreshToken };
   },
 };

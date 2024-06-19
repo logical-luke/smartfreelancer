@@ -41,7 +41,7 @@
         type="button"
         @click="showSyncedPanel"
         v-tooltip.bottom="getSynchronizationStatus"
-        class="inline-flex cursor-auto bg-lime-600 items-center justify-center items-center p-2 text-sm font-medium text-white rounded-full transition duration-200"
+        class="inline-flex cursor-auto bg-lime-600 items-center justify-center p-2 text-sm font-medium text-white rounded-full transition duration-200"
       >
         <cloud-icon size="20" />
       </button>
@@ -78,11 +78,15 @@ export default {
       "isQueueEmpty",
     ]),
     getSynchronizationStatus() {
-      return (
-        this.$t("Last synchronization time") +
-        ": " +
-        this.getSynchronizationTime.toLocaleString()
-      );
+      if (this.getSynchronizationTime) {
+        return (
+            this.$t("Last synchronization time") +
+            ": " +
+            this.getSynchronizationTime.toLocaleString()
+        );
+      }
+
+      return '';
     },
   },
   methods: {

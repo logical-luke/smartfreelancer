@@ -20,6 +20,9 @@ import InvoicesPage from "@/views/invoice/InvoicesPage.vue";
 import ClientsPage from "../views/client/ClientsPage.vue";
 import ProjectsPage from "../views/project/ProjectsPage.vue";
 import TasksPage from "../views/task/TasksPage.vue";
+import cookies from "@/services/cookies";
+import cache from "@/services/cache";
+import authorization from "@/services/authorization";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -178,23 +181,24 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+  const { token, refreshToken } = await authorization.getTokensFromCookies();
+
+  await authorization.authorize(token, refreshToken);
+
   if (
-    (to.name === "LoginPage" || to.name === "RegistrationPage") &&
-    store.getters["authorization/isAuthorized"]
+    (to.name === "LoginPage" || to.name === "RegistrationPage") && store.getters["authorization/isAuthorized"]
   ) {
     next({ name: "DeepWorkHubPage" });
   } else {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
-      // this route requires auth, check if logged in
-      // if not, redirect to login page.
       if (!store.getters["authorization/isAuthorized"]) {
         next({ name: "LoginPage" });
       } else {
-        next(); // go to wherever I'm going
+        next();
       }
     } else {
-      next(); // does not require auth, make sure to always call next()!
+      next();
     }
   }
 });

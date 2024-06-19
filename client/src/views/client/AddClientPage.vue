@@ -9,12 +9,12 @@
 
       <client-form props="client" />
 
-      <div class="flex gap-4 justify-center md:justify-start w-full md:w-1/2">
-        <main-action-button @click="submitForm" class="w-1/2 md:w-auto">
+      <div class="flex gap-4 flex-col md:flex-row justify-center md:justify-start w-full md:w-1/2">
+        <main-action-button @click="submitForm" class="w-full md:w-auto">
           {{ $t("Add Client") }}
         </main-action-button>
         <router-link :to="this.clientsPageRoute">
-          <action-button class="w-1/2 md:w-auto">{{ $t("Cancel") }}</action-button>
+          <action-button class="w-full md:w-auto">{{ $t("Cancel") }}</action-button>
         </router-link>
       </div>
     </div>

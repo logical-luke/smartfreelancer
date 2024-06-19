@@ -10,12 +10,12 @@ export default {
     secure = true,
     sameSite = "Strict"
   ) {
-    return VueCookies.set(key, value, expires, path, domain, secure, sameSite);
+    return await VueCookies.set(key, value, expires, path, domain, secure, sameSite);
   },
   async get(key) {
-    return VueCookies.get(key);
+    return await VueCookies.get(key);
   },
   async remove(key) {
-    return VueCookies.remove(key);
+    return await VueCookies.remove(key);
   },
 };

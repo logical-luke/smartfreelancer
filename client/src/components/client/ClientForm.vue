@@ -59,7 +59,7 @@
                   transition
                   duration-200"
                    name="demo[]"
-                   url="/api/upload"
+                   :url="uploadApiURL"
                    accept="image/*"
                    :maxFileSize="1000000"
                    @upload="onUpload"
@@ -96,6 +96,9 @@ export default {
   computed: {
     chooseLabel() {
       return this.$t("Browse");
+    },
+    uploadApiURL() {
+      return process.env.API_BASE_URL + "/login";
     }
   },
   methods: {

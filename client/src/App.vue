@@ -112,23 +112,15 @@ export default {
         let vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty("--vh", `${vh}px`);
       });
-      let token = await cookies.get("api_token");
-      if (token === "null" || token === "") {
-        token = null;
-      }
-      if (!token) {
-        store.commit("synchronization/setInitialLoaded", true);
-      }
 
-      let refreshToken = await cookies.get("refresh_token");
-      if (refreshToken === "null" || refreshToken === "") {
-        refreshToken = null;
-      }
+      const { token, refreshToken } = await authorization.getTokensFromCookies();
+
+      await authorization.authorize(token, refreshToken);
 
       await cache.loadLocale();
 
-      if (token && refreshToken) {
-        await authorization.authorize(token, refreshToken);
+
+      if (token) {
         await synchronization.syncUser();
         await cache.getInitial();
       }

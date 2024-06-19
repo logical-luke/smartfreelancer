@@ -66,7 +66,6 @@ export default {
   methods: {
     setLanguage(language) {
       const code = language.code;
-      console.log(code);
       this.$i18n.locale = code;
       store.dispatch("settings/setLocale", code);
       cache.set("locale", code);
