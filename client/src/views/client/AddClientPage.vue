@@ -6,31 +6,17 @@
   </div>
   <div class="flex container">
     <div class="flex flex-col gap-4 w-full">
-
-      <client-form props="client" />
-
-      <div class="flex gap-4 flex-col md:flex-row justify-center md:justify-start w-full md:w-1/2">
-        <main-action-button @click="submitForm" class="w-full md:w-auto">
-          {{ $t("Add Client") }}
-        </main-action-button>
-        <router-link :to="this.clientsPageRoute">
-          <action-button class="w-full md:w-auto">{{ $t("Cancel") }}</action-button>
-        </router-link>
-      </div>
+      <client-form />
     </div>
   </div>
 </template>
 
 <script>
 import ClientForm from "@/components/client/ClientForm.vue";
-import ActionButton from "@/components/ActionButton.vue";
-import MainActionButton from "@/components/MainActionButton.vue";
 
 export default {
   name: "AddClientPage",
   components: {
-    MainActionButton,
-    ActionButton,
     ClientForm,
   },
   data() {
@@ -39,13 +25,6 @@ export default {
         name: "ClientsPage"
       }
     }
-  },
-  methods: {
-    async submitForm() {
-      await this.$store.dispatch("clients/createClient", this.client);
-
-      this.$router.push("/clients");
-    },
   },
 };
 </script>

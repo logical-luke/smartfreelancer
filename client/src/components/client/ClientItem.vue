@@ -4,7 +4,7 @@
       <div class="flex items-center">
         <img
             class="w-20 h-20 p-2 mr-4 rounded-full border border-indigo-50"
-            src="/client-placeholder.png"
+            :src="getAvatar()"
             alt="{{ name }}"
         />
         <div>
@@ -110,6 +110,9 @@ export default {
     },
     hasEmail() {
       return !!this.email;
+    },
+    getAvatar() {
+      return this.avatar && this.avatar !== '' ? this.avatar : '/client-placeholder.png';
     }
   },
   props: {
@@ -121,13 +124,13 @@ export default {
       type: String,
       required: true,
     },
-    description: {
-      type: String,
-    },
     email: {
       type: String,
     },
     phone: {
+      type: String,
+    },
+    avatar: {
       type: String,
     },
   },

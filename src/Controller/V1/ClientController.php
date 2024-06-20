@@ -11,7 +11,7 @@ use App\Model\Client\CreateClientPayload;
 use App\Model\Client\DeleteClientPayload;
 use App\Model\Client\UpdateClientPayload;
 use App\Repository\ClientRepository;
-use App\Service\Client\ClientCreator;
+use App\Service\Client\Creator;
 use App\Service\Client\ClientDeleter;
 use App\Service\Client\ClientUpdater;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,7 +35,7 @@ class ClientController extends AbstractController
     }
 
     #[Route('/create', name: 'create', methods: 'POST')]
-    public function create(ClientCreator $clientCreator, Request $request): JsonResponse
+    public function create(Creator $clientCreator, Request $request): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();

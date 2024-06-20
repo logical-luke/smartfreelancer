@@ -12,7 +12,7 @@
             :name="client.name"
             :email="client.email"
             :phone="client.phone"
-            :description="client.description"
+            :avatar="client.avatar"
         />
       </template>
     </transition-group>

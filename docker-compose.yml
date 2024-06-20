@@ -50,6 +50,7 @@ services:
     volumes:
       - ./:/var/www/api
       - /var/www/api/vendor
+      - upload_dir:/var/www/api/upload
 
   app:
     build:
@@ -91,3 +92,4 @@ services:
 
 volumes:
   db_data:
+  upload_dir:

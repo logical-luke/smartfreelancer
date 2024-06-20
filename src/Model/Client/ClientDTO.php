@@ -12,9 +12,8 @@ readonly class ClientDTO
         public string  $id,
         public string  $ownerId,
         public ?string $name,
-        public ?string $description,
+        public ?string $avatar,
         public ?string $email,
-        public ?string $industry,
     ) {
     }
 
@@ -24,9 +23,8 @@ readonly class ClientDTO
             $client->getId()?->toRfc4122(),
             $client->getOwner()?->getId()?->toRfc4122(),
             $client->getName(),
-            $client->getDescription(),
+            $client->getAvatar(),
             $client->getEmail(),
-            $client->getIndustry(),
         );
     }
 }

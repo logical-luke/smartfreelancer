@@ -2,9 +2,12 @@
 
 namespace App\Command;
 
-use App\Model\Synchronization\SynchronizationPayload;
-use App\Service\Synchronization\RabbitMQConsumer;
-use App\Service\Synchronization\SynchronisationProcessor;
+use App\Model\Client\CreateClientPayload;
+use App\Model\Synchronization\ActionPayloadInterface;
+use App\Model\Synchronization\DataInterface;
+use App\Model\Synchronization\Payload;
+use App\Service\Synchronization\Consumer;
+use App\Service\Synchronization\Handler;
 use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -15,6 +18,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV7;
+use Throwable;
 
 #[AsCommand(
     name: 'app:synchronization-worker',
@@ -22,10 +28,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class SynchronizationWorkerCommand extends Command
 {
-
     public function __construct(
-        private readonly RabbitMQConsumer $consumer,
-        private readonly SynchronisationProcessor $processor,
+        private readonly Consumer $consumer,
+        private readonly Handler $handler,
         private readonly ManagerRegistry $registry,
     ) {
         parent::__construct();
@@ -42,29 +47,16 @@ class SynchronizationWorkerCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $this->consumer->consumeMessages('synchronization', function (AMQPMessage $message) use ($io) {
-            try {
                 try {
-                    ($this->processor)(
-                        SynchronizationPayload::from(
-                            json_decode(
-                                $message->getBody(),
-                                true,
-                                512,
-                                JSON_THROW_ON_ERROR
-                            )
-                        )
+                    ($this->handler)(
+                        Payload::fromJson($message->getBody()),
                     );
-                    $io->success('Processed message: ' . $message->getBody());
-                } catch (Exception $e) {
-                    $io->error($e->getMessage());
+                    $io->success(sprintf('Processed message: %s', $message->getBody()));
+                } catch (Throwable|Exception $e) {
+                    $io->error(sprintf('Failed to process message: %s due to %s', $message->getBody(), $e->getMessage()));
                     $this->registry->resetManager();
                     sleep(1);
-                } catch (\Throwable $e) {
-                    $io->error($e->getMessage());
                 }
-            } catch (\JsonException $e) {
-                $io->error('Invalid synchronization message: ' . $message->getBody());
-            }
         });
 
         return Command::SUCCESS;

@@ -136,14 +136,12 @@ export default {
       clearInterval(store.state.synchronization.backgroundUploadIntervalId);
     }
   },
-  async pushToQueue(model, queue, action, payload) {
-    payload.ownerId = store.getters["getUserId"];
+  async pushToQueue(resource, action, data) {
     await store.dispatch("synchronization/pushToQueue", {
       id: getUuid(),
-      model: model,
-      queue: queue,
+      resource: resource,
       action: action,
-      payload: payload,
+      data: data,
     });
   },
 };

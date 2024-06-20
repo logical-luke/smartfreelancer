@@ -37,7 +37,7 @@
 
   <div class="w-full md:w-1/2">
     <label class="flex flex-col gap-2 text-sm font-semibold" for="phone">{{ $t("Photo") }}
-      <file-upload mode="basic"
+      <file-upload  v-if="!hasAvatar()" mode="basic"
                    class="inline-flex
                   shadow
                   p-4
@@ -58,16 +58,26 @@
                   disabled:text-slate-500
                   transition
                   duration-200"
-                   name="demo[]"
+                   name="image"
                    :url="uploadApiURL"
                    accept="image/*"
                    :maxFileSize="1000000"
                    @upload="onUpload"
                    :auto="true"
                    :chooseLabel="chooseLabel"
+                   @before-send="beforeSend"
       />
+      <img v-else :src="client.avatar" alt="avatar" class="w-20 h-20 rounded-full"/>
     </label>
+  </div>
 
+  <div class="flex gap-4 flex-col md:flex-row justify-center md:justify-start w-full md:w-1/2">
+    <main-action-button @click="submitForm" class="w-full md:w-auto">
+      {{ $t("Add Client") }}
+    </main-action-button>
+    <router-link :to="this.clientsPageRoute">
+      <action-button class="w-full md:w-auto">{{ $t("Cancel") }}</action-button>
+    </router-link>
   </div>
 </template>
 
@@ -79,10 +89,14 @@ import InputGroupAddon from 'primevue/inputgroupaddon';
 import MailIcon from "vue-tabler-icons/icons/MailIcon";
 import PhoneIcon from "vue-tabler-icons/icons/PhoneIcon";
 import FileUpload from 'primevue/fileupload';
+import store from "@/store";
+import MainActionButton from "@/components/MainActionButton.vue";
+import ActionButton from "@/components/ActionButton.vue";
+import client from "@/services/client";
 
 export default {
   name: "ClientForm",
-  components: {MailIcon, InputText, InputGroup, InputGroupAddon, PhoneIcon, FileUpload},
+  components: {ActionButton, MainActionButton, MailIcon, InputText, InputGroup, InputGroupAddon, PhoneIcon, FileUpload},
   data() {
     return {
       client: {
@@ -98,12 +112,30 @@ export default {
       return this.$t("Browse");
     },
     uploadApiURL() {
-      return process.env.API_BASE_URL + "/login";
+      return process.env.API_BASE_URL + "/upload/image";
     }
   },
   methods: {
     onUpload(event) {
-    }
+      const response = JSON.parse(event.xhr.response);
+
+      if (response.filename) {
+        this.client.avatar = response.filename;
+      }
+    },
+    hasAvatar() {
+      return this.client.avatar !== "";
+    },
+    beforeSend(request) {
+      request.xhr.setRequestHeader('Authorization', 'Bearer ' + store.getters["authorization/getToken"]);
+
+      return request;
+    },
+    async submitForm() {
+      await client.addClient(this.client)
+
+      this.$router.push("/clients");
+    },
   }
 };
 </script>

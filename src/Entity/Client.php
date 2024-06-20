@@ -21,9 +21,6 @@ class Client
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 10000, nullable: true)]
-    private ?string $description = null;
-
     #[ORM\ManyToOne(inversedBy: 'clients')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
@@ -41,10 +38,13 @@ class Client
     private Collection $tasks;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $industry = null;
+    private ?string $email = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $email = null;
+    private ?string $phone = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $avatar = null;
 
     protected function __construct(User $user)
     {
@@ -72,18 +72,6 @@ class Client
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
 
         return $this;
     }
@@ -212,18 +200,6 @@ class Client
         return $this;
     }
 
-    public function getIndustry(): ?string
-    {
-        return $this->industry;
-    }
-
-    public function setIndustry(?string $industry): static
-    {
-        $this->industry = $industry;
-
-        return $this;
-    }
-
     public function getEmail(): ?string
     {
         return $this->email;
@@ -232,6 +208,30 @@ class Client
     public function setEmail(?string $email): static
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): static
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): static
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }

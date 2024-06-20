@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller\V1;
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -16,8 +18,12 @@ class UploadController extends AbstractController
 {
     #[Route('/image', name: 'image', methods: ['POST'])]
     public function uploadImage(
-        Request $request
+        Request $request,
+        ParameterBagInterface $params,
     ): JsonResponse {
+        /** @var User $user */
+        $user = $this->getUser();
+
         $file = $request->files->get('image');
 
         if (!$file instanceof UploadedFile) {
@@ -27,10 +33,17 @@ class UploadController extends AbstractController
         }
 
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $newFilename = $originalFilename . '-' . uniqid('', true) . '.' . $file->guessExtension();
+
+        if (!$user->getId()) {
+            return $this->json([
+                'error' => 'User is not authenticated.',
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $newFilename = sprintf('%s-%s-%s.%s', $user->getId()->toRfc4122(), $originalFilename, uniqid('', true), $file->guessExtension());
 
         try {
-            $file->move('uploads', $newFilename);
+            $file->move(sprintf('%s/upload', $params->get('kernel.project_dir')), $newFilename);
         } catch (\Exception $exception) {
             return $this->json([
                 'error' => $exception->getMessage(),
@@ -38,7 +51,7 @@ class UploadController extends AbstractController
         }
 
         return $this->json([
-            'filename' => $newFilename,
+            'filename' => sprintf('%s/%s',  $params->get('uploaded_files_base_url'), $newFilename),
         ]);
     }
 }
