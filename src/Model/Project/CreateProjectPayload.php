@@ -19,8 +19,8 @@ readonly class CreateProjectPayload
 
     public static function from(array $payload): self
     {
-        if (!isset($payload['ownerId'])) {
-            throw new InvalidPayloadException('Missing owner id');
+        if (!isset($payload['userId'])) {
+            throw new InvalidPayloadException('Missing owner clientId');
         }
 
         if (!isset($payload['name'])) {
@@ -30,11 +30,11 @@ readonly class CreateProjectPayload
         $payload = array_merge([
             'name' => null,
             'description' => null,
-            'ownerId' => null,
+            'userId' => null,
             'clientId' => null,
         ], $payload);
 
-        return new self($payload['ownerId'], $payload['name'], $payload['description'], $payload['clientId']);
+        return new self($payload['userId'], $payload['name'], $payload['description'], $payload['clientId']);
     }
 
     public function getOwnerId(): Uuid

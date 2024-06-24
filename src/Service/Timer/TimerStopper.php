@@ -5,16 +5,20 @@ declare(strict_types=1);
 namespace App\Service\Timer;
 
 use App\Entity\TimeEntry;
+use App\Entity\User;
 use App\Exception\InvalidPayloadException;
+use App\Model\Synchronization\ActionPayloadInterface;
 use App\Model\TimeEntry\CreateTimeEntryPayload;
 use App\Model\Timer\StopTimerPayload;
 use App\Repository\TimerRepository;
 use App\Repository\UserRepository;
+use App\Service\Synchronization\ProcessorInterface;
 use App\Service\TimeEntry\TimeEntryCreator;
+use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
-#[Autoconfigure(lazy: true)]
-class TimerStopper
+#[AsTaggedItem(index: 'stop.timer')]
+class TimerStopper implements ProcessorInterface
 {
     public function __construct(
         private TimerRepository $timerRepository,
@@ -23,7 +27,7 @@ class TimerStopper
     ) {
     }
 
-    public function __invoke(StopTimerPayload $payload): TimeEntry
+    public function sync(User $user, ActionPayloadInterface $payload): void
     {
         if (!$timer = $this->timerRepository->find($payload->getId())) {
             throw new InvalidPayloadException('Invalid timer id');
@@ -43,7 +47,5 @@ class TimerStopper
         $this->userRepository->save($timerOwner, true);
 
         $this->timerRepository->remove($timer, true);
-
-        return $timeEntry;
     }
 }

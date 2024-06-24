@@ -21,7 +21,7 @@ readonly class CreateTaskPayload
 
     public static function from(array $payload): self
     {
-        if (!isset($payload['ownerId'])) {
+        if (!isset($payload['userId'])) {
             throw new InvalidPayloadException('Missing owner id');
         }
 
@@ -32,12 +32,12 @@ readonly class CreateTaskPayload
         $payload = array_merge([
             'name' => null,
             'description' => null,
-            'ownerId' => null,
+            'userId' => null,
             'projectId' => null,
         ], $payload);
 
         return new self(
-            $payload['ownerId'],
+            $payload['userId'],
             $payload['name'],
             $payload['description'],
             $payload['projectId'],

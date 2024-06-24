@@ -19,9 +19,8 @@ export default {
     await store.commit("timer/setTimer", newTimer);
     await cache.set("timer", JSON.stringify(newTimer));
     await synchronization.pushToQueue(
-      "Timer",
-      "TimerCreator",
-      "CreateTimer",
+      "timer",
+      "start",
       newTimer
     );
   },

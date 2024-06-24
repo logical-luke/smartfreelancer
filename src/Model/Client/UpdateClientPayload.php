@@ -4,40 +4,92 @@ declare(strict_types=1);
 
 namespace App\Model\Client;
 
+use App\Exception\InvalidPayloadException;
+use App\Model\Synchronization\ActionPayloadInterface;
 use Symfony\Component\Uid\Uuid;
 
-class UpdateClientPayload
+readonly class UpdateClientPayload implements ActionPayloadInterface
 {
     protected function __construct(
-        private readonly string $id,
-        private readonly ?string $name,
-        private readonly ?string $description,
+        private string $clientId,
+        private string $userId,
+        private string $name,
+        private ?string $email,
+        private ?string $phone,
+        private ?string $avatar,
     ) {
     }
 
     public static function from(array $payload): self
     {
-        // todo Add validation here
+        if (!isset($payload['id'])) {
+            throw new InvalidPayloadException('Missing clientId');
+        }
+
+        if (!isset($payload['name'])) {
+            throw new InvalidPayloadException('Missing name');
+        }
+
+        $payload = array_merge([
+            'email' => null,
+            'phone' => null,
+            'avatar' => null,
+        ], $payload);
 
         return new self(
             $payload['id'],
-            $payload['name'] ?? null,
-            $payload['description'] ?? null,
+            $payload['userId'],
+            $payload['name'],
+            $payload['email'],
+            $payload['phone'],
+            $payload['avatar'],
         );
     }
 
-    public function getId(): Uuid
+    public function getClientId(): Uuid
     {
-        return Uuid::fromString($this->id);
+        return Uuid::fromString($this->clientId);
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getDescription(): ?string
+    public function getUserId(): Uuid
     {
-        return $this->description;
+        return Uuid::fromString($this->userId);
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'clientId' => $this->clientId,
+            'userId' => $this->userId,
+            'name' => $this->name,
+            'email' => $this->email,
+            'phone' => $this->phone,
+            'avatar' => $this->avatar,
+        ];
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

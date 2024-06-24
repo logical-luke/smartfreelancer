@@ -389,11 +389,6 @@ export default {
 
     return response.data;
   },
-  async getServerTime() {
-    const response = await getRequest("/time");
-
-    return response.data;
-  },
 
   async postGoogleStart() {
     const response = await axios.post(

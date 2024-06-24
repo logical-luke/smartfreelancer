@@ -26,7 +26,7 @@ class ProjectUpdater
         }
 
         // todo Add check if user is eligible to update project
-        // if ($project->getOwner()->getId() !==) {
+        // if ($project->getOwner()->getClientId() !==) {
         //
         // }
 

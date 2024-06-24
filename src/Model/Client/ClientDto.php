@@ -6,7 +6,7 @@ namespace App\Model\Client;
 
 use App\Entity\Client;
 
-readonly class ClientDTO
+readonly class ClientDto
 {
     protected function __construct(
         public string  $id,

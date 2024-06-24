@@ -26,16 +26,16 @@ class CreateTimeEntryPayload
             throw new InvalidPayloadException('Missing end time');
         }
 
-        if (!isset($payload['timerId']) && !isset($payload['ownerId'])) {
-            throw new InvalidPayloadException('Missing timer id or owner id');
+        if (!isset($payload['timerId']) && !isset($payload['userId'])) {
+            throw new InvalidPayloadException('Missing timer clientId or owner clientId');
         }
 
         if (!isset($payload['timerId']) && !isset($payload['startTime'])) {
-            throw new InvalidPayloadException('Missing timer id or start time');
+            throw new InvalidPayloadException('Missing timer clientId or start time');
         }
 
         return new self(
-            $payload['ownerId'] ?? null,
+            $payload['userId'] ?? null,
             $payload['timerId'] ?? null,
             $payload['startTime'] ?? null,
             $payload['endTime'],

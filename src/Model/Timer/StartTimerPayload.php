@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Model\Timer;
 
+use App\Model\Synchronization\ActionPayloadInterface;
 use Symfony\Component\Uid\Uuid;
 
-readonly class CreateTimerPayload
+readonly class StartTimerPayload implements ActionPayloadInterface
 {
     protected function __construct(
-        private ?string $id,
-        private string $ownerId,
+        private string $id,
+        private string $userId,
         private int $startTime,
         private ?string $projectId,
         private ?string $clientId,
@@ -18,11 +19,11 @@ readonly class CreateTimerPayload
     ) {
     }
 
-    public static function from(array $payload): CreateTimerPayload
+    public static function from(array $payload): StartTimerPayload
     {
         return new self(
-            $payload['id'] ?? null,
-            $payload['ownerId'],
+            $payload['id'],
+            $payload['userId'],
             $payload['startTime'],
             $payload['projectId'] ?? null,
             $payload['clientId'] ?? null,
@@ -30,14 +31,14 @@ readonly class CreateTimerPayload
         );
     }
 
-    public function getId(): ?Uuid
+    public function getId(): Uuid
     {
-        return $this->id ? Uuid::fromString($this->id) : null;
+        return Uuid::fromString($this->id);
     }
 
-    public function getOwnerId(): Uuid
+    public function getUserId(): Uuid
     {
-        return Uuid::fromString($this->ownerId);
+        return Uuid::fromString($this->userId);
     }
 
     public function getStartTime(): \DateTimeImmutable
@@ -58,5 +59,22 @@ readonly class CreateTimerPayload
     public function getTaskId(): ?Uuid
     {
         return $this->taskId ? Uuid::fromString($this->taskId) : null;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'userId' => $this->userId,
+            'startTime' => $this->startTime,
+            'projectId' => $this->projectId,
+            'clientId' => $this->clientId,
+            'taskId' => $this->taskId,
+        ];
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

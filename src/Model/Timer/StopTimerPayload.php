@@ -29,7 +29,7 @@ class StopTimerPayload
         return new self(
             $payload['id'],
             $payload['endTime'],
-            $payload['ownerId'],
+            $payload['userId'],
         );
     }
 

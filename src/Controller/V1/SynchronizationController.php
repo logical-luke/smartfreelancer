@@ -6,14 +6,16 @@ namespace App\Controller\V1;
 
 use App\Entity\Client;
 use App\Entity\Project;
+use App\Entity\SynchronizationLog;
 use App\Entity\Task;
 use App\Entity\User;
 use App\Exception\InvalidPayloadException;
-use App\Model\Client\ClientDTO;
+use App\Model\Client\ClientDto;
 use App\Model\Project\ProjectDTO;
 use App\Model\Synchronization\Payload;
 use App\Model\Task\TaskDTO;
 use App\Model\Timer\TimerDTO;
+use App\Repository\SynchronizationLogRepository;
 use App\Service\Synchronization\ProcessorsCollection;
 use App\Service\Synchronization\Producer;
 use JsonException;
@@ -34,7 +36,7 @@ class SynchronizationController extends AbstractController
         $user = $this->getUser();
 
         return $this->json([
-            'clients' => array_map(static function (Client $client) { return ClientDTO::fromClient($client); }, $user->getClients()->toArray()),
+            'clients' => array_map(static function (Client $client) { return ClientDto::fromClient($client); }, $user->getClients()->toArray()),
             'projects' => array_map(static function (Project $project) { return ProjectDTO::fromProject($project); }, $user->getProjects()->toArray()),
             'tasks' => array_map(static function (Task $task) { return TaskDTO::fromTask($task); }, $user->getTasks()->toArray()),
             'timer' => $user->getTimer() ? TimerDTO::fromTimer($user->getTimer()) : null,
@@ -42,7 +44,7 @@ class SynchronizationController extends AbstractController
     }
 
     #[Route('/queue', name: 'collect', methods: "POST")]
-    public function collect(Request $request, Producer $producer, ProcessorsCollection $processorsCollection): JsonResponse
+    public function collect(Request $request, Producer $producer, ProcessorsCollection $processorsCollection, SynchronizationLogRepository $synchronizationLogRepository): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -53,6 +55,10 @@ class SynchronizationController extends AbstractController
 
         try {
             $payload = Payload::fromUserRequest($user, $request);
+
+            $synchronizationLog = SynchronizationLog::fromPayload($user, $payload);
+
+            $synchronizationLogRepository->save($synchronizationLog, true);
 
             if (!$processorsCollection->exist($payload->getProcessorKey())) {
                 return $this->json(['error' => 'Invalid action for the resource'], Response::HTTP_BAD_REQUEST);

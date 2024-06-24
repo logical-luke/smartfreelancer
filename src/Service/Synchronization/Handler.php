@@ -11,6 +11,7 @@ use App\Repository\SynchronizationLogRepository;
 use App\Repository\UserRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Throwable;
 
 readonly class Handler
 {
@@ -29,25 +30,24 @@ readonly class Handler
             throw new \RuntimeException('Invalid user');
         }
 
-        $synchronizationLog = SynchronizationLog::fromPayload($user, $payload);
+        if (!$synchronizationLog = $this->synchronizationLogRepository->findOneByRequestId($payload->getId())) {
+            $synchronizationLog = SynchronizationLog::fromPayload($user, $payload);
+        }
+        $synchronizationLog->setStatus(SynchronizationStatusEnum::IN_PROGRESS->value);
         $this->synchronizationLogRepository->save($synchronizationLog, true);
 
-        $processor = $this->processorsCollection->get($payload->getProcessorKey());
-
         try {
-            $synchronizationLog->setStatus(SynchronizationStatusEnum::IN_PROGRESS->value);
-            $this->synchronizationLogRepository->save($synchronizationLog, true);
-            $processor->sync($payload->getData());
+            $processor = $this->processorsCollection->get($payload->getProcessorKey());
+            $processor->sync($user, $payload->getData());
             $synchronizationLog->setStatus(SynchronizationStatusEnum::COMPLETED->value);
             $user->setSynchronizationTime(new \DateTimeImmutable());
 
             $this->userRepository->save($user, true);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $synchronizationLog
                 ->setStatus(SynchronizationStatusEnum::FAILED->value)
                 ->setMessage($exception->getMessage());
         }
-
         $this->synchronizationLogRepository->save($synchronizationLog, true);
     }
 }

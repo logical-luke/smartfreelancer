@@ -26,8 +26,6 @@ readonly class CreateClientPayload implements ActionPayloadInterface
         }
 
         $payload = array_merge([
-            'name' => null,
-            'userId' => null,
             'email' => null,
             'phone' => null,
             'avatar' => null,

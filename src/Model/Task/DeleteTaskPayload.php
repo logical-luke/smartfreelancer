@@ -14,7 +14,7 @@ class DeleteTaskPayload
 
     public static function from(array $payload): self
     {
-        return new self($payload['id']);
+        return new self($payload['clientId']);
     }
 
     public function getId(): Uuid

@@ -16,7 +16,7 @@ class DeleteProjectPayload
     {
         // todo Add validation here
 
-        return new self($payload['id']);
+        return new self($payload['clientId']);
     }
 
     public function getId(): Uuid
