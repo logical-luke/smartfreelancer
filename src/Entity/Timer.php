@@ -31,16 +31,14 @@ class Timer
     #[ORM\OneToOne(inversedBy: 'timer', cascade: ['persist'])]
     private ?Task $task = null;
 
-    protected function __construct(User $owner, ?Uuid $id = null)
+    protected function __construct(User $owner, Uuid $id)
     {
-        $this->id = !$id ? Uuid::v7() : $id;
-
+        $this->id = $id;
         $this->owner = $owner;
-
         $this->startTime = new \DateTimeImmutable();
     }
 
-    public static function fromUser(User $owner, ?Uuid $id = null): self
+    public static function fromUser(User $owner, Uuid $id): self
     {
         return new self($owner, $id);
     }

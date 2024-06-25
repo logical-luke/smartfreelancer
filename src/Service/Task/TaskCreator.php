@@ -5,28 +5,32 @@ declare(strict_types=1);
 namespace App\Service\Task;
 
 use App\Entity\Task;
+use App\Entity\User;
+use App\Model\Synchronization\ActionPayloadInterface;
 use App\Model\Task\CreateTaskPayload;
 use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
-use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+use App\Service\Synchronization\ProcessorInterface;
+use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 
-#[Autoconfigure(lazy: true)]
-class TaskCreator
+
+#[AsTaggedItem(index: 'create.task')]
+readonly class TaskCreator implements ProcessorInterface
 {
     public function __construct(
-        private readonly TaskRepository $taskRepository,
-        private readonly UserRepository $userRepository,
-        private readonly ProjectRepository $projectRepository,
-        private readonly ClientRepository $clientRepository,
+        private TaskRepository $taskRepository,
+        private UserRepository $userRepository,
+        private ProjectRepository $projectRepository,
+        private ClientRepository $clientRepository,
     ) {
     }
 
-    public function __invoke(CreateTaskPayload $payload): Task
+    public function sync(User $user, ActionPayloadInterface $payload): void
     {
-        if (!$user = $this->userRepository->find($payload->getOwnerId())) {
-            throw new \RuntimeException('User not found');
+        if (!$payload instanceof CreateTaskPayload) {
+            throw new \RuntimeException('Invalid payload');
         }
 
         $task = Task::fromUser($user);
@@ -47,7 +51,5 @@ class TaskCreator
         }
 
         $this->taskRepository->save($task, true);
-
-        return $task;
     }
 }

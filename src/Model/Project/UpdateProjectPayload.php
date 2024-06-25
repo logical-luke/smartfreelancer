@@ -4,36 +4,46 @@ declare(strict_types=1);
 
 namespace App\Model\Project;
 
+use App\Exception\InvalidPayloadException;
+use App\Model\Synchronization\ActionPayloadInterface;
 use Symfony\Component\Uid\Uuid;
 
-class UpdateProjectPayload
+readonly class UpdateProjectPayload implements ActionPayloadInterface
 {
     protected function __construct(
-        private readonly string $id,
-        private readonly ?string $name,
-        private readonly ?string $description,
-        private readonly ?string $clientId,
+        private string $projectId,
+        private string $name,
+        private ?string $description,
+        private ?string $clientId,
+        private string $ownerId,
     ) {
     }
 
-    public static function from(array $payload): self
+    public static function from(Uuid $userId, array $payload): self
     {
-        // todo Add validation here
+        if (!isset($payload['id'])) {
+            throw new InvalidPayloadException('Missing project id');
+        }
+
+        if (!isset($payload['name'])) {
+            throw new InvalidPayloadException('Missing name');
+        }
 
         return new self(
             $payload['id'],
             $payload['name'] ?? null,
             $payload['description'] ?? null,
             $payload['clientId'] ?? null,
+            $userId->toRfc4122(),
         );
     }
 
-    public function getId(): Uuid
+    public function getProjectId(): Uuid
     {
-        return Uuid::fromString($this->id);
+        return Uuid::fromString($this->projectId);
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -46,5 +56,26 @@ class UpdateProjectPayload
     public function getClientId(): ?Uuid
     {
         return $this->clientId ? Uuid::fromString($this->clientId) : null;
+    }
+
+    public function getOwnerId(): string
+    {
+        return $this->ownerId;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->projectId,
+            'name' => $this->name,
+            'description' => $this->description,
+            'clientId' => $this->clientId,
+            'ownerId' => $this->ownerId,
+        ];
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

@@ -14,21 +14,20 @@ class Client
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    private ?Uuid $id = null;
+    #[ORM\GeneratedValue(strategy: 'NONE')]
+    private Uuid $id;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private string $name;
 
     #[ORM\ManyToOne(inversedBy: 'clients')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $owner = null;
+    private User $owner;
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Project::class)]
     private Collection $projects;
 
-    #[ORM\OneToOne(mappedBy: 'client', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'client', cascade: ['persist'])]
     private ?Timer $timer = null;
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: TimeEntry::class)]
@@ -46,20 +45,22 @@ class Client
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatar = null;
 
-    protected function __construct(User $user)
+    protected function __construct(User $owner, Uuid $id, string $name)
     {
-        $this->owner = $user;
+        $this->id = $id;
+        $this->owner = $owner;
+        $this->name = $name;
         $this->projects = new ArrayCollection();
         $this->timeEntries = new ArrayCollection();
         $this->tasks = new ArrayCollection();
     }
 
-    public static function fromUser(User $user): self
+    public static function from(User $owner, Uuid $id, string $name): self
     {
-        return new self($user);
+        return new self($owner, $id, $name);
     }
 
-    public function getId(): ?Uuid
+    public function getId(): Uuid
     {
         return $this->id;
     }
@@ -76,7 +77,7 @@ class Client
         return $this;
     }
 
-    public function getOwner(): ?User
+    public function getOwner(): User
     {
         return $this->owner;
     }

@@ -6,7 +6,7 @@ namespace App\Model\Timer;
 
 use App\Entity\Timer;
 
-class TimerDTO
+readonly class TimerDTO
 {
     protected function __construct(
         public ?string $id,

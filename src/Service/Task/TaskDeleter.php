@@ -18,7 +18,7 @@ class TaskDeleter
 
     public function __invoke(DeleteTaskPayload $payload): void
     {
-        if (!$task = $this->taskRepository->find($payload->getId())) {
+        if (!$task = $this->taskRepository->find($payload->getTaskId())) {
             throw new \RuntimeException('Task not found');
         }
 

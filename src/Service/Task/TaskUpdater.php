@@ -21,7 +21,7 @@ class TaskUpdater
 
     public function __invoke(UpdateTaskPayload $payload): Task
     {
-        if (!$task = $this->taskRepository->find($payload->getId())) {
+        if (!$task = $this->taskRepository->find($payload->getTaskId())) {
             throw new \RuntimeException('Task not found');
         }
 

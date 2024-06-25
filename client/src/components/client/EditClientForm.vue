@@ -95,7 +95,7 @@ import ActionButton from "@/components/ActionButton.vue";
 import client from "@/services/client";
 
 export default {
-  name: "ClientForm",
+  name: "AddClientForm",
   components: {ActionButton, MainActionButton, MailIcon, InputText, InputGroup, InputGroupAddon, PhoneIcon, FileUpload},
   data() {
     return {
@@ -132,7 +132,7 @@ export default {
       return request;
     },
     async submitForm() {
-      await client.addClient(this.client)
+      await client.edit(this.client)
 
       this.$router.push("/clients");
     },

@@ -33,9 +33,8 @@ export default {
     await store.commit("timer/clearTimer");
     timer.endTime = endTime;
     await synchronization.pushToQueue(
-      "Timer",
-      "TimerStopper",
-      "StopTimer",
+      "timer",
+      "stop",
       timer
     );
     await timeEntries.createTimeEntry(
@@ -59,9 +58,8 @@ export default {
     await store.dispatch("timer/setTaskId", null);
 
     await synchronization.pushToQueue(
-      "Timer",
-      "TimerUpdater",
-      "UpdateTimer",
+      "timer",
+      "update",
       timer
     );
   },
@@ -77,9 +75,8 @@ export default {
     await store.dispatch("timer/setTaskId", null);
 
     await synchronization.pushToQueue(
-      "Timer",
-      "TimerUpdater",
-      "UpdateTimer",
+      "timer",
+      "update",
       timer
     );
   },
@@ -95,9 +92,8 @@ export default {
     await store.dispatch("timer/setTaskId", id);
 
     await synchronization.pushToQueue(
-      "Timer",
-      "TimerUpdater",
-      "UpdateTimer",
+      "timer",
+      "update",
       timer
     );
   },
@@ -109,9 +105,8 @@ export default {
     await store.dispatch("timer/setTaskId", null);
 
     await synchronization.pushToQueue(
-      "Timer",
-      "TimerUpdater",
-      "UpdateTimer",
+      "timer",
+      "update",
       timer
     );
   },
@@ -125,9 +120,8 @@ export default {
     await store.dispatch("timer/setDescription", description);
 
     await synchronization.pushToQueue(
-      "Timer",
-      "TimerUpdater",
-      "UpdateTimer",
+      "timer",
+      "update",
       timer
     );
   },
@@ -145,9 +139,8 @@ export default {
     await store.dispatch("timer/setStartTime", startTime);
 
     await synchronization.pushToQueue(
-      "Timer",
-      "TimerUpdater",
-      "UpdateTimer",
+      "timer",
+      "update",
       timer
     );
   },
@@ -165,9 +158,8 @@ export default {
     await store.dispatch("timer/setEndTime", endTime);
 
     await synchronization.pushToQueue(
-      "Timer",
-      "TimerUpdater",
-      "UpdateTimer",
+      "timer",
+      "update",
       timer
     );
   },
@@ -185,9 +177,8 @@ export default {
     await store.dispatch("timer/setStartTime", adjustedStartTime);
 
     await synchronization.pushToQueue(
-      "Timer",
-      "TimerUpdater",
-      "UpdateTimer",
+      "timer",
+      "update",
       timer
     );
   },

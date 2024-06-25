@@ -30,7 +30,7 @@ readonly class Handler
             throw new \RuntimeException('Invalid user');
         }
 
-        if (!$synchronizationLog = $this->synchronizationLogRepository->findOneByRequestId($payload->getId())) {
+        if (!$synchronizationLog = $this->synchronizationLogRepository->findOneById($payload->getId())) {
             $synchronizationLog = SynchronizationLog::fromPayload($user, $payload);
         }
         $synchronizationLog->setStatus(SynchronizationStatusEnum::IN_PROGRESS->value);

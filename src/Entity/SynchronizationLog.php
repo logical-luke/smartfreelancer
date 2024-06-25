@@ -7,21 +7,19 @@ use App\Model\Synchronization\SynchronizationStatusEnum;
 use App\Repository\SynchronizationLogRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: SynchronizationLogRepository::class)]
 class SynchronizationLog
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column(type: Types::BINARY)]
-    private Uuid $requestId;
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
+    private ?Uuid $id = null;
 
     #[ORM\Column]
-    private array $payload = [];
+    private array $payload;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $resource = null;
@@ -38,9 +36,9 @@ class SynchronizationLog
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
 
-    public function __construct(Uuid $requestId, array $payload, ?string $resource, ?string $action, ?User $user)
+    public function __construct(Uuid $id, array $payload, ?string $resource, ?string $action, ?User $user)
     {
-        $this->requestId = $requestId;
+        $this->id = $id;
         $this->payload = $payload;
         $this->resource = $resource;
         $this->action = $action;
@@ -49,16 +47,10 @@ class SynchronizationLog
     }
 
 
-    public function getId(): ?int
+    public function getId(): ?Uuid
     {
         return $this->id;
     }
-
-    public function getRequestId(): Uuid
-    {
-        return $this->requestId;
-    }
-
 
     public function getPayload(): array
     {

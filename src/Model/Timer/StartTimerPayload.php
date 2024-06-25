@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Model\Timer;
 
+use App\Exception\InvalidPayloadException;
 use App\Model\Synchronization\ActionPayloadInterface;
+use DateTimeImmutable;
 use Symfony\Component\Uid\Uuid;
 
 readonly class StartTimerPayload implements ActionPayloadInterface
 {
     protected function __construct(
-        private string $id,
+        private string $timerId,
         private string $userId,
         private int $startTime,
         private ?string $projectId,
@@ -19,21 +21,35 @@ readonly class StartTimerPayload implements ActionPayloadInterface
     ) {
     }
 
-    public static function from(array $payload): StartTimerPayload
+    public static function from(Uuid $userId, array $payload): StartTimerPayload
     {
+        if (!isset($payload['id'])) {
+            throw new InvalidPayloadException('Missing timer id');
+        }
+
+        if (!isset($payload['startTime'])) {
+            throw new InvalidPayloadException('Missing start time');
+        }
+
+        $payload = array_merge([
+            'projectId' => null,
+            'clientId' => null,
+            'taskId' => null,
+        ], $payload);
+
         return new self(
             $payload['id'],
-            $payload['userId'],
+            $userId->toRfc4122(),
             $payload['startTime'],
-            $payload['projectId'] ?? null,
-            $payload['clientId'] ?? null,
-            $payload['taskId'] ?? null,
+            $payload['projectId'],
+            $payload['clientId'],
+            $payload['taskId'],
         );
     }
 
-    public function getId(): Uuid
+    public function getTimerId(): Uuid
     {
-        return Uuid::fromString($this->id);
+        return Uuid::fromString($this->timerId);
     }
 
     public function getUserId(): Uuid
@@ -41,9 +57,9 @@ readonly class StartTimerPayload implements ActionPayloadInterface
         return Uuid::fromString($this->userId);
     }
 
-    public function getStartTime(): \DateTimeImmutable
+    public function getStartTime(): DateTimeImmutable
     {
-        return (new \DateTimeImmutable())->setTimestamp($this->startTime);
+        return (new DateTimeImmutable())->setTimestamp($this->startTime);
     }
 
     public function getProjectId(): ?Uuid
@@ -64,7 +80,7 @@ readonly class StartTimerPayload implements ActionPayloadInterface
     public function toArray(): array
     {
         return [
-            'id' => $this->id,
+            'id' => $this->timerId,
             'userId' => $this->userId,
             'startTime' => $this->startTime,
             'projectId' => $this->projectId,

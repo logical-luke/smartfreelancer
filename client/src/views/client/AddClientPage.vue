@@ -6,18 +6,18 @@
   </div>
   <div class="flex container">
     <div class="flex flex-col gap-4 w-full">
-      <client-form />
+      <add-client-form />
     </div>
   </div>
 </template>
 
 <script>
-import ClientForm from "@/components/client/ClientForm.vue";
+import AddClientForm from "@/components/client/AddClientForm.vue";
 
 export default {
   name: "AddClientPage",
   components: {
-    ClientForm,
+    AddClientForm,
   },
   data() {
     return {

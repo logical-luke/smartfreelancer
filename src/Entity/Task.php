@@ -16,7 +16,7 @@ class Task
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    private ?Uuid $id = null;
+    private Uuid $id;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -49,19 +49,20 @@ class Task
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: self::class)]
     private Collection $subtasks;
 
-    protected function __construct(User $user)
+    protected function __construct(User $user, Uuid $id)
     {
+        $this->id = $id;
         $this->owner = $user;
         $this->timeEntries = new ArrayCollection();
         $this->subtasks = new ArrayCollection();
     }
 
-    public static function fromUser(User $user): self
+    public static function fromUser(User $user, Uuid $id): self
     {
-        return new self($user);
+        return new self($user, $id);
     }
 
-    public function getId(): ?Uuid
+    public function getId(): Uuid
     {
         return $this->id;
     }

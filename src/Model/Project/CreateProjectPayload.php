@@ -10,6 +10,7 @@ use Symfony\Component\Uid\Uuid;
 readonly class CreateProjectPayload
 {
     protected function __construct(
+        private string $projectId,
         private string $ownerId,
         private ?string $name,
         private ?string $description,
@@ -17,10 +18,10 @@ readonly class CreateProjectPayload
     ) {
     }
 
-    public static function from(array $payload): self
+    public static function from(Uuid $userId, array $payload): self
     {
-        if (!isset($payload['userId'])) {
-            throw new InvalidPayloadException('Missing owner clientId');
+        if (!isset($payload['id'])) {
+            throw new InvalidPayloadException('Missing project id');
         }
 
         if (!isset($payload['name'])) {
@@ -28,13 +29,17 @@ readonly class CreateProjectPayload
         }
 
         $payload = array_merge([
-            'name' => null,
             'description' => null,
-            'userId' => null,
             'clientId' => null,
         ], $payload);
 
-        return new self($payload['userId'], $payload['name'], $payload['description'], $payload['clientId']);
+        return new self(
+            $payload['id'],
+            $userId->toRfc4122(),
+            $payload['name'],
+            $payload['description'],
+            $payload['clientId']
+        );
     }
 
     public function getOwnerId(): Uuid
@@ -55,5 +60,10 @@ readonly class CreateProjectPayload
     public function getClientId(): ?Uuid
     {
         return $this->clientId ? Uuid::fromString($this->clientId) : null;
+    }
+
+    public function getProjectId(): Uuid
+    {
+        return Uuid::fromString($this->projectId);
     }
 }

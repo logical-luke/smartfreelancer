@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import ClientForm from "@/components/client/ClientForm.vue";
+import ClientForm from "@/components/client/AddClientForm.vue";
 import {mapState} from "vuex";
 import SubmitButton from "@/components/SubmitButton.vue";
 import DeviceFloppyIcon from "vue-tabler-icons/icons/DeviceFloppyIcon";

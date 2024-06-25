@@ -11,7 +11,7 @@ readonly class TaskDTO
     protected function __construct(
         public string $id,
         public string $ownerId,
-        public ?string $name,
+        public string $name,
         public ?string $description,
         public ?string $projectId,
         public ?string $clientId,

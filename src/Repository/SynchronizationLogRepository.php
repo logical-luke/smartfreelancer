@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\SynchronizationLog;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -40,11 +41,11 @@ class SynchronizationLogRepository extends ServiceEntityRepository
         }
     }
 
-    public function findOneByRequestId(Uuid $getId): ?SynchronizationLog
+    public function findOneById(Uuid $id): ?SynchronizationLog
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.requestId = :val')
-            ->setParameter('val', $getId)
+            ->andWhere('s.id = :val')
+            ->setParameter('val', $id, UuidType::NAME)
             ->getQuery()
             ->getOneOrNullResult()
         ;

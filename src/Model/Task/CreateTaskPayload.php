@@ -11,18 +11,19 @@ readonly class CreateTaskPayload
 {
     protected function __construct(
         private string $ownerId,
-        private ?string $name,
+        private string $taskId,
+        private string $name,
         private ?string $description,
-        private ?string $projectId,
         private ?string $clientId,
-        private ?string $taskId,
+        private ?string $projectId,
+        private ?string $parentTaskId,
     ) {
     }
 
-    public static function from(array $payload): self
+    public static function from(Uuid $userId, array $payload): self
     {
-        if (!isset($payload['userId'])) {
-            throw new InvalidPayloadException('Missing owner id');
+        if (!isset($payload['id'])) {
+            throw new InvalidPayloadException('Missing task id');
         }
 
         if (!isset($payload['name'])) {
@@ -30,20 +31,26 @@ readonly class CreateTaskPayload
         }
 
         $payload = array_merge([
-            'name' => null,
             'description' => null,
-            'userId' => null,
+            'clientId' => null,
             'projectId' => null,
+            'parentTaskId' => null,
         ], $payload);
 
         return new self(
-            $payload['userId'],
+            $userId->toRfc4122(),
+            $payload['id'],
             $payload['name'],
             $payload['description'],
-            $payload['projectId'],
             $payload['clientId'],
-            $payload['taskId'],
+            $payload['projectId'],
+            $payload['parentTaskId'],
         );
+    }
+
+    public function getTaskId(): Uuid
+    {
+        return Uuid::fromString($this->taskId);
     }
 
     public function getOwnerId(): Uuid
@@ -66,13 +73,13 @@ readonly class CreateTaskPayload
         return $this->projectId ? Uuid::fromString($this->projectId) : null;
     }
 
-    public function getClientId(): ?string
+    public function getClientId(): ?Uuid
     {
-        return $this->clientId;
+        return $this->clientId ? Uuid::fromString($this->clientId) : null;
     }
 
-    public function getTaskId(): ?string
+    public function getParentTaskId(): ?Uuid
     {
-        return $this->taskId;
+        return $this->parentTaskId ? Uuid::fromString($this->parentTaskId) : null;
     }
 }

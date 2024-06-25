@@ -4,38 +4,59 @@ declare(strict_types=1);
 
 namespace App\Model\Timer;
 
+use App\Exception\InvalidPayloadException;
+use App\Model\Synchronization\ActionPayloadInterface;
 use Symfony\Component\Uid\Uuid;
 
-class UpdateTimerPayload
+readonly class UpdateTimerPayload implements ActionPayloadInterface
 {
     protected function __construct(
-        private readonly string $id,
-        private readonly ?int $startTime,
-        private readonly ?string $clientId,
-        private readonly ?string $projectId,
-        private readonly ?string $taskId,
+        private string $timerId,
+        private string $userId,
+        private int $startTime,
+        private ?string $clientId,
+        private ?string $projectId,
+        private ?string $taskId,
     ) {
     }
 
-    public static function from(array $payload): self
+    public static function from(Uuid $userId, array $payload): self
     {
-        // todo Add validation here
+        if (!isset($payload['id'])) {
+            throw new InvalidPayloadException('Missing timer id');
+        }
+
+        if (!isset($payload['startTime'])) {
+            throw new InvalidPayloadException('Missing start time');
+        }
+
+        $payload = array_merge([
+            'projectId' => null,
+            'clientId' => null,
+            'taskId' => null,
+        ], $payload);
 
         return new self(
             $payload['id'],
-            $payload['startTime'] ?? null,
-            $payload['clientId'] ?? null,
-            $payload['projectId'] ?? null,
-            $payload['taskId'] ?? null,
+            $userId->toRfc4122(),
+            $payload['startTime'],
+            $payload['clientId'],
+            $payload['projectId'],
+            $payload['taskId'],
         );
     }
 
-    public function getId(): Uuid
+    public function getTimerId(): Uuid
     {
-        return Uuid::fromString($this->id);
+        return Uuid::fromString($this->timerId);
     }
 
-    public function getStartTime(): ?int
+    public function getUserId(): Uuid
+    {
+        return Uuid::fromString($this->userId);
+    }
+
+    public function getStartTime(): int
     {
         return $this->startTime;
     }
@@ -53,5 +74,22 @@ class UpdateTimerPayload
     public function getTaskId(): ?Uuid
     {
         return $this->taskId ? Uuid::fromString($this->taskId) : null;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->timerId,
+            'userId' => $this->userId,
+            'startTime' => $this->startTime,
+            'projectId' => $this->projectId,
+            'clientId' => $this->clientId,
+            'taskId' => $this->taskId,
+        ];
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

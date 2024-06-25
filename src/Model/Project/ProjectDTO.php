@@ -6,14 +6,14 @@ namespace App\Model\Project;
 
 use App\Entity\Project;
 
-class ProjectDTO
+readonly class ProjectDTO
 {
     protected function __construct(
-        public readonly string $id,
-        public readonly string $ownerId,
-        public readonly ?string $name,
-        public readonly ?string $description,
-        public readonly ?string $clientId,
+        public string $id,
+        public string $ownerId,
+        public ?string $name,
+        public ?string $description,
+        public ?string $clientId,
     ) {
     }
 
@@ -21,7 +21,7 @@ class ProjectDTO
     {
         return new self(
             $project->getId()?->toRfc4122(),
-            $project->getOwner()->getId()?->toRfc4122(),
+            $project->getOwner()?->getId()?->toRfc4122(),
             $project->getName(),
             $project->getDescription(),
             $project->getClient()?->getId()?->toRfc4122(),
