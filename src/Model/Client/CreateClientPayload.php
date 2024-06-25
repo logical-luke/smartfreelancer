@@ -6,6 +6,7 @@ namespace App\Model\Client;
 
 use App\Exception\InvalidPayloadException;
 use App\Model\Synchronization\ActionPayloadInterface;
+use DateTimeImmutable;
 use Symfony\Component\Uid\Uuid;
 
 readonly class CreateClientPayload implements ActionPayloadInterface
@@ -14,6 +15,7 @@ readonly class CreateClientPayload implements ActionPayloadInterface
         private string $clientId,
         private string $userId,
         private string $name,
+        private int $createdAt,
         private ?string $email,
         private ?string $phone,
         private ?string $avatar,
@@ -38,6 +40,10 @@ readonly class CreateClientPayload implements ActionPayloadInterface
             throw new InvalidPayloadException('Invalid phone number');
         }
 
+        if (!isset($payload['createdAt'])) {
+            throw new InvalidPayloadException('Missing created at');
+        }
+
         $payload = array_merge([
             'email' => null,
             'phone' => null,
@@ -48,6 +54,7 @@ readonly class CreateClientPayload implements ActionPayloadInterface
             $payload['id'],
             $userId->toRfc4122(),
             $payload['name'],
+            $payload['createdAt'],
             $payload['email'],
             $payload['phone'],
             $payload['avatar'],
@@ -90,6 +97,7 @@ readonly class CreateClientPayload implements ActionPayloadInterface
             'email' => $this->email,
             'phone' => $this->phone,
             'avatar' => $this->avatar,
+            'createdAt' => $this->createdAt,
         ];
     }
 
@@ -101,5 +109,10 @@ readonly class CreateClientPayload implements ActionPayloadInterface
     public function getClientId(): Uuid
     {
         return Uuid::fromString($this->clientId);
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return (new DateTimeImmutable())->setTimestamp($this->createdAt);
     }
 }

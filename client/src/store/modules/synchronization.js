@@ -13,13 +13,6 @@ const state = () => ({
 });
 
 const actions = {
-  pushToQueue({ commit, rootGetters }, queueItem) {
-    const queue = JSON.parse(
-      JSON.stringify(rootGetters["synchronization/getQueue"])
-    );
-    queue.push(queueItem);
-    commit("setQueue", queue);
-  },
   removeFromQueue({ commit, rootGetters }, queueItem) {
     const queue = JSON.parse(
       JSON.stringify(rootGetters["synchronization/getQueue"])

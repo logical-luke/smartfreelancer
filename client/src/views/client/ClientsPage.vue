@@ -5,7 +5,7 @@
     </div>
   </div>
   <div v-if="clients.length > 0" class="flex container flex-wrap gap-8 mb-8">
-    <transition-group name="fade-slower" class="transition-element">
+    <transition-group name="fade" mode="out-in">
       <template v-for="client in clients" :key="client.id">
         <client-item
             :id="client.id"

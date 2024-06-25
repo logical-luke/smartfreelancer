@@ -76,6 +76,7 @@
       <action-button>{{ $t("View Details") }}</action-button>
       <action-button>{{ $t("Edit") }}</action-button>
       <action-button>{{ $t("Archive") }}</action-button>
+      <action-button @click="this.delete">{{ $t("Delete") }}</action-button>
     </div>
   </div>
 </template>
@@ -90,6 +91,7 @@ import ProgressIcon from "vue-tabler-icons/icons/ProgressIcon";
 import ProgressXIcon from "vue-tabler-icons/icons/ProgressXIcon";
 import ProgressCheckIcon from "vue-tabler-icons/icons/ProgressCheckIcon";
 import CalendarIcon from "vue-tabler-icons/icons/CalendarIcon";
+import client from "@/services/client";
 
 export default {
   name: "ClientItem",
@@ -113,6 +115,9 @@ export default {
     },
     getAvatar() {
       return this.avatar && this.avatar !== '' ? this.avatar : '/client-placeholder.png';
+    },
+    delete() {
+      client.delete(this.id);
     }
   },
   props: {

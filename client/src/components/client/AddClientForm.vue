@@ -95,7 +95,7 @@ export default {
       this.client.avatar = avatar;
     },
     async submitForm() {
-      await client.addClient(this.client)
+      await client.add(this.client)
 
       this.$router.push("/clients");
     },

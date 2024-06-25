@@ -45,7 +45,6 @@ export default {
   },
   methods: {
     async submitForm() {
-      await store.dispatch("clients/updateClient", this.client);
       await router.push("/clients");
     },
   },

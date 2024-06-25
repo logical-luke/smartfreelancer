@@ -20,10 +20,10 @@ readonly class UpdateClientPayload implements ActionPayloadInterface
     ) {
     }
 
-    public static function from(array $payload): self
+    public static function from(Uuid $userId, array $payload): self
     {
         if (!isset($payload['id'])) {
-            throw new InvalidPayloadException('Missing clientId');
+            throw new InvalidPayloadException('Missing client id');
         }
 
         if (!isset($payload['name'])) {
@@ -38,7 +38,7 @@ readonly class UpdateClientPayload implements ActionPayloadInterface
 
         return new self(
             $payload['id'],
-            $payload['userId'],
+            $userId->toRfc4122(),
             $payload['name'],
             $payload['email'],
             $payload['phone'],

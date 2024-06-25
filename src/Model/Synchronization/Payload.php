@@ -16,6 +16,7 @@ use App\Model\Task\CreateTaskPayload;
 use App\Model\Task\DeleteTaskPayload;
 use App\Model\Task\UpdateTaskPayload;
 use App\Service\Synchronization\ActionPayloadMapper;
+use DateTimeImmutable;
 use JsonException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
@@ -27,6 +28,7 @@ readonly class Payload implements \JsonSerializable
         private string $userId,
         private string $resource,
         private string $action,
+        private DateTimeImmutable $requestedAt,
         private ActionPayloadInterface $data,
     ) {
     }
@@ -36,6 +38,7 @@ readonly class Payload implements \JsonSerializable
         Uuid $userId,
         string $resource,
         string $action,
+        DateTimeImmutable $requestedAt,
         ActionPayloadInterface $actionPayload
     ): Payload {
         return new self(
@@ -43,6 +46,7 @@ readonly class Payload implements \JsonSerializable
             $userId->toRfc4122(),
             $resource,
             $action,
+            $requestedAt,
             $actionPayload,
         );
     }
@@ -70,11 +74,16 @@ readonly class Payload implements \JsonSerializable
             throw new InvalidPayloadException('Missing data');
         }
 
+        if (!isset($content['time'])) {
+            throw new InvalidPayloadException('Missing time');
+        }
+
         return self::from(
             $content['id'],
             $user->getId(),
             $content['resource'],
             $content['action'],
+            (new DateTimeImmutable)->setTimestamp($content['time']),
             ActionPayloadMapper::map($user->getId(), $content['resource'], $content['action'], $content['data']),
         );
     }
@@ -91,6 +100,7 @@ readonly class Payload implements \JsonSerializable
             $object['userId'],
             $object['resource'],
             $object['action'],
+            (new DateTimeImmutable)->setTimestamp($object['time']),
             ActionPayloadMapper::map(
                 Uuid::fromString($object['userId']),
                 $object['resource'],
@@ -131,7 +141,7 @@ readonly class Payload implements \JsonSerializable
     }
 
     /**
-     * @return array{id: string, userId: string, resource: string, action: string, data: false|string}
+     * @return array{id: string, userId: string, resource: string, action: string, time: string, data: false|string}
      * @throws JsonException
      */
     public function jsonSerialize(): array
@@ -141,7 +151,13 @@ readonly class Payload implements \JsonSerializable
             'userId' => $this->userId,
             'resource' => $this->resource,
             'action' => $this->action,
+            'time' => $this->requestedAt->getTimestamp(),
             'data' => json_encode($this->data, JSON_THROW_ON_ERROR),
         ];
+    }
+
+    public function getRequestedAt(): DateTimeImmutable
+    {
+        return $this->requestedAt;
     }
 }

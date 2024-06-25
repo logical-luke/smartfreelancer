@@ -3,7 +3,7 @@
     <input-text
       class="borderless-input placeholder-gray-500"
       placeholder="00:00:00"
-      :value="this.hasDuration ? `${hours}:${minutes}:${seconds}` : ''"
+      :value="hasDuration ? `${hours}:${minutes}:${seconds}` : ''"
       @update:model-value="updateDuration"
     />
   </div>

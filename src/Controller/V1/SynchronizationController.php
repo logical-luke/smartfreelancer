@@ -16,6 +16,7 @@ use App\Model\Synchronization\Payload;
 use App\Model\Task\TaskDTO;
 use App\Model\Timer\TimerDTO;
 use App\Repository\SynchronizationLogRepository;
+use App\Service\Client\ClientDtoArrayMapper;
 use App\Service\Synchronization\ProcessorsCollection;
 use App\Service\Synchronization\Producer;
 use JsonException;
@@ -36,7 +37,7 @@ class SynchronizationController extends AbstractController
         $user = $this->getUser();
 
         return $this->json([
-            'clients' => array_map(static function (Client $client) { return ClientDto::fromClient($client); }, $user->getClients()->toArray()),
+            'clients' => ClientDtoArrayMapper::map($user->getClients()),
             'projects' => array_map(static function (Project $project) { return ProjectDTO::fromProject($project); }, $user->getProjects()->toArray()),
             'tasks' => array_map(static function (Task $task) { return TaskDTO::fromTask($task); }, $user->getTasks()->toArray()),
             'timer' => $user->getTimer() ? TimerDTO::fromTimer($user->getTimer()) : null,

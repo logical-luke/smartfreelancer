@@ -18,7 +18,7 @@ export default {
 
     await store.commit("timer/setTimer", newTimer);
     await cache.set("timer", JSON.stringify(newTimer));
-    await synchronization.pushToQueue(
+    synchronization.pushToQueue(
       "timer",
       "start",
       newTimer
@@ -32,7 +32,7 @@ export default {
     }
     await store.commit("timer/clearTimer");
     timer.endTime = endTime;
-    await synchronization.pushToQueue(
+    synchronization.pushToQueue(
       "timer",
       "stop",
       timer
@@ -57,7 +57,7 @@ export default {
     await store.dispatch("timer/setProjectId", id);
     await store.dispatch("timer/setTaskId", null);
 
-    await synchronization.pushToQueue(
+    synchronization.pushToQueue(
       "timer",
       "update",
       timer
@@ -74,7 +74,7 @@ export default {
     await store.dispatch("timer/setProjectId", null);
     await store.dispatch("timer/setTaskId", null);
 
-    await synchronization.pushToQueue(
+    synchronization.pushToQueue(
       "timer",
       "update",
       timer
@@ -91,7 +91,7 @@ export default {
     await store.dispatch("timer/setProjectId", null);
     await store.dispatch("timer/setTaskId", id);
 
-    await synchronization.pushToQueue(
+    synchronization.pushToQueue(
       "timer",
       "update",
       timer
@@ -104,7 +104,7 @@ export default {
     await store.dispatch("timer/setProjectId", null);
     await store.dispatch("timer/setTaskId", null);
 
-    await synchronization.pushToQueue(
+    synchronization.pushToQueue(
       "timer",
       "update",
       timer
@@ -119,7 +119,7 @@ export default {
 
     await store.dispatch("timer/setDescription", description);
 
-    await synchronization.pushToQueue(
+    synchronization.pushToQueue(
       "timer",
       "update",
       timer
@@ -138,7 +138,7 @@ export default {
 
     await store.dispatch("timer/setStartTime", startTime);
 
-    await synchronization.pushToQueue(
+    synchronization.pushToQueue(
       "timer",
       "update",
       timer
@@ -157,7 +157,7 @@ export default {
 
     await store.dispatch("timer/setEndTime", endTime);
 
-    await synchronization.pushToQueue(
+    synchronization.pushToQueue(
       "timer",
       "update",
       timer
@@ -176,7 +176,7 @@ export default {
 
     await store.dispatch("timer/setStartTime", adjustedStartTime);
 
-    await synchronization.pushToQueue(
+    synchronization.pushToQueue(
       "timer",
       "update",
       timer

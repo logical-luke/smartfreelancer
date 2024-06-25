@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Model\Synchronization\Payload;
 use App\Model\Synchronization\SynchronizationStatusEnum;
 use App\Repository\SynchronizationLogRepository;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -36,13 +37,24 @@ class SynchronizationLog
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
 
-    public function __construct(Uuid $id, array $payload, ?string $resource, ?string $action, ?User $user)
+    #[ORM\Column]
+    private DateTimeImmutable $requestedAt;
+
+    #[ORM\Column]
+    private DateTimeImmutable $receivedAt;
+
+    #[ORM\Column(nullable: true)]
+    private ?DateTimeImmutable $finishedAt = null;
+
+    public function __construct(Uuid $id, array $payload, ?string $resource, ?string $action, ?User $user, DateTimeImmutable $requestedAt)
     {
         $this->id = $id;
         $this->payload = $payload;
         $this->resource = $resource;
         $this->action = $action;
         $this->user = $user;
+        $this->requestedAt = $requestedAt;
+        $this->receivedAt = new DateTimeImmutable();
         $this->status = SynchronizationStatusEnum::NEW->value;
     }
 
@@ -104,6 +116,43 @@ class SynchronizationLog
             $payload->getResource(),
             $payload->getAction(),
             $user,
+            $payload->getRequestedAt(),
         );
+    }
+
+    public function getRequestedAt(): ?DateTimeImmutable
+    {
+        return $this->requestedAt;
+    }
+
+    public function setRequestedAt(DateTimeImmutable $requestedAt): static
+    {
+        $this->requestedAt = $requestedAt;
+
+        return $this;
+    }
+
+    public function getReceivedAt(): ?DateTimeImmutable
+    {
+        return $this->receivedAt;
+    }
+
+    public function setReceivedAt(DateTimeImmutable $receivedAt): static
+    {
+        $this->receivedAt = $receivedAt;
+
+        return $this;
+    }
+
+    public function getFinishedAt(): ?DateTimeImmutable
+    {
+        return $this->finishedAt;
+    }
+
+    public function setFinishedAt(?DateTimeImmutable $finishedAt): static
+    {
+        $this->finishedAt = $finishedAt;
+
+        return $this;
     }
 }

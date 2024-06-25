@@ -28,7 +28,7 @@ readonly class Creator implements ProcessorInterface
             throw new \RuntimeException('Invalid payload');
         }
 
-        $client = (Client::from($user, $payload->getClientId(), $payload->getName()))
+        $client = (Client::from($user, $payload->getClientId(), $payload->getName(), $payload->getCreatedAt()))
             ->setEmail($payload->getEmail())
             ->setPhone($payload->getPhone())
             ->setAvatar($payload->getAvatar());

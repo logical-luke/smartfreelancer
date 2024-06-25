@@ -90,7 +90,7 @@ export default {
     newPomodoro.endTime = newPomodoro.startTime + newPomodoro.duration;
 
     await store.commit("pomodoro/setPomodoro", newPomodoro);
-    // await synchronization.pushToQueue("Pomodoro", "PomodoroCreator", "CreatePomodoro", newPomodoro);
+    // synchronization.pushToQueue("Pomodoro", "PomodoroCreator", "CreatePomodoro", newPomodoro);
 
     if (repeat > 0) {
       let planned = [];
@@ -102,7 +102,7 @@ export default {
         }
       }
       await store.commit("pomodoro/setPlanned", planned);
-      // await synchronization.pushToQueue("Pomodoro", "PomodoroCreator", "CreatePomodoro", newPomodoro);
+      // synchronization.pushToQueue("Pomodoro", "PomodoroCreator", "CreatePomodoro", newPomodoro);
     }
   },
   getEmptyPomodoro() {
@@ -146,14 +146,14 @@ export default {
 
       const nextPomodoro = planned.shift();
       await store.commit("pomodoro/setPlanned", planned);
-      // await synchronization.pushToQueue("Pomodoro", "PomodoroCreator", "CreatePomodoro", nextPomodoro);
+      // synchronization.pushToQueue("Pomodoro", "PomodoroCreator", "CreatePomodoro", nextPomodoro);
 
       nextPomodoro.isRunning = true;
       nextPomodoro.startTime = await store.getters["time/getServerTime"];
       nextPomodoro.endTime = nextPomodoro.startTime + nextPomodoro.duration;
 
       await store.commit("pomodoro/setPomodoro", nextPomodoro);
-      // await synchronization.pushToQueue("Pomodoro", "PomodoroCreator", "CreatePomodoro", pomodoro);
+      // synchronization.pushToQueue("Pomodoro", "PomodoroCreator", "CreatePomodoro", pomodoro);
 
       return nextPomodoro;
     }
@@ -174,7 +174,7 @@ export default {
 
       pomodoro.isRunning = false;
       await store.commit("pomodoro/setPomodoro", pomodoro);
-      // await synchronization.pushToQueue("Pomodoro", "PomodoroUpdater", "UpdatePomodoro", pomodoro);
+      // synchronization.pushToQueue("Pomodoro", "PomodoroUpdater", "UpdatePomodoro", pomodoro);
     }
   },
   async resumePomodoro() {
@@ -187,7 +187,7 @@ export default {
         (await store.getters["time/getServerTime"]) + pomodoro.duration;
       pomodoro.isRunning = true;
       await store.commit("pomodoro/setPomodoro", pomodoro);
-      // await synchronization.pushToQueue("Pomodoro", "PomodoroUpdater", "UpdatePomodoro", pomodoro);
+      // synchronization.pushToQueue("Pomodoro", "PomodoroUpdater", "UpdatePomodoro", pomodoro);
     }
   },
   async doesCurrentPomodoroExist() {

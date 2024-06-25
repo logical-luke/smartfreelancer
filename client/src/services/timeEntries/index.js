@@ -26,7 +26,7 @@ export default {
     timeEntries.unshift(timeEntry);
     await store.commit("timeEntries/setTimeEntries", timeEntries);
     if (pushSync) {
-      await synchronization.pushToQueue(
+      synchronization.pushToQueue(
         "TimeEntry",
         "TimeEntryCreator",
         "createTimeEntry",

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ClientRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -45,19 +46,23 @@ class Client
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatar = null;
 
-    protected function __construct(User $owner, Uuid $id, string $name)
+    #[ORM\Column]
+    private ?DateTimeImmutable $createdAt = null;
+
+    protected function __construct(User $owner, Uuid $id, string $name, DateTimeImmutable $createdAt)
     {
         $this->id = $id;
         $this->owner = $owner;
         $this->name = $name;
+        $this->createdAt = $createdAt;
         $this->projects = new ArrayCollection();
         $this->timeEntries = new ArrayCollection();
         $this->tasks = new ArrayCollection();
     }
 
-    public static function from(User $owner, Uuid $id, string $name): self
+    public static function from(User $owner, Uuid $id, string $name, DateTimeImmutable $createdAt): self
     {
-        return new self($owner, $id, $name);
+        return new self($owner, $id, $name, $createdAt);
     }
 
     public function getId(): Uuid
@@ -235,5 +240,10 @@ class Client
         $this->avatar = $avatar;
 
         return $this;
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
     }
 }

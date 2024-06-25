@@ -14,6 +14,7 @@ readonly class ClientDto
         public ?string $name,
         public ?string $avatar,
         public ?string $email,
+        public int $createdAt,
     ) {
     }
 
@@ -25,6 +26,7 @@ readonly class ClientDto
             $client->getName(),
             $client->getAvatar(),
             $client->getEmail(),
+            $client->getCreatedAt()->getTimestamp(),
         );
     }
 }

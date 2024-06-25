@@ -48,6 +48,7 @@ readonly class Handler
                 ->setStatus(SynchronizationStatusEnum::FAILED->value)
                 ->setMessage($exception->getMessage());
         }
+        $synchronizationLog->setFinishedAt(new \DateTimeImmutable());
         $this->synchronizationLogRepository->save($synchronizationLog, true);
     }
 }

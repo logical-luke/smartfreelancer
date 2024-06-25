@@ -136,12 +136,17 @@ export default {
       clearInterval(store.state.synchronization.backgroundUploadIntervalId);
     }
   },
-  async pushToQueue(resource, action, data) {
-    await store.dispatch("synchronization/pushToQueue", {
+  pushToQueue(resource, action, data) {
+    const queue = JSON.parse(
+        JSON.stringify(store.getters["synchronization/getQueue"])
+    );
+    queue.push({
       id: getUuid(),
       resource: resource,
       action: action,
+      time: store.getters["time/getServerTime"],
       data: data,
     });
+    store.commit("synchronization/setQueue", queue);
   },
 };
