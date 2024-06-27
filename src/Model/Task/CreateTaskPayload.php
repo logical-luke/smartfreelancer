@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace App\Model\Task;
 
 use App\Exception\InvalidPayloadException;
+use App\Model\Synchronization\ActionPayloadInterface;
+use DateTimeImmutable;
 use Symfony\Component\Uid\Uuid;
 
-readonly class CreateTaskPayload
+readonly class CreateTaskPayload implements ActionPayloadInterface
 {
     protected function __construct(
-        private string $ownerId,
         private string $taskId,
+        private string $userId,
         private string $name,
+        private int $createdAt,
         private ?string $description,
         private ?string $clientId,
         private ?string $projectId,
@@ -30,6 +33,10 @@ readonly class CreateTaskPayload
             throw new InvalidPayloadException('Missing name');
         }
 
+        if (!isset($payload['createdAt'])) {
+            throw new InvalidPayloadException('Missing created at');
+        }
+
         $payload = array_merge([
             'description' => null,
             'clientId' => null,
@@ -38,9 +45,10 @@ readonly class CreateTaskPayload
         ], $payload);
 
         return new self(
-            $userId->toRfc4122(),
             $payload['id'],
+            $userId->toRfc4122(),
             $payload['name'],
+            $payload['createdAt'],
             $payload['description'],
             $payload['clientId'],
             $payload['projectId'],
@@ -53,12 +61,7 @@ readonly class CreateTaskPayload
         return Uuid::fromString($this->taskId);
     }
 
-    public function getOwnerId(): Uuid
-    {
-        return Uuid::fromString($this->ownerId);
-    }
-
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -81,5 +84,29 @@ readonly class CreateTaskPayload
     public function getParentTaskId(): ?Uuid
     {
         return $this->parentTaskId ? Uuid::fromString($this->parentTaskId) : null;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'userId' => $this->userId,
+            'id' => $this->taskId,
+            'name' => $this->name,
+            'description' => $this->description,
+            'clientId' => $this->clientId,
+            'projectId' => $this->projectId,
+            'parentTaskId' => $this->parentTaskId,
+            'createdAt' => $this->createdAt,
+        ];
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return (new DateTimeImmutable())->setTimestamp($this->createdAt);
     }
 }

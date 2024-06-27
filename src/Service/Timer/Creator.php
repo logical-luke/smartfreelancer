@@ -8,7 +8,7 @@ use App\Entity\Timer;
 use App\Entity\User;
 use App\Exception\InvalidPayloadException;
 use App\Model\Synchronization\ActionPayloadInterface;
-use App\Model\Timer\StartTimerPayload;
+use App\Model\Timer\CreateTimerPayload;
 use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
@@ -17,8 +17,8 @@ use App\Repository\UserRepository;
 use App\Service\Synchronization\ProcessorInterface;
 use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 
-#[AsTaggedItem(index: 'start.timer')]
-readonly class Starter implements ProcessorInterface
+#[AsTaggedItem(index: 'delete.timer')]
+readonly class Creator implements ProcessorInterface
 {
     public function __construct(
         private TimerRepository $timerRepository,
@@ -31,7 +31,7 @@ readonly class Starter implements ProcessorInterface
 
     public function sync(User $user, ActionPayloadInterface $payload): void
     {
-        if (!$payload instanceof StartTimerPayload) {
+        if (!$payload instanceof CreateTimerPayload) {
             throw new \RuntimeException('Invalid payload');
         }
 

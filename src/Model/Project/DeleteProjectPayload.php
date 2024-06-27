@@ -36,7 +36,7 @@ readonly class DeleteProjectPayload implements ActionPayloadInterface
     {
         return [
             'id' => $this->projectId,
-            'ownerId' => $this->ownerId,
+            'userId' => $this->ownerId,
         ];
     }
 

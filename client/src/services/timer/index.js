@@ -20,7 +20,7 @@ export default {
     await cache.set("timer", JSON.stringify(newTimer));
     synchronization.pushToQueue(
       "timer",
-      "start",
+      "create",
       newTimer
     );
   },
@@ -34,7 +34,7 @@ export default {
     timer.endTime = endTime;
     synchronization.pushToQueue(
       "timer",
-      "stop",
+      "delete",
       timer
     );
     await timeEntries.createTimeEntry(

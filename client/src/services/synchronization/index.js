@@ -4,12 +4,13 @@ import api from "@/services/api";
 import router from "@/router";
 import getUuid from "@/services/uuidGenerator";
 import getUTCTimestampFromLocaltime from "@/services/time/getUTCTimestampFromLocaltime";
+import cache from "@/services/cache";
 
 const millisecondsInSecond = 1000;
 const millisecondsInMinute = millisecondsInSecond * 60;
 
 export default {
-  async syncUser() {
+  async fetchUser() {
     let user = null;
     let time = null;
     try {
@@ -26,6 +27,17 @@ export default {
       const offset = serverTime - getUTCTimestampFromLocaltime();
 
       await store.commit("time/setServerTimeOffset", offset);
+      await store.commit(
+          "time/setServerTime",
+          getUTCTimestampFromLocaltime() + offset
+      );
+      setInterval(async () => {
+        await store.commit(
+            "time/setServerTime",
+            getUTCTimestampFromLocaltime() +
+            store.getters["time/getServerTimeOffset"]
+        );
+      }, 1000);
       await store.commit("setUser", user);
     } catch (err) {
       await authorization.logout();
@@ -39,16 +51,16 @@ export default {
       return router.push("/login");
     }
   },
-  async syncAll() {
+  async fetchAllData() {
     if (
       store.getters["synchronization/isOffline"] ||
       store.getters["synchronization/isBackgroundUploadInProgress"] ||
-      store.getters["synchronization/isBackgroundDownloadInProgress"] ||
+      store.getters["synchronization/isBackgroundFetchingInProgress"] ||
       !store.getters["synchronization/isQueueEmpty"]
     ) {
       return;
     }
-    await store.commit("synchronization/setBackgroundDownloadInProgress", true);
+    await store.commit("synchronization/setBackgroundFetchingInProgress", true);
 
     const initial = await api.getInitial();
 
@@ -72,7 +84,7 @@ export default {
 
     await store.commit("synchronization/setSynchronizationTime", new Date());
     await store.commit(
-      "synchronization/setBackgroundDownloadInProgress",
+      "synchronization/setBackgroundFetchingInProgress",
       false
     );
   },
@@ -81,7 +93,7 @@ export default {
     if (
       store.getters["synchronization/isOffline"] ||
       store.getters["synchronization/isBackgroundUploadInProgress"] ||
-      store.getters["synchronization/isBackgroundDownloadInProgress"] ||
+      store.getters["synchronization/isBackgroundFetchingInProgress"] ||
       queue.length < 1
     ) {
       return;
@@ -92,32 +104,40 @@ export default {
     for (let i = 0; i < queue.length; i++) {
       const queueItem = queue[i];
       try {
-        await api.pushSyncItem(queueItem);
-        await store.dispatch("synchronization/removeFromQueue", queueItem);
+        const synchronizationResponse = await api.pushSyncItem(queueItem);
+        await this.removeFromQueue(queueItem.id);
+        await this.pushToSynchronizationLogQueue(synchronizationResponse.id);
       } catch (e) {
         await store.commit("synchronization/setSynchronizationFailed", true);
         await this.disableBackgroundUpload();
-        await this.disableBackgroundSync();
+        await this.disableBackgroundFetching();
       }
     }
     await store.commit("synchronization/setSynchronizationTime", new Date());
 
     await store.commit("synchronization/setBackgroundUploadInProgress", false);
   },
-  async enableBackgroundSync() {
-    if (!store.getters["synchronization/isBackgroundSyncEnabled"]) {
-      const backgroundDownloadId = setInterval(() => {
-        this.syncAll();
-      }, millisecondsInMinute);
+  async enableBackgroundFetching() {
+    console.log('wtf');
+    if (!store.getters["synchronization/isBackgroundFetchingEnabled"]) {
+      console.log('setting');
+      const backgroundFetchingId = setInterval(() => {
+        this.fetchAllData();
+      }, millisecondsInMinute * 5);
+      console.log(backgroundFetchingId);
       await store.commit(
-        "synchronization/setBackgroundDownloadIntervalId",
-        backgroundDownloadId
+        "synchronization/setBackgroundFetchingIntervalId",
+        backgroundFetchingId
       );
     }
   },
-  async disableBackgroundSync() {
-    if (store.getters["synchronization/isBackgroundSyncEnabled"]) {
-      clearInterval(store.state.synchronization.backgroundDownloadIntervalId);
+  async disableBackgroundFetching() {
+    if (store.getters["synchronization/isBackgroundFetchingEnabled"]) {
+      clearInterval(store.getters["synchronization/getBackgroundFetchingIntervalId"]);
+      await store.commit(
+          "synchronization/setBackgroundFetchingIntervalId",
+          null
+      );
     }
   },
   async enableBackgroundUpload() {
@@ -133,7 +153,11 @@ export default {
   },
   async disableBackgroundUpload() {
     if (store.getters["synchronization/isBackgroundUploadEnabled"]) {
-      clearInterval(store.state.synchronization.backgroundUploadIntervalId);
+      clearInterval(store.getters["synchronization/getBackgroundUploadIntervalId"]);
+      store.commit(
+          "synchronization/setBackgroundUploadIntervalId",
+          null
+      );
     }
   },
   pushToQueue(resource, action, data) {
@@ -148,5 +172,25 @@ export default {
       data: data,
     });
     store.commit("synchronization/setQueue", queue);
+    cache.set("queue", JSON.stringify(queue)).then();
+  },
+  async removeFromQueue(queueItemId) {
+    const queue = JSON.parse(
+        JSON.stringify(store.getters["synchronization/getQueue"])
+    );
+    queue.splice(
+        queue.findIndex((obj) => obj.id === queueItemId),
+        1
+    );
+    store.commit("synchronization/setQueue", queue);
+    cache.set("queue", JSON.stringify(queue)).then();
+  },
+  pushToSynchronizationLogQueue(synchronizationLogId) {
+    const queue = JSON.parse(
+        JSON.stringify(store.getters["synchronization/getSynchronizationLogQueue"])
+    );
+    queue.push(synchronizationLogId);
+    store.commit("synchronization/setSynchronizationLogQueue", queue);
+    cache.set("synchronizationLogQueue", JSON.stringify(queue)).then();
   },
 };

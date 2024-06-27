@@ -1,12 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import LoginPage from "@/views/authorization/LoginPage.vue";
 import store from "../store";
-import ProjectEditPage from "@/views/project/ProjectEditPage.vue";
-import ProjectCreatePage from "@/views/project/ProjectCreatePage.vue";
 import AddClientPage from "@/views/client/AddClientPage.vue";
-import ClientEditPage from "@/views/client/ClientEditPage.vue";
-import TaskEditPage from "@/views/task/TaskEditPage.vue";
-import TaskCreatePage from "@/views/task/TaskCreatePage.vue";
 import DeepWorkHubPage from "@/views/deepWorkHub/DeepWorkHubPage.vue";
 import ReportsPage from "@/views/report/ReportsPage.vue";
 import RegistrationPage from "@/views/authorization/RegistrationPage.vue";
@@ -62,52 +57,12 @@ const router = createRouter({
       },
     },
     {
-      path: "/project/edit/:id",
-      name: "ProjectEditPage",
-      meta: {
-        requiresAuth: true,
-      },
-      component: ProjectEditPage,
-    },
-    {
-      path: "/project/create",
-      name: "ProjectCreatePage",
-      meta: {
-        requiresAuth: true,
-      },
-      component: ProjectCreatePage,
-    },
-    {
       path: "/client/add",
       name: "AddClientPage",
       meta: {
         requiresAuth: true,
       },
       component: AddClientPage,
-    },
-    {
-      path: "/client/edit/:id",
-      name: "ClientEditPage",
-      meta: {
-        requiresAuth: true,
-      },
-      component: ClientEditPage,
-    },
-    {
-      path: "/task/edit/:id",
-      name: "TaskEditPage",
-      meta: {
-        requiresAuth: true,
-      },
-      component: TaskEditPage,
-    },
-    {
-      path: "/task/create",
-      name: "TaskCreatePage",
-      meta: {
-        requiresAuth: true,
-      },
-      component: TaskCreatePage,
     },
     {
       path: "/automations",

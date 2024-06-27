@@ -49,14 +49,4 @@ class TimerRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
-
-    public function persist(Timer $timer): void
-    {
-        $this->getEntityManager()->persist($timer);
-    }
-
-    public function flush(): void
-    {
-        $this->getEntityManager()->flush();
-    }
 }

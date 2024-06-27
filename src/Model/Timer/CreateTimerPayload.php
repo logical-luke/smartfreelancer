@@ -9,7 +9,7 @@ use App\Model\Synchronization\ActionPayloadInterface;
 use DateTimeImmutable;
 use Symfony\Component\Uid\Uuid;
 
-readonly class StartTimerPayload implements ActionPayloadInterface
+readonly class CreateTimerPayload implements ActionPayloadInterface
 {
     protected function __construct(
         private string $timerId,
@@ -21,7 +21,7 @@ readonly class StartTimerPayload implements ActionPayloadInterface
     ) {
     }
 
-    public static function from(Uuid $userId, array $payload): StartTimerPayload
+    public static function from(Uuid $userId, array $payload): CreateTimerPayload
     {
         if (!isset($payload['id'])) {
             throw new InvalidPayloadException('Missing timer id');

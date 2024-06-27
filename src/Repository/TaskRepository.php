@@ -6,15 +6,8 @@ use App\Entity\Task;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
 
-/**
- * @extends ServiceEntityRepository<Task>
- *
- * @method Task|null find($id, $lockMode = null, $lockVersion = null)
- * @method Task|null findOneBy(array $criteria, array $orderBy = null)
- * @method Task[]    findAll()
- * @method Task[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class TaskRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -49,8 +42,12 @@ class TaskRepository extends ServiceEntityRepository
         ]);
     }
 
-    public function flush(): void
+    public function findOneById(Uuid $id): ?Task
     {
-        $this->getEntityManager()->flush();
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.id = :val')
+            ->setParameter('val', $id, UuidType::NAME)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

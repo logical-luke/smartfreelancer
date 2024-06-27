@@ -57,6 +57,6 @@ readonly class Updater implements ProcessorInterface
             ->setProject($project)
             ->setTask($task);
 
-        $this->timerRepository->flush();
+        $this->timerRepository->save($timer, true);
     }
 }

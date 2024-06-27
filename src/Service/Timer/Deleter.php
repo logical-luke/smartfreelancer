@@ -9,27 +9,26 @@ use App\Entity\User;
 use App\Exception\InvalidPayloadException;
 use App\Model\Synchronization\ActionPayloadInterface;
 use App\Model\TimeEntry\CreateTimeEntryPayload;
-use App\Model\Timer\StartTimerPayload;
-use App\Model\Timer\StopTimerPayload;
+use App\Model\Timer\CreateTimerPayload;
+use App\Model\Timer\DeleteTimerPayload;
 use App\Repository\TimerRepository;
 use App\Repository\UserRepository;
 use App\Service\Synchronization\ProcessorInterface;
 use App\Service\TimeEntry\TimeEntryCreator;
 use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 
-#[AsTaggedItem(index: 'stop.timer')]
-readonly class Stopper implements ProcessorInterface
+#[AsTaggedItem(index: 'delete.timer')]
+readonly class Deleter implements ProcessorInterface
 {
     public function __construct(
         private TimerRepository $timerRepository,
-        private TimeEntryCreator $timeEntryCreator,
         private UserRepository $userRepository,
     ) {
     }
 
     public function sync(User $user, ActionPayloadInterface $payload): void
     {
-        if (!$payload instanceof StopTimerPayload) {
+        if (!$payload instanceof DeleteTimerPayload) {
             throw new \RuntimeException('Invalid payload');
         }
 
@@ -44,15 +43,6 @@ readonly class Stopper implements ProcessorInterface
         if ($this->userRepository->find($payload->getUserId())?->getId()?->toRfc4122() !== $timerOwner->getId()?->toRfc4122()) {
             throw new InvalidPayloadException('Invalid timer owner');
         }
-
-        $timeEntry = ($this->timeEntryCreator)(CreateTimeEntryPayload::from([
-            'timerId' => $timer->getId()?->toRfc4122(),
-            'endTime' => $payload->getEndTime()->getTimestamp(),
-        ]));
-
-        $timerOwner->setTimer(null);
-
-        $this->userRepository->save($timerOwner, true);
 
         $this->timerRepository->remove($timer, true);
     }

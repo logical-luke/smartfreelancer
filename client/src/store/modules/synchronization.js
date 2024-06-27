@@ -4,26 +4,14 @@ const state = () => ({
   initialLoaded: false,
   synchronizationTime: null,
   queue: [],
+  synchronizationLogQueue: [],
   offline: false,
+  backgroundFetchingIntervalId: null,
+  backgroundFetchingInProgress: false,
   backgroundUploadIntervalId: null,
-  backgroundDownloadIntervalId: null,
   backgroundUploadInProgress: false,
-  backgroundDownloadInProgress: false,
   synchronizationFailed: false,
 });
-
-const actions = {
-  removeFromQueue({ commit, rootGetters }, queueItem) {
-    const queue = JSON.parse(
-      JSON.stringify(rootGetters["synchronization/getQueue"])
-    );
-    queue.splice(
-      queue.findIndex((obj) => obj.id === queueItem.id),
-      1
-    );
-    commit("setQueue", queue);
-  },
-};
 
 const mutations = {
   setInitialLoaded(state, loaded) {
@@ -31,32 +19,33 @@ const mutations = {
   },
   setSynchronizationTime(state, synchronizationTime) {
     state.synchronizationTime = synchronizationTime;
-    cache
-      .set("synchronizationTime", JSON.stringify(synchronizationTime))
-      .then();
   },
   setQueue(state, queue) {
     state.queue = queue;
-    cache.set("queue", JSON.stringify(queue)).then();
+  },
+  setSynchronizationLogQueue(state, synchronizationLogQueue) {
+    state.synchronizationLogQueue = synchronizationLogQueue;
   },
   setOffline(state, offline) {
     state.offline = offline;
   },
   setBackgroundUploadIntervalId(state, backgroundUploadIntervalId) {
-    state.backgroundSyncIntervalId = backgroundUploadIntervalId;
+    state.backgroundUploadIntervalId = backgroundUploadIntervalId;
   },
-  setBackgroundDownloadIntervalId(state, backgroundDownloadIntervalId) {
-    state.backgroundSyncIntervalId = backgroundDownloadIntervalId;
+  setBackgroundFetchingIntervalId(state, backgroundFetchingIntervalId) {
+    state.backgroundFetchingIntervalId = backgroundFetchingIntervalId;
   },
   setBackgroundUploadInProgress(state, backgroundUploadInProgress) {
     state.backgroundUploadInProgress = backgroundUploadInProgress;
   },
-  setBackgroundDownloadInProgress(state, backgroundDownloadInProgress) {
-    state.backgroundDownloadInProgress = backgroundDownloadInProgress;
+  setBackgroundFetchingInProgress(state, backgroundFetchingInProgress) {
+    state.backgroundFetchingInProgress = backgroundFetchingInProgress;
   },
   clearQueue(state) {
     state.queue = [];
-    cache.set("queue", JSON.stringify([])).then();
+  },
+  clearSynchronizationLogQueue(state) {
+    state.synchronizationLogQueue = [];
   },
   setSynchronizationFailed(state, synchronizationFailed) {
     state.synchronizationFailed = synchronizationFailed;
@@ -76,6 +65,9 @@ const getters = {
   getQueue(state) {
     return state.queue;
   },
+  getSynchronizationLogQueue(state) {
+    return state.synchronizationLogQueue;
+  },
   isOffline(state) {
     return state.offline;
   },
@@ -85,23 +77,23 @@ const getters = {
   getBackgroundUploadIntervalId(state) {
     return state.backgroundUploadIntervalId;
   },
-  getBackgroundDownloadIntervalId(state) {
-    return state.backgroundSyncIntervalId;
+  getBackgroundFetchingIntervalId(state) {
+    return state.backgroundFetchingIntervalId;
   },
   isBackgroundUploadInProgress(state) {
     return state.backgroundUploadInProgress;
   },
-  isBackgroundDownloadInProgress(state) {
-    return state.backgroundDownloadInProgress;
+  isBackgroundFetchingInProgress(state) {
+    return state.backgroundFetchingInProgress;
   },
   isSynchronizationFailed(state) {
-    return state.synchronizationFailed;
+    return !!state.synchronizationFailed;
   },
   isBackgroundUploadEnabled(state) {
     return state.backgroundUploadIntervalId !== null;
   },
-  isBackgroundSyncEnabled(state) {
-    return state.backgroundSyncIntervalId !== null;
+  isBackgroundFetchingEnabled(state) {
+    return state.backgroundFetchingIntervalId !== null;
   },
 };
 
@@ -110,5 +102,4 @@ export default {
   state,
   mutations,
   getters,
-  actions,
 };

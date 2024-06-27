@@ -159,5 +159,9 @@
   "Log In to Your Account": "Log In to Your Account",
   "Time Worked": "Time Worked",
   "Cancel": "Cancel",
-  "Name": "Name"
+  "Name": "Name",
+  "Photo": "Photo",
+  "Delete": "Delete",
+  "Browse": "Browse",
+  "Invalid email": "Invalid email"
 }

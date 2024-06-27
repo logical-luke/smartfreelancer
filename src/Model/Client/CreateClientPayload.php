@@ -66,14 +66,7 @@ readonly class CreateClientPayload implements ActionPayloadInterface
         return $this->email;
     }
 
-    public
-    function getUserId(): Uuid
-    {
-        return Uuid::fromString($this->userId);
-    }
-
-    public
-    function getName(): ?string
+    public function getName(): ?string
     {
         return $this->name;
     }

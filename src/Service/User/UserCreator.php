@@ -36,8 +36,7 @@ class UserCreator
             $user->setPassword($hashedPassword);
         }
 
-        $this->userRepository->persist($user);
-        $this->userRepository->flush();
+        $this->userRepository->save($user, true);
 
         return $user;
     }

@@ -44,7 +44,7 @@ export default {
     }
   },
   async logout() {
-    await synchronization.disableBackgroundSync();
+    await synchronization.disableBackgroundFetching();
     await synchronization.disableBackgroundUpload();
     await store.commit("synchronization/setInitialLoaded", false);
     await store.commit("authorization/setToken", null);
@@ -56,6 +56,13 @@ export default {
     await store.commit("tasks/setTasks", []);
     await store.commit("timer/clearTimer");
     await store.commit("synchronization/setSynchronizationTime", null);
+    await store.commit("synchronization/clearQueue");
+    await store.commit("synchronization/clearSynchronizationLogQueue");
+    await store.commit("synchronization/setSynchronizationFailed", false);
+    await store.commit("synchronization/setBackgroundUploadIntervalId", null);
+    await store.commit("synchronization/setBackgroundUploadInProgress", false);
+    await store.commit("synchronization/setBackgroundFetchingIntervalId", null);
+    await store.commit("synchronization/setBackgroundFetchingInProgress", false);
     await cookies.remove("api_token");
     await cookies.remove("refresh_token");
     await cache.clear();

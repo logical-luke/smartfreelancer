@@ -19,13 +19,6 @@ export default {
   components: {
     AddClientForm,
   },
-  data() {
-    return {
-      clientsPageRoute: {
-        name: "ClientsPage"
-      }
-    }
-  },
 };
 </script>
 

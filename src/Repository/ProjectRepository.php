@@ -48,9 +48,4 @@ class ProjectRepository extends ServiceEntityRepository
             'id' => 'DESC',
         ]);
     }
-
-    public function flush(): void
-    {
-        $this->getEntityManager()->flush();
-    }
 }

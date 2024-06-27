@@ -17,25 +17,25 @@ class SynchronizationLog
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'NONE')]
-    private ?Uuid $id = null;
+    private Uuid $id;
 
     #[ORM\Column]
     private array $payload;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $resource = null;
+    #[ORM\Column(length: 255)]
+    private string $resource;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $action = null;
+    #[ORM\Column(length: 255)]
+    private string $action;
 
     #[ORM\ManyToOne(inversedBy: 'synchronizationLogs')]
-    private ?User $user = null;
+    private User $user;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $message = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $status = null;
+    #[ORM\Column(length: 255)]
+    private string $status;
 
     #[ORM\Column]
     private DateTimeImmutable $requestedAt;
@@ -46,7 +46,7 @@ class SynchronizationLog
     #[ORM\Column(nullable: true)]
     private ?DateTimeImmutable $finishedAt = null;
 
-    public function __construct(Uuid $id, array $payload, ?string $resource, ?string $action, ?User $user, DateTimeImmutable $requestedAt)
+    public function __construct(Uuid $id, array $payload, string $resource, string $action, User $user, DateTimeImmutable $requestedAt)
     {
         $this->id = $id;
         $this->payload = $payload;
@@ -59,7 +59,7 @@ class SynchronizationLog
     }
 
 
-    public function getId(): ?Uuid
+    public function getId(): Uuid
     {
         return $this->id;
     }

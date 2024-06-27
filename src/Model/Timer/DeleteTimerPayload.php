@@ -8,7 +8,7 @@ use App\Exception\InvalidPayloadException;
 use App\Model\Synchronization\ActionPayloadInterface;
 use Symfony\Component\Uid\Uuid;
 
-readonly class StopTimerPayload implements ActionPayloadInterface
+readonly class DeleteTimerPayload implements ActionPayloadInterface
 {
     protected function __construct(
         private string $timerId,

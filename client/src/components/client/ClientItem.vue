@@ -5,7 +5,7 @@
         <img
             class="w-20 h-20 p-2 mr-4 rounded-full border border-indigo-50"
             :src="getAvatar()"
-            alt="{{ name }}"
+            :alt="name"
         />
         <div>
           <h3 class="font-medium text-lg">{{ name }}</h3>

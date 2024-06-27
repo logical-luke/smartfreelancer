@@ -11,6 +11,7 @@ readonly class UpdateTaskPayload
 {
     protected function __construct(
         private string $taskId,
+        private string $userId,
         private string $name,
         private ?string $description,
         private ?string $clientId,
@@ -39,6 +40,7 @@ readonly class UpdateTaskPayload
 
         return new self(
             $payload['id'],
+            $userId->toRfc4122(),
             $payload['name'],
             $payload['description'],
             $payload['clientId'],
@@ -80,5 +82,10 @@ readonly class UpdateTaskPayload
     public function getParentTaskId(): ?Uuid
     {
         return $this->parentTaskId ? Uuid::fromString($this->parentTaskId) : null;
+    }
+
+    public function getUserId(): Uuid
+    {
+        return Uuid::fromString($this->userId);
     }
 }

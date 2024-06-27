@@ -17,11 +17,10 @@ use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 
 
 #[AsTaggedItem(index: 'create.task')]
-readonly class TaskCreator implements ProcessorInterface
+readonly class Creator implements ProcessorInterface
 {
     public function __construct(
         private TaskRepository $taskRepository,
-        private UserRepository $userRepository,
         private ProjectRepository $projectRepository,
         private ClientRepository $clientRepository,
     ) {
@@ -33,20 +32,18 @@ readonly class TaskCreator implements ProcessorInterface
             throw new \RuntimeException('Invalid payload');
         }
 
-        $task = Task::fromUser($user);
-
-        $task->setName($payload->getName());
-        $task->setDescription($payload->getDescription());
-
-        if ($payload->getProjectId() && $project = $this->projectRepository->find($payload->getProjectId())) {
-            $task->setProject($project);
+        if ($this->taskRepository->findOneById($payload->getTaskId())) {
+            throw new \RuntimeException('Task already exists');
         }
 
-        if ($payload->getClientId() && $client = $this->clientRepository->find($payload->getClientId())) {
-            $task->setClient($client);
-        }
+        $client = $payload->getClientId() ? $this->clientRepository->find($payload->getClientId()) : null;
+        $project = $payload->getProjectId() ? $this->projectRepository->find($payload->getProjectId()) : null;
+        $task = (Task::fromUser($user, $payload->getTaskId(), $payload->getName(), $payload->getCreatedAt()))
+            ->setDescription($payload->getDescription())
+            ->setClient($client)
+            ->setProject($project);
 
-        if ($payload->getTaskId() && $parentTask = $this->taskRepository->find($payload->getTaskId())) {
+        if ($payload->getParentTaskId() && $parentTask = $this->taskRepository->findOneById($payload->getTaskId())) {
             $parentTask->addSubtask($task);
         }
 

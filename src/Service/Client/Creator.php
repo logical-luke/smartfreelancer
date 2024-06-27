@@ -18,7 +18,6 @@ readonly class Creator implements ProcessorInterface
 {
     public function __construct(
         private ClientRepository $clientRepository,
-        private UserRepository $userRepository,
     ) {
     }
 
@@ -35,7 +34,5 @@ readonly class Creator implements ProcessorInterface
 
 
         $this->clientRepository->save($client, true);
-        $user->addClient($client);
-        $this->userRepository->save($user, true);
     }
 }

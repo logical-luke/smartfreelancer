@@ -17,7 +17,7 @@
   <div v-else class="p-1">
     <div
       class="flex items-center animate-pulse-slow"
-      v-if="isBackgroundUploadInProgress || isBackgroundDownloadInProgress"
+      v-if="isBackgroundUploadInProgress || isBackgroundFetchingInProgress"
     >
       <button
         type="button"
@@ -26,7 +26,7 @@
         class="inline-flex cursor-auto bg-yellow-600 items-center justify-center items-center p-2 text-sm font-medium text-white rounded-full transition duration-200"
       >
         <cloud-download-icon
-          v-if="isBackgroundDownloadInProgress"
+          v-if="isBackgroundFetchingInProgress"
           class="animate-pulse-slow"
           size="20"
         />
@@ -71,7 +71,7 @@ export default {
   },
   computed: {
     ...mapGetters("synchronization", [
-      "isBackgroundDownloadInProgress",
+      "isBackgroundFetchingInProgress",
       "isBackgroundUploadInProgress",
       "isOffline",
       "getSynchronizationTime",

@@ -12,7 +12,7 @@ readonly class DeleteTaskPayload implements ActionPayloadInterface
 {
     protected function __construct(
         private string $taskId,
-        private string $ownerId,
+        private string $userId,
     ) {
     }
 
@@ -33,16 +33,16 @@ readonly class DeleteTaskPayload implements ActionPayloadInterface
         return Uuid::fromString($this->taskId);
     }
 
-    public function getOwnerId(): Uuid
+    public function getUserId(): Uuid
     {
-        return Uuid::fromString($this->ownerId);
+        return Uuid::fromString($this->userId);
     }
 
     public function toArray(): array
     {
         return [
             'id' => $this->taskId,
-            'ownerId' => $this->ownerId,
+            'userId' => $this->userId,
         ];
     }
 

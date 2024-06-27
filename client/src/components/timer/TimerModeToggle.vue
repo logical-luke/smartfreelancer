@@ -50,21 +50,16 @@ export default {
   <toggle-button
     :disabled="this.disabled"
     v-model="checked"
-    onLabel=" "
-    offLabel=" "
-    unstyled
+    onLabel="Timer"
+    offLabel="Manual Entry"
     @update:model-value="toggle"
-    :class="{
-      'bg-gray-500 hover:bg-gray-600': this.disabled,
-      'bg-indigo-500 hover:bg-indigo-600': !this.disabled,
-    }"
-    class="inline-flex items-center justify-center px-2 py-2 text-sm font-medium text-white rounded-full transition duration-200"
   >
     <template #icon>
-      <clock-play-icon :size="Math.ceil(size * 1.9)" v-if="checked" />
-      <clock-plus-icon :size="Math.ceil(size * 1.9)" v-else />
+        <clock-play-icon class="mr-2" :size="Math.ceil(size * 1.9)" v-if="checked" />
+        <clock-plus-icon class="mr-2" :size="Math.ceil(size * 1.9)" v-else />
     </template>
   </toggle-button>
 </template>
 
-<style scoped></style>
+<style>
+</style>

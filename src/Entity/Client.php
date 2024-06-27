@@ -47,7 +47,7 @@ class Client
     private ?string $avatar = null;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $createdAt = null;
+    private DateTimeImmutable $createdAt;
 
     protected function __construct(User $owner, Uuid $id, string $name, DateTimeImmutable $createdAt)
     {

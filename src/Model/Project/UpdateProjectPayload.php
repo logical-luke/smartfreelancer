@@ -70,7 +70,7 @@ readonly class UpdateProjectPayload implements ActionPayloadInterface
             'name' => $this->name,
             'description' => $this->description,
             'clientId' => $this->clientId,
-            'ownerId' => $this->ownerId,
+            'userId' => $this->ownerId,
         ];
     }
 

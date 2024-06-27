@@ -16,8 +16,8 @@ use App\Model\Synchronization\ActionPayloadInterface;
 use App\Model\Task\CreateTaskPayload;
 use App\Model\Task\DeleteTaskPayload;
 use App\Model\Task\UpdateTaskPayload;
-use App\Model\Timer\StartTimerPayload;
-use App\Model\Timer\StopTimerPayload;
+use App\Model\Timer\CreateTimerPayload;
+use App\Model\Timer\DeleteTimerPayload;
 use App\Model\Timer\UpdateTimerPayload;
 use Symfony\Component\Uid\Uuid;
 
@@ -35,8 +35,8 @@ class ActionPayloadMapper
             ['task', 'create'] => CreateTaskPayload::from($userId,$data),
             ['task', 'update'] => UpdateTaskPayload::from($userId,$data),
             ['task', 'delete'] => DeleteTaskPayload::from($userId,$data),
-            ['timer', 'start'] => StartTimerPayload::from($userId, $data),
-            ['timer', 'stop'] => StopTimerPayload::from($userId, $data),
+            ['timer', 'create'] => CreateTimerPayload::from($userId, $data),
+            ['timer', 'delete'] => DeleteTimerPayload::from($userId, $data),
             ['timer', 'update'] => UpdateTimerPayload::from($userId, $data),
             default => throw new InvalidPayloadException('Invalid resource or action'),
         };

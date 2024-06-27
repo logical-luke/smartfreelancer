@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade" mode="out-in">
+  <transition name="fade">
     <div
       class="flex h-screen items-center justify-center"
       v-if="!isInitialLoaded"
@@ -80,11 +80,13 @@ export default {
     queue() {
       if (this.isQueueEmpty) {
         synchronization.disableBackgroundUpload();
-        synchronization.enableBackgroundSync();
-      } else {
-        synchronization.disableBackgroundSync();
-        synchronization.enableBackgroundUpload();
+        synchronization.enableBackgroundFetching();
+
+        return;
       }
+
+      synchronization.disableBackgroundFetching();
+      synchronization.enableBackgroundUpload();
     },
   },
   computed: {
@@ -102,11 +104,8 @@ export default {
   setup() {
     const route = useRoute();
     onMounted(async () => {
-      // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
       let vh = window.innerHeight * 0.01;
-      // Then we set the value in the --vh custom property to the root of the document
       document.documentElement.style.setProperty("--vh", `${vh}px`);
-      // We listen to the resize event
       window.addEventListener("resize", () => {
         // We execute the same script as before
         let vh = window.innerHeight * 0.01;
@@ -114,31 +113,18 @@ export default {
       });
 
       const { token, refreshToken } = await authorization.getTokensFromCookies();
-
       await authorization.authorize(token, refreshToken);
 
       await cache.loadLocale();
 
-
       if (token) {
-        await synchronization.syncUser();
+        await synchronization.fetchUser();
         await cache.getInitial();
+        await synchronization.disableBackgroundUpload();
+        await synchronization.enableBackgroundFetching();
       }
-
-      store.commit(
-        "time/setServerTime",
-        getUTCTimestampFromLocaltime() +
-          store.getters["time/getServerTimeOffset"]
-      );
-
-      setInterval(() => {
-        store.commit(
-          "time/setServerTime",
-          getUTCTimestampFromLocaltime() +
-            store.getters["time/getServerTimeOffset"]
-        );
-      }, 1000);
     });
+
     return { route };
   },
 };
@@ -147,7 +133,7 @@ export default {
 <style>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition: all 0.4s ease-in-out;
 }
 
 .fade-enter-from,
@@ -155,13 +141,18 @@ export default {
   opacity: 0;
 }
 
-.fade-slower-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.3s ease-out;
 }
 
-.fade-slower-enter-from,
-.fade-leave-to {
+.slide-enter-from {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.slide-leave-to {
+  transform: translateX(100%);
   opacity: 0;
 }
 
@@ -185,7 +176,13 @@ button.p-button.p-component.p-confirm-dialog-accept.confirm-button-accept:enable
 }
 
 .h-screen {
-  height: 100vh; /* Fallback for browsers that do not support Custom Properties */
-  height: calc(var(--vh, 1vh) * 100);
+  /* Fallback for browsers that do not support Custom Properties */
+  height: 100vh;
 }
+
+.h-screen {
+  height: calc(1vh * 100);
+}
+
+
 </style>

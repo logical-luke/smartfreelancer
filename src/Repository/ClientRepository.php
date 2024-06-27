@@ -48,14 +48,4 @@ class ClientRepository extends ServiceEntityRepository
             'id' => 'DESC',
         ]);
     }
-
-    public function persist(Client $client): void
-    {
-        $this->getEntityManager()->persist($client);
-    }
-
-    public function flush(): void
-    {
-        $this->getEntityManager()->flush();
-    }
 }

@@ -53,6 +53,12 @@ export default {
         JSON.parse(await this.get("queue"))
       );
     }
+    if (await this.exists("synchronizationLogQueue")) {
+      await store.commit(
+          "synchronization/setSynchronizationLogQueue",
+          JSON.parse(await this.get("synchronizationLogQueue"))
+      );
+    }
     if (await this.exists("synchronizationTime")) {
       const syncTime = JSON.parse(await this.get("synchronizationTime"));
       const syncTimeObject = new Date(syncTime);

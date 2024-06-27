@@ -156,7 +156,7 @@ export default {
         );
         await authorization.authorize(token, refreshToken);
         await store.commit("synchronization/setInitialLoaded", false);
-        await synchronization.syncAll();
+        await synchronization.fetchAllData();
         await store.commit("synchronization/setInitialLoaded", true);
 
         await router.push("/");

@@ -13,7 +13,7 @@ use App\Exception\InvalidPayloadException;
 use App\Model\Client\ClientDto;
 use App\Model\Project\ProjectDTO;
 use App\Model\Synchronization\Payload;
-use App\Model\Task\TaskDTO;
+use App\Model\Task\TaskDto;
 use App\Model\Timer\TimerDTO;
 use App\Repository\SynchronizationLogRepository;
 use App\Service\Client\ClientDtoArrayMapper;
@@ -39,7 +39,7 @@ class SynchronizationController extends AbstractController
         return $this->json([
             'clients' => ClientDtoArrayMapper::map($user->getClients()),
             'projects' => array_map(static function (Project $project) { return ProjectDTO::fromProject($project); }, $user->getProjects()->toArray()),
-            'tasks' => array_map(static function (Task $task) { return TaskDTO::fromTask($task); }, $user->getTasks()->toArray()),
+            'tasks' => array_map(static function (Task $task) { return TaskDto::fromTask($task); }, $user->getTasks()->toArray()),
             'timer' => $user->getTimer() ? TimerDTO::fromTimer($user->getTimer()) : null,
         ]);
     }
@@ -59,6 +59,10 @@ class SynchronizationController extends AbstractController
 
             $synchronizationLog = SynchronizationLog::fromPayload($user, $payload);
 
+            if (null !== $synchronizationLogRepository->findOneById($synchronizationLog->getId())) {
+                return $this->json(['error' => 'Synchronization log already exists'], Response::HTTP_CONFLICT);
+            }
+
             $synchronizationLogRepository->save($synchronizationLog, true);
 
             if (!$processorsCollection->exist($payload->getProcessorKey())) {
@@ -74,6 +78,6 @@ class SynchronizationController extends AbstractController
             return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->json(['uploadTime' => time()]);
+        return $this->json(['id' => $synchronizationLog->getId()->toRfc4122()]);
     }
 }

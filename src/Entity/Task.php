@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TaskRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,19 +15,18 @@ class Task
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     private Uuid $id;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private string $name;
 
     #[ORM\Column(length: 10000, nullable: true)]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $owner = null;
+    private User $owner;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     private ?Project $project = null;
@@ -44,22 +44,27 @@ class Task
     private ?Client $client = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'subtasks')]
-    private ?self $task = null;
+    private ?self $parentTask = null;
 
-    #[ORM\OneToMany(mappedBy: 'task', targetEntity: self::class)]
+    #[ORM\OneToMany(mappedBy: 'parentTask', targetEntity: self::class)]
     private Collection $subtasks;
 
-    protected function __construct(User $user, Uuid $id)
+    #[ORM\Column]
+    private DateTimeImmutable $createdAt;
+
+    protected function __construct(User $user, Uuid $id, string $name, DateTimeImmutable $createdAt)
     {
         $this->id = $id;
         $this->owner = $user;
+        $this->name = $name;
+        $this->createdAt = $createdAt;
         $this->timeEntries = new ArrayCollection();
         $this->subtasks = new ArrayCollection();
     }
 
-    public static function fromUser(User $user, Uuid $id): self
+    public static function fromUser(User $user, Uuid $id, string $name, DateTimeImmutable $createdAt): self
     {
-        return new self($user, $id);
+        return new self($user, $id, $name, $createdAt);
     }
 
     public function getId(): Uuid
@@ -67,7 +72,7 @@ class Task
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -91,7 +96,7 @@ class Task
         return $this;
     }
 
-    public function getOwner(): ?User
+    public function getOwner(): User
     {
         return $this->owner;
     }
@@ -191,14 +196,14 @@ class Task
         return $this;
     }
 
-    public function getTask(): ?self
+    public function getParentTask(): ?self
     {
-        return $this->task;
+        return $this->parentTask;
     }
 
-    public function setTask(?self $task): self
+    public function setParentTask(?self $parentTask): self
     {
-        $this->task = $task;
+        $this->parentTask = $parentTask;
 
         return $this;
     }
@@ -215,7 +220,7 @@ class Task
     {
         if (!$this->subtasks->contains($subtask)) {
             $this->subtasks->add($subtask);
-            $subtask->setTask($this);
+            $subtask->setParentTask($this);
         }
 
         return $this;
@@ -223,12 +228,22 @@ class Task
 
     public function removeSubtask(self $subtask): self
     {
-        if ($this->subtasks->removeElement($subtask)) {
-            // set the owning side to null (unless already changed)
-            if ($subtask->getTask() === $this) {
-                $subtask->setTask(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->subtasks->removeElement($subtask) && $subtask->getParentTask() === $this) {
+            $subtask->setParentTask(null);
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
