@@ -1,3 +1,14 @@
+<script>
+import AddClientForm from "@/components/client/AddClientForm.vue";
+
+export default {
+  name: "AddClientPage",
+  components: {
+    AddClientForm,
+  },
+};
+</script>
+
 <template>
   <div class="flex mb-8">
     <div>
@@ -11,15 +22,3 @@
   </div>
 </template>
 
-<script>
-import AddClientForm from "@/components/client/AddClientForm.vue";
-
-export default {
-  name: "AddClientPage",
-  components: {
-    AddClientForm,
-  },
-};
-</script>
-
-<style scoped></style>

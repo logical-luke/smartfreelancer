@@ -118,13 +118,10 @@ export default {
     await store.commit("synchronization/setBackgroundUploadInProgress", false);
   },
   async enableBackgroundFetching() {
-    console.log('wtf');
     if (!store.getters["synchronization/isBackgroundFetchingEnabled"]) {
-      console.log('setting');
       const backgroundFetchingId = setInterval(() => {
         this.fetchAllData();
       }, millisecondsInMinute * 5);
-      console.log(backgroundFetchingId);
       await store.commit(
         "synchronization/setBackgroundFetchingIntervalId",
         backgroundFetchingId

@@ -1,3 +1,12 @@
+<script>
+import TransparentLogoWide from "@/components/logo/TransparentLogoWide.vue";
+
+export default {
+  name: "NotFoundPage",
+  components: { TransparentLogoWide },
+};
+</script>
+
 <template>
   <div class="flex h-screen -mt-12 flex-col items-center justify-center">
     <transparent-logo-wide size="h-60" />
@@ -19,14 +28,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import TransparentLogoWide from "@/components/logo/TransparentLogoWide.vue";
-
-export default {
-  name: "NotFoundPage",
-  components: { TransparentLogoWide },
-};
-</script>
-
-<style scoped></style>
