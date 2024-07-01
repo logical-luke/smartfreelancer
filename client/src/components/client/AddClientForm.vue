@@ -9,7 +9,7 @@ import TrashIcon from "vue-tabler-icons/icons/TrashIcon"
 import store from "@/store";
 import MainActionButton from "@/components/MainActionButton.vue";
 import ActionButton from "@/components/ActionButton.vue";
-import client from "@/services/client";
+import clientService from "@/services/client";
 import ImageUploadInput from "@/components/ImageUploadInput.vue";
 
 export default {
@@ -59,7 +59,7 @@ export default {
         return;
       }
 
-      await client.create(this.client)
+      await clientService.create(this.client)
 
       this.$router.push(this.afterSavePageRoute);
     },
@@ -134,7 +134,7 @@ export default {
 
     <div class="flex gap-4 flex-col md:flex-row justify-center md:justify-start w-full md:w-1/2">
       <main-action-button :disabled="!canSubmitForm() || client.name.length === 0" @keyup.enter="submitForm" @click="submitForm" class="w-full md:w-auto">
-        {{ $t("Add Client") }}
+        {{ $t("Add") }}
       </main-action-button>
       <router-link :to="cancelPageRoute">
         <action-button class="w-full md:w-auto">{{ $t("Cancel") }}</action-button>

@@ -79,7 +79,7 @@ readonly class UpdateClientPayload implements ActionPayloadInterface
     public function toArray(): array
     {
         return [
-            'clientId' => $this->clientId,
+            'id' => $this->clientId,
             'userId' => $this->userId,
             'name' => $this->name,
             'email' => $this->email,

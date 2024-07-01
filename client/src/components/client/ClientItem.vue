@@ -8,7 +8,7 @@ import ProgressIcon from "vue-tabler-icons/icons/ProgressIcon";
 import ProgressXIcon from "vue-tabler-icons/icons/ProgressXIcon";
 import ProgressCheckIcon from "vue-tabler-icons/icons/ProgressCheckIcon";
 import CalendarIcon from "vue-tabler-icons/icons/CalendarIcon";
-import client from "@/services/client";
+import clientService from "@/services/client";
 import router from "@/router";
 
 export default {
@@ -38,7 +38,7 @@ export default {
       await router.push({name: "EditClientPage", params: {id: this.id}});
     },
     delete() {
-      client.delete(this.id);
+      clientService.delete(this.id);
     }
   },
   props: {

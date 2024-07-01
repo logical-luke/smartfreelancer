@@ -1,6 +1,7 @@
 import getUuid from "@/services/uuidGenerator";
 import store from "@/store";
 import synchronization from "@/services/synchronization";
+import cache from "@/services/cache";
 
 const createNewClient = (newClientInput) => {
     return {
@@ -21,6 +22,7 @@ export default {
         const newClient = createNewClient(newClientInput);
         clients.unshift(newClient);
         store.commit("clients/setClients", clients);
+        cache.set('clients', JSON.stringify(clients)).then();
         synchronization.pushToQueue(
             "client",
             "create",
@@ -31,6 +33,7 @@ export default {
         let clients = getClients();
         clients = clients.filter((client) => client.id !== id);
         store.commit("clients/setClients", clients);
+        cache.set('clients', JSON.stringify(clients)).then();
         synchronization.pushToQueue(
             "client",
             "delete",
@@ -47,6 +50,7 @@ export default {
             return client;
         });
         store.commit("clients/setClients", clients);
+        cache.set('clients', JSON.stringify(clients)).then();
         synchronization.pushToQueue(
             "client",
             "update",
@@ -56,5 +60,14 @@ export default {
     getById(id) {
         let clients = getClients();
         return clients.filter((client) => client.id === id).pop();
+    },
+    getTimerOptions() {
+        let clients = getClients();
+        return clients.all.map((client) => {
+            return {
+                id: client.id,
+                label: client.name,
+            };
+        });
     }
 }

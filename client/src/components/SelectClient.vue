@@ -13,6 +13,7 @@ import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import { onMounted, ref } from "vue";
 import store from "@/store";
+import clientService from "@/services/client";
 
 export default {
   name: "SelectClient",
@@ -22,7 +23,7 @@ export default {
   },
   watch: {
     clients() {
-      this.options = store.getters["clients/getClientsOptions"];
+      this.options = clientService.getTimerOptions();
     },
   },
   methods: {
@@ -38,7 +39,7 @@ export default {
     let clientId = ref("clientId");
     let options = ref("options");
     clientId.value = null;
-    options.value = store.getters["clients/getClientsOptions"];
+    options.value = clientService.getTimerOptions();
     onMounted(() => {
       if (props.selected) {
         const selectedClient = options.value
@@ -57,7 +58,7 @@ export default {
   },
   emits: ["updated"],
   created() {
-    this.options = store.getters["clients/getClientsOptions"];
+    this.options = clientService.getTimerOptions();
   },
 };
 </script>

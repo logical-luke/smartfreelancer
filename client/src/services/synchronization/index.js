@@ -68,6 +68,7 @@ export default {
 
     if (Array.isArray(clients) && clients.length > 0) {
       await store.commit("clients/setClients", clients);
+      await cache.set('clients', JSON.stringify(clients));
     }
     if (Array.isArray(projects) && projects.length > 0) {
       await store.commit("projects/setProjects", projects);

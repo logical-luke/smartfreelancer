@@ -10,7 +10,7 @@ import store from "@/store";
 import MainActionButton from "@/components/MainActionButton.vue";
 import ActionButton from "@/components/ActionButton.vue";
 import ImageUploadInput from "@/components/ImageUploadInput.vue";
-import client from "@/services/client";
+import clientService from "@/services/client";
 
 export default {
   name: "EditClientForm",
@@ -60,7 +60,7 @@ export default {
         return;
       }
 
-      await client.update(this.client)
+      await clientService.update(this.client)
 
       this.$router.push(this.afterSavePageRoute);
     },
@@ -80,7 +80,7 @@ export default {
     },
   },
   async mounted() {
-    const clientObject = client.getById(this.$route.params.id);
+    const clientObject = clientService.getById(this.$route.params.id);
     if (!clientObject) {
       await this.$router.push({name: 'NotFoundPage'});
     }
@@ -142,7 +142,7 @@ export default {
 
     <div class="flex gap-4 flex-col md:flex-row justify-center md:justify-start w-full md:w-1/2">
       <main-action-button :disabled="!canSubmitForm() || client.name.length === 0" @keyup.enter="submitForm" @click="submitForm" class="w-full md:w-auto">
-        {{ $t("Edit Client") }}
+        {{ $t("Save") }}
       </main-action-button>
       <router-link :to="cancelPageRoute">
         <action-button class="w-full md:w-auto">{{ $t("Cancel") }}</action-button>

@@ -13,6 +13,7 @@ readonly class ClientDto
         public string  $ownerId,
         public ?string $name,
         public ?string $avatar,
+        public ?string $phone,
         public ?string $email,
         public int $createdAt,
     ) {
@@ -25,6 +26,7 @@ readonly class ClientDto
             $client->getOwner()?->getId()?->toRfc4122(),
             $client->getName(),
             $client->getAvatar(),
+            $client->getPhone(),
             $client->getEmail(),
             $client->getCreatedAt()->getTimestamp(),
         );
