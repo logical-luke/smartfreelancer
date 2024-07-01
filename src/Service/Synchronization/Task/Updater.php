@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Task;
+namespace App\Service\Synchronization\Task;
 
-use App\Entity\Task;
 use App\Entity\User;
 use App\Model\Synchronization\ActionPayloadInterface;
 use App\Model\Task\UpdateTaskPayload;

@@ -9,11 +9,11 @@ import TrashIcon from "vue-tabler-icons/icons/TrashIcon"
 import store from "@/store";
 import MainActionButton from "@/components/MainActionButton.vue";
 import ActionButton from "@/components/ActionButton.vue";
-import client from "@/services/client";
 import ImageUploadInput from "@/components/ImageUploadInput.vue";
+import client from "@/services/client";
 
 export default {
-  name: "AddClientForm",
+  name: "EditClientForm",
   components: {
     ImageUploadInput,
     ActionButton,
@@ -28,6 +28,7 @@ export default {
   data() {
     return {
       client: {
+        id: null,
         name: "",
         avatar: "",
         email: "",
@@ -59,7 +60,7 @@ export default {
         return;
       }
 
-      await client.create(this.client)
+      await client.update(this.client)
 
       this.$router.push(this.afterSavePageRoute);
     },
@@ -78,6 +79,13 @@ export default {
       return this.nameValid && this.emailValid && this.phoneValid;
     },
   },
+  async mounted() {
+    const clientObject = client.getById(this.$route.params.id);
+    if (!clientObject) {
+      await this.$router.push({name: 'NotFoundPage'});
+    }
+    this.client = clientObject;
+  }
 };
 </script>
 
@@ -134,7 +142,7 @@ export default {
 
     <div class="flex gap-4 flex-col md:flex-row justify-center md:justify-start w-full md:w-1/2">
       <main-action-button :disabled="!canSubmitForm() || client.name.length === 0" @keyup.enter="submitForm" @click="submitForm" class="w-full md:w-auto">
-        {{ $t("Add Client") }}
+        {{ $t("Edit Client") }}
       </main-action-button>
       <router-link :to="cancelPageRoute">
         <action-button class="w-full md:w-auto">{{ $t("Cancel") }}</action-button>

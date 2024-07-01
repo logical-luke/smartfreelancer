@@ -1,3 +1,68 @@
+<script>
+import MailIcon from "vue-tabler-icons/icons/MailIcon";
+import PhoneIcon from "vue-tabler-icons/icons/PhoneIcon";
+import ActionButton from "@/components/ActionButton.vue";
+import CoinsIcon from "vue-tabler-icons/icons/CoinsIcon";
+import ClockIcon from "vue-tabler-icons/icons/ClockIcon";
+import ProgressIcon from "vue-tabler-icons/icons/ProgressIcon";
+import ProgressXIcon from "vue-tabler-icons/icons/ProgressXIcon";
+import ProgressCheckIcon from "vue-tabler-icons/icons/ProgressCheckIcon";
+import CalendarIcon from "vue-tabler-icons/icons/CalendarIcon";
+import client from "@/services/client";
+import router from "@/router";
+
+export default {
+  name: "ClientItem",
+  components: {
+    ProgressCheckIcon,
+    ProgressXIcon,
+    ProgressIcon,
+    ClockIcon,
+    CoinsIcon,
+    ActionButton,
+    PhoneIcon,
+    MailIcon,
+    CalendarIcon
+  },
+  methods: {
+    hasPhone() {
+      return !!this.phone;
+    },
+    hasEmail() {
+      return !!this.email;
+    },
+    getAvatar() {
+      return this.avatar && this.avatar !== '' ? this.avatar : '/client-placeholder.png';
+    },
+    async goToEditClientPage() {
+      await router.push({name: "EditClientPage", params: {id: this.id}});
+    },
+    delete() {
+      client.delete(this.id);
+    }
+  },
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    avatar: {
+      type: String,
+    },
+  },
+};
+</script>
+
 <template>
   <div class="p-8 w-full bg-white shadow rounded">
     <div class="flex justify-between items-center mb-8">
@@ -16,11 +81,11 @@
     <div v-if="hasPhone() || hasEmail()" class="mb-8 p-4 bg-gray-100 rounded">
       <div v-if="hasEmail()" :class="hasPhone() ? 'mb-4' : ''" class="flex items-center gap-4">
         <mail-icon class="text-gray-500"/>
-        <span>{{ $t("Email") }}:</span>
+        <span>{{ $t("Email") }}: {{ email }}</span>
       </div>
       <div v-if="hasPhone()" class="flex items-center gap-4">
         <phone-icon class="text-gray-500"/>
-        <span>{{ $t("Phone") }}:</span>
+        <span>{{ $t("Phone") }}: {{ phone }}</span>
       </div>
     </div>
 
@@ -73,71 +138,10 @@
     </div>
 
     <div class="flex gap-4 flex-col items-center md:flex-row">
-      <action-button>{{ $t("View Details") }}</action-button>
-      <action-button>{{ $t("Edit") }}</action-button>
-      <action-button>{{ $t("Archive") }}</action-button>
+      <action-button disabled="disabled">{{ $t("View Details") }}</action-button>
+      <action-button @click="this.goToEditClientPage">{{ $t("Edit") }}</action-button>
       <action-button @click="this.delete">{{ $t("Delete") }}</action-button>
     </div>
   </div>
 </template>
 
-<script>
-import MailIcon from "vue-tabler-icons/icons/MailIcon";
-import PhoneIcon from "vue-tabler-icons/icons/PhoneIcon";
-import ActionButton from "@/components/ActionButton.vue";
-import CoinsIcon from "vue-tabler-icons/icons/CoinsIcon";
-import ClockIcon from "vue-tabler-icons/icons/ClockIcon";
-import ProgressIcon from "vue-tabler-icons/icons/ProgressIcon";
-import ProgressXIcon from "vue-tabler-icons/icons/ProgressXIcon";
-import ProgressCheckIcon from "vue-tabler-icons/icons/ProgressCheckIcon";
-import CalendarIcon from "vue-tabler-icons/icons/CalendarIcon";
-import client from "@/services/client";
-
-export default {
-  name: "ClientItem",
-  components: {
-    ProgressCheckIcon,
-    ProgressXIcon,
-    ProgressIcon,
-    ClockIcon,
-    CoinsIcon,
-    ActionButton,
-    PhoneIcon,
-    MailIcon,
-    CalendarIcon
-  },
-  methods: {
-    hasPhone() {
-      return !!this.phone;
-    },
-    hasEmail() {
-      return !!this.email;
-    },
-    getAvatar() {
-      return this.avatar && this.avatar !== '' ? this.avatar : '/client-placeholder.png';
-    },
-    delete() {
-      client.delete(this.id);
-    }
-  },
-  props: {
-    id: {
-      type: String,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-    },
-    phone: {
-      type: String,
-    },
-    avatar: {
-      type: String,
-    },
-  },
-};
-</script>

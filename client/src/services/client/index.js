@@ -1,50 +1,34 @@
-import api from "@/services/api";
 import getUuid from "@/services/uuidGenerator";
 import store from "@/store";
 import synchronization from "@/services/synchronization";
 
-const emptyClient = {
-    id: null,
-    createdAt: null,
-    name: null,
-    description: null,
-    avatar: null,
-    email: null,
-    phone: null,
-};
-
-function mapClientProperties(newClientInput, newClient) {
-    for (let key in newClientInput) {
-        if (newClientInput.hasOwnProperty(key)) {
-            newClient[key] = newClientInput[key];
-        }
+const createNewClient = (newClientInput) => {
+    return {
+        id: getUuid(),
+        createdAt: store.getters['time/getServerTime'],
+        name: newClientInput?.name,
+        avatar: newClientInput?.avatar,
+        email: newClientInput?.email,
+        phone: newClientInput?.phone,
     }
 }
 
-const createNewClient = (newClientInput) => {
-    let newClient = JSON.parse(JSON.stringify(emptyClient));
-
-    newClient.id = getUuid();
-    newClient.createdAt = store.getters['time/getServerTime'];
-    mapClientProperties(newClientInput, newClient);
-
-    return newClient;
-}
+const getClients = () => { return JSON.parse(JSON.stringify(store.getters["clients/getClients"])) };
 
 export default {
-    add(newClientInput) {
-        let clients = JSON.parse(JSON.stringify(store.getters["clients/getClients"]));
+    create(newClientInput) {
+        let clients = getClients();
         const newClient = createNewClient(newClientInput);
         clients.unshift(newClient);
         store.commit("clients/setClients", clients);
         synchronization.pushToQueue(
             "client",
             "create",
-            newClient
+            newClient,
         );
     },
     delete(id) {
-        let clients = JSON.parse(JSON.stringify(store.getters["clients/getClients"]));
+        let clients = getClients();
         clients = clients.filter((client) => client.id !== id);
         store.commit("clients/setClients", clients);
         synchronization.pushToQueue(
@@ -53,4 +37,24 @@ export default {
             {id: id}
         );
     },
+    update(updatedClient) {
+        let clients = getClients();
+
+        clients = clients.map((client) => {
+            if (client.id === updatedClient.id) {
+                return {...updatedClient};
+            }
+            return client;
+        });
+        store.commit("clients/setClients", clients);
+        synchronization.pushToQueue(
+            "client",
+            "update",
+            updatedClient
+        );
+    },
+    getById(id) {
+        let clients = getClients();
+        return clients.filter((client) => client.id === id).pop();
+    }
 }

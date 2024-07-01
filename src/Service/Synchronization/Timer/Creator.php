@@ -2,51 +2,51 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Task;
+namespace App\Service\Synchronization\Timer;
 
-use App\Entity\Task;
+use App\Entity\Timer;
 use App\Entity\User;
 use App\Model\Synchronization\ActionPayloadInterface;
-use App\Model\Task\CreateTaskPayload;
+use App\Model\Timer\CreateTimerPayload;
 use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
+use App\Repository\TimerRepository;
 use App\Repository\UserRepository;
 use App\Service\Synchronization\ProcessorInterface;
 use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 
-
-#[AsTaggedItem(index: 'create.task')]
+#[AsTaggedItem(index: 'delete.timer')]
 readonly class Creator implements ProcessorInterface
 {
     public function __construct(
-        private TaskRepository $taskRepository,
+        private TimerRepository $timerRepository,
+        private UserRepository $userRepository,
         private ProjectRepository $projectRepository,
         private ClientRepository $clientRepository,
+        private TaskRepository $taskRepository,
     ) {
     }
 
     public function sync(User $user, ActionPayloadInterface $payload): void
     {
-        if (!$payload instanceof CreateTaskPayload) {
+        if (!$payload instanceof CreateTimerPayload) {
             throw new \RuntimeException('Invalid payload');
-        }
-
-        if ($this->taskRepository->findOneById($payload->getTaskId())) {
-            throw new \RuntimeException('Task already exists');
         }
 
         $client = $payload->getClientId() ? $this->clientRepository->find($payload->getClientId()) : null;
         $project = $payload->getProjectId() ? $this->projectRepository->find($payload->getProjectId()) : null;
-        $task = (Task::fromUser($user, $payload->getTaskId(), $payload->getName(), $payload->getCreatedAt()))
-            ->setDescription($payload->getDescription())
+        $task = $payload->getTaskId() ? $this->taskRepository->find($payload->getTaskId()) : null;
+        $timer = (Timer::fromUser($user, $payload->getTimerId()))
+            ->setStartTime($payload->getStartTime())
             ->setClient($client)
-            ->setProject($project);
+            ->setProject($project)
+            ->setTask($task);
 
-        if ($payload->getParentTaskId() && $parentTask = $this->taskRepository->findOneById($payload->getTaskId())) {
-            $parentTask->addSubtask($task);
-        }
+        $this->timerRepository->save($timer, true);
 
-        $this->taskRepository->save($task, true);
+        $user->setTimer($timer);
+
+        $this->userRepository->save($user, true);
     }
 }

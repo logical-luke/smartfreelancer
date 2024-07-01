@@ -2,19 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Timer;
+namespace App\Service\Synchronization\Timer;
 
-use App\Entity\TimeEntry;
 use App\Entity\User;
 use App\Exception\InvalidPayloadException;
 use App\Model\Synchronization\ActionPayloadInterface;
-use App\Model\TimeEntry\CreateTimeEntryPayload;
-use App\Model\Timer\CreateTimerPayload;
 use App\Model\Timer\DeleteTimerPayload;
 use App\Repository\TimerRepository;
 use App\Repository\UserRepository;
 use App\Service\Synchronization\ProcessorInterface;
-use App\Service\TimeEntry\TimeEntryCreator;
 use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 
 #[AsTaggedItem(index: 'delete.timer')]

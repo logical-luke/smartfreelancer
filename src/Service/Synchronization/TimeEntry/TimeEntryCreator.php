@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service\TimeEntry;
+namespace App\Service\Synchronization\TimeEntry;
 
 use App\Entity\TimeEntry;
 use App\Exception\InvalidPayloadException;
@@ -13,7 +13,6 @@ use App\Repository\TaskRepository;
 use App\Repository\TimeEntryRepository;
 use App\Repository\TimerRepository;
 use App\Repository\UserRepository;
-use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
 readonly class TimeEntryCreator
 {

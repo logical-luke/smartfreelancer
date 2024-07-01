@@ -18,6 +18,7 @@ import TasksPage from "../views/task/TasksPage.vue";
 import cookies from "@/services/cookies";
 import cache from "@/services/cache";
 import authorization from "@/services/authorization";
+import EditClientPage from "@/views/client/EditClientPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -127,6 +128,14 @@ const router = createRouter({
         requiresAuth: true,
       },
       component: TasksPage,
+    },
+    {
+      path: "/client/edit/:id",
+      name: "EditClientPage",
+      meta: {
+        requiresAuth: true,
+      },
+      component: EditClientPage,
     },
     {
       path: "/:pathMatch(.*)*",

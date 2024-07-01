@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Project;
+namespace App\Service\Synchronization\Project;
 
-use App\Entity\Project;
 use App\Entity\User;
 use App\Model\Project\UpdateProjectPayload;
 use App\Model\Synchronization\ActionPayloadInterface;

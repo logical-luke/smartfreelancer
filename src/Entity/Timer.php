@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TimerRepository;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -13,14 +14,15 @@ class Timer
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
-    private ?Uuid $id = null;
+    #[ORM\GeneratedValue(strategy: 'NONE')]
+    private Uuid $id;
 
     #[ORM\Column(type: Types::DATETIMETZ_IMMUTABLE)]
-    private ?\DateTimeInterface $startTime = null;
+    private DateTimeImmutable $startTime;
 
     #[ORM\OneToOne(inversedBy: 'timer', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $owner = null;
+    private User $owner;
 
     #[ORM\OneToOne(inversedBy: 'timer', cascade: ['persist'])]
     private ?Client $client = null;
@@ -35,7 +37,7 @@ class Timer
     {
         $this->id = $id;
         $this->owner = $owner;
-        $this->startTime = new \DateTimeImmutable();
+        $this->startTime = new DateTimeImmutable();
     }
 
     public static function fromUser(User $owner, Uuid $id): self
@@ -43,24 +45,24 @@ class Timer
         return new self($owner, $id);
     }
 
-    public function getStartTime(): ?\DateTimeInterface
+    public function getStartTime(): DateTimeImmutable
     {
         return $this->startTime;
     }
 
-    public function setStartTime(?\DateTimeInterface $startTime): Timer
+    public function setStartTime(DateTimeImmutable $startTime): Timer
     {
         $this->startTime = $startTime;
 
         return $this;
     }
 
-    public function getId(): ?Uuid
+    public function getId(): Uuid
     {
         return $this->id;
     }
 
-    public function getOwner(): ?User
+    public function getOwner(): User
     {
         return $this->owner;
     }

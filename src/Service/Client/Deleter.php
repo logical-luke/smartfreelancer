@@ -4,44 +4,40 @@ declare(strict_types=1);
 
 namespace App\Service\Client;
 
-use App\Entity\User;
-use App\Model\Client\DeleteClientPayload;
-use App\Model\Synchronization\ActionPayloadInterface;
+use App\Entity\Client;
 use App\Repository\ClientRepository;
-use App\Service\Synchronization\ProcessorInterface;
-use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
+use App\Service\Project\Deleter as ProjectDeleter;
+use App\Service\Timer\Updater as TimerUpdater;
+use App\Service\Task\Deleter as TaskDeleter;
+use App\Service\TimeEntry\Deleter as TimeEntryDeleter;
 
-#[AsTaggedItem(index: 'delete.client')]
-readonly class Deleter implements ProcessorInterface
+readonly class Deleter
 {
     public function __construct(
         private ClientRepository $clientRepository,
+        private ProjectDeleter $projectDeleter,
+        private TimerUpdater $timerUpdater,
+        private TaskDeleter $taskDeleter,
+        private TimeEntryDeleter $timeEntryDeleter,
     ) {
     }
-    public function sync(User $user, ActionPayloadInterface $payload): void
+
+    public function __invoke(Client $client): void
     {
-        if (!$payload instanceof DeleteClientPayload) {
-            throw new \RuntimeException('Invalid payload');
-        }
-
-        if (!$client = $this->clientRepository->find($payload->getClientId())) {
-            throw new \RuntimeException('Client not found');
-        }
-
         if ($timer = $client->getTimer()) {
-            $timer->setClient(null);
+            ($this->timerUpdater)($timer, null, $timer->getProject(), $timer->getTask(), $timer->getStartTime());
         }
 
         foreach ($client->getProjects() as $project) {
-            $project->setClient(null);
+            ($this->projectDeleter)($project);
         }
 
         foreach ($client->getTasks() as $task) {
-            $task->setClient(null);
+            ($this->taskDeleter)($task);
         }
 
         foreach ($client->getTimeEntries() as $timeEntry) {
-            $timeEntry->setClient(null);
+            ($this->timeEntryDeleter)($timeEntry);
         }
 
         $this->clientRepository->remove($client, true);

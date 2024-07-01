@@ -6,32 +6,31 @@ namespace App\Service\Client;
 
 use App\Entity\Client;
 use App\Entity\User;
-use App\Model\Client\CreateClientPayload;
-use App\Model\Synchronization\ActionPayloadInterface;
 use App\Repository\ClientRepository;
-use App\Repository\UserRepository;
-use App\Service\Synchronization\ProcessorInterface;
-use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
+use Symfony\Component\Uid\Uuid;
 
-#[AsTaggedItem(index: 'create.client')]
-readonly class Creator implements ProcessorInterface
+readonly class Creator
 {
     public function __construct(
         private ClientRepository $clientRepository,
     ) {
     }
 
-    public function sync(User $user, ActionPayloadInterface $payload): void
-    {
-        if (!$payload instanceof CreateClientPayload) {
-            throw new \RuntimeException('Invalid payload');
-        }
+    public function __invoke(
+        User $owner,
+        Uuid $clientId,
+        string $name,
+        \DateTimeImmutable $createdAt,
+        ?string $phone,
+        ?string $email,
+        ?string $avatar,
+    ): void {
+        $client = (Client::from($owner, $clientId, $name, $createdAt));
 
-        $client = (Client::from($user, $payload->getClientId(), $payload->getName(), $payload->getCreatedAt()))
-            ->setEmail($payload->getEmail())
-            ->setPhone($payload->getPhone())
-            ->setAvatar($payload->getAvatar());
-
+        $client
+            ->setEmail($email)
+            ->setPhone($phone)
+            ->setAvatar($avatar);
 
         $this->clientRepository->save($client, true);
     }
