@@ -45,6 +45,12 @@ export default {
             :email="client.email"
             :phone="client.phone"
             :avatar="client.avatar"
+            :revenue="client.revenue"
+            :timeWorked="client.timeWorked"
+            :ongoingTasks="client.ongoingTasks"
+            :plannedTasks="client.plannedTasks"
+            :finishedTasks="client.finishedTasks"
+            :blockedTasks="client.blockedTasks"
         />
       </transition-group>
     </div>

@@ -2,9 +2,6 @@
 
 namespace App\Command;
 
-use App\Model\Client\CreateClientPayload;
-use App\Model\Synchronization\ActionPayloadInterface;
-use App\Model\Synchronization\DataInterface;
 use App\Model\Synchronization\Payload;
 use App\Service\Synchronization\Consumer;
 use App\Service\Synchronization\Handler;
@@ -18,8 +15,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Uid\UuidV7;
 use Throwable;
 
 #[AsCommand(

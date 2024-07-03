@@ -59,6 +59,24 @@ export default {
     avatar: {
       type: String,
     },
+    revenue: {
+      type: Number,
+    },
+    timeWorked: {
+      type: Number,
+    },
+    ongoingTasks: {
+      type: Number,
+    },
+    plannedTasks: {
+      type: Number,
+    },
+    finishedTasks: {
+      type: Number,
+    },
+    blockedTasks: {
+      type: Number,
+    },
   },
 };
 </script>
@@ -68,7 +86,7 @@ export default {
     <div class="flex justify-between items-center mb-8">
       <div class="flex items-center">
         <img
-            class="w-20 h-20 p-2 mr-4 rounded-full border border-indigo-50"
+            class="w-20 h-20 p-1 mr-4 rounded-full border border-indigo-700"
             :src="getAvatar()"
             :alt="name"
         />
@@ -95,14 +113,14 @@ export default {
           <coins-icon class="text-yellow-500"/>
           <p class="text-xs font-medium">{{ $t("Revenue") }}</p>
         </div>
-        <span>$12,500</span>
+        <span>{{ revenue }} $</span>
       </div>
       <div class="p-4 bg-gray-100 rounded w-full md:w-1/2">
         <div class="flex items-center gap-4 mb-2">
           <clock-icon class="text-blue-500"/>
           <p class="text-xs font-medium">{{ $t("Time Worked") }}</p>
         </div>
-        <span>147 hours</span>
+        <span>{{ timeWorked }} {{ $t("hours") }}</span>
       </div>
     </div>
 
@@ -112,33 +130,32 @@ export default {
           <progress-icon class="text-amber-500"/>
           <p class="text-xs font-medium">{{ $t("Ongoing Tasks") }}</p>
         </div>
-        <span>2</span>
+        <span>{{ ongoingTasks }}</span>
       </div>
       <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
         <div class="flex items-center gap-4 mb-2">
           <calendar-icon class="text-blue-400"/>
           <p class="text-xs font-medium">{{ $t("Planned Tasks") }}</p>
         </div>
-        <span>14</span>
+        <span>{{ plannedTasks }}</span>
       </div>
       <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
         <div class="flex items-center gap-4 mb-2">
           <progress-check-icon class="text-green-500"/>
           <p class="text-xs font-medium">{{ $t("Finished Tasks") }}</p>
         </div>
-        <span>3</span>
+        <span>{{ finishedTasks }}</span>
       </div>
       <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
         <div class="flex items-center gap-4 mb-2">
           <progress-x-icon class="text-red-500"/>
           <p class="text-xs font-medium">{{ $t("Blocked Tasks") }}</p>
         </div>
-        <span>1</span>
+        <span>{{ blockedTasks }}</span>
       </div>
     </div>
 
     <div class="flex gap-4 flex-col items-center md:flex-row">
-      <action-button disabled="disabled">{{ $t("View Details") }}</action-button>
       <action-button @click="this.goToEditClientPage">{{ $t("Edit") }}</action-button>
       <action-button @click="this.delete">{{ $t("Delete") }}</action-button>
     </div>

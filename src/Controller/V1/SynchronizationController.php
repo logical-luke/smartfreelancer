@@ -31,13 +31,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class SynchronizationController extends AbstractController
 {
     #[Route('', name: 'initial', methods: "GET")]
-    public function initial(): JsonResponse
+    public function initial(ClientDtoArrayMapper $clientDtoArrayMapper): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
 
         return $this->json([
-            'clients' => ClientDtoArrayMapper::map($user->getClients()),
+            'clients' => $clientDtoArrayMapper->map($user->getClients()),
             'projects' => array_map(static function (Project $project) { return ProjectDTO::fromProject($project); }, $user->getProjects()->toArray()),
             'tasks' => array_map(static function (Task $task) { return TaskDto::fromTask($task); }, $user->getTasks()->toArray()),
             'timer' => $user->getTimer() ? TimerDTO::fromTimer($user->getTimer()) : null,

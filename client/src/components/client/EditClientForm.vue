@@ -1,12 +1,10 @@
 <script>
-import {mapState} from "vuex";
 import InputText from 'primevue/inputtext';
 import InputGroup from 'primevue/inputgroup';
 import InputGroupAddon from 'primevue/inputgroupaddon';
 import MailIcon from "vue-tabler-icons/icons/MailIcon";
 import PhoneIcon from "vue-tabler-icons/icons/PhoneIcon";
 import TrashIcon from "vue-tabler-icons/icons/TrashIcon"
-import store from "@/store";
 import MainActionButton from "@/components/MainActionButton.vue";
 import ActionButton from "@/components/ActionButton.vue";
 import ImageUploadInput from "@/components/ImageUploadInput.vue";

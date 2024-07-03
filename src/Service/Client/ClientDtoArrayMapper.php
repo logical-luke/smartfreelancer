@@ -7,16 +7,23 @@ namespace App\Service\Client;
 use App\Entity\Client;
 use App\Model\Client\ClientDto;
 use Doctrine\Common\Collections\Collection;
+
 readonly class ClientDtoArrayMapper
 {
-    public static function map(Collection $clients): array
+    public function __construct()
+    {
+    }
+
+    public function map(Collection $clients): array
     {
         $clientsArray = $clients->toArray();
 
-        usort($clientsArray, static function($a, $b) {
+        usort($clientsArray, static function ($a, $b) {
             return $a->getCreatedAt() < $b->getCreatedAt();
         });
 
-        return array_map(static function (Client $client) { return ClientDto::fromClient($client); }, $clientsArray);
+        return array_map(static function (Client $client) {
+            return (ClientDto::fromClient($client, 0, 0, 0, 0, 0, 0));
+        }, $clientsArray);
     }
 }

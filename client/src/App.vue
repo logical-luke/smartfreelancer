@@ -1,14 +1,12 @@
 <script>
 import { onMounted } from "vue";
 import { mapGetters, mapState } from "vuex";
-import store from "@/store";
-import cookies from "@/services/cookies";
 import authorization from "@/services/authorization";
 import cache from "@/services/cache";
 import synchronization from "@/services/synchronization";
 import SidebarNav from "@/components/navigation/SidebarNav.vue";
 import TimeTrackingSection from "@/components/timer/TimeTrackingSection.vue";
-import { MoonLoader } from "vue3-spinner";
+import { RotateLoader } from "vue3-spinner";
 import ConfirmDialog from "primevue/confirmdialog";
 import Toast from "primevue/toast";
 import { useRoute } from "vue-router";
@@ -21,7 +19,7 @@ export default {
     RandomLoadingText,
     SidebarNav,
     TimeTrackingSection,
-    MoonLoader,
+    RotateLoader,
     ConfirmDialog,
     Toast,
   },
@@ -78,15 +76,14 @@ export default {
 </script>
 
 <template>
-  <transition name="fade">
+  <transition name="initial">
     <div
       class="flex h-screen items-center justify-center"
       v-if="!isInitialLoaded"
     >
       <div class="flex flex-col items-center justify-center">
         <div>
-          <moon-loader
-            :size="spinnerSize"
+          <rotate-loader
             :color="spinnerColor"
             :loading="true"
           />
@@ -130,6 +127,19 @@ export default {
 
 .fade-enter-from,
 .fade-leave-to {
+  opacity: 0;
+}
+
+.initial-enter-active {
+  transition: all 0.2s ease-in;
+}
+
+.initial-leave-active {
+  transition: all 0.9s ease-out;
+}
+
+.initial-enter-from,
+.initial-leave-to {
   opacity: 0;
 }
 

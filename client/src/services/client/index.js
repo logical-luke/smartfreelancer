@@ -11,6 +11,12 @@ const createNewClient = (newClientInput) => {
         avatar: newClientInput?.avatar,
         email: newClientInput?.email,
         phone: newClientInput?.phone,
+        revenue: 0,
+        timeWorked: 0,
+        ongoingTasks: 0,
+        plannedTasks: 0,
+        finishedTasks: 0,
+        blockedTasks: 0,
     }
 }
 
@@ -45,7 +51,7 @@ export default {
 
         clients = clients.map((client) => {
             if (client.id === updatedClient.id) {
-                return {...updatedClient};
+                return {...client, ...updatedClient};
             }
             return client;
         });
