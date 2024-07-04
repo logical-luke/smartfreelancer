@@ -1,32 +1,25 @@
 <template>
   <button
-    type="button"
-    :class="sizeClasses"
-    class="inline-flex bg-indigo-500 hover:bg-indigo-600 items-center justify-center px-2 py-2 text-sm font-medium text-white rounded-full transition duration-200"
+      type="button"
+      :class="sizeClasses"
+      @click.prevent="toggleTimer"
+      class="inline-flex bg-indigo-500 hover:bg-indigo-600 items-center justify-center px-2 py-2 text-sm font-medium text-white rounded-full transition duration-200"
   >
-    <template v-if="isManualMode">
-      <plus-icon @click.prevent="addTimeEntry" :size="Math.ceil(size * 1.8)" />
-    </template>
-    <template v-else>
-      <div @click.prevent="toggleTimer">
-        <player-play-icon :size="Math.ceil(size * 1.8)" v-if="!isRunning" />
-        <player-stop-icon :size="Math.ceil(size * 1.8)" v-else />
-      </div>
-    </template>
+    <player-play-icon :size="Math.ceil(size * 1.8)" v-if="!isRunning"/>
+    <player-stop-icon :size="Math.ceil(size * 1.8)" v-else/>
   </button>
 </template>
 
 <script>
 import PlayerPlayIcon from "vue-tabler-icons/icons/PlayerPlayIcon";
-import { mapState } from "vuex";
+import {mapState} from "vuex";
 import PlayerStopIcon from "vue-tabler-icons/icons/PlayerStopIcon";
-import PlusIcon from "vue-tabler-icons/icons/PlusIcon";
 import timer from "@/services/timer";
 import timeEntries from "@/services/timeEntries";
 
 export default {
   name: "TimerButton",
-  components: { PlayerStopIcon, PlayerPlayIcon, PlusIcon },
+  components: {PlayerStopIcon, PlayerPlayIcon},
   props: {
     projectId: {
       type: String,
@@ -54,7 +47,6 @@ export default {
   computed: {
     ...mapState({
       timer: (state) => state.timer.current,
-      timerMode: (state) => state.timer.timerMode,
     }),
     sizeClasses() {
       return `w-${this.size} h-${this.size}`;
@@ -64,16 +56,9 @@ export default {
     async timer() {
       this.isRunning = await this.checkCurrentTimer();
     },
-    async timerMode() {
-      this.isManualMode = await timer.isManualMode();
-    },
   },
   methods: {
     async toggleTimer() {
-      if (await timer.isManualMode()) {
-        return;
-      }
-
       if (!this.isRunning && this.timer && this.timer.id) {
         await timer.stopTimer();
       }
@@ -98,20 +83,15 @@ export default {
     },
     async checkCurrentTimer() {
       return await timer.isCurrentRunningTimer(
-        this.taskId,
-        this.projectId,
-        this.clientId,
-        this.global
+          this.taskId,
+          this.projectId,
+          this.clientId,
+          this.global
       );
-    },
-    async addTimeEntry() {
-      await timeEntries.createTimeEntryFromCurrentTimer();
-      await timer.setNewManualTimerStartEndTime();
     },
   },
   async mounted() {
     this.isRunning = await this.checkCurrentTimer();
-    this.isManualMode = await timer.isManualMode();
   },
 };
 </script>

@@ -3,7 +3,6 @@
       class="flex flex-wrap gap-3"
     >
       <div class="flex items-center gap-3">
-        <timer-mode-toggle />
         <timer-button :size="12" :global="true" />
         <pomodoro-timer :size="12" />
         <duration-input />
@@ -30,7 +29,6 @@ import SelectSubjectButton from "@/components/timer/SelectSubjectButton.vue";
 import DurationInput from "@/components/DurationInput.vue";
 import PomodoroTimer from "@/components/PomodoroTimer.vue";
 import DescriptionInput from "@/components/DescriptionInput.vue";
-import TimerModeToggle from "@/components/timer/TimerModeToggle.vue";
 
 export default {
   name: "TimeTrackingSection",
@@ -41,7 +39,6 @@ export default {
     };
   },
   components: {
-    TimerModeToggle,
     DescriptionInput,
     PomodoroTimer,
     DurationInput,

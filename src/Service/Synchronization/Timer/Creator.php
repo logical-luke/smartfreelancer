@@ -16,7 +16,7 @@ use App\Repository\UserRepository;
 use App\Service\Synchronization\ProcessorInterface;
 use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 
-#[AsTaggedItem(index: 'delete.timer')]
+#[AsTaggedItem(index: 'create.timer')]
 readonly class Creator implements ProcessorInterface
 {
     public function __construct(
