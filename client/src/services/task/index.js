@@ -1,6 +1,5 @@
 import getUuid from "@/services/uuidGenerator";
 import store from "@/store";
-import synchronization from "@/services/synchronization";
 
 const createNewTask = (newTaskInputInput) => {
     return {
@@ -20,10 +19,5 @@ export default {
         const newTask = createNewTask(newTaskInput);
         tasks.unshift(tasks);
         store.commit("tasks/setTasks", tasks);
-        synchronization.pushToQueue(
-            "task",
-            "create",
-            newTask,
-        )
     },
 }

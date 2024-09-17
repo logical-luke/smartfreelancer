@@ -1,9 +1,7 @@
 <script>
 import { onMounted } from "vue";
-import { mapGetters, mapState } from "vuex";
 import authorization from "@/services/authorization";
 import cache from "@/services/cache";
-import synchronization from "@/services/synchronization";
 import SidebarNav from "@/components/navigation/SidebarNav.vue";
 import TimeTrackingSection from "@/components/timer/TimeTrackingSection.vue";
 import { RotateLoader } from "vue3-spinner";
@@ -27,20 +25,8 @@ export default {
     return {
       spinnerSize: "96 px",
       spinnerColor: "#382CDD",
+      isInitialLoaded: true,
     };
-  },
-  watch: {
-    queue() {
-      if (this.isQueueEmpty) {
-        synchronization.disableBackgroundUpload();
-        synchronization.enableBackgroundFetching();
-
-        return;
-      }
-
-      synchronization.disableBackgroundFetching();
-      synchronization.enableBackgroundUpload();
-    },
   },
   computed: {
     path() {
@@ -49,10 +35,6 @@ export default {
     isAuthorizedPage() {
       return this.route.meta && this.route.meta.requiresAuth === true;
     },
-    ...mapGetters("synchronization", ["isInitialLoaded", "isQueueEmpty"]),
-    ...mapState({
-      queue: (state) => state.synchronization.queue,
-    }),
   },
   setup() {
     const route = useRoute();
@@ -61,13 +43,6 @@ export default {
       await authorization.authorize(token, refreshToken);
 
       await cache.loadLocale();
-
-      if (token) {
-        await synchronization.fetchUser();
-        await cache.getInitial();
-        await synchronization.disableBackgroundUpload();
-        await synchronization.enableBackgroundFetching();
-      }
     });
 
     return { route };
@@ -102,18 +77,16 @@ export default {
         />
         <confirm-dialog />
         <sidebar-nav v-if="isAuthorizedPage" />
-        <div v-if="isInitialLoaded">
-          <router-view v-slot="{ Component }">
-            <transition name="fade" mode="out-in">
-              <div
-                :class="isAuthorizedPage ? 'py-8 px-8' : ''"
-                :key="path"
-              >
-                <component :is="Component"></component>
-              </div>
-            </transition>
-          </router-view>
-        </div>
+        <router-view v-slot="{ Component }">
+          <transition name="fade" mode="out-in">
+            <div
+              :class="isAuthorizedPage ? 'py-8 px-8' : ''"
+              :key="path"
+            >
+              <component :is="Component"></component>
+            </div>
+          </transition>
+        </router-view>
       </div>
     </div>
   </transition>

@@ -37,19 +37,3 @@ services:
             $clientId: '%env(GOOGLE_CLIENT_ID)%'
             $clientSecret: '%env(GOOGLE_CLIENT_SECRET)%'
             $feAppBaseUrl: '%env(FE_APP_BASE_URL)%'
-
-    App\Service\Synchronization\Producer:
-        arguments:
-            $host: '%env(RABBITMQ_HOST)%'
-            $port: '%env(RABBITMQ_PORT)%'
-            $user: '%env(RABBITMQ_USER)%'
-            $password: '%env(RABBITMQ_PASSWORD)%'
-            $vhost: '%env(RABBITMQ_VHOST)%'
-
-    App\Service\Synchronization\Consumer:
-      arguments:
-        $host: '%env(RABBITMQ_HOST)%'
-        $port: '%env(RABBITMQ_PORT)%'
-        $user: '%env(RABBITMQ_USER)%'
-        $password: '%env(RABBITMQ_PASSWORD)%'
-        $vhost: '%env(RABBITMQ_VHOST)%'

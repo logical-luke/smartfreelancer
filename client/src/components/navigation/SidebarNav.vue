@@ -7,7 +7,6 @@
             <icon-only-logo />
           </div>
           <div class="flex-row flex items-center justify-end gap-2">
-            <synchronization-status />
             <button
               @click="toggle"
               class="navbar-burger p-2 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
@@ -34,7 +33,6 @@
               <icon-only-logo />
             </div>
             <div class="flex flex-row items-center justify-end gap-2">
-              <synchronization-status />
               <button
                 @click="toggle"
                 class="lg:hidden navbar-burger p-2 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
@@ -131,7 +129,6 @@ import LanguageSwitcher from "@/components/LanguageSwitcher.vue";
 import CalendarIcon from "vue-tabler-icons/icons/CalendarIcon";
 import IconOnlyLogo from "@/components/IconOnlyLogo.vue";
 import ReportIcon from "vue-tabler-icons/icons/ReportIcon";
-import SynchronizationStatus from "@/components/SynchronizationStatus.vue";
 import FriendsIcon from "vue-tabler-icons/icons/FriendsIcon";
 import TargetIcon from "vue-tabler-icons/icons/TargetIcon";
 
@@ -139,7 +136,6 @@ export default {
   name: "SidebarNav",
   components: {
     FriendsIcon,
-    SynchronizationStatus,
     ReportIcon,
     IconOnlyLogo,
     CalendarIcon,

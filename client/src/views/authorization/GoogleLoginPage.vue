@@ -9,7 +9,6 @@ import router from "../../router";
 import store from "@/store";
 import api from "@/services/api";
 import authorization from "@/services/authorization";
-import synchronization from "@/services/synchronization";
 import { MoonLoader } from "vue3-spinner";
 
 export default {
@@ -52,10 +51,6 @@ export default {
         return;
       }
       await authorization.authorize(token, refreshToken);
-      await store.commit("synchronization/setInitialLoaded", false);
-      await synchronization.fetchUser();
-      await synchronization.fetchAllData();
-      await store.commit("synchronization/setInitialLoaded", true);
 
       await router.push("/");
     } catch (e) {
@@ -67,9 +62,6 @@ export default {
       });
       await router.push("/login");
     }
-  },
-  beforeRouteEnter() {
-    store.commit("synchronization/setInitialLoaded", true);
   },
 };
 </script>

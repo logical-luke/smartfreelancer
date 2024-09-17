@@ -339,11 +339,6 @@ export default {
     return response.data;
   },
 
-  async getInitial() {
-    const response = await getRequest("/synchronization");
-
-    return response.data;
-  },
 
   async getClient(id) {
     const response = await getRequest("/client/" + id);
@@ -406,12 +401,6 @@ export default {
         state: payload.state,
       }
     );
-
-    return response.data;
-  },
-
-  async pushSyncItem(payload) {
-    const response = await postRequest("/synchronization/queue", payload);
 
     return response.data;
   },

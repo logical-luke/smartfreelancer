@@ -100,7 +100,6 @@ import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Divider from "primevue/divider";
 import authorization from "@/services/authorization";
-import synchronization from "@/services/synchronization";
 import api from "@/services/api";
 
 export default {
@@ -155,9 +154,6 @@ export default {
             this.password
         );
         await authorization.authorize(token, refreshToken);
-        await store.commit("synchronization/setInitialLoaded", false);
-        await synchronization.fetchAllData();
-        await store.commit("synchronization/setInitialLoaded", true);
 
         await router.push("/");
       } catch (err) {
@@ -185,9 +181,6 @@ export default {
     isFormValid() {
       return this.isValidEmail(this.email) && this.password !== "" && this.confirmPassword !== "";
     },
-  },
-  beforeRouteEnter() {
-    store.commit("synchronization/setInitialLoaded", true);
   },
 };
 </script>

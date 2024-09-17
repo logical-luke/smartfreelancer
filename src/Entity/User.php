@@ -50,12 +50,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $loginType = LoginTypeEnum::EMAIL->value;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: SynchronizationLog::class)]
-    private Collection $synchronizationLogs;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $synchronizationTime = null;
-
     public function __construct()
     {
         $this->id = Uuid::v7();
@@ -63,7 +57,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->clients = new ArrayCollection();
         $this->tasks = new ArrayCollection();
         $this->timeEntries = new ArrayCollection();
-        $this->synchronizationLogs = new ArrayCollection();
     }
 
     public function getId(): Uuid
@@ -188,26 +181,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLoginType(string $loginType): self
     {
         $this->loginType = $loginType;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, SynchronizationLog>
-     */
-    public function getSynchronizationLogs(): Collection
-    {
-        return $this->synchronizationLogs;
-    }
-
-    public function getSynchronizationTime(): ?\DateTimeImmutable
-    {
-        return $this->synchronizationTime;
-    }
-
-    public function setSynchronizationTime(?\DateTimeImmutable $synchronizationTime): static
-    {
-        $this->synchronizationTime = $synchronizationTime;
 
         return $this;
     }

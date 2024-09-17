@@ -56,7 +56,6 @@
 <script>
 import store from "@/store";
 import router from "@/router";
-import synchronization from "@/services/synchronization";
 import authorization from "@/services/authorization";
 import SubmitButton from "@/components/SubmitButton.vue";
 import TransparentLogoWide from "@/components/logo/TransparentLogoWide.vue";
@@ -98,10 +97,6 @@ export default {
             this.password
         );
         await authorization.authorize(token, refreshToken);
-        await store.commit("synchronization/setInitialLoaded", false);
-        await synchronization.fetchUser();
-        await synchronization.fetchAllData();
-        await store.commit("synchronization/setInitialLoaded", true);
 
         await router.push("/");
       } catch (err) {
@@ -127,9 +122,6 @@ export default {
     async goToRegistration() {
       await router.push("/register");
     },
-  },
-  beforeRouteEnter() {
-    store.commit("synchronization/setInitialLoaded", true);
   },
 };
 </script>

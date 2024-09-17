@@ -47,27 +47,6 @@ export default {
         JSON.parse(await this.get("pomodoro-configuration"))
       );
     }
-    if (await this.exists("queue")) {
-      await store.commit(
-        "synchronization/setQueue",
-        JSON.parse(await this.get("queue"))
-      );
-    }
-    if (await this.exists("synchronizationLogQueue")) {
-      await store.commit(
-          "synchronization/setSynchronizationLogQueue",
-          JSON.parse(await this.get("synchronizationLogQueue"))
-      );
-    }
-    if (await this.exists("synchronizationTime")) {
-      const syncTime = JSON.parse(await this.get("synchronizationTime"));
-      const syncTimeObject = new Date(syncTime);
-      await store.commit(
-        "synchronization/setSynchronizationTime",
-        syncTimeObject
-      );
-    }
-    await store.commit("synchronization/setInitialLoaded", true);
   },
   async clear() {
     return await db.clear();

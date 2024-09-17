@@ -1,7 +1,6 @@
 import getUuid from "@/services/uuidGenerator";
 import store from "@/store";
 import cache from "@/services/cache";
-import synchronization from "@/services/synchronization";
 import timeEntries from "@/services/timeEntries";
 import getSecondsTimestampFromDate from "../time/getSecondsTimestampFromDate";
 import getRelativeTime from "@/services/time/relativeTimeGetter";
@@ -18,11 +17,6 @@ export default {
 
     await store.commit("timer/setTimer", newTimer);
     await cache.set("timer", JSON.stringify(newTimer));
-    synchronization.pushToQueue(
-      "timer",
-      "create",
-      newTimer
-    );
   },
   async stopTimer() {
     const endTime = store.getters["time/getServerTime"];
@@ -32,11 +26,6 @@ export default {
     }
     await store.commit("timer/clearTimer");
     timer.endTime = endTime;
-    synchronization.pushToQueue(
-      "timer",
-      "delete",
-      timer
-    );
     await timeEntries.createTimeEntry(
       timer.clientId,
       timer.projectId,
@@ -56,12 +45,6 @@ export default {
     await store.dispatch("timer/setClientId", null);
     await store.dispatch("timer/setProjectId", id);
     await store.dispatch("timer/setTaskId", null);
-
-    synchronization.pushToQueue(
-      "timer",
-      "update",
-      timer
-    );
   },
   async setClient(id) {
     const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
@@ -73,12 +56,6 @@ export default {
     await store.dispatch("timer/setClientId", id);
     await store.dispatch("timer/setProjectId", null);
     await store.dispatch("timer/setTaskId", null);
-
-    synchronization.pushToQueue(
-      "timer",
-      "update",
-      timer
-    );
   },
   async setTask(id) {
     const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
@@ -90,12 +67,6 @@ export default {
     await store.dispatch("timer/setClientId", null);
     await store.dispatch("timer/setProjectId", null);
     await store.dispatch("timer/setTaskId", id);
-
-    synchronization.pushToQueue(
-      "timer",
-      "update",
-      timer
-    );
   },
   async setEmptySubject() {
     const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
@@ -103,12 +74,6 @@ export default {
     await store.dispatch("timer/setClientId", null);
     await store.dispatch("timer/setProjectId", null);
     await store.dispatch("timer/setTaskId", null);
-
-    synchronization.pushToQueue(
-      "timer",
-      "update",
-      timer
-    );
   },
   async setDescription(description) {
     const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
@@ -118,12 +83,6 @@ export default {
     }
 
     await store.dispatch("timer/setDescription", description);
-
-    synchronization.pushToQueue(
-      "timer",
-      "update",
-      timer
-    );
   },
   async setStartTime(startTime) {
     if (startTime instanceof Date) {
@@ -137,12 +96,6 @@ export default {
     }
 
     await store.dispatch("timer/setStartTime", startTime);
-
-    synchronization.pushToQueue(
-      "timer",
-      "update",
-      timer
-    );
   },
   async setEndTime(endTime) {
     if (endTime instanceof Date) {
@@ -156,12 +109,6 @@ export default {
     }
 
     await store.dispatch("timer/setEndTime", endTime);
-
-    synchronization.pushToQueue(
-      "timer",
-      "update",
-      timer
-    );
   },
   async setDuration(duration) {
     const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));
@@ -175,12 +122,6 @@ export default {
     }
 
     await store.dispatch("timer/setStartTime", adjustedStartTime);
-
-    synchronization.pushToQueue(
-      "timer",
-      "update",
-      timer
-    );
   },
   async isTimerRunning() {
     const timer = JSON.parse(JSON.stringify(store.getters["timer/getTimer"]));

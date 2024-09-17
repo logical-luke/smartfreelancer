@@ -4,7 +4,6 @@ import authorization from "@/store/modules/authorization";
 import clients from "@/store/modules/clients";
 import projects from "./modules/projects";
 import settings from "@/store/modules/settings";
-import synchronization from "@/store/modules/synchronization";
 import tasks from "@/store/modules/tasks";
 import time from "@/store/modules/time";
 import timeEntries from "@/store/modules/timeEntries";
@@ -22,7 +21,6 @@ export default createStore({
     clients,
     projects,
     settings,
-    synchronization,
     tasks,
     time,
     timeEntries,
