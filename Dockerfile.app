@@ -1,5 +1,5 @@
 # Choose the base image
-FROM node:18 as build-stage
+FROM node:20 as build-stage
 
 # Set the APP_ENV argument with a default value of 'prod'
 ARG APP_ENV=prod

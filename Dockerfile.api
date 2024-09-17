@@ -1,5 +1,5 @@
 # Choose the base image
-FROM php:8.2-fpm
+FROM php:8.3-fpm
 
 # Set the APP_ENV argument with a default value of 'prod'
 ARG APP_ENV=prod
