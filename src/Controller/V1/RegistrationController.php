@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Controller\V1;
 
 use App\Exception\InvalidPayloadException;
-use App\Exception\UserAlreadyExistsException;
+use App\Exception\ResourceAlreadyExistsException;
 use App\Model\User\RegistrationPayload;
 use App\Service\User\RegistrationHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/register', name: 'app_register_')]
 class RegistrationController extends AbstractController
@@ -30,7 +30,7 @@ class RegistrationController extends AbstractController
             $registrationHandler($payload);
         } catch (InvalidPayloadException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
-        } catch (UserAlreadyExistsException $e) {
+        } catch (ResourceAlreadyExistsException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_CONFLICT);
         }
 

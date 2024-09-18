@@ -1,5 +1,4 @@
 import api from "@/services/api";
-import cache from "@/services/cache";
 
 const state = () => ({
   all: [],
@@ -72,11 +71,6 @@ const actions = {
 const mutations = {
   setTasks(state, tasks) {
     state.all = tasks;
-    if (Array.isArray(tasks) && tasks.length > 0) {
-      cache.set("tasks", JSON.stringify(tasks)).then();
-    } else {
-      cache.remove("tasks").then();
-    }
   },
 };
 

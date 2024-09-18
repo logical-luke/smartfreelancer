@@ -1,5 +1,5 @@
 <script>
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 import ClientItem from "@/components/client/ClientItem.vue";
 import MainActionButton from "@/components/MainActionButton.vue";
 import router from "@/router";
@@ -18,13 +18,19 @@ export default {
     }
   },
   computed: mapState({
-    clients: (state) => state.clients.all,
+    clients: (state) => state.clients.clients,
   }),
   methods: {
     async goToAddClient() {
       await router.push({name: "AddClientPage"});
     },
-  }
+    ...mapActions({
+      loadClients: "clients/load",
+    }),
+  },
+  async created() {
+    await this.loadClients();
+  },
 };
 </script>
 

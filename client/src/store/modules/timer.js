@@ -1,5 +1,3 @@
-import cache from "@/services/cache";
-
 const emptyTimer = {
   id: null,
   startTime: null,
@@ -67,11 +65,9 @@ const getters = {
 const mutations = {
   setTimer(state, timer) {
     state.current = timer;
-    cache.set("timer", JSON.stringify(timer)).then(() => {});
   },
   clearTimer(state) {
     state.current = JSON.parse(JSON.stringify(emptyTimer));
-    cache.set("timer", JSON.stringify(emptyTimer)).then(() => {});
   },
   setTimerMode: (state, mode) => (state.timerMode = mode),
 };

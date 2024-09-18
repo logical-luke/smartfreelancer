@@ -15,8 +15,6 @@ import InvoicesPage from "@/views/invoice/InvoicesPage.vue";
 import ClientsPage from "../views/client/ClientsPage.vue";
 import ProjectsPage from "../views/project/ProjectsPage.vue";
 import TasksPage from "../views/task/TasksPage.vue";
-import cookies from "@/services/cookies";
-import cache from "@/services/cache";
 import authorization from "@/services/authorization";
 import EditClientPage from "@/views/client/EditClientPage.vue";
 

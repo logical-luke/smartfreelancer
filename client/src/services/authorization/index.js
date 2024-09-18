@@ -1,8 +1,6 @@
 import cookies from "@/services/cookies";
-import cache from "@/services/cache";
 import store from "@/store";
 import api from "@/services/api";
-import router from "@/router";
 
 export default {
   async login(email, password) {
@@ -53,7 +51,6 @@ export default {
     await store.commit("timer/clearTimer");
     await cookies.remove("api_token");
     await cookies.remove("refresh_token");
-    await cache.clear();
   },
   async getTokensFromCookies() {
     let token = await cookies.get("api_token");

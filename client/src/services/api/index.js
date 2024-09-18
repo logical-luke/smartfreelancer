@@ -4,7 +4,7 @@ import authorization from "@/services/authorization";
 
 axios.defaults.withCredentials = true;
 
-const getRequest = async function (url, params, headers, repeated = 0) {
+const getRequest = async function (url, params = {}, headers = {}, repeated = 0) {
   try {
     const response = await axios.get(process.env.API_BASE_URL + url, {
       params: params,
@@ -54,10 +54,7 @@ const getRequest = async function (url, params, headers, repeated = 0) {
   return getRequest(url, params, headers, repeated);
 };
 
-const postRequest = async function (url, data, headers, repeated = 0) {
-  if (!data) {
-    data = {};
-  }
+const postRequest = async function (url, data = {}, headers = {}, repeated = 0) {
   try {
     const response = axios.post(process.env.API_BASE_URL + url, data, {
       headers: {
@@ -96,13 +93,9 @@ const postRequest = async function (url, data, headers, repeated = 0) {
   return postRequest(url, data, headers, repeated);
 };
 
-const deleteRequest = async function (url, data, headers, repeated = 0) {
-  if (!data) {
-    data = {};
-  }
+const putRequest = async function (url, data = {}, headers = {}, repeated = 0) {
   try {
-    const response = axios.delete(process.env.API_BASE_URL + url, {
-      data: data,
+    const response = axios.put(process.env.API_BASE_URL + url, data, {
       headers: {
         Authorization: `Bearer ${store.getters["authorization/getToken"]}`,
       },
@@ -115,7 +108,7 @@ const deleteRequest = async function (url, data, headers, repeated = 0) {
       await refreshToken();
 
       repeated++;
-      return deleteRequest(url, data, headers, repeated);
+      return putRequest(url, data, headers, repeated);
     }
 
     return response;
@@ -127,7 +120,7 @@ const deleteRequest = async function (url, data, headers, repeated = 0) {
       await refreshToken();
 
       repeated++;
-      return deleteRequest(url, data, headers, repeated);
+      return putRequest(url, data, headers, repeated);
     }
   }
 
@@ -136,7 +129,46 @@ const deleteRequest = async function (url, data, headers, repeated = 0) {
   }
 
   repeated++;
-  return deleteRequest(url, data, headers, repeated);
+  return putRequest(url, data, headers, repeated);
+};
+
+const deleteRequest = async function (url, headers = {}, repeated = 0) {
+  try {
+    const response = axios.delete(process.env.API_BASE_URL + url, {
+      headers: {
+        Authorization: `Bearer ${store.getters["authorization/getToken"]}`,
+      },
+    });
+
+    if (response.status === 401) {
+      if (repeated > 0) {
+        return await authorization.logout();
+      }
+      await refreshToken();
+
+      repeated++;
+      return deleteRequest(url, headers, repeated);
+    }
+
+    return response;
+  } catch (err) {
+    if (err.response.status === 401) {
+      if (repeated > 0) {
+        return await authorization.logout();
+      }
+      await refreshToken();
+
+      repeated++;
+      return deleteRequest(url, headers, repeated);
+    }
+  }
+
+  if (repeated > 3) {
+    throw new Error("Too many failed requests");
+  }
+
+  repeated++;
+  return deleteRequest(url, headers, repeated);
 };
 
 const refreshToken = async function () {
@@ -333,27 +365,24 @@ export default {
     return response.data;
   },
 
-  async getClients() {
-    const response = await getRequest("/client");
-
-    return response.data;
-  },
-
-
   async getClient(id) {
-    const response = await getRequest("/client/" + id);
+    const response = await getRequest("/clients/" + id);
 
     return response.data;
   },
 
   async deleteClient(id) {
-    const response = await deleteRequest("/client/delete/" + id);
+    const response = await deleteRequest("/clients/" + id);
+
+    if (response.status !== 204) {
+      throw new Error(response.data.message);
+    }
 
     return response.data;
   },
 
   async updateClient(client) {
-    const response = await postRequest("/client/update/" + client.id, client);
+    const response = await putRequest("/clients/" + client.id, client);
 
     if (response.status !== 200) {
       throw new Error(response.data.message);
@@ -363,7 +392,7 @@ export default {
   },
 
   async createClient(client) {
-    const response = await postRequest("/client/create", client);
+    const response = await postRequest("/clients", client);
 
     if (response.status !== 200) {
       throw new Error(response.data.message);
@@ -404,4 +433,9 @@ export default {
 
     return response.data;
   },
+  async getClients() {
+    const response = await getRequest("/clients");
+
+    return response.data;
+  }
 };

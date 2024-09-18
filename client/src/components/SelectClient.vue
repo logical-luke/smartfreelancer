@@ -1,19 +1,9 @@
-<template>
-  <v-select
-    :options="options"
-    placeholder="Select client"
-    v-model="clientId"
-    @update:modelValue="setClient"
-  >
-  </v-select>
-</template>
-
 <script>
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import { onMounted, ref } from "vue";
 import store from "@/store";
-import clientService from "@/services/client";
+import {mapState} from "vuex";
 
 export default {
   name: "SelectClient",
@@ -21,9 +11,14 @@ export default {
   props: {
     selected: Number,
   },
+  computed: {
+    ...mapState({
+      clients: (state) => state.clients.clients,
+    }),
+  },
   watch: {
     clients() {
-      this.options = clientService.getTimerOptions();
+      this.options = this.getClientsOptions();
     },
   },
   methods: {
@@ -34,12 +29,20 @@ export default {
 
       return this.$emit("updated", null);
     },
+    getClientsOptions() {
+      return this.clients.all.map((client) => {
+        return {
+          id: client.id,
+          label: client.name,
+        };
+      })
+    }
   },
   setup(props) {
     let clientId = ref("clientId");
     let options = ref("options");
     clientId.value = null;
-    options.value = clientService.getTimerOptions();
+    options.value = this.getClientsOptions();
     onMounted(() => {
       if (props.selected) {
         const selectedClient = options.value
@@ -58,9 +61,20 @@ export default {
   },
   emits: ["updated"],
   created() {
-    this.options = clientService.getTimerOptions();
+    this.options = this.getClientsOptions();
   },
 };
 </script>
 
+<template>
+  <v-select
+      :options="options"
+      placeholder="Select client"
+      v-model="clientId"
+      @update:modelValue="setClient"
+  >
+  </v-select>
+</template>
+
 <style scoped></style>
+

@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\User\UserCreator;
+use App\Service\User\Creator;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -16,7 +16,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class CreateUserCommand extends Command
 {
-    public function __construct(private readonly UserCreator $userCreator)
+    public function __construct(private readonly Creator $userCreator)
     {
         parent::__construct();
     }

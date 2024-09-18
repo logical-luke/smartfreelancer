@@ -1,15 +1,13 @@
 <script>
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 import InputText from 'primevue/inputtext';
 import InputGroup from 'primevue/inputgroup';
 import InputGroupAddon from 'primevue/inputgroupaddon';
 import MailIcon from "vue-tabler-icons/icons/MailIcon";
 import PhoneIcon from "vue-tabler-icons/icons/PhoneIcon";
 import TrashIcon from "vue-tabler-icons/icons/TrashIcon"
-import store from "@/store";
 import MainActionButton from "@/components/MainActionButton.vue";
 import ActionButton from "@/components/ActionButton.vue";
-import clientService from "@/services/client";
 import ImageUploadInput from "@/components/ImageUploadInput.vue";
 
 export default {
@@ -58,10 +56,15 @@ export default {
       if (!this.canSubmitForm() || this.client.name.length === 0) {
         return;
       }
-
-      await clientService.create(this.client)
-
-      this.$router.push(this.afterSavePageRoute);
+      try {
+        console.log('creating');
+        await this.createClient(this.client);
+        console.log('created');
+        this.$router.push(this.afterSavePageRoute);
+      } catch (e) {
+        console.log('creating error', e);
+      //   todo handle error
+      }
     },
     updateEmailValid() {
       const emailRegex = /^\S+@\S+\.\S+$/;
@@ -77,6 +80,9 @@ export default {
     canSubmitForm() {
       return this.nameValid && this.emailValid && this.phoneValid;
     },
+    ...mapActions({
+      createClient: "clients/create",
+    }),
   },
 };
 </script>

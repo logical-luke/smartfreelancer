@@ -1,7 +1,6 @@
 <script>
 import { onMounted } from "vue";
 import authorization from "@/services/authorization";
-import cache from "@/services/cache";
 import SidebarNav from "@/components/navigation/SidebarNav.vue";
 import TimeTrackingSection from "@/components/timer/TimeTrackingSection.vue";
 import { RotateLoader } from "vue3-spinner";
@@ -41,8 +40,6 @@ export default {
     onMounted(async () => {
       const { token, refreshToken } = await authorization.getTokensFromCookies();
       await authorization.authorize(token, refreshToken);
-
-      await cache.loadLocale();
     });
 
     return { route };

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Service\User;
 
 use App\Exception\InvalidPayloadException;
-use App\Exception\UserAlreadyExistsException;
+use App\Exception\ResourceAlreadyExistsException;
 use App\Model\User\CreateUserPayload;
 use App\Model\User\JWTTokenDTO;
 use App\Model\User\RegistrationPayload;
@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class RegistrationHandler
 {
     public function __construct(
-        private readonly UserCreator $userCreator,
+        private readonly Creator $userCreator,
         private readonly UserRepository $userRepository,
         private readonly ValidatorInterface $validator,
         private readonly JWTTokenGetter $tokenGetter,
@@ -30,7 +30,7 @@ class RegistrationHandler
         }
 
         if ($this->userRepository->findOneByEmail($payload->getEmail())) {
-            throw new UserAlreadyExistsException();
+            throw new ResourceAlreadyExistsException('user');
         }
 
         if ($this->validator->validate($payload->getEmail(), [new Email()])->count() > 0) {

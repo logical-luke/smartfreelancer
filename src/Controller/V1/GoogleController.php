@@ -9,12 +9,12 @@ use App\Model\User\LoginTypeEnum;
 use App\Repository\UserRepository;
 use App\Service\External\GoogleClient;
 use App\Service\User\JWTTokenGetter;
-use App\Service\User\UserCreator;
+use App\Service\User\Creator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/google/', name: 'app_google_')]
 class GoogleController extends AbstractController
@@ -35,7 +35,7 @@ class GoogleController extends AbstractController
     #[Route('connect/check', name: 'connect_check', methods: 'POST')]
     public function connectCheckAction(
         JWTTokenGetter $tokenGetter,
-        UserCreator $userCreator,
+        Creator $userCreator,
         UserRepository $userRepository,
         GoogleClient $client,
         Request $request

@@ -1,16 +1,6 @@
-<template>
-  <dropdown v-model="selected"
-            :options="languages"
-            optionLabel="name"
-            class="w-full"
-            @update:model-value="setLanguage"
-  />
-</template>
-
 <script>
 import {mapGetters} from "vuex";
 import store from "@/store";
-import cache from "@/services/cache";
 import Dropdown from 'primevue/dropdown';
 
 export default {
@@ -68,7 +58,6 @@ export default {
       const code = language.code;
       this.$i18n.locale = code;
       store.dispatch("settings/setLocale", code);
-      cache.set("locale", code);
     },
   },
   mounted() {
@@ -81,3 +70,12 @@ export default {
   },
 };
 </script>
+
+<template>
+  <dropdown v-model="selected"
+            :options="languages"
+            optionLabel="name"
+            class="w-full"
+            @update:model-value="setLanguage"
+  />
+</template>

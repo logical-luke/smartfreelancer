@@ -8,7 +8,8 @@ import TrashIcon from "vue-tabler-icons/icons/TrashIcon"
 import MainActionButton from "@/components/MainActionButton.vue";
 import ActionButton from "@/components/ActionButton.vue";
 import ImageUploadInput from "@/components/ImageUploadInput.vue";
-import clientService from "@/services/client";
+import {mapActions, mapGetters} from "vuex";
+import store from "@/store";
 
 export default {
   name: "EditClientForm",
@@ -58,7 +59,7 @@ export default {
         return;
       }
 
-      await clientService.update(this.client)
+      await this.updateClient(this.client);
 
       this.$router.push(this.afterSavePageRoute);
     },
@@ -76,9 +77,14 @@ export default {
     canSubmitForm() {
       return this.nameValid && this.emailValid && this.phoneValid;
     },
+    ...mapActions({
+      updateClient: "clients/update",
+      loadClients: "clients/load",
+    }),
   },
-  async mounted() {
-    const clientObject = clientService.getById(this.$route.params.id);
+  async created() {
+    await this.loadClients();
+    const clientObject = await store.getters['clients/getClient'](this.$route.params.id);
     if (!clientObject) {
       await this.$router.push({name: 'NotFoundPage'});
     }

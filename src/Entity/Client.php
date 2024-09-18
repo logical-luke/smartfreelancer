@@ -49,20 +49,20 @@ class Client
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
 
-    protected function __construct(User $owner, Uuid $id, string $name, DateTimeImmutable $createdAt)
+    protected function __construct(User $owner, string $name)
     {
-        $this->id = $id;
+        $this->id = Uuid::v7();
         $this->owner = $owner;
         $this->name = $name;
-        $this->createdAt = $createdAt;
+        $this->createdAt = new DateTimeImmutable();
         $this->projects = new ArrayCollection();
         $this->timeEntries = new ArrayCollection();
         $this->tasks = new ArrayCollection();
     }
 
-    public static function from(User $owner, Uuid $id, string $name, DateTimeImmutable $createdAt): self
+    public static function from(User $owner, string $name): self
     {
-        return new self($owner, $id, $name, $createdAt);
+        return new self($owner, $name);
     }
 
     public function getId(): Uuid

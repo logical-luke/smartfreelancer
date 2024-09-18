@@ -21,12 +21,22 @@ readonly class CreateUserPayload
             throw new \InvalidArgumentException('Missing "email" in payload');
         }
 
+        try {
+            $loginType = isset($payload['loginType']) ? LoginTypeEnum::from($payload['loginType']) : LoginTypeEnum::EMAIL;
+        } catch (\UnexpectedValueException $e) {
+            throw new \InvalidArgumentException('Invalid "loginType" in payload');
+        }
+
+        if (LoginTypeEnum::EMAIL === $loginType && !isset($payload['password'])) {
+            throw new \InvalidArgumentException('Missing "password" in payload for email registration');
+        }
+
         return new self(
             $payload['email'],
             $payload['password'] ?? null,
             $payload['accessToken'] ?? null,
             $payload['refreshToken'] ?? null,
-            $payload['loginType'] ?? LoginTypeEnum::EMAIL,
+            $loginType,
         );
     }
 
@@ -50,7 +60,7 @@ readonly class CreateUserPayload
         return $this->refreshToken;
     }
 
-    public function getLoginType(): ?LoginTypeEnum
+    public function getLoginType(): LoginTypeEnum
     {
         return $this->loginType;
     }

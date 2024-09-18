@@ -9,7 +9,7 @@ use App\Model\Time\TimeDTO;
 use App\Model\User\UserDTO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/me', name: 'app_me_')]
 class MeController extends AbstractController

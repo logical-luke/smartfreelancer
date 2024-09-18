@@ -1,6 +1,5 @@
 import getUuid from "@/services/uuidGenerator";
 import store from "@/store";
-import cache from "@/services/cache";
 import timeEntries from "@/services/timeEntries";
 import getSecondsTimestampFromDate from "../time/getSecondsTimestampFromDate";
 import getRelativeTime from "@/services/time/relativeTimeGetter";
@@ -16,7 +15,6 @@ export default {
     newTimer.id = getUuid();
 
     await store.commit("timer/setTimer", newTimer);
-    await cache.set("timer", JSON.stringify(newTimer));
   },
   async stopTimer() {
     const endTime = store.getters["time/getServerTime"];
@@ -177,7 +175,6 @@ export default {
     const currentTimerMode = await store.getters["timer/getTimerMode"];
     const newTimerMode = currentTimerMode === "timer" ? "manual" : "timer";
     store.commit("timer/setTimerMode", newTimerMode);
-    await cache.set("timerMode", newTimerMode);
     if (newTimerMode === "manual") {
       await this.setNewManualTimerStartEndTime();
     } else {

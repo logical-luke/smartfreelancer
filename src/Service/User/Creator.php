@@ -11,12 +11,11 @@ use App\Repository\UserRepository;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-#[Autoconfigure(lazy: true)]
-class UserCreator
+readonly class Creator
 {
     public function __construct(
-        private readonly UserRepository $userRepository,
-        private readonly UserPasswordHasherInterface $userPasswordHasher
+        private UserRepository $userRepository,
+        private UserPasswordHasherInterface $userPasswordHasher
     ) {
     }
 
