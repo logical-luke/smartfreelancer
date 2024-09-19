@@ -40,7 +40,6 @@ export default defineConfig({
           }
         },
         globals: {
-          // replace feature flag globals with boolean literals
           "vue-i18n": "vue-i18n",
         },
       },
