@@ -1,5 +1,5 @@
-<script>
-import { onMounted } from "vue";
+<script setup lang="ts">
+import { ref, computed, onMounted } from "vue";
 import authorization from "@/services/authorization";
 import SidebarNav from "@/components/navigation/SidebarNav.vue";
 import ConfirmDialog from "primevue/confirmdialog";
@@ -7,51 +7,24 @@ import Toast from "primevue/toast";
 import { useRoute } from "vue-router";
 import RandomLoadingText from "./components/RandomLoadingText.vue";
 
-export default {
-  name: "App",
-  components: {
-    RandomLoadingText,
-    SidebarNav,
-    ConfirmDialog,
-    Toast,
-  },
-  setup() {
-    const route = useRoute();
-    onMounted(async () => {
-      const { token, refreshToken } =
-        await authorization.getTokensFromCookies();
-      await authorization.authorize(token, refreshToken);
-    });
+const route = useRoute();
 
-    return { route };
-  },
-  data() {
-    return {
-      spinnerSize: "96 px",
-      spinnerColor: "#382CDD",
-      isInitialLoaded: true,
-    };
-  },
-  computed: {
-    path() {
-      return this.route.name;
-    },
-    isAuthorizedPage() {
-      return this.route.meta && this.route.meta.requiresAuth === true;
-    },
-  },
-};
+const isInitialLoaded = ref<boolean>(true);
+
+const path = computed<string | undefined>(() => route.name as string | undefined);
+const isAuthorizedPage = computed<boolean>(() => route.meta && route.meta.requiresAuth === true);
+
+onMounted(async () => {
+  const { token, refreshToken } = await authorization.getTokensFromCookies();
+  await authorization.authorize(token, refreshToken);
+});
 </script>
 
 <template>
   <transition name="initial">
-    <div
-      v-if="!isInitialLoaded"
-      class="flex h-screen items-center justify-center"
-    >
+    <div v-if="!isInitialLoaded" class="flex h-screen items-center justify-center">
       <div class="flex flex-col items-center justify-center">
-        <div>
-        </div>
+        <div></div>
         <div class="flex items-center justify-center mt-4 p-4">
           <span class="text-center"><random-loading-text /></span>
         </div>
@@ -60,9 +33,9 @@ export default {
     <div v-else>
       <div class="h-screen" :class="{ 'mx-auto lg:ml-80': isAuthorizedPage }">
         <toast
-          :breakpoints="{ '920px': { width: '100%', right: '0', left: '0' } }"
-          :close-button-props="{ style: { 'box-shadow': 'none' } }"
-          error-icon="pi pi-minus-circle"
+            :breakpoints="{ '920px': { width: '100%', right: '0', left: '0' } }"
+            :close-button-props="{ style: { 'box-shadow': 'none' } }"
+            error-icon="pi pi-minus-circle"
         />
         <confirm-dialog />
         <sidebar-nav v-if="isAuthorizedPage" />

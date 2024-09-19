@@ -95,7 +95,7 @@ export default {
   <div @keyup.enter="submitForm">
     <label class="flex flex-col text-sm font-semibold gap-2" for="name">
       <span> {{ $t("Name") }} <span class="text-red-500">*</span> </span>
-      <input-text
+      <InputText
         id="name"
         v-model="client.name"
         class="block w-full md:w-1/2 px-4 py-4 text-sm placeholder-gray-500 bg-white border rounded"
@@ -112,7 +112,7 @@ export default {
       >{{ $t("Email") }}
       <input-group>
         <input-group-addon> </input-group-addon>
-        <input-text
+        <InputText
           id="email"
           v-model="client.email"
           name="email"
@@ -129,7 +129,7 @@ export default {
       >{{ $t("Phone") }}
       <input-group>
         <input-group-addon> </input-group-addon>
-        <input-text
+        <InputText
           id="phone"
           v-model="client.phone"
           name="phone"
@@ -157,16 +157,16 @@ export default {
   <div
     class="flex gap-4 flex-col md:flex-row justify-center md:justify-start w-full md:w-1/2"
   >
-    <main-action-button
+    <MainActionButton
       :disabled="!canSubmitForm() || client.name.length === 0"
       class="w-full md:w-auto"
       @keyup.enter="submitForm"
       @click="submitForm"
     >
       {{ $t("Save") }}
-    </main-action-button>
+    </MainActionButton>
     <router-link :to="cancelPageRoute">
-      <action-button class="w-full md:w-auto">{{ $t("Cancel") }}</action-button>
+      <ActionButton class="w-full md:w-auto">{{ $t("Cancel") }}</ActionButton>
     </router-link>
   </div>
 </template>

@@ -9,7 +9,7 @@ export default {
 
 <template>
   <div class="flex h-screen -mt-12 flex-col items-center justify-center">
-    <transparent-logo-wide size="h-60" />
+    <TransparentLogoWide size="h-60" />
     <span class="text-xs font-semibold text-indigo-500 uppercase"
       >{{ $t("Error") }} 404</span
     >

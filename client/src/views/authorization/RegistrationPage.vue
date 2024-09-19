@@ -109,7 +109,7 @@ export default {
       class="md:border-2 rounded-md p-8 md:shadow w-full max-w-sm md:max-w-lg lg:max-w-xl"
     >
       <div class="flex justify-center w-full mb-4">
-        <transparent-logo-wide size="w-60" text-color="#410B01" />
+        <TransparentLogoWide size="w-60" text-color="#410B01" />
       </div>
       <div class="flex w-full justify-center items-center">
         <div class="flex flex-col gap-4 w-full">
@@ -117,9 +117,9 @@ export default {
             <label class="block text-sm font-medium mb-1" for="email">
               {{ $t("EMAIL") }}
             </label>
-            <input-text
+            <InputText
               v-model="email"
-              class="w-full p-inputtext-sm"
+              class="w-full"
               type="email"
               autocomplete="email"
               :invalid="showEmailValidationFailure"
@@ -135,11 +135,10 @@ export default {
             <label class="block text-sm font-medium mb-1" for="password">
               {{ $t("PASSWORD") }}
             </label>
-            <password
-              id="passwordPanel"
+            <Password
+              id="password-panel"
               v-model="password"
-              class="w-full p-inputtext-sm"
-              input-id="passwordInput"
+              input-id="password-input"
               :toggle-mask="true"
               autocomplete="new-password"
               prompt-label=" "
@@ -152,7 +151,7 @@ export default {
               >
               <template #footer="sp">
                 {{ sp.level }}
-                <divider />
+                <Divider />
                 <p class="mt-2">{{ $t("Recommendations") }}:</p>
                 <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
                   <li>{{ $t("At least one lowercase") }}</li>
@@ -161,44 +160,43 @@ export default {
                   <li>{{ $t("Minimum 8 characters") }}</li>
                 </ul>
               </template>
-            </password>
+            </Password>
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1" for="confirmPassword">
+            <label class="block text-sm font-medium mb-1" for="confirm-password">
               {{ $t("CONFIRM PASSWORD") }}
             </label>
-            <password
-              id="confirmPasswordPanel"
+            <Password
+              id="confirm-password-panel"
               v-model="confirmPassword"
-              class="w-full p-inputtext-sm"
-              input-id="confirmPasswordInput"
+              input-id="confirm-password-input"
               :toggle-mask="true"
               autocomplete="new-password"
               :feedback="false"
             />
           </div>
 
-          <main-action-button
+          <MainActionButton
             :disabled="isFormValid() === false"
             @click="register"
-            >{{ $t("Sign Up") }}</main-action-button
+            >{{ $t("Sign Up") }}</MainActionButton
           >
 
-          <divider align="center" class="py-2">
+          <Divider align="center" class="py-2">
             <span>{{ $t("OR") }}</span>
-          </divider>
+          </Divider>
 
-          <main-action-button @click="loginWithGoogle">{{
+          <MainActionButton @click="loginWithGoogle">{{
             $t("Sign Up with Google")
-          }}</main-action-button>
+          }}</MainActionButton>
 
-          <action-button @click="redirectToLogin">{{
+          <ActionButton @click="redirectToLogin">{{
             $t("Log In to Your Account")
-          }}</action-button>
+          }}</ActionButton>
 
           <div class="flex justify-center mt-4">
-            <language-switcher />
+            <LanguageSwitcher />
           </div>
         </div>
       </div>
@@ -207,19 +205,19 @@ export default {
 </template>
 
 <style>
-#passwordPanel {
+#password-panel {
   width: 100%;
 }
 
-#passwordInput {
+#password-input {
   width: 100%;
 }
 
-#confirmPasswordPanel {
+#confirm-password-panel {
   width: 100%;
 }
 
-#confirmPasswordInput {
+#confirm-password-input {
   width: 100%;
 }
 </style>

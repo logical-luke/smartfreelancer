@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-fit">
-    <input-text
+    <InputText
       v-model="description"
       class="borderless-input font-bold"
       :placeholder="$t('Log your magic moment! 🚀')"

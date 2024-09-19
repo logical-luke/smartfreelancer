@@ -129,7 +129,7 @@ export default {
               </sidebar-item>
               <sidebar-logout />
             </ul>
-            <language-switcher />
+            <LanguageSwitcher />
           </div>
         </nav>
       </div>

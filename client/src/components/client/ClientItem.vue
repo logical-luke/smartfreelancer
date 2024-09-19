@@ -111,7 +111,6 @@ export default {
       </div>
       <div class="p-4 bg-gray-100 rounded w-full md:w-1/2">
         <div class="flex items-center gap-4 mb-2">
-          <clock-icon class="text-blue-500" />
           <p class="text-xs font-medium">{{ $t("Time Worked") }}</p>
         </div>
         <span>{{ timeWorked }} {{ $t("hours") }}</span>
@@ -127,14 +126,12 @@ export default {
       </div>
       <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
         <div class="flex items-center gap-4 mb-2">
-          <calendar-icon class="text-blue-400" />
           <p class="text-xs font-medium">{{ $t("Planned Tasks") }}</p>
         </div>
         <span>{{ plannedTasks }}</span>
       </div>
       <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
         <div class="flex items-center gap-4 mb-2">
-          <progress-check-icon class="text-green-500" />
           <p class="text-xs font-medium">{{ $t("Finished Tasks") }}</p>
         </div>
         <span>{{ finishedTasks }}</span>
@@ -148,10 +145,10 @@ export default {
     </div>
 
     <div class="flex gap-4 flex-col items-center md:flex-row">
-      <action-button @click="goToEditClientPage">{{
+      <ActionButton @click="goToEditClientPage">{{
         $t("Edit")
-      }}</action-button>
-      <action-button @click="this.delete">{{ $t("Delete") }}</action-button>
+      }}</ActionButton>
+      <ActionButton @click="this.delete">{{ $t("Delete") }}</ActionButton>
     </div>
   </div>
 </template>

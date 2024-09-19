@@ -1,84 +1,56 @@
-<script>
-import { mapGetters } from "vuex";
-import store from "@/store";
-import Dropdown from "primevue/dropdown";
+<script setup lang="ts">
+import { ref, reactive, computed, onMounted } from "vue";
+import { useStore } from "vuex";
+import Select from "primevue/select";
+import i18n from "@/services/locale/i18n"; // Import the i18n instance
 
-export default {
-  name: "LanguageSwitcher",
-  components: {
-    Dropdown,
-  },
-  data() {
-    return {
-      selected: {
-        name: "English",
-        code: "en",
-      },
-      languages: [
-        {
-          name: "čeština",
-          code: "cs",
-        },
-        {
-          name: "Deutsch",
-          code: "de",
-        },
-        {
-          name: "English",
-          code: "en",
-        },
-        {
-          name: "Española",
-          code: "es",
-        },
-        {
-          name: "Français",
-          code: "fr",
-        },
-        {
-          name: "Italiano",
-          code: "it",
-        },
-        {
-          name: "Polski",
-          code: "pl",
-        },
-        {
-          name: "українська мова",
-          code: "uk",
-        },
-      ],
-    };
-  },
-  computed: {
-    ...mapGetters("settings", ["getLocale"]),
-  },
-  mounted() {
-    const locale = this.getLocale;
-    const selectedLanguage = this.languages.find(
-      (lang) => lang.code === locale
-    );
-    if (selectedLanguage) {
-      this.selected = selectedLanguage;
-    }
-    this.$i18n.locale = locale;
-  },
-  methods: {
-    setLanguage(language) {
-      const code = language.code;
-      this.$i18n.locale = code;
-      store.dispatch("settings/setLocale", code);
-    },
-  },
-};
+const store = useStore();
+
+interface Language {
+  name: string;
+  code: string;
+}
+
+const selected = ref<Language>({
+  name: "English",
+  code: "en",
+});
+
+const languages = reactive<Language[]>([
+  { name: "čeština", code: "cs" },
+  { name: "Deutsch", code: "de" },
+  { name: "English", code: "en" },
+  { name: "Española", code: "es" },
+  { name: "Français", code: "fr" },
+  { name: "Italiano", code: "it" },
+  { name: "Polski", code: "pl" },
+  { name: "українська мова", code: "uk" },
+]);
+
+const getLocale = computed<string>(() => store.getters["settings/getLocale"]);
+
+onMounted(() => {
+  const locale = getLocale.value;
+  const selectedLanguage = languages.find((lang) => lang.code === locale);
+  if (selectedLanguage) {
+    selected.value = selectedLanguage;
+  }
+  i18n.global.locale = locale; // Use the i18n instance
+});
+
+function setLanguage(language: Language) {
+  const code = language.code;
+  i18n.global.locale = code; // Use the i18n instance
+  store.dispatch("settings/setLocale", code);
+}
 </script>
 
 <template>
-  <dropdown
-    v-model="selected"
-    :options="languages"
-    option-label="name"
-    class="w-full"
-    @update:model-value="setLanguage"
+  <Select
+      v-model="selected"
+      :options="languages"
+      option-label="name"
+      class="w-full"
+      @update:model-value="setLanguage"
   />
 </template>

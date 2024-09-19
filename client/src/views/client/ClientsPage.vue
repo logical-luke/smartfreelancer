@@ -61,7 +61,7 @@ export default {
       </transition-group>
     </div>
   </transition>
-  <main-action-button class="w-full md:w-auto" @click="goToAddClient">{{
+  <MainActionButton class="w-full md:w-auto" @click="goToAddClient">{{
     $t("Add Client")
-  }}</main-action-button>
+  }}</MainActionButton>
 </template>

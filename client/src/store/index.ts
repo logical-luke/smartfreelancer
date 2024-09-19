@@ -6,10 +6,7 @@ import projects from "./modules/projects";
 import settings from "@/store/modules/settings";
 import tasks from "@/store/modules/tasks";
 import time from "@/store/modules/time";
-import timeEntries from "@/store/modules/timeEntries";
 import timer from "@/store/modules/timer";
-import buildWorkHubTree from "@/services/treeBuilder";
-import pomodoro from "@/store/modules/pomodoro";
 const debug = process.env.NODE_ENV !== "production";
 
 export default createStore({
@@ -23,9 +20,7 @@ export default createStore({
     settings,
     tasks,
     time,
-    timeEntries,
     timer,
-    pomodoro,
   },
   mutations: {
     setUser(state, user) {

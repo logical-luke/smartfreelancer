@@ -1,6 +1,6 @@
 <template>
   <div class="w-28" @click="show">
-    <input-text
+    <InputText
       class="borderless-input placeholder-gray-500"
       placeholder="00:00:00"
       :value="hasDuration ? `${hours}:${minutes}:${seconds}` : ''"
