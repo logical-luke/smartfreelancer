@@ -3,8 +3,8 @@ import EditClientForm from "@/components/client/EditClientForm.vue";
 
 export default {
   name: "EditClientPage",
-  components: {EditClientForm}
-}
+  components: { EditClientForm },
+};
 </script>
 
 <template>
@@ -19,4 +19,3 @@ export default {
     </div>
   </div>
 </template>
-

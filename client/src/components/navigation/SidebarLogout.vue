@@ -1,23 +1,9 @@
-<template>
-  <a
-    class="flex cursor-pointer items-center pl-3 py-4 pr-2 text-gray-50 hover:bg-gray-900 rounded"
-    @click="logout()"
-  >
-    <span class="inline-block mr-3">
-      <logout-icon />
-    </span>
-    <span>{{ $t("Log out") }}</span>
-  </a>
-</template>
-
 <script>
-import LogoutIcon from "vue-tabler-icons/icons/LogoutIcon";
 import authorization from "@/services/authorization";
 import router from "@/router";
 
 export default {
   name: "SidebarLogout",
-  components: { LogoutIcon },
   methods: {
     async logout() {
       await authorization.logout();
@@ -27,3 +13,14 @@ export default {
   },
 };
 </script>
+
+<template>
+  <a
+      class="flex cursor-pointer items-center pl-3 py-4 pr-2 text-gray-50 hover:bg-gray-900 rounded"
+      @click="logout()"
+  >
+    <span class="inline-block mr-3">
+    </span>
+    <span>{{ $t("Log out") }}</span>
+  </a>
+</template>

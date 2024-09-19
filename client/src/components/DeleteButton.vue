@@ -1,23 +1,6 @@
-<template>
-  <button
-    @click="showConfirmation"
-    :class="
-      iconOnly
-        ? 'text-red-500 hover:text-red-600'
-        : 'inline-flex text-center items-center w-full md:w-auto font-medium text-sm px-8 py-4 bg-red-400 hover:bg-red-600 rounded transition duration-200'
-    "
-  >
-    <trash-icon />
-    <template v-if="!iconOnly">{{ title ? title : "Delete" }}</template>
-  </button>
-</template>
-
 <script>
-import TrashIcon from "vue-tabler-icons/icons/TrashIcon";
-
 export default {
   name: "DeleteButton",
-  components: { TrashIcon },
   props: {
     title: String,
     subject: String,
@@ -40,4 +23,15 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<template>
+  <button
+      :class="
+      iconOnly
+        ? 'text-red-500 hover:text-red-600'
+        : 'inline-flex text-center items-center w-full md:w-auto font-medium text-sm px-8 py-4 bg-red-400 hover:bg-red-600 rounded transition duration-200'
+    "
+      @click="showConfirmation"
+  >
+    <template v-if="!iconOnly">{{ title ? title : "Delete" }}</template>
+  </button>
+</template>

@@ -149,7 +149,8 @@ router.beforeEach(async (to, from, next) => {
   await authorization.authorize(token, refreshToken);
 
   if (
-    (to.name === "LoginPage" || to.name === "RegistrationPage") && store.getters["authorization/isAuthorized"]
+    (to.name === "LoginPage" || to.name === "RegistrationPage") &&
+    store.getters["authorization/isAuthorized"]
   ) {
     next({ name: "DeepWorkHubPage" });
   } else {

@@ -19,7 +19,6 @@ fs.readFile(
     console.log(en);
 
     for (const lang of languages) {
-        
       console.log("Translating to " + lang);
       let translated = {};
       const langFileName = path.join(__dirname, `../src/locale/${lang}.json`);

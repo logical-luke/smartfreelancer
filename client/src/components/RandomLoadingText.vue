@@ -1,5 +1,5 @@
 <template>
-  {{ this.text }}
+  {{ text }}
 </template>
 
 <script>
@@ -23,6 +23,10 @@ export default {
     ...mapState({
       locale: (state) => state.settings.locale,
     }),
+  },
+  mounted() {
+    this.updateTexts();
+    this.setText();
   },
   methods: {
     setText() {
@@ -248,10 +252,6 @@ export default {
         ),
       ];
     },
-  },
-  mounted() {
-    this.updateTexts();
-    this.setText();
   },
 };
 </script>

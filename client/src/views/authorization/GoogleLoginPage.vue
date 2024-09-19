@@ -1,19 +1,15 @@
 <template>
   <div class="flex h-screen items-center justify-center">
-    <moon-loader :size="spinnerSize" :color="spinnerColor" :loading="true" />
   </div>
 </template>
 
 <script>
 import router from "../../router";
-import store from "@/store";
 import api from "@/services/api";
 import authorization from "@/services/authorization";
-import { MoonLoader } from "vue3-spinner";
 
 export default {
   name: "GoogleLoginPage",
-  components: { MoonLoader },
   data() {
     return {
       spinnerSize: "96 px",

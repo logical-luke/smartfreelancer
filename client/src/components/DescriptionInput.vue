@@ -1,25 +1,13 @@
 <template>
   <div class="max-w-fit">
     <input-text
-      class="borderless-input font-bold"
-      @update:model-value="setDescription"
       v-model="description"
+      class="borderless-input font-bold"
       :placeholder="$t('Log your magic moment! 🚀')"
+      @update:model-value="setDescription"
     />
   </div>
 </template>
-
-<style scoped>
-.borderless-input {
-  border: none;
-  box-shadow: none;
-}
-
-.p-inputtext {
-  font-weight: 700;
-  color: black;
-}
-</style>
 
 <script>
 import InputText from "primevue/inputtext";
@@ -51,3 +39,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.borderless-input {
+  border: none;
+  box-shadow: none;
+}
+
+.p-inputtext {
+  font-weight: 700;
+  color: black;
+}
+</style>

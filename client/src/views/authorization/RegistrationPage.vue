@@ -1,96 +1,4 @@
-<template>
-  <div class="flex flex-col justify-center items-center h-full min-h-screen p-4 overflow-auto">
-    <div class="md:border-2 rounded-md p-8 md:shadow w-full max-w-sm md:max-w-lg lg:max-w-xl">
-      <div class="flex justify-center w-full mb-4">
-        <transparent-logo-wide size="w-60" text-color="#410B01" />
-      </div>
-      <div class="flex w-full justify-center items-center">
-        <div class="flex flex-col gap-4 w-full">
-          <div>
-            <label class="block text-sm font-medium mb-1" for="email">
-              {{ $t("EMAIL") }}
-            </label>
-            <input-text
-                class="w-full p-inputtext-sm"
-                type="email"
-                v-model="email"
-                autocomplete="email"
-                @focusout="emailFocused=false"
-                @focusin="emailFocused=true"
-                :invalid="showEmailValidationFailure"
-            />
-            <p class="text-red-500 font-bold" v-if="showEmailValidationFailure">{{ $t("Invalid email") }}</p>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium mb-1" for="password">
-              {{ $t("PASSWORD") }}
-            </label>
-            <password
-                class="w-full p-inputtext-sm"
-                v-model="password"
-                input-id="passwordInput"
-                :toggle-mask="true"
-                autocomplete="new-password"
-                id="passwordPanel"
-                prompt-label=" "
-                :weak-label="$t('Weak password')"
-                :medium-label="$t('Medium password')"
-                :strong-label="$t('Strong password')"
-            >
-              <template #header
-              ><p class="mb-1">{{ $t("Enter a password") }}</p></template
-              >
-              <template #footer="sp">
-                {{ sp.level }}
-                <divider />
-                <p class="mt-2">{{ $t("Recommendations") }}:</p>
-                <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
-                  <li>{{ $t("At least one lowercase") }}</li>
-                  <li>{{ $t("At least one uppercase") }}</li>
-                  <li>{{ $t("At least one numeric") }}</li>
-                  <li>{{ $t("Minimum 8 characters") }}</li>
-                </ul>
-              </template>
-            </password>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium mb-1" for="confirmPassword">
-              {{ $t("CONFIRM PASSWORD") }}
-            </label>
-            <password
-                class="w-full p-inputtext-sm"
-                v-model="confirmPassword"
-                input-id="confirmPasswordInput"
-                :toggle-mask="true"
-                autocomplete="new-password"
-                id="confirmPasswordPanel"
-                :feedback="false"
-            />
-          </div>
-
-          <main-action-button :disabled="isFormValid() === false" @click="register">{{ $t("Sign Up") }}</main-action-button>
-
-          <divider align="center" class="py-2">
-            <span>{{ $t("OR") }}</span>
-          </divider>
-
-          <main-action-button @click="loginWithGoogle">{{ $t("Sign Up with Google") }}</main-action-button>
-
-          <action-button @click="redirectToLogin">{{ $t("Log In to Your Account") }}</action-button>
-
-          <div class="flex justify-center mt-4">
-            <language-switcher />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
-import store from "@/store";
 import router from "@/router";
 import TransparentLogoWide from "@/components/logo/TransparentLogoWide.vue";
 import MainActionButton from "@/components/MainActionButton.vue";
@@ -111,7 +19,7 @@ export default {
     TransparentLogoWide,
     Password,
     InputText,
-    Divider
+    Divider,
   },
   data: () => {
     return {
@@ -123,7 +31,11 @@ export default {
   },
   computed: {
     showEmailValidationFailure() {
-      return !this.emailFocused && this.email !== '' && !this.isValidEmail(this.email);
+      return (
+        !this.emailFocused &&
+        this.email !== "" &&
+        !this.isValidEmail(this.email)
+      );
     },
   },
   methods: {
@@ -150,8 +62,8 @@ export default {
           confirmPassword: this.confirmPassword,
         });
         const { token, refreshToken } = await authorization.login(
-            this.email,
-            this.password
+          this.email,
+          this.password
         );
         await authorization.authorize(token, refreshToken);
 
@@ -170,7 +82,7 @@ export default {
       }
     },
     async loginWithGoogle() {
-      window.location.href = await api.postGoogleStart()
+      window.location.href = await api.postGoogleStart();
     },
     isValidEmail(email) {
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -179,11 +91,120 @@ export default {
       router.push("/login");
     },
     isFormValid() {
-      return this.isValidEmail(this.email) && this.password !== "" && this.confirmPassword !== "";
+      return (
+        this.isValidEmail(this.email) &&
+        this.password !== "" &&
+        this.confirmPassword !== ""
+      );
     },
   },
 };
 </script>
+
+<template>
+  <div
+    class="flex flex-col justify-center items-center h-full min-h-screen p-4 overflow-auto"
+  >
+    <div
+      class="md:border-2 rounded-md p-8 md:shadow w-full max-w-sm md:max-w-lg lg:max-w-xl"
+    >
+      <div class="flex justify-center w-full mb-4">
+        <transparent-logo-wide size="w-60" text-color="#410B01" />
+      </div>
+      <div class="flex w-full justify-center items-center">
+        <div class="flex flex-col gap-4 w-full">
+          <div>
+            <label class="block text-sm font-medium mb-1" for="email">
+              {{ $t("EMAIL") }}
+            </label>
+            <input-text
+              v-model="email"
+              class="w-full p-inputtext-sm"
+              type="email"
+              autocomplete="email"
+              :invalid="showEmailValidationFailure"
+              @focusout="emailFocused = false"
+              @focusin="emailFocused = true"
+            />
+            <p v-if="showEmailValidationFailure" class="text-red-500 font-bold">
+              {{ $t("Invalid email") }}
+            </p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium mb-1" for="password">
+              {{ $t("PASSWORD") }}
+            </label>
+            <password
+              id="passwordPanel"
+              v-model="password"
+              class="w-full p-inputtext-sm"
+              input-id="passwordInput"
+              :toggle-mask="true"
+              autocomplete="new-password"
+              prompt-label=" "
+              :weak-label="$t('Weak password')"
+              :medium-label="$t('Medium password')"
+              :strong-label="$t('Strong password')"
+            >
+              <template #header
+                ><p class="mb-1">{{ $t("Enter a password") }}</p></template
+              >
+              <template #footer="sp">
+                {{ sp.level }}
+                <divider />
+                <p class="mt-2">{{ $t("Recommendations") }}:</p>
+                <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+                  <li>{{ $t("At least one lowercase") }}</li>
+                  <li>{{ $t("At least one uppercase") }}</li>
+                  <li>{{ $t("At least one numeric") }}</li>
+                  <li>{{ $t("Minimum 8 characters") }}</li>
+                </ul>
+              </template>
+            </password>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium mb-1" for="confirmPassword">
+              {{ $t("CONFIRM PASSWORD") }}
+            </label>
+            <password
+              id="confirmPasswordPanel"
+              v-model="confirmPassword"
+              class="w-full p-inputtext-sm"
+              input-id="confirmPasswordInput"
+              :toggle-mask="true"
+              autocomplete="new-password"
+              :feedback="false"
+            />
+          </div>
+
+          <main-action-button
+            :disabled="isFormValid() === false"
+            @click="register"
+            >{{ $t("Sign Up") }}</main-action-button
+          >
+
+          <divider align="center" class="py-2">
+            <span>{{ $t("OR") }}</span>
+          </divider>
+
+          <main-action-button @click="loginWithGoogle">{{
+            $t("Sign Up with Google")
+          }}</main-action-button>
+
+          <action-button @click="redirectToLogin">{{
+            $t("Log In to Your Account")
+          }}</action-button>
+
+          <div class="flex justify-center mt-4">
+            <language-switcher />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style>
 #passwordPanel {

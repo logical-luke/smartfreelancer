@@ -1,5 +1,5 @@
 <template>
-  <div @click="show" class="w-28">
+  <div class="w-28" @click="show">
     <input-text
       class="borderless-input placeholder-gray-500"
       placeholder="00:00:00"
@@ -20,20 +20,6 @@
   </overlay-panel>
 </template>
 
-<style scoped>
-.borderless-input {
-  border: none;
-  box-shadow: none;
-}
-
-.p-inputtext {
-  width: 100%;
-  font-weight: 600;
-  text-align: center;
-  color: black;
-}
-</style>
-
 <script>
 import { mapGetters, mapState } from "vuex";
 import StartTime from "./timer/StartTime.vue";
@@ -46,6 +32,13 @@ import timer from "@/services/timer";
 export default {
   name: "DurationInput",
   components: { EndTime, StartTime, OverlayPanel, InputText },
+  props: {
+    includeStartEndTimeButtons: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
   data() {
     return {
       hours: "00",
@@ -54,13 +47,6 @@ export default {
       isFocused: false,
       hasDuration: false,
     };
-  },
-  props: {
-    includeStartEndTimeButtons: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
   },
   watch: {
     async serverTime() {
@@ -96,6 +82,11 @@ export default {
       return await timer.setEndTime();
     },
   },
+  async mounted() {
+    await this.updateClock();
+    await this.updateIfHasDuration();
+    this.timerRunning = await timer.isTimerRunning();
+  },
   methods: {
     async updateClock(forced) {
       if ((await timer.isManualMode()) || !this.isFocused || forced) {
@@ -120,13 +111,22 @@ export default {
       this.isFocused = isFocused;
     },
   },
-  async mounted() {
-    await this.updateClock();
-    await this.updateIfHasDuration();
-    this.timerRunning = await timer.isTimerRunning();
-  },
 };
 </script>
+
 <script setup>
 import TimerCalendar from "@/components/timer/TimerCalendar.vue";
 </script>
+<style scoped>
+.borderless-input {
+  border: none;
+  box-shadow: none;
+}
+
+.p-inputtext {
+  width: 100%;
+  font-weight: 600;
+  text-align: center;
+  color: black;
+}
+</style>

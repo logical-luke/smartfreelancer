@@ -1,7 +1,7 @@
 <script>
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 import store from "@/store";
-import Dropdown from 'primevue/dropdown';
+import Dropdown from "primevue/dropdown";
 
 export default {
   name: "LanguageSwitcher",
@@ -12,46 +12,56 @@ export default {
     return {
       selected: {
         name: "English",
-        code: "en"
+        code: "en",
       },
       languages: [
         {
           name: "čeština",
-          code: "cs"
+          code: "cs",
         },
         {
           name: "Deutsch",
-          code: "de"
+          code: "de",
         },
         {
           name: "English",
-          code: "en"
+          code: "en",
         },
         {
           name: "Española",
-          code: "es"
+          code: "es",
         },
         {
           name: "Français",
-          code: "fr"
+          code: "fr",
         },
         {
           name: "Italiano",
-          code: "it"
+          code: "it",
         },
         {
           name: "Polski",
-          code: "pl"
+          code: "pl",
         },
         {
           name: "українська мова",
-          code: "uk"
+          code: "uk",
         },
-      ]
+      ],
     };
   },
   computed: {
     ...mapGetters("settings", ["getLocale"]),
+  },
+  mounted() {
+    const locale = this.getLocale;
+    const selectedLanguage = this.languages.find(
+      (lang) => lang.code === locale
+    );
+    if (selectedLanguage) {
+      this.selected = selectedLanguage;
+    }
+    this.$i18n.locale = locale;
   },
   methods: {
     setLanguage(language) {
@@ -60,22 +70,15 @@ export default {
       store.dispatch("settings/setLocale", code);
     },
   },
-  mounted() {
-    const locale = this.getLocale;
-    const selectedLanguage = this.languages.find(lang => lang.code === locale);
-    if (selectedLanguage) {
-      this.selected = selectedLanguage;
-    }
-    this.$i18n.locale = locale;
-  },
 };
 </script>
 
 <template>
-  <dropdown v-model="selected"
-            :options="languages"
-            optionLabel="name"
-            class="w-full"
-            @update:model-value="setLanguage"
+  <dropdown
+    v-model="selected"
+    :options="languages"
+    option-label="name"
+    class="w-full"
+    @update:model-value="setLanguage"
   />
 </template>

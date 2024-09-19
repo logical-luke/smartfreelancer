@@ -1,6 +1,5 @@
 import getRelativeTime from "@/services/time/relativeTimeGetter";
 import store from "@/store";
-import getUuid from "@/services/uuidGenerator";
 
 export default {
   async getDurations() {
@@ -124,7 +123,7 @@ export default {
   },
   createNewPomodoro(duration, type) {
     let pomodoro = JSON.parse(JSON.stringify(this.getEmptyPomodoro()));
-    pomodoro.id = getUuid();
+    pomodoro.id = null;
     pomodoro.duration = duration;
     pomodoro.remainingTime = duration;
     pomodoro.type = type;

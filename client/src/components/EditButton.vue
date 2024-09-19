@@ -8,18 +8,15 @@
           : 'inline-flex text-center items-center w-full md:w-auto px-8 py-4 text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 rounded transition duration-200'
       "
     >
-      <edit-icon />
       <template v-if="!iconOnly">Edit</template>
     </button>
   </router-link>
 </template>
 
 <script>
-import EditIcon from "vue-tabler-icons/icons/EditIcon";
 
 export default {
   name: "EditButton",
-  components: { EditIcon },
   props: {
     goTo: {
       type: String,

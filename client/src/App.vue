@@ -2,12 +2,9 @@
 import { onMounted } from "vue";
 import authorization from "@/services/authorization";
 import SidebarNav from "@/components/navigation/SidebarNav.vue";
-import TimeTrackingSection from "@/components/timer/TimeTrackingSection.vue";
-import { RotateLoader } from "vue3-spinner";
 import ConfirmDialog from "primevue/confirmdialog";
 import Toast from "primevue/toast";
 import { useRoute } from "vue-router";
-import getUTCTimestampFromLocaltime from "@/services/time/getUTCTimestampFromLocaltime";
 import RandomLoadingText from "./components/RandomLoadingText.vue";
 
 export default {
@@ -15,10 +12,18 @@ export default {
   components: {
     RandomLoadingText,
     SidebarNav,
-    TimeTrackingSection,
-    RotateLoader,
     ConfirmDialog,
     Toast,
+  },
+  setup() {
+    const route = useRoute();
+    onMounted(async () => {
+      const { token, refreshToken } =
+        await authorization.getTokensFromCookies();
+      await authorization.authorize(token, refreshToken);
+    });
+
+    return { route };
   },
   data() {
     return {
@@ -35,30 +40,17 @@ export default {
       return this.route.meta && this.route.meta.requiresAuth === true;
     },
   },
-  setup() {
-    const route = useRoute();
-    onMounted(async () => {
-      const { token, refreshToken } = await authorization.getTokensFromCookies();
-      await authorization.authorize(token, refreshToken);
-    });
-
-    return { route };
-  },
 };
 </script>
 
 <template>
   <transition name="initial">
     <div
-      class="flex h-screen items-center justify-center"
       v-if="!isInitialLoaded"
+      class="flex h-screen items-center justify-center"
     >
       <div class="flex flex-col items-center justify-center">
         <div>
-          <rotate-loader
-            :color="spinnerColor"
-            :loading="true"
-          />
         </div>
         <div class="flex items-center justify-center mt-4 p-4">
           <span class="text-center"><random-loading-text /></span>
@@ -69,17 +61,14 @@ export default {
       <div class="h-screen" :class="{ 'mx-auto lg:ml-80': isAuthorizedPage }">
         <toast
           :breakpoints="{ '920px': { width: '100%', right: '0', left: '0' } }"
-          :closeButtonProps="{ style: { 'box-shadow': 'none' } }"
-          errorIcon="pi pi-minus-circle"
+          :close-button-props="{ style: { 'box-shadow': 'none' } }"
+          error-icon="pi pi-minus-circle"
         />
         <confirm-dialog />
         <sidebar-nav v-if="isAuthorizedPage" />
         <router-view v-slot="{ Component }">
           <transition name="fade" mode="out-in">
-            <div
-              :class="isAuthorizedPage ? 'py-8 px-8' : ''"
-              :key="path"
-            >
+            <div :key="path" :class="isAuthorizedPage ? 'py-8 px-8' : ''">
               <component :is="Component"></component>
             </div>
           </transition>

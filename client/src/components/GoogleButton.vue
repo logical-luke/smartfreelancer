@@ -6,7 +6,6 @@
   >
     <div class="flex items-center w-full">
       <div class="flex items-center justify-start flex-grow-0">
-        <brand-google-icon size="18" />
       </div>
       <div class="flex items-center justify-center flex-grow">
         <span><slot></slot> {{ $t("with") }} Google</span>
@@ -16,12 +15,10 @@
 </template>
 
 <script>
-import BrandGoogleIcon from "vue-tabler-icons/icons/BrandGoogleIcon";
 import api from "@/services/api";
 
 export default {
   name: "GoogleButton",
-  components: { BrandGoogleIcon },
   methods: {
     async loginWithGoogle() {
       window.location.href = await api.postGoogleStart();
