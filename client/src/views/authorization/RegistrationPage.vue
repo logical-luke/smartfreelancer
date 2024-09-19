@@ -1,5 +1,7 @@
-<script>
-import router from "@/router";
+<script lang="ts">
+import { defineComponent, ref, computed } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthorizationStore } from "@/stores/auth";
 import TransparentLogoWide from "@/components/logo/TransparentLogoWide.vue";
 import MainActionButton from "@/components/MainActionButton.vue";
 import ActionButton from "@/components/ActionButton.vue";
@@ -7,10 +9,9 @@ import LanguageSwitcher from "@/components/LanguageSwitcher.vue";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Divider from "primevue/divider";
-import authorization from "@/services/authorization";
 import api from "@/services/api";
 
-export default {
+export default defineComponent({
   name: "RegistrationPage",
   components: {
     MainActionButton,
@@ -21,93 +22,70 @@ export default {
     InputText,
     Divider,
   },
-  data: () => {
-    return {
-      email: "",
-      password: "",
-      confirmPassword: "",
-      emailFocused: false,
+  setup() {
+    const email = ref("");
+    const password = ref("");
+    const confirmPassword = ref("");
+    const emailFocused = ref(false);
+    const router = useRouter();
+    const authStore = useAuthorizationStore();
+
+    const showEmailValidationFailure = computed(() => {
+      return !emailFocused.value && email.value !== "" && !isValidEmail(email.value);
+    });
+
+    const isValidEmail = (email: string) => {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     };
-  },
-  computed: {
-    showEmailValidationFailure() {
-      return (
-        !this.emailFocused &&
-        this.email !== "" &&
-        !this.isValidEmail(this.email)
-      );
-    },
-  },
-  methods: {
-    async register() {
-      if (!this.isFormValid()) {
+
+    const isFormValid = computed(() => {
+      return isValidEmail(email.value) && password.value !== "" && confirmPassword.value !== "";
+    });
+
+    const register = async () => {
+      if (!isFormValid.value) {
         return;
       }
-      this.$toast.removeAllGroups();
-      if (this.password !== this.confirmPassword) {
-        this.confirmPassword = "";
-        this.$toast.add({
-          severity: "error",
-          summary: this.$i18n.t("Unable to sign up"),
-          detail: this.$i18n.t("The passwords given are not the same"),
-          life: 5000,
-        });
-
+      if (password.value !== confirmPassword.value) {
+        confirmPassword.value = "";
+        // Add toast notification for password mismatch
         return;
       }
       try {
-        await authorization.register({
-          email: this.email,
-          password: this.password,
-          confirmPassword: this.confirmPassword,
-        });
-        const { token, refreshToken } = await authorization.login(
-          this.email,
-          this.password
-        );
-        await authorization.authorize(token, refreshToken);
-
+        await authStore.register(email.value, password.value, confirmPassword.value);
+        await authStore.login(email.value, password.value);
         await router.push("/");
       } catch (err) {
-        let message = this.$i18n.t("Unable to sign up");
-        if (err.message === "User already exists") {
-          message = this.$i18n.t("Email is already taken");
-        }
-        this.$toast.add({
-          severity: "error",
-          summary: this.$i18n.t("Unable to sign up"),
-          detail: message,
-          life: 5000,
-        });
+        // Handle registration error
       }
-    },
-    async loginWithGoogle() {
+    };
+
+    const loginWithGoogle = async () => {
       window.location.href = await api.postGoogleStart();
-    },
-    isValidEmail(email) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    },
-    redirectToLogin() {
+    };
+
+    const redirectToLogin = () => {
       router.push("/login");
-    },
-    isFormValid() {
-      return (
-        this.isValidEmail(this.email) &&
-        this.password !== "" &&
-        this.confirmPassword !== ""
-      );
-    },
+    };
+
+    return {
+      email,
+      password,
+      confirmPassword,
+      emailFocused,
+      showEmailValidationFailure,
+      isFormValid,
+      register,
+      loginWithGoogle,
+      redirectToLogin,
+    };
   },
-};
+});
 </script>
 
 <template>
-  <div
-    class="flex flex-col justify-center items-center h-full min-h-screen p-4 overflow-auto"
-  >
-    <div
-      class="md:border-2 rounded-md p-8 md:shadow w-full max-w-sm md:max-w-lg lg:max-w-xl"
-    >
+  <div class="flex flex-col justify-center items-center h-full min-h-screen p-4 overflow-auto">
+    <div class="md:border-2 rounded-md p-8 md:shadow w-full max-w-sm md:max-w-lg lg:max-w-xl">
       <div class="flex justify-center w-full mb-4">
         <TransparentLogoWide size="w-60" text-color="#410B01" />
       </div>
@@ -146,9 +124,9 @@ export default {
               :medium-label="$t('Medium password')"
               :strong-label="$t('Strong password')"
             >
-              <template #header
-                ><p class="mb-1">{{ $t("Enter a password") }}</p></template
-              >
+              <template #header>
+                <p class="mb-1">{{ $t("Enter a password") }}</p>
+              </template>
               <template #footer="sp">
                 {{ sp.level }}
                 <Divider />
@@ -177,23 +155,21 @@ export default {
             />
           </div>
 
-          <MainActionButton
-            :disabled="isFormValid() === false"
-            @click="register"
-            >{{ $t("Sign Up") }}</MainActionButton
-          >
+          <MainActionButton :disabled="isFormValid === false" @click="register">
+            {{ $t("Sign Up") }}
+          </MainActionButton>
 
           <Divider align="center" class="py-2">
             <span>{{ $t("OR") }}</span>
           </Divider>
 
-          <MainActionButton @click="loginWithGoogle">{{
-            $t("Sign Up with Google")
-          }}</MainActionButton>
+          <MainActionButton @click="loginWithGoogle">
+            {{ $t("Sign Up with Google") }}
+          </MainActionButton>
 
-          <ActionButton @click="redirectToLogin">{{
-            $t("Log In to Your Account")
-          }}</ActionButton>
+          <ActionButton @click="redirectToLogin">
+            {{ $t("Log In to Your Account") }}
+          </ActionButton>
 
           <div class="flex justify-center mt-4">
             <LanguageSwitcher />

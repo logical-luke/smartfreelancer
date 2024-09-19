@@ -1,30 +1,30 @@
-import axios from "axios";
-import store from "../../store";
-import authorization from "@/services/authorization";
+import axios, { AxiosResponse } from "axios";
+import { useAuthorizationStore } from "@/stores/auth";
 
 axios.defaults.withCredentials = true;
 
 const getRequest = async function (
-  url,
-  params = {},
-  headers = {},
+  url: string,
+  params: Record<string, any> = {},
+  headers: Record<string, any> = {},
   repeated = 0
-) {
+): Promise<AxiosResponse<any>> {
+  const authStore = useAuthorizationStore();
   try {
     const response = await axios.get(process.env.API_BASE_URL + url, {
       params: params,
       headers: {
-        Authorization: `Bearer ${store.getters["authorization/getToken"]}`,
+        Authorization: `Bearer ${authStore.getToken}`,
       },
     });
 
     if (response.status === 404) {
-      return { data: {} };
+      return { data: {} } as AxiosResponse<any>;
     }
 
     if (response.status === 401) {
       if (repeated > 0) {
-        return await authorization.logout();
+        return await authStore.logout();
       }
 
       await refreshToken();
@@ -34,14 +34,14 @@ const getRequest = async function (
     }
 
     return response;
-  } catch (err) {
-    if (err.response.status === 404) {
-      return { data: {} };
+  } catch (err: any) {
+    if (err.response?.status === 404) {
+      return { data: {} } as AxiosResponse<any>;
     }
 
-    if (err.response.status === 401) {
+    if (err.response?.status === 401) {
       if (repeated > 0) {
-        return await authorization.logout();
+        return await authStore.logout();
       }
 
       await refreshToken();
@@ -60,21 +60,22 @@ const getRequest = async function (
 };
 
 const postRequest = async function (
-  url,
-  data = {},
-  headers = {},
+  url: string,
+  data: Record<string, any> = {},
+  headers: Record<string, any> = {},
   repeated = 0
-) {
+): Promise<AxiosResponse<any>> {
+  const authStore = useAuthorizationStore();
   try {
-    const response = axios.post(process.env.API_BASE_URL + url, data, {
+    const response = await axios.post(process.env.API_BASE_URL + url, data, {
       headers: {
-        Authorization: `Bearer ${store.getters["authorization/getToken"]}`,
+        Authorization: `Bearer ${authStore.getToken}`,
       },
     });
 
     if (response.status === 401) {
       if (repeated > 0) {
-        return await authorization.logout();
+        return await authStore.logout();
       }
       await refreshToken();
 
@@ -83,10 +84,10 @@ const postRequest = async function (
     }
 
     return response;
-  } catch (err) {
-    if (err.response.status === 401) {
+  } catch (err: any) {
+    if (err.response?.status === 401) {
       if (repeated > 0) {
-        return await authorization.logout();
+        return await authStore.logout();
       }
       await refreshToken();
 
@@ -103,17 +104,23 @@ const postRequest = async function (
   return postRequest(url, data, headers, repeated);
 };
 
-const putRequest = async function (url, data = {}, headers = {}, repeated = 0) {
+const putRequest = async function (
+  url: string,
+  data: Record<string, any> = {},
+  headers: Record<string, any> = {},
+  repeated = 0
+): Promise<AxiosResponse<any>> {
+  const authStore = useAuthorizationStore();
   try {
-    const response = axios.put(process.env.API_BASE_URL + url, data, {
+    const response = await axios.put(process.env.API_BASE_URL + url, data, {
       headers: {
-        Authorization: `Bearer ${store.getters["authorization/getToken"]}`,
+        Authorization: `Bearer ${authStore.getToken}`,
       },
     });
 
     if (response.status === 401) {
       if (repeated > 0) {
-        return await authorization.logout();
+        return await authStore.logout();
       }
       await refreshToken();
 
@@ -122,10 +129,10 @@ const putRequest = async function (url, data = {}, headers = {}, repeated = 0) {
     }
 
     return response;
-  } catch (err) {
-    if (err.response.status === 401) {
+  } catch (err: any) {
+    if (err.response?.status === 401) {
       if (repeated > 0) {
-        return await authorization.logout();
+        return await authStore.logout();
       }
       await refreshToken();
 
@@ -142,17 +149,22 @@ const putRequest = async function (url, data = {}, headers = {}, repeated = 0) {
   return putRequest(url, data, headers, repeated);
 };
 
-const deleteRequest = async function (url, headers = {}, repeated = 0) {
+const deleteRequest = async function (
+  url: string,
+  headers: Record<string, any> = {},
+  repeated = 0
+): Promise<AxiosResponse<any>> {
+  const authStore = useAuthorizationStore();
   try {
-    const response = axios.delete(process.env.API_BASE_URL + url, {
+    const response = await axios.delete(process.env.API_BASE_URL + url, {
       headers: {
-        Authorization: `Bearer ${store.getters["authorization/getToken"]}`,
+        Authorization: `Bearer ${authStore.getToken}`,
       },
     });
 
     if (response.status === 401) {
       if (repeated > 0) {
-        return await authorization.logout();
+        await authStore.logout();
       }
       await refreshToken();
 
@@ -161,10 +173,10 @@ const deleteRequest = async function (url, headers = {}, repeated = 0) {
     }
 
     return response;
-  } catch (err) {
-    if (err.response.status === 401) {
+  } catch (err: any) {
+    if (err.response?.status === 401) {
       if (repeated > 0) {
-        return await authorization.logout();
+        return await authStore.logout();
       }
       await refreshToken();
 
@@ -181,32 +193,31 @@ const deleteRequest = async function (url, headers = {}, repeated = 0) {
   return deleteRequest(url, headers, repeated);
 };
 
-const refreshToken = async function () {
-  let response = false;
-  if (store.getters["authorization/getRefreshToken"]) {
+const refreshToken = async function (): Promise<void> {
+  const authStore = useAuthorizationStore();
+  let response: AxiosResponse<any> | false = false;
+  if (authStore.getRefreshToken) {
     try {
       response = await axios.post(process.env.API_BASE_URL + "/token/refresh", {
-        refresh_token: store.getters["authorization/getRefreshToken"],
+        refresh_token: authStore.getRefreshToken,
       });
-    } catch (err) {
-      await authorization.logout();
-
+    } catch (err: any) {
+      await authStore.logout();
       return;
     }
     if (response && response.status === 200) {
-      await authorization.authorize(
+      await authStore.authorize(
         response.data.token,
         response.data.refresh_token
       );
-
       return;
     }
   }
-  await authorization.logout();
+  await authStore.logout();
 };
 
 export default {
-  async login(email, password) {
+  async login(email: string, password: string): Promise<{ token: string; refreshToken: string }> {
     try {
       const response = await axios.post(process.env.API_BASE_URL + "/login", {
         email: email,
@@ -219,7 +230,7 @@ export default {
           refreshToken: response.data.refresh_token,
         };
       }
-    } catch (e) {
+    } catch (e: any) {
       if (e.response && e.response.status === 401) {
         throw new Error("Invalid username or password");
       }
@@ -228,7 +239,7 @@ export default {
     throw new Error("Unable to log in. Please try again later");
   },
 
-  async register(email, password, confirmPassword) {
+  async register(email: string, password: string, confirmPassword: string): Promise<{ token: string; refreshToken: string }> {
     try {
       const response = await axios.post(
         process.env.API_BASE_URL + "/register",
@@ -243,83 +254,37 @@ export default {
         token: response.data.token,
         refreshToken: response.data.refresh_token,
       };
-    } catch (e) {
+    } catch (e: any) {
       if (
         e.response &&
         (e.response.status === 400 || e.response.status === 409)
       ) {
-        throw new Error(e.response.data.error);
+        throw new Error("Invalid email or password");
       }
     }
 
     throw new Error("Unable to sign in. Please try again later.");
   },
 
-  async getUser() {
-    const response = await getRequest("/me");
-
-    return response.data;
-  },
-
-  async getTimer() {
-    const response = await getRequest("/timer");
-
-    if (response) {
-      return response.data;
-    }
-
-    return null;
-  },
-
-  async createTimer(timerPayload) {
-    const response = await postRequest("/timer/create", timerPayload);
-
-    return response.data;
-  },
-
-  async stopTimer(timer) {
-    const response = await postRequest("/timer/stop", timer);
-
-    return response.data;
-  },
-
-  async getProjects() {
-    const response = await getRequest("/project");
-
-    return response.data;
-  },
-
-  async getProject(id) {
-    const response = await getRequest("/project/" + id);
-
-    return response.data;
-  },
-
-  async deleteProject(id) {
+  async deleteProject(id: string): Promise<any> {
     const response = await deleteRequest("/project/delete/" + id);
 
     return response.data;
   },
 
-  async deleteClients(ids) {
-    const response = await deleteRequest("/client/delete", ids);
-
-    return response.data;
-  },
-
-  async deleteProjects(ids) {
+  async deleteProjects(ids: any): Promise<any> {
     const response = await deleteRequest("/project/delete", ids);
 
     return response.data;
   },
 
-  async deleteTasks(ids) {
+  async deleteTasks(ids: any): Promise<any> {
     const response = await deleteRequest("/task/delete", ids);
 
     return response.data;
   },
 
-  async updateProject(project) {
+  async updateProject(project: any): Promise<any> {
     const response = await postRequest(
       "/project/update/" + project.id,
       project
@@ -332,7 +297,7 @@ export default {
     return response.data;
   },
 
-  async createProject(project) {
+  async createProject(project: any): Promise<any> {
     const response = await postRequest("/project/create", project);
     if (response.status !== 200) {
       throw new Error(response.data.message);
@@ -341,25 +306,13 @@ export default {
     return response.data;
   },
 
-  async getTasks() {
-    const response = await getRequest("/task");
-
-    return response.data;
-  },
-
-  async getTask(id) {
-    const response = await getRequest("/task/" + id);
-
-    return response.data;
-  },
-
-  async deleteTask(id) {
+  async deleteTask(id: string): Promise<any> {
     const response = await deleteRequest("/task/delete/" + id);
 
     return response.data;
   },
 
-  async updateTask(task) {
+  async updateTask(task: any): Promise<any> {
     const response = await postRequest("/task/update/" + task.id, task);
 
     if (response.status !== 200) {
@@ -369,7 +322,7 @@ export default {
     return response.data;
   },
 
-  async createTask(task) {
+  async createTask(task: any): Promise<any> {
     const response = await postRequest("/task/create", task);
     if (response.status !== 200) {
       throw new Error(response.data.message);
@@ -378,13 +331,13 @@ export default {
     return response.data;
   },
 
-  async getClient(id) {
+  async getClient(id: string): Promise<any> {
     const response = await getRequest("/clients/" + id);
 
     return response.data;
   },
 
-  async deleteClient(id) {
+  async deleteClient(id: string): Promise<any> {
     const response = await deleteRequest("/clients/" + id);
 
     if (response.status !== 204) {
@@ -394,7 +347,7 @@ export default {
     return response.data;
   },
 
-  async updateClient(client) {
+  async updateClient(client: any): Promise<any> {
     const response = await putRequest("/clients/" + client.id, client);
 
     if (response.status !== 200) {
@@ -404,7 +357,7 @@ export default {
     return response.data;
   },
 
-  async createClient(client) {
+  async createClient(client: any): Promise<any> {
     const response = await postRequest("/clients", client);
 
     if (response.status !== 200) {
@@ -413,21 +366,8 @@ export default {
 
     return response.data;
   },
-  async updateTimer(timer) {
-    const response = await postRequest("/timer/update/" + timer.id, timer);
 
-    if (response.status !== 200) {
-      throw new Error(response.data.message);
-    }
-  },
-
-  async getTimeEntries(payload) {
-    const response = await getRequest("/time-entry", payload);
-
-    return response.data;
-  },
-
-  async postGoogleStart() {
+  async postGoogleStart(): Promise<string> {
     const response = await axios.post(
       process.env.API_BASE_URL + "/google/connect"
     );
@@ -435,7 +375,7 @@ export default {
     return response.data.targetUrl;
   },
 
-  async postGoogleCheck(payload) {
+  async postGoogleCheck(payload: { code: string; state: string }): Promise<any> {
     const response = await axios.post(
       process.env.API_BASE_URL + "/google/connect/check",
       {
@@ -446,7 +386,7 @@ export default {
 
     return response.data;
   },
-  async getClients() {
+  async getClients(): Promise<any> {
     const response = await getRequest("/clients");
 
     return response.data;

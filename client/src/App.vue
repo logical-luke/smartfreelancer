@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
-import authorization from "@/services/authorization";
 import SidebarNav from "@/components/navigation/SidebarNav.vue";
 import ConfirmDialog from "primevue/confirmdialog";
 import Toast from "primevue/toast";
 import { useRoute } from "vue-router";
 import RandomLoadingText from "./components/RandomLoadingText.vue";
+import { useAuthorizationStore } from "@/stores/auth";
 
 const route = useRoute();
 
@@ -15,8 +15,8 @@ const path = computed<string | undefined>(() => route.name as string | undefined
 const isAuthorizedPage = computed<boolean>(() => route.meta && route.meta.requiresAuth === true);
 
 onMounted(async () => {
-  const { token, refreshToken } = await authorization.getTokensFromCookies();
-  await authorization.authorize(token, refreshToken);
+  const authStore = useAuthorizationStore();
+  await authStore.getTokensFromCookies();
 });
 </script>
 

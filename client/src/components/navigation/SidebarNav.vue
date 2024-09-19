@@ -1,11 +1,12 @@
-<script>
-import { mapGetters } from "vuex";
+<script lang="ts">
+import {defineComponent, computed, ref} from "vue";
+import { useAuthorizationStore } from "@/stores/auth";
 import SidebarItem from "@/components/navigation/SidebarItem.vue";
 import SidebarLogout from "@/components/navigation/SidebarLogout.vue";
 import LanguageSwitcher from "@/components/LanguageSwitcher.vue";
-import IconOnlyLogo from "@/components/IconOnlyLogo.vue";
+import IconOnlyLogo from "@/components/icon/IconOnlyLogo.vue";
 
-export default {
+export default defineComponent({
   name: "SidebarNav",
   components: {
     IconOnlyLogo,
@@ -13,9 +14,19 @@ export default {
     SidebarLogout,
     SidebarItem,
   },
-  data() {
+  setup() {
+    const authStore = useAuthorizationStore();
+    const isAuthorized = computed(() => authStore.isAuthorized);
+    const open = ref(false);
+
+    const toggle = () => {
+      open.value = !open.value;
+    };
+
     return {
-      open: false,
+      isAuthorized,
+      open,
+      toggle,
     };
   },
   watch: {
@@ -23,15 +34,7 @@ export default {
       this.open = false;
     },
   },
-  computed: {
-    ...mapGetters("authorization", ["isAuthorized"]),
-  },
-  methods: {
-    toggle() {
-      this.open = !this.open;
-    },
-  },
-};
+});
 </script>
 
 <template>
@@ -77,57 +80,57 @@ export default {
           </div>
           <div class="px-4 pb-8">
             <ul class="mb-8 text-sm font-medium">
-              <sidebar-item go-to="/">
+              <SidebarItem go-to="/">
                 {{ $t("Deep Work Hub") }}
                 <template #icon>
                 </template>
-              </sidebar-item>
-              <sidebar-item go-to="/calendar">
+              </SidebarItem>
+              <SidebarItem go-to="/calendar">
                 {{ $t("Calendar") }}
                 <template #icon>
                 </template>
-              </sidebar-item>
-              <sidebar-item go-to="/tasks">
+              </SidebarItem>
+              <SidebarItem go-to="/tasks">
                 {{ $t("Tasks") }}
                 <template #icon>
                 </template>
-              </sidebar-item>
-              <sidebar-item go-to="/projects">
+              </SidebarItem>
+              <SidebarItem go-to="/projects">
                 {{ $t("Projects") }}
                 <template #icon>
                 </template>
-              </sidebar-item>
-              <sidebar-item go-to="/clients">
+              </SidebarItem>
+              <SidebarItem go-to="/clients">
                 {{ $t("Clients") }}
                 <template #icon>
                 </template>
-              </sidebar-item>
-              <sidebar-item go-to="/reports">
+              </SidebarItem>
+              <SidebarItem go-to="/reports">
                 {{ $t("Reports") }}
                 <template #icon>
                 </template>
-              </sidebar-item>
-              <sidebar-item go-to="/invoices">
+              </SidebarItem>
+              <SidebarItem go-to="/invoices">
                 {{ $t("Invoices") }}
                 <template #icon>
                 </template>
-              </sidebar-item>
-              <sidebar-item go-to="/expenses">
+              </SidebarItem>
+              <SidebarItem go-to="/expenses">
                 {{ $t("Expenses") }}
                 <template #icon>
                 </template>
-              </sidebar-item>
-              <sidebar-item go-to="/automations">
+              </SidebarItem>
+              <SidebarItem go-to="/automations">
                 {{ $t("Automations") }}
                 <template #icon>
                 </template>
-              </sidebar-item>
-              <sidebar-item go-to="/settings">
+              </SidebarItem>
+              <SidebarItem go-to="/settings">
                 {{ $t("Settings") }}
                 <template #icon>
                 </template>
-              </sidebar-item>
-              <sidebar-logout />
+              </SidebarItem>
+              <SidebarLogout />
             </ul>
             <LanguageSwitcher />
           </div>

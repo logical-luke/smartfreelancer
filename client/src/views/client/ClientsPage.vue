@@ -1,37 +1,35 @@
-<script>
-import { mapActions, mapState } from "vuex";
-import ClientItem from "@/components/client/ClientItem.vue";
-import MainActionButton from "@/components/MainActionButton.vue";
-import router from "@/router";
+<script lang="ts">
+import { defineComponent, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useClientsStore } from '@/stores/clients';
+import ClientItem from '@/components/client/ClientItem.vue';
+import MainActionButton from '@/components/MainActionButton.vue';
 
-export default {
-  name: "ClientsPage",
+export default defineComponent({
+  name: 'ClientsPage',
   components: {
     MainActionButton,
     ClientItem,
   },
-  data() {
+  setup() {
+    const clientsStore = useClientsStore();
+    const router = useRouter();
+    const addClientRoute = { name: 'AddClientPage' };
+
+    const clients = computed(() => clientsStore.clients);
+
+    const goToAddClient = async () => {
+      await router.push(addClientRoute);
+    };
+
+    clientsStore.load();
+
     return {
-      addClientRoute: {
-        name: "AddClientPage",
-      },
+      clients,
+      goToAddClient,
     };
   },
-  computed: mapState({
-    clients: (state) => state.clients.clients,
-  }),
-  methods: {
-    async goToAddClient() {
-      await router.push({ name: "AddClientPage" });
-    },
-    ...mapActions({
-      loadClients: "clients/load",
-    }),
-  },
-  async created() {
-    await this.loadClients();
-  },
-};
+});
 </script>
 
 <template>
@@ -43,7 +41,7 @@ export default {
   <transition name="slide">
     <div v-if="clients.length > 0" class="flex container flex-wrap gap-8 mb-8">
       <transition-group name="slide">
-        <client-item
+        <ClientItem
           v-for="client in clients"
           :id="client.id"
           :key="client.id"

@@ -1,165 +1,171 @@
-<script>
-import { mapActions } from "vuex";
-import InputText from "primevue/inputtext";
-import InputGroup from "primevue/inputgroup";
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
+import { useClientsStore } from '@/stores/clients';
+import InputText from 'primevue/inputtext';
+import MainActionButton from '@/components/MainActionButton.vue';
+import ActionButton from '@/components/ActionButton.vue';
+import ImageUploadInput from '@/components/ImageUploadInput.vue';
+import { useRouter } from 'vue-router';
 import InputGroupAddon from "primevue/inputgroupaddon";
-import MainActionButton from "@/components/MainActionButton.vue";
-import ActionButton from "@/components/ActionButton.vue";
-import ImageUploadInput from "@/components/ImageUploadInput.vue";
+import InputGroup from "primevue/inputgroup";
 
-export default {
-  name: "AddClientForm",
+export default defineComponent({
   components: {
-    ImageUploadInput,
-    ActionButton,
-    MainActionButton,
-    InputText,
     InputGroup,
     InputGroupAddon,
+    InputText,
+    MainActionButton,
+    ActionButton,
+    ImageUploadInput,
   },
-  data() {
+  setup() {
+    const clientsStore = useClientsStore();
+    const router = useRouter();
+    const client = ref({
+      name: '',
+      email: '',
+      phone: '',
+      avatar: '',
+    });
+    const nameValid = ref(true);
+    const emailValid = ref(true);
+    const phoneValid = ref(true);
+    const cancelPageRoute = ref({ name: "ClientsPage" });
+    const afterSaveRoute = ref({ name: "ClientsPage" });
+
+    const updateNameValid = () => {
+      nameValid.value = client.value.name.length > 0;
+    };
+
+    const updateEmailValid = () => {
+      emailValid.value = /\S+@\S+\.\S+/.test(client.value.email);
+    };
+
+    const updatePhoneValid = () => {
+      phoneValid.value = /^\+?[1-9]\d{1,14}$/.test(client.value.phone);
+    };
+
+    const updateAvatar = (avatar: string) => {
+      client.value.avatar = avatar;
+    };
+
+    const clearAvatar = () => {
+      client.value.avatar = '';
+    };
+
+    const hasAvatar = () => {
+      return client.value.avatar.length > 0;
+    };
+
+    const canSubmitForm = () => {
+      return nameValid.value && emailValid.value && phoneValid.value;
+    };
+
+    const submitForm = async () => {
+      if (canSubmitForm()) {
+        await clientsStore.create(client.value);
+        router.push(afterSaveRoute.value);
+      }
+    };
+
     return {
-      client: {
-        name: "",
-        avatar: "",
-        email: "",
-        phone: "",
-      },
-      cancelPageRoute: {
-        name: "ClientsPage",
-      },
-      afterSavePageRoute: {
-        name: "ClientsPage",
-      },
-      phoneValid: true,
-      emailValid: true,
-      nameValid: true,
+      client,
+      nameValid,
+      emailValid,
+      phoneValid,
+      updateNameValid,
+      updateEmailValid,
+      updatePhoneValid,
+      updateAvatar,
+      clearAvatar,
+      hasAvatar,
+      canSubmitForm,
+      submitForm,
+      cancelPageRoute, // Return the cancel route
+      afterSaveRoute, // Return the after save route
     };
   },
-  methods: {
-    hasAvatar() {
-      return this.client.avatar !== "" && this.client.avatar !== null;
-    },
-    updateAvatar(avatar) {
-      this.client.avatar = avatar;
-    },
-    clearAvatar() {
-      this.client.avatar = "";
-    },
-    async submitForm() {
-      if (!this.canSubmitForm() || this.client.name.length === 0) {
-        return;
-      }
-      try {
-        console.log("creating");
-        await this.createClient(this.client);
-        console.log("created");
-        this.$router.push(this.afterSavePageRoute);
-      } catch (e) {
-        console.log("creating error", e);
-        //   todo handle error
-      }
-    },
-    updateEmailValid() {
-      const emailRegex = /^\S+@\S+\.\S+$/;
-      this.emailValid =
-        this.client.email.length === 0 || emailRegex.test(this.client.email);
-    },
-    updatePhoneValid() {
-      const phoneRegex = /^\+?[0-9]{1,4}[0-9]{6,14}$/;
-      this.phoneValid =
-        this.client.phone.length === 0 || phoneRegex.test(this.client.phone);
-    },
-    updateNameValid() {
-      this.nameValid = this.client.name.length > 0;
-    },
-    canSubmitForm() {
-      return this.nameValid && this.emailValid && this.phoneValid;
-    },
-    ...mapActions({
-      createClient: "clients/create",
-    }),
-  },
-};
+});
 </script>
 
 <template>
-  <div @keyup.enter="submitForm">
-    <label class="flex flex-col text-sm font-semibold gap-2" for="name">
-      <span> {{ $t("Name") }} <span class="text-red-500">*</span> </span>
-      <InputText
-        id="name"
-        v-model="client.name"
-        class="block w-full md:w-1/2 px-4 py-4 text-sm placeholder-gray-500 bg-white border rounded"
-        name="name"
-        placeholder="John Doe"
-        :invalid="!nameValid"
-        @focusout="updateNameValid"
-      />
-    </label>
-  </div>
+  <div>
+    <div class="w-full md:w-1/2" @keyup.enter="submitForm">
+      <label class="flex flex-col gap-2 text-sm font-semibold" for="name">
+        {{ $t("Name") }}
+        <InputGroup>
+          <InputGroupAddon></InputGroupAddon>
+          <InputText
+              id="name"
+              v-model="client.name"
+              name="name"
+              placeholder="John Doe"
+              :invalid="!nameValid"
+              @focusout="updateNameValid"
+          />
+        </InputGroup>
+      </label>
+    </div>
 
-  <div class="w-full md:w-1/2" @keyup.enter="submitForm">
-    <label class="flex flex-col gap-2 text-sm font-semibold" for="email"
-      >{{ $t("Email") }}
-      <input-group>
-        <input-group-addon> </input-group-addon>
-        <InputText
-          id="email"
-          v-model="client.email"
-          name="email"
-          placeholder="john.doe@domain.com"
-          :invalid="!emailValid"
-          @focusout="updateEmailValid"
+    <div class="w-full md:w-1/2" @keyup.enter="submitForm">
+      <label class="flex flex-col gap-2 text-sm font-semibold" for="email">
+        {{ $t("Email") }}
+        <InputGroup>
+          <InputGroupAddon></InputGroupAddon>
+          <InputText
+              id="email"
+              v-model="client.email"
+              name="email"
+              placeholder="john.doe@domain.com"
+              :invalid="!emailValid"
+              @focusout="updateEmailValid"
+          />
+        </InputGroup>
+      </label>
+    </div>
+
+    <div class="w-full md:w-1/2" @keyup.enter="submitForm">
+      <label class="flex flex-col gap-2 text-sm font-semibold" for="phone">
+        {{ $t("Phone") }}
+        <InputGroup>
+          <InputGroupAddon></InputGroupAddon>
+          <InputText
+              id="phone"
+              v-model="client.phone"
+              name="phone"
+              placeholder="+1 561-555-7689"
+              :invalid="!phoneValid"
+              @focusout="updatePhoneValid"
+          />
+        </InputGroup>
+      </label>
+    </div>
+
+    <div class="w-full md:w-1/2" @keyup.enter="submitForm">
+      <label class="flex flex-col gap-2 text-sm font-semibold" for="photo">
+        {{ $t("Photo") }}
+        <ImageUploadInput
+            v-if="!hasAvatar()"
+            @file-uploaded="updateAvatar"
         />
-      </input-group>
-    </label>
-  </div>
+        <span v-else class="flex flex-row items-center gap-2">
+          <img :src="client.avatar" alt="avatar" class="w-20 h-20 rounded-full" />
+        </span>
+      </label>
+    </div>
 
-  <div class="w-full md:w-1/2" @keyup.enter="submitForm">
-    <label class="flex flex-col gap-2 text-sm font-semibold" for="phone"
-      >{{ $t("Phone") }}
-      <input-group>
-        <input-group-addon> </input-group-addon>
-        <InputText
-          id="phone"
-          v-model="client.phone"
-          name="phone"
-          placeholder="+1 561-555-7689"
-          :invalid="!phoneValid"
-          @focusout="updatePhoneValid"
-        />
-      </input-group>
-    </label>
-  </div>
-
-  <div class="w-full md:w-1/2" @keyup.enter="submitForm">
-    <label class="flex flex-col gap-2 text-sm font-semibold" for="phone"
-      >{{ $t("Photo") }}
-      <image-upload-input
-        v-if="!hasAvatar()"
-        @file-uploaded="updateAvatar"
-      />
-      <span v-else class="flex flex-row items-center gap-2">
-        <img :src="client.avatar" alt="avatar" class="w-20 h-20 rounded-full" />
-        <trash-icon @click="clearAvatar" />
-      </span>
-    </label>
-  </div>
-
-  <div
-    class="flex gap-4 flex-col md:flex-row justify-center md:justify-start w-full md:w-1/2"
-  >
-    <MainActionButton
-      :disabled="!canSubmitForm() || client.name.length === 0"
-      class="w-full md:w-auto"
-      @keyup.enter="submitForm"
-      @click="submitForm"
-    >
-      {{ $t("Add") }}
-    </MainActionButton>
-    <router-link :to="cancelPageRoute">
-      <ActionButton class="w-full md:w-auto">{{ $t("Cancel") }}</ActionButton>
-    </router-link>
+    <div class="flex gap-4 flex-col md:flex-row justify-center md:justify-start w-full md:w-1/2">
+      <MainActionButton
+          :disabled="!canSubmitForm() || client.name.length === 0"
+          class="w-full md:w-auto"
+          @keyup.enter="submitForm"
+          @click="submitForm"
+      >
+        {{ $t("Add") }}
+      </MainActionButton>
+      <router-link :to="cancelPageRoute">
+        <ActionButton class="w-full md:w-auto">{{ $t("Cancel") }}</ActionButton>
+      </router-link>
+    </div>
   </div>
 </template>

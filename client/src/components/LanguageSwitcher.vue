@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from "vue";
-import { useStore } from "vuex";
 import Select from "primevue/select";
 import i18n from "@/services/locale/i18n"; // Import the i18n instance
-
-const store = useStore();
 
 interface Language {
   name: string;
@@ -27,7 +24,7 @@ const languages = reactive<Language[]>([
   { name: "українська мова", code: "uk" },
 ]);
 
-const getLocale = computed<string>(() => store.getters["settings/getLocale"]);
+const getLocale = computed<string>(() => 'en');
 
 onMounted(() => {
   const locale = getLocale.value;
@@ -41,7 +38,6 @@ onMounted(() => {
 function setLanguage(language: Language) {
   const code = language.code;
   i18n.global.locale = code; // Use the i18n instance
-  store.dispatch("settings/setLocale", code);
 }
 </script>
 

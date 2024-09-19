@@ -1,38 +1,13 @@
-<script>
-import ActionButton from "@/components/ActionButton.vue";
-import router from "@/router";
-import { mapActions } from "vuex";
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
+import { useClientsStore } from '@/stores/clients';
+import ActionButton from '@/components/ActionButton.vue';
 
-export default {
-  name: "ClientItem",
+export default defineComponent({
+  name: 'ClientItem',
   components: {
     ActionButton,
-  },
-  methods: {
-    hasPhone() {
-      return !!this.phone;
-    },
-    hasEmail() {
-      return !!this.email;
-    },
-    getAvatar() {
-      return this.avatar && this.avatar !== ""
-        ? this.avatar
-        : "/client-placeholder.png";
-    },
-    async goToEditClientPage() {
-      await router.push({ name: "EditClientPage", params: { id: this.id } });
-    },
-    delete() {
-      try {
-        this.deleteClient(this.id);
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    ...mapActions({
-      deleteClient: "clients/delete",
-    }),
   },
   props: {
     id: {
@@ -71,7 +46,35 @@ export default {
       type: Number,
     },
   },
-};
+  setup(props) {
+    const router = useRouter();
+    const clientsStore = useClientsStore();
+
+    const hasPhone = () => !!props.phone;
+    const hasEmail = () => !!props.email;
+    const getAvatar = () => (props.avatar && props.avatar !== '' ? props.avatar : '/client-placeholder.png');
+
+    const goToEditClientPage = async () => {
+      await router.push({ name: 'EditClientPage', params: { id: props.id } });
+    };
+
+    const deleteClient = async () => {
+      try {
+        await clientsStore.delete(props.id);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    return {
+      hasPhone,
+      hasEmail,
+      getAvatar,
+      goToEditClientPage,
+      deleteClient,
+    };
+  },
+});
 </script>
 
 <template>
@@ -148,7 +151,7 @@ export default {
       <ActionButton @click="goToEditClientPage">{{
         $t("Edit")
       }}</ActionButton>
-      <ActionButton @click="this.delete">{{ $t("Delete") }}</ActionButton>
+      <ActionButton @click="deleteClient">{{ $t("Delete") }}</ActionButton>
     </div>
   </div>
 </template>

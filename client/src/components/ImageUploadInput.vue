@@ -1,6 +1,5 @@
 <script>
 import FileUpload from "primevue/fileupload";
-import store from "@/store";
 
 export default {
   name: "ImageUploadInput",
@@ -18,7 +17,7 @@ export default {
     beforeSend(request) {
       request.xhr.setRequestHeader(
         "Authorization",
-        "Bearer " + store.getters["authorization/getToken"]
+        "Bearer " + ''
       );
 
       return request;

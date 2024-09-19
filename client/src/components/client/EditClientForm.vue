@@ -1,15 +1,16 @@
-<script>
-import InputText from "primevue/inputtext";
-import InputGroup from "primevue/inputgroup";
-import InputGroupAddon from "primevue/inputgroupaddon";
-import MainActionButton from "@/components/MainActionButton.vue";
-import ActionButton from "@/components/ActionButton.vue";
-import ImageUploadInput from "@/components/ImageUploadInput.vue";
-import { mapActions } from "vuex";
-import store from "@/store";
+<script lang="ts">
+import { defineComponent, ref, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { useClientsStore } from '@/stores/clients';
+import InputText from 'primevue/inputtext';
+import InputGroup from 'primevue/inputgroup';
+import InputGroupAddon from 'primevue/inputgroupaddon';
+import MainActionButton from '@/components/MainActionButton.vue';
+import ActionButton from '@/components/ActionButton.vue';
+import ImageUploadInput from '@/components/ImageUploadInput.vue';
 
-export default {
-  name: "EditClientForm",
+export default defineComponent({
+  name: 'EditClientForm',
   components: {
     ImageUploadInput,
     ActionButton,
@@ -18,77 +19,81 @@ export default {
     InputGroup,
     InputGroupAddon,
   },
-  data() {
-    return {
-      client: {
-        id: null,
-        name: "",
-        avatar: "",
-        email: "",
-        phone: "",
-      },
-      cancelPageRoute: {
-        name: "ClientsPage",
-      },
-      afterSavePageRoute: {
-        name: "ClientsPage",
-      },
-      phoneValid: true,
-      emailValid: true,
-      nameValid: true,
+  setup() {
+    const clientsStore = useClientsStore();
+    const router = useRouter();
+    const route = useRoute();
+    const client = ref({
+      id: null,
+      name: '',
+      avatar: '',
+      email: '',
+      phone: '',
+    });
+    const cancelPageRoute = ref({ name: 'ClientsPage' });
+    const afterSavePageRoute = ref({ name: 'ClientsPage' });
+    const phoneValid = ref(true);
+    const emailValid = ref(true);
+    const nameValid = ref(true);
+
+    const hasAvatar = () => client.value.avatar !== '' && client.value.avatar !== null;
+    const updateAvatar = (avatar: string) => { client.value.avatar = avatar; };
+    const clearAvatar = () => { client.value.avatar = ''; };
+
+    const updateEmailValid = () => {
+      const emailRegex = /^\S+@\S+\.\S+$/;
+      emailValid.value = client.value.email.length === 0 || emailRegex.test(client.value.email);
     };
-  },
-  methods: {
-    hasAvatar() {
-      return this.client.avatar !== "" && this.client.avatar !== null;
-    },
-    updateAvatar(avatar) {
-      this.client.avatar = avatar;
-    },
-    clearAvatar() {
-      this.client.avatar = "";
-    },
-    async submitForm() {
-      if (!this.canSubmitForm() || this.client.name.length === 0) {
+
+    const updatePhoneValid = () => {
+      const phoneRegex = /^\+?[0-9]{1,4}[0-9]{6,14}$/;
+      phoneValid.value = client.value.phone.length === 0 || phoneRegex.test(client.value.phone);
+    };
+
+    const updateNameValid = () => {
+      nameValid.value = client.value.name.length > 0;
+    };
+
+    const canSubmitForm = () => {
+      return nameValid.value && emailValid.value && phoneValid.value;
+    };
+
+    const submitForm = async () => {
+      if (!canSubmitForm() || client.value.name.length === 0) {
         return;
       }
 
-      await this.updateClient(this.client);
+      await clientsStore.update(client.value);
+      router.push(afterSavePageRoute.value);
+    };
 
-      this.$router.push(this.afterSavePageRoute);
-    },
-    updateEmailValid() {
-      const emailRegex = /^\S+@\S+\.\S+$/;
-      this.emailValid =
-        this.client.email.length === 0 || emailRegex.test(this.client.email);
-    },
-    updatePhoneValid() {
-      const phoneRegex = /^\+?[0-9]{1,4}[0-9]{6,14}$/;
-      this.phoneValid =
-        this.client.phone.length === 0 || phoneRegex.test(this.client.phone);
-    },
-    updateNameValid() {
-      this.nameValid = this.client.name.length > 0;
-    },
-    canSubmitForm() {
-      return this.nameValid && this.emailValid && this.phoneValid;
-    },
-    ...mapActions({
-      updateClient: "clients/update",
-      loadClients: "clients/load",
-    }),
+    onMounted(async () => {
+      await clientsStore.load();
+      const clientObject = clientsStore.clients.find(c => c.id === route.params.id);
+      if (!clientObject) {
+        await router.push({ name: 'NotFoundPage' });
+      }
+      client.value = clientObject;
+    });
+
+    return {
+      client,
+      cancelPageRoute,
+      afterSavePageRoute,
+      phoneValid,
+      emailValid,
+      nameValid,
+      hasAvatar,
+      updateAvatar,
+      clearAvatar,
+      submitForm,
+      updateEmailValid,
+      updatePhoneValid,
+      updateNameValid,
+      canSubmitForm,
+    };
   },
-  async created() {
-    await this.loadClients();
-    const clientObject = await store.getters["clients/getClient"](
-      this.$route.params.id
-    );
-    if (!clientObject) {
-      await this.$router.push({ name: "NotFoundPage" });
-    }
-    this.client = clientObject;
-  },
-};
+});
 </script>
 
 <template>
@@ -108,10 +113,10 @@ export default {
   </div>
 
   <div class="w-full md:w-1/2" @keyup.enter="submitForm">
-    <label class="flex flex-col gap-2 text-sm font-semibold" for="email"
-      >{{ $t("Email") }}
-      <input-group>
-        <input-group-addon> </input-group-addon>
+    <label class="flex flex-col gap-2 text-sm font-semibold" for="email">
+      {{ $t("Email") }}
+      <InputGroup>
+        <InputGroupAddon></InputGroupAddon>
         <InputText
           id="email"
           v-model="client.email"
@@ -120,15 +125,15 @@ export default {
           :invalid="!emailValid"
           @focusout="updateEmailValid"
         />
-      </input-group>
+      </InputGroup>
     </label>
   </div>
 
   <div class="w-full md:w-1/2" @keyup.enter="submitForm">
-    <label class="flex flex-col gap-2 text-sm font-semibold" for="phone"
-      >{{ $t("Phone") }}
-      <input-group>
-        <input-group-addon> </input-group-addon>
+    <label class="flex flex-col gap-2 text-sm font-semibold" for="phone">
+      {{ $t("Phone") }}
+      <InputGroup>
+        <InputGroupAddon></InputGroupAddon>
         <InputText
           id="phone"
           v-model="client.phone"
@@ -137,14 +142,14 @@ export default {
           :invalid="!phoneValid"
           @focusout="updatePhoneValid"
         />
-      </input-group>
+      </InputGroup>
     </label>
   </div>
 
   <div class="w-full md:w-1/2" @keyup.enter="submitForm">
-    <label class="flex flex-col gap-2 text-sm font-semibold" for="phone"
-      >{{ $t("Photo") }}
-      <image-upload-input
+    <label class="flex flex-col gap-2 text-sm font-semibold" for="photo">
+      {{ $t("Photo") }}
+      <ImageUploadInput
         v-if="!hasAvatar()"
         @file-uploaded="updateAvatar"
       />
@@ -154,9 +159,7 @@ export default {
     </label>
   </div>
 
-  <div
-    class="flex gap-4 flex-col md:flex-row justify-center md:justify-start w-full md:w-1/2"
-  >
+  <div class="flex gap-4 flex-col md:flex-row justify-center md:justify-start w-full md:w-1/2">
     <MainActionButton
       :disabled="!canSubmitForm() || client.name.length === 0"
       class="w-full md:w-auto"

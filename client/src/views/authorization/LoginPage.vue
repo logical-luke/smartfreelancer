@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useStore } from "vuex";
+import { useToast } from "primevue/usetoast";
 import TransparentLogoWide from "@/components/logo/TransparentLogoWide.vue";
 import LanguageSwitcher from "@/components/LanguageSwitcher.vue";
 import Password from "primevue/password";
@@ -9,14 +9,13 @@ import InputText from "primevue/inputtext";
 import Divider from "primevue/divider";
 import ActionButton from "@/components/ActionButton.vue";
 import MainActionButton from "@/components/MainActionButton.vue";
-import authorization from "@/services/authorization";
+import { useAuthorizationStore } from "@/stores/auth";
 import api from "@/services/api";
-import { useToast } from "primevue/usetoast";
 import i18n from "@/services/locale/i18n";
 
 const router = useRouter();
-const store = useStore();
 const toast = useToast();
+const authorizationStore = useAuthorizationStore();
 
 const email = ref<string>("");
 const password = ref<string>("");
@@ -25,9 +24,7 @@ const buttonTitle = ref<string>("Log in");
 async function login() {
   try {
     toast.removeAllGroups();
-    const { token, refreshToken } = await authorization.login(email.value, password.value);
-    await authorization.authorize(token, refreshToken);
-
+    await authorizationStore.login(email.value, password.value);
     await router.push("/");
   } catch (err: any) {
     password.value = "";
