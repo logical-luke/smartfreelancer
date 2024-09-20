@@ -5,12 +5,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 
 export default {
   name: "TasksPage",
-  computed: mapState({
-    tasks: (state) => state.tasks.all,
-  }),
 };
 </script>

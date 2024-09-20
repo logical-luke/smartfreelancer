@@ -1,98 +1,68 @@
-<script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useClientsStore } from '@/stores/clients';
 import InputText from 'primevue/inputtext';
 import InputGroup from 'primevue/inputgroup';
 import InputGroupAddon from 'primevue/inputgroupaddon';
-import MainActionButton from '@/components/MainActionButton.vue';
-import ActionButton from '@/components/ActionButton.vue';
-import ImageUploadInput from '@/components/ImageUploadInput.vue';
+import MainActionButton from '@/components/form/MainActionButton.vue';
+import ActionButton from '@/components/form/ActionButton.vue';
+import ImageUploadInput from '@/components/form/ImageUploadInput.vue';
 
-export default defineComponent({
-  name: 'EditClientForm',
-  components: {
-    ImageUploadInput,
-    ActionButton,
-    MainActionButton,
-    InputText,
-    InputGroup,
-    InputGroupAddon,
-  },
-  setup() {
-    const clientsStore = useClientsStore();
-    const router = useRouter();
-    const route = useRoute();
-    const client = ref({
-      id: null,
-      name: '',
-      avatar: '',
-      email: '',
-      phone: '',
-    });
-    const cancelPageRoute = ref({ name: 'ClientsPage' });
-    const afterSavePageRoute = ref({ name: 'ClientsPage' });
-    const phoneValid = ref(true);
-    const emailValid = ref(true);
-    const nameValid = ref(true);
+const clientsStore = useClientsStore();
+const router = useRouter();
+const route = useRoute();
+const client = ref({
+  id: null,
+  name: '',
+  avatar: '',
+  email: '',
+  phone: '',
+});
+const cancelPageRoute = ref({ name: 'ClientsPage' });
+const afterSavePageRoute = ref({ name: 'ClientsPage' });
+const phoneValid = ref(true);
+const emailValid = ref(true);
+const nameValid = ref(true);
 
-    const hasAvatar = () => client.value.avatar !== '' && client.value.avatar !== null;
-    const updateAvatar = (avatar: string) => { client.value.avatar = avatar; };
-    const clearAvatar = () => { client.value.avatar = ''; };
+const hasAvatar = () => client.value.avatar !== '' && client.value.avatar !== null;
+const updateAvatar = (avatar: string) => { client.value.avatar = avatar; };
+const clearAvatar = () => { client.value.avatar = ''; };
 
-    const updateEmailValid = () => {
-      const emailRegex = /^\S+@\S+\.\S+$/;
-      emailValid.value = client.value.email.length === 0 || emailRegex.test(client.value.email);
-    };
+const updateEmailValid = () => {
+  const emailRegex = /^\S+@\S+\.\S+$/;
+  emailValid.value = client.value.email.length === 0 || emailRegex.test(client.value.email);
+};
 
-    const updatePhoneValid = () => {
-      const phoneRegex = /^\+?[0-9]{1,4}[0-9]{6,14}$/;
-      phoneValid.value = client.value.phone.length === 0 || phoneRegex.test(client.value.phone);
-    };
+const updatePhoneValid = () => {
+  const phoneRegex = /^\+?[0-9]{1,4}[0-9]{6,14}$/;
+  phoneValid.value = client.value.phone.length === 0 || phoneRegex.test(client.value.phone);
+};
 
-    const updateNameValid = () => {
-      nameValid.value = client.value.name.length > 0;
-    };
+const updateNameValid = () => {
+  nameValid.value = client.value.name.length > 0;
+};
 
-    const canSubmitForm = () => {
-      return nameValid.value && emailValid.value && phoneValid.value;
-    };
+const canSubmitForm = () => {
+  return nameValid.value && emailValid.value && phoneValid.value;
+};
 
-    const submitForm = async () => {
-      if (!canSubmitForm() || client.value.name.length === 0) {
-        return;
-      }
+const submitForm = async () => {
+  if (!canSubmitForm() || client.value.name.length === 0) {
+    return;
+  }
 
-      await clientsStore.update(client.value);
-      router.push(afterSavePageRoute.value);
-    };
+  await clientsStore.update(client.value);
+  router.push(afterSavePageRoute.value);
+};
 
-    onMounted(async () => {
-      await clientsStore.load();
-      const clientObject = clientsStore.clients.find(c => c.id === route.params.id);
-      if (!clientObject) {
-        await router.push({ name: 'NotFoundPage' });
-      }
-      client.value = clientObject;
-    });
-
-    return {
-      client,
-      cancelPageRoute,
-      afterSavePageRoute,
-      phoneValid,
-      emailValid,
-      nameValid,
-      hasAvatar,
-      updateAvatar,
-      clearAvatar,
-      submitForm,
-      updateEmailValid,
-      updatePhoneValid,
-      updateNameValid,
-      canSubmitForm,
-    };
-  },
+onMounted(async () => {
+  await clientsStore.load();
+  const clientObject = clientsStore.clients.find(c => c.id === route.params.id);
+  if (!clientObject) {
+    await router.push({ name: 'NotFoundPage' });
+  }
+  client.value = clientObject;
 });
 </script>
 

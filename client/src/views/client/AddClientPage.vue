@@ -1,18 +1,14 @@
-<script>
-import AddClientForm from "@/components/client/AddClientForm.vue";
+<script setup lang="ts">
+import { ref } from 'vue';
+import AddClientForm from '@/components/client/AddClientForm.vue';
 
-export default {
-  name: "AddClientPage",
-  components: {
-    AddClientForm,
-  },
-};
+const title = ref('Add Client');
 </script>
 
 <template>
   <div class="flex mb-8">
     <div>
-      <h3 class="text-xl font-bold">{{ $t("Add Client") }}</h3>
+      <h3 class="text-xl font-bold">{{ $t(title) }}</h3>
     </div>
   </div>
   <div class="flex container">

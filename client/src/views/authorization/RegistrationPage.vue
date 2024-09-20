@@ -1,86 +1,60 @@
-<script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+<script lang="ts" setup>
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthorizationStore } from "@/stores/auth";
 import TransparentLogoWide from "@/components/logo/TransparentLogoWide.vue";
-import MainActionButton from "@/components/MainActionButton.vue";
-import ActionButton from "@/components/ActionButton.vue";
-import LanguageSwitcher from "@/components/LanguageSwitcher.vue";
+import MainActionButton from "@/components/form/MainActionButton.vue";
+import ActionButton from "@/components/form/ActionButton.vue";
+import LanguageSwitcher from "@/components/navigation/LanguageSwitcher.vue";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Divider from "primevue/divider";
 import api from "@/services/api";
 
-export default defineComponent({
-  name: "RegistrationPage",
-  components: {
-    MainActionButton,
-    ActionButton,
-    LanguageSwitcher,
-    TransparentLogoWide,
-    Password,
-    InputText,
-    Divider,
-  },
-  setup() {
-    const email = ref("");
-    const password = ref("");
-    const confirmPassword = ref("");
-    const emailFocused = ref(false);
-    const router = useRouter();
-    const authStore = useAuthorizationStore();
+const email = ref("");
+const password = ref("");
+const confirmPassword = ref("");
+const emailFocused = ref(false);
+const router = useRouter();
+const authStore = useAuthorizationStore();
 
-    const showEmailValidationFailure = computed(() => {
-      return !emailFocused.value && email.value !== "" && !isValidEmail(email.value);
-    });
-
-    const isValidEmail = (email: string) => {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    };
-
-    const isFormValid = computed(() => {
-      return isValidEmail(email.value) && password.value !== "" && confirmPassword.value !== "";
-    });
-
-    const register = async () => {
-      if (!isFormValid.value) {
-        return;
-      }
-      if (password.value !== confirmPassword.value) {
-        confirmPassword.value = "";
-        // Add toast notification for password mismatch
-        return;
-      }
-      try {
-        await authStore.register(email.value, password.value, confirmPassword.value);
-        await authStore.login(email.value, password.value);
-        await router.push("/");
-      } catch (err) {
-        // Handle registration error
-      }
-    };
-
-    const loginWithGoogle = async () => {
-      window.location.href = await api.postGoogleStart();
-    };
-
-    const redirectToLogin = () => {
-      router.push("/login");
-    };
-
-    return {
-      email,
-      password,
-      confirmPassword,
-      emailFocused,
-      showEmailValidationFailure,
-      isFormValid,
-      register,
-      loginWithGoogle,
-      redirectToLogin,
-    };
-  },
+const showEmailValidationFailure = computed(() => {
+  return !emailFocused.value && email.value !== "" && !isValidEmail(email.value);
 });
+
+const isValidEmail = (email: string) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+
+const isFormValid = computed(() => {
+  return isValidEmail(email.value) && password.value !== "" && confirmPassword.value !== "";
+});
+
+const register = async () => {
+  if (!isFormValid.value) {
+    return;
+  }
+  if (password.value !== confirmPassword.value) {
+    confirmPassword.value = "";
+    // Add toast notification for password mismatch
+    return;
+  }
+  try {
+    await authStore.register(email.value, password.value, confirmPassword.value);
+    await authStore.login(email.value, password.value);
+    await router.push("/");
+  } catch (err) {
+    // Handle registration error
+  }
+};
+
+const loginWithGoogle = async () => {
+  window.location.href = await api.postGoogleStart();
+};
+
+const redirectToLogin = () => {
+  router.push("/login");
+};
 </script>
 
 <template>

@@ -1,91 +1,62 @@
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import { useClientsStore } from '@/stores/clients';
 import InputText from 'primevue/inputtext';
-import MainActionButton from '@/components/MainActionButton.vue';
-import ActionButton from '@/components/ActionButton.vue';
-import ImageUploadInput from '@/components/ImageUploadInput.vue';
+import MainActionButton from '@/components/form/MainActionButton.vue';
+import ActionButton from '@/components/form/ActionButton.vue';
+import ImageUploadInput from '@/components/form/ImageUploadInput.vue';
 import { useRouter } from 'vue-router';
 import InputGroupAddon from "primevue/inputgroupaddon";
 import InputGroup from "primevue/inputgroup";
 
-export default defineComponent({
-  components: {
-    InputGroup,
-    InputGroupAddon,
-    InputText,
-    MainActionButton,
-    ActionButton,
-    ImageUploadInput,
-  },
-  setup() {
-    const clientsStore = useClientsStore();
-    const router = useRouter();
-    const client = ref({
-      name: '',
-      email: '',
-      phone: '',
-      avatar: '',
-    });
-    const nameValid = ref(true);
-    const emailValid = ref(true);
-    const phoneValid = ref(true);
-    const cancelPageRoute = ref({ name: "ClientsPage" });
-    const afterSaveRoute = ref({ name: "ClientsPage" });
-
-    const updateNameValid = () => {
-      nameValid.value = client.value.name.length > 0;
-    };
-
-    const updateEmailValid = () => {
-      emailValid.value = /\S+@\S+\.\S+/.test(client.value.email);
-    };
-
-    const updatePhoneValid = () => {
-      phoneValid.value = /^\+?[1-9]\d{1,14}$/.test(client.value.phone);
-    };
-
-    const updateAvatar = (avatar: string) => {
-      client.value.avatar = avatar;
-    };
-
-    const clearAvatar = () => {
-      client.value.avatar = '';
-    };
-
-    const hasAvatar = () => {
-      return client.value.avatar.length > 0;
-    };
-
-    const canSubmitForm = () => {
-      return nameValid.value && emailValid.value && phoneValid.value;
-    };
-
-    const submitForm = async () => {
-      if (canSubmitForm()) {
-        await clientsStore.create(client.value);
-        router.push(afterSaveRoute.value);
-      }
-    };
-
-    return {
-      client,
-      nameValid,
-      emailValid,
-      phoneValid,
-      updateNameValid,
-      updateEmailValid,
-      updatePhoneValid,
-      updateAvatar,
-      clearAvatar,
-      hasAvatar,
-      canSubmitForm,
-      submitForm,
-      cancelPageRoute, // Return the cancel route
-      afterSaveRoute, // Return the after save route
-    };
-  },
+const clientsStore = useClientsStore();
+const router = useRouter();
+const client = ref({
+  name: '',
+  email: '',
+  phone: '',
+  avatar: '',
 });
+const nameValid = ref(true);
+const emailValid = ref(true);
+const phoneValid = ref(true);
+const cancelPageRoute = ref({ name: "ClientsPage" });
+const afterSaveRoute = ref({ name: "ClientsPage" });
+
+const updateNameValid = () => {
+  nameValid.value = client.value.name.length > 0;
+};
+
+const updateEmailValid = () => {
+  emailValid.value = /\S+@\S+\.\S+/.test(client.value.email);
+};
+
+const updatePhoneValid = () => {
+  phoneValid.value = /^\+?[1-9]\d{1,14}$/.test(client.value.phone);
+};
+
+const updateAvatar = (avatar: string) => {
+  client.value.avatar = avatar;
+};
+
+const clearAvatar = () => {
+  client.value.avatar = '';
+};
+
+const hasAvatar = () => {
+  return client.value.avatar.length > 0;
+};
+
+const canSubmitForm = () => {
+  return nameValid.value && emailValid.value && phoneValid.value;
+};
+
+const submitForm = async () => {
+  if (canSubmitForm()) {
+    await clientsStore.create(client.value);
+    router.push(afterSaveRoute.value);
+  }
+};
 </script>
 
 <template>

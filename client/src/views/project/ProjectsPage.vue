@@ -1,11 +1,7 @@
 <script>
-import { mapState } from "vuex";
 
 export default {
   name: "ProjectsPage",
-  computed: mapState({
-    projects: (state) => state.projects.all,
-  }),
 };
 </script>
 

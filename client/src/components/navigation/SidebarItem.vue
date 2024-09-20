@@ -1,3 +1,11 @@
+<script setup lang="ts">
+import { defineProps } from 'vue';
+
+const props = defineProps<{
+  goTo: string;
+}>();
+</script>
+
 <template>
   <li>
     <router-link
@@ -14,14 +22,3 @@
   </li>
 </template>
 
-<script>
-export default {
-  name: "SidebarItem",
-  props: {
-    goTo: {
-      type: String,
-      required: true,
-    },
-  },
-};
-</script>

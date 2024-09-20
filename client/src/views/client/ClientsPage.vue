@@ -1,34 +1,22 @@
-<script lang="ts">
-import { defineComponent, computed } from 'vue';
+<script setup lang="ts">
+import { computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useClientsStore } from '@/stores/clients';
 import ClientItem from '@/components/client/ClientItem.vue';
-import MainActionButton from '@/components/MainActionButton.vue';
+import MainActionButton from '@/components/form/MainActionButton.vue';
 
-export default defineComponent({
-  name: 'ClientsPage',
-  components: {
-    MainActionButton,
-    ClientItem,
-  },
-  setup() {
-    const clientsStore = useClientsStore();
-    const router = useRouter();
-    const addClientRoute = { name: 'AddClientPage' };
+const clientsStore = useClientsStore();
+const router = useRouter();
+const addClientRoute = { name: 'AddClientPage' };
 
-    const clients = computed(() => clientsStore.clients);
+const clients = computed(() => clientsStore.clients);
 
-    const goToAddClient = async () => {
-      await router.push(addClientRoute);
-    };
+const goToAddClient = async () => {
+  await router.push(addClientRoute);
+};
 
-    clientsStore.load();
-
-    return {
-      clients,
-      goToAddClient,
-    };
-  },
+onMounted(() => {
+  clientsStore.load();
 });
 </script>
 

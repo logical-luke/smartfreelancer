@@ -1,16 +1,14 @@
-<script>
-import EditClientForm from "@/components/client/EditClientForm.vue";
+<script setup lang="ts">
+import { ref } from 'vue';
+import EditClientForm from '@/components/client/EditClientForm.vue';
 
-export default {
-  name: "EditClientPage",
-  components: { EditClientForm },
-};
+const title = ref('Edit Client');
 </script>
 
 <template>
   <div class="flex mb-8">
     <div>
-      <h3 class="text-xl font-bold">{{ $t("Edit Client") }}</h3>
+      <h3 class="text-xl font-bold">{{ $t(title) }}</h3>
     </div>
   </div>
   <div class="flex container">

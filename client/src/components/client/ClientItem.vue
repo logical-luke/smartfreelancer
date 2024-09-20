@@ -1,80 +1,67 @@
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useClientsStore } from '@/stores/clients';
-import ActionButton from '@/components/ActionButton.vue';
+import ActionButton from '@/components/form/ActionButton.vue';
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
 
-export default defineComponent({
-  name: 'ClientItem',
-  components: {
-    ActionButton,
-  },
-  props: {
-    id: {
-      type: String,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-    },
-    phone: {
-      type: String,
-    },
-    avatar: {
-      type: String,
-    },
-    revenue: {
-      type: Number,
-    },
-    timeWorked: {
-      type: Number,
-    },
-    ongoingTasks: {
-      type: Number,
-    },
-    plannedTasks: {
-      type: Number,
-    },
-    finishedTasks: {
-      type: Number,
-    },
-    blockedTasks: {
-      type: Number,
-    },
-  },
-  setup(props) {
-    const router = useRouter();
-    const clientsStore = useClientsStore();
+const props = defineProps<{
+  id: string;
+  name: string;
+  email?: string;
+  phone?: string;
+  avatar?: string;
+  revenue?: number;
+  timeWorked?: number;
+  ongoingTasks?: number;
+  plannedTasks?: number;
+  finishedTasks?: number;
+  blockedTasks?: number;
+}>();
 
-    const hasPhone = () => !!props.phone;
-    const hasEmail = () => !!props.email;
-    const getAvatar = () => (props.avatar && props.avatar !== '' ? props.avatar : '/client-placeholder.png');
+const router = useRouter();
+const clientsStore = useClientsStore();
+const confirm = useConfirm();
+const toast = useToast();
 
-    const goToEditClientPage = async () => {
-      await router.push({ name: 'EditClientPage', params: { id: props.id } });
-    };
+const hasPhone = () => !!props.phone;
+const hasEmail = () => !!props.email;
+const getAvatar = () => (props.avatar && props.avatar !== '' ? props.avatar : '/client-placeholder.png');
 
-    const deleteClient = async () => {
-      try {
-        await clientsStore.delete(props.id);
-      } catch (e) {
-        console.error(e);
-      }
-    };
+const goToEditClientPage = async () => {
+  await router.push({ name: 'EditClientPage', params: { id: props.id } });
+};
 
-    return {
-      hasPhone,
-      hasEmail,
-      getAvatar,
-      goToEditClientPage,
-      deleteClient,
-    };
-  },
-});
+const confirmDeletion = async () => {
+  confirm.require({
+    message: 'Do you want to delete this client?',
+    header: 'Danger Zone',
+    icon: 'pi pi-info-circle',
+    rejectLabel: 'Cancel',
+    rejectProps: {
+      label: 'Cancel',
+      severity: 'secondary',
+      outlined: true
+    },
+    acceptProps: {
+      label: 'Delete',
+      severity: 'danger'
+    },
+    accept: () => {
+      deleteClient();
+      toast.add({ severity: 'info', summary: 'Deleted', detail: 'Client deleted', life: 3000 });
+    }
+  })
+};
+
+const deleteClient = async () => {
+  try {
+    await clientsStore.delete(props.id);
+  } catch (e) {
+    console.error(e);
+  }
+};
 </script>
 
 <template>
@@ -151,7 +138,7 @@ export default defineComponent({
       <ActionButton @click="goToEditClientPage">{{
         $t("Edit")
       }}</ActionButton>
-      <ActionButton @click="deleteClient">{{ $t("Delete") }}</ActionButton>
+      <ActionButton @click="confirmDeletion">{{ $t("Delete") }}</ActionButton>
     </div>
   </div>
 </template>
