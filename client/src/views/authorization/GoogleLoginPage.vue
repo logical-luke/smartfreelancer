@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
@@ -60,7 +62,7 @@ async function goToRegistration() {
         <div class="flex flex-col gap-4 w-full">
           <div>
             <label class="block text-sm font-medium mb-1" for="email">
-              {{ $t("EMAIL") }}
+              {{ t("EMAIL") }}
             </label>
             <InputText
                 v-model="email"
@@ -70,33 +72,33 @@ async function goToRegistration() {
             />
           </div>
 
-          <div class="w-full" id="password-panel">
+          <div id="password-panel" class="w-full">
             <label class="block text-sm font-medium mb-1" for="password">
-              {{ $t("PASSWORD") }}
+              {{ t("PASSWORD") }}
             </label>
             <Password
+                id="password-input"
                 v-model="password"
                 :toggle-mask="true"
                 autocomplete="current-password"
                 :feedback="false"
-                inputClass="w-full"
-                id="password-input"
+                input-class="w-full"
             />
           </div>
 
           <MainActionButton
               :disabled="email === '' || password === ''"
               @click="login">
-            {{ $t("Log In") }}
+            {{ t("Log In") }}
           </MainActionButton>
 
           <Divider align="center" class="py-2">
-            <span>{{ $t("OR") }}</span>
+            <span>{{ t("OR") }}</span>
           </Divider>
 
-          <MainActionButton @click="loginWithGoogle">{{ $t("Log In with Google") }}</MainActionButton>
+          <MainActionButton @click="loginWithGoogle">{{ t("Log In with Google") }}</MainActionButton>
 
-          <ActionButton @click="goToRegistration">{{ $t("Sign Up for an Account") }}</ActionButton>
+          <ActionButton @click="goToRegistration">{{ t("Sign Up for an Account") }}</ActionButton>
 
           <div class="flex justify-center mt-4">
             <LanguageSwitcher />

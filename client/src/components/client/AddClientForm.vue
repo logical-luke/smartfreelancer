@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {useI18n} from "vue-i18n";
+const { t } = useI18n();
 import { ref } from 'vue';
 import { useClientsStore } from '@/stores/clients';
 import InputText from 'primevue/inputtext';
@@ -63,7 +65,7 @@ const submitForm = async () => {
   <div>
     <div class="w-full md:w-1/2" @keyup.enter="submitForm">
       <label class="flex flex-col gap-2 text-sm font-semibold" for="name">
-        {{ $t("Name") }}
+        {{ t("Name") }}
         <InputGroup>
           <InputGroupAddon></InputGroupAddon>
           <InputText
@@ -80,7 +82,7 @@ const submitForm = async () => {
 
     <div class="w-full md:w-1/2" @keyup.enter="submitForm">
       <label class="flex flex-col gap-2 text-sm font-semibold" for="email">
-        {{ $t("Email") }}
+        {{ t("Email") }}
         <InputGroup>
           <InputGroupAddon></InputGroupAddon>
           <InputText
@@ -97,7 +99,7 @@ const submitForm = async () => {
 
     <div class="w-full md:w-1/2" @keyup.enter="submitForm">
       <label class="flex flex-col gap-2 text-sm font-semibold" for="phone">
-        {{ $t("Phone") }}
+        {{ t("Phone") }}
         <InputGroup>
           <InputGroupAddon></InputGroupAddon>
           <InputText
@@ -114,7 +116,7 @@ const submitForm = async () => {
 
     <div class="w-full md:w-1/2" @keyup.enter="submitForm">
       <label class="flex flex-col gap-2 text-sm font-semibold" for="photo">
-        {{ $t("Photo") }}
+        {{ t("Photo") }}
         <ImageUploadInput
             v-if="!hasAvatar()"
             @file-uploaded="updateAvatar"
@@ -132,10 +134,10 @@ const submitForm = async () => {
           @keyup.enter="submitForm"
           @click="submitForm"
       >
-        {{ $t("Add") }}
+        {{ t("Add") }}
       </MainActionButton>
       <router-link :to="cancelPageRoute">
-        <ActionButton class="w-full md:w-auto">{{ $t("Cancel") }}</ActionButton>
+        <ActionButton class="w-full md:w-auto">{{ t("Cancel") }}</ActionButton>
       </router-link>
     </div>
   </div>

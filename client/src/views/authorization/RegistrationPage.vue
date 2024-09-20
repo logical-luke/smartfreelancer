@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import {useI18n} from "vue-i18n";
+const { t } = useI18n();
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthorizationStore } from "@/stores/auth";
@@ -67,7 +69,7 @@ const redirectToLogin = () => {
         <div class="flex flex-col gap-4 w-full">
           <div>
             <label class="block text-sm font-medium mb-1" for="email">
-              {{ $t("EMAIL") }}
+              {{ t("EMAIL") }}
             </label>
             <InputText
               v-model="email"
@@ -79,13 +81,13 @@ const redirectToLogin = () => {
               @focusin="emailFocused = true"
             />
             <p v-if="showEmailValidationFailure" class="text-red-500 font-bold">
-              {{ $t("Invalid email") }}
+              {{ t("Invalid email") }}
             </p>
           </div>
 
           <div>
             <label class="block text-sm font-medium mb-1" for="password">
-              {{ $t("PASSWORD") }}
+              {{ t("PASSWORD") }}
             </label>
             <Password
               id="password-panel"
@@ -94,22 +96,22 @@ const redirectToLogin = () => {
               :toggle-mask="true"
               autocomplete="new-password"
               prompt-label=" "
-              :weak-label="$t('Weak password')"
-              :medium-label="$t('Medium password')"
-              :strong-label="$t('Strong password')"
+              :weak-label="t('Weak password')"
+              :medium-label="t('Medium password')"
+              :strong-label="t('Strong password')"
             >
               <template #header>
-                <p class="mb-1">{{ $t("Enter a password") }}</p>
+                <p class="mb-1">{{ t("Enter a password") }}</p>
               </template>
               <template #footer="sp">
                 {{ sp.level }}
                 <Divider />
-                <p class="mt-2">{{ $t("Recommendations") }}:</p>
+                <p class="mt-2">{{ t("Recommendations") }}:</p>
                 <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
-                  <li>{{ $t("At least one lowercase") }}</li>
-                  <li>{{ $t("At least one uppercase") }}</li>
-                  <li>{{ $t("At least one numeric") }}</li>
-                  <li>{{ $t("Minimum 8 characters") }}</li>
+                  <li>{{ t("At least one lowercase") }}</li>
+                  <li>{{ t("At least one uppercase") }}</li>
+                  <li>{{ t("At least one numeric") }}</li>
+                  <li>{{ t("Minimum 8 characters") }}</li>
                 </ul>
               </template>
             </Password>
@@ -117,7 +119,7 @@ const redirectToLogin = () => {
 
           <div>
             <label class="block text-sm font-medium mb-1" for="confirm-password">
-              {{ $t("CONFIRM PASSWORD") }}
+              {{ t("CONFIRM PASSWORD") }}
             </label>
             <Password
               id="confirm-password-panel"
@@ -130,19 +132,19 @@ const redirectToLogin = () => {
           </div>
 
           <MainActionButton :disabled="isFormValid === false" @click="register">
-            {{ $t("Sign Up") }}
+            {{ t("Sign Up") }}
           </MainActionButton>
 
           <Divider align="center" class="py-2">
-            <span>{{ $t("OR") }}</span>
+            <span>{{ t("OR") }}</span>
           </Divider>
 
           <MainActionButton @click="loginWithGoogle">
-            {{ $t("Sign Up with Google") }}
+            {{ t("Sign Up with Google") }}
           </MainActionButton>
 
           <ActionButton @click="redirectToLogin">
-            {{ $t("Log In to Your Account") }}
+            {{ t("Log In to Your Account") }}
           </ActionButton>
 
           <div class="flex justify-center mt-4">

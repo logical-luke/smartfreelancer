@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 import { useRouter } from 'vue-router';
 import { useAuthorizationStore } from '@/stores/auth';
 
@@ -19,6 +21,6 @@ const logout = async () => {
     <span class="inline-block mr-3">
       <i class="pi pi-power-off"></i>
     </span>
-    <span>{{ $t("Log out") }}</span>
+    <span>{{ t("Log out") }}</span>
   </a>
 </template>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 import { computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useClientsStore } from '@/stores/clients';
@@ -23,7 +25,7 @@ onMounted(() => {
 <template>
   <div class="flex mb-8">
     <div>
-      <h3 class="text-xl font-bold">{{ $t("Clients") }}</h3>
+      <h3 class="text-xl font-bold">{{ t("Clients") }}</h3>
     </div>
   </div>
   <transition name="slide">
@@ -48,6 +50,6 @@ onMounted(() => {
     </div>
   </transition>
   <MainActionButton class="w-full md:w-auto" @click="goToAddClient">{{
-    $t("Add Client")
+    t("Add Client")
   }}</MainActionButton>
 </template>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useClientsStore } from '@/stores/clients';
@@ -69,7 +71,7 @@ onMounted(async () => {
 <template>
   <div @keyup.enter="submitForm">
     <label class="flex flex-col text-sm font-semibold gap-2" for="name">
-      <span> {{ $t("Name") }} <span class="text-red-500">*</span> </span>
+      <span> {{ t("Name") }} <span class="text-red-500">*</span> </span>
       <InputText
         id="name"
         v-model="client.name"
@@ -84,7 +86,7 @@ onMounted(async () => {
 
   <div class="w-full md:w-1/2" @keyup.enter="submitForm">
     <label class="flex flex-col gap-2 text-sm font-semibold" for="email">
-      {{ $t("Email") }}
+      {{ t("Email") }}
       <InputGroup>
         <InputGroupAddon></InputGroupAddon>
         <InputText
@@ -101,7 +103,7 @@ onMounted(async () => {
 
   <div class="w-full md:w-1/2" @keyup.enter="submitForm">
     <label class="flex flex-col gap-2 text-sm font-semibold" for="phone">
-      {{ $t("Phone") }}
+      {{ t("Phone") }}
       <InputGroup>
         <InputGroupAddon></InputGroupAddon>
         <InputText
@@ -118,7 +120,7 @@ onMounted(async () => {
 
   <div class="w-full md:w-1/2" @keyup.enter="submitForm">
     <label class="flex flex-col gap-2 text-sm font-semibold" for="photo">
-      {{ $t("Photo") }}
+      {{ t("Photo") }}
       <ImageUploadInput
         v-if="!hasAvatar()"
         @file-uploaded="updateAvatar"
@@ -136,10 +138,10 @@ onMounted(async () => {
       @keyup.enter="submitForm"
       @click="submitForm"
     >
-      {{ $t("Save") }}
+      {{ t("Save") }}
     </MainActionButton>
     <router-link :to="cancelPageRoute">
-      <ActionButton class="w-full md:w-auto">{{ $t("Cancel") }}</ActionButton>
+      <ActionButton class="w-full md:w-auto">{{ t("Cancel") }}</ActionButton>
     </router-link>
   </div>
 </template>

@@ -1,12 +1,11 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+</script>
+
 <template>
   <div class="flex mb-8">
-    <h3 class="text-xl font-bold">{{ $t("Tasks") }}</h3>
+    <h3 class="text-xl font-bold">{{ t("Tasks") }}</h3>
   </div>
 </template>
-
-<script>
-
-export default {
-  name: "TasksPage",
-};
-</script>

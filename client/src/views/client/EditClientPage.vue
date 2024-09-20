@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n;
 import { ref } from 'vue';
 import EditClientForm from '@/components/client/EditClientForm.vue';
 
@@ -8,7 +10,7 @@ const title = ref('Edit Client');
 <template>
   <div class="flex mb-8">
     <div>
-      <h3 class="text-xl font-bold">{{ $t(title) }}</h3>
+      <h3 class="text-xl font-bold">{{ t(title) }}</h3>
     </div>
   </div>
   <div class="flex container">

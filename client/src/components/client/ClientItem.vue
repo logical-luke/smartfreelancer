@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import {useI18n} from "vue-i18n";
+const { t } = useI18n();
 import { useRouter } from 'vue-router';
 import { useClientsStore } from '@/stores/clients';
 import ActionButton from '@/components/form/ActionButton.vue';
@@ -85,50 +86,50 @@ const deleteClient = async () => {
         :class="hasPhone() ? 'mb-4' : ''"
         class="flex items-center gap-4"
       >
-        <span>{{ $t("Email") }}: {{ email }}</span>
+        <span>{{ t("Email") }}: {{ email }}</span>
       </div>
       <div v-if="hasPhone()" class="flex items-center gap-4">
-        <span>{{ $t("Phone") }}: {{ phone }}</span>
+        <span>{{ t("Phone") }}: {{ phone }}</span>
       </div>
     </div>
 
     <div class="flex flex-col md:flex-row mb-8 gap-4">
       <div class="p-4 bg-gray-100 rounded w-full md:w-1/2">
         <div class="flex items-center gap-4 mb-2">
-          <p class="text-xs font-medium">{{ $t("Revenue") }}</p>
+          <p class="text-xs font-medium">{{ t("Revenue") }}</p>
         </div>
         <span>{{ revenue }} $</span>
       </div>
       <div class="p-4 bg-gray-100 rounded w-full md:w-1/2">
         <div class="flex items-center gap-4 mb-2">
-          <p class="text-xs font-medium">{{ $t("Time Worked") }}</p>
+          <p class="text-xs font-medium">{{ t("Time Worked") }}</p>
         </div>
-        <span>{{ timeWorked }} {{ $t("hours") }}</span>
+        <span>{{ timeWorked }} {{ t("hours") }}</span>
       </div>
     </div>
 
     <div class="flex flex-col md:flex-row gap-4 mb-8">
       <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
         <div class="flex items-center gap-4 mb-2">
-          <p class="text-xs font-medium">{{ $t("Ongoing Tasks") }}</p>
+          <p class="text-xs font-medium">{{ t("Ongoing Tasks") }}</p>
         </div>
         <span>{{ ongoingTasks }}</span>
       </div>
       <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
         <div class="flex items-center gap-4 mb-2">
-          <p class="text-xs font-medium">{{ $t("Planned Tasks") }}</p>
+          <p class="text-xs font-medium">{{ t("Planned Tasks") }}</p>
         </div>
         <span>{{ plannedTasks }}</span>
       </div>
       <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
         <div class="flex items-center gap-4 mb-2">
-          <p class="text-xs font-medium">{{ $t("Finished Tasks") }}</p>
+          <p class="text-xs font-medium">{{ t("Finished Tasks") }}</p>
         </div>
         <span>{{ finishedTasks }}</span>
       </div>
       <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
         <div class="flex items-center gap-4 mb-2">
-          <p class="text-xs font-medium">{{ $t("Blocked Tasks") }}</p>
+          <p class="text-xs font-medium">{{ t("Blocked Tasks") }}</p>
         </div>
         <span>{{ blockedTasks }}</span>
       </div>
@@ -136,9 +137,9 @@ const deleteClient = async () => {
 
     <div class="flex gap-4 flex-col items-center md:flex-row">
       <ActionButton @click="goToEditClientPage">{{
-        $t("Edit")
+        t("Edit")
       }}</ActionButton>
-      <ActionButton @click="confirmDeletion">{{ $t("Delete") }}</ActionButton>
+      <ActionButton @click="confirmDeletion">{{ t("Delete") }}</ActionButton>
     </div>
   </div>
 </template>
