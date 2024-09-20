@@ -25,7 +25,7 @@ onMounted(() => {
 <template>
   <div class="flex mb-8">
     <div>
-      <h3 class="text-xl font-bold">{{ t("Clients") }}</h3>
+      <h3 class=" text-2xl font-bold">{{ t("Clients") }}</h3>
     </div>
   </div>
   <transition name="slide">

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import {computed} from "vue";
 import FileUpload, {type FileUploadBeforeSendEvent, type FileUploadUploadEvent} from "primevue/fileupload";
-import { useAuthorizationStore } from "@/stores/auth";
-import { useI18n } from "vue-i18n";
+import {useAuthorizationStore} from "@/stores/auth";
+import {useI18n} from "vue-i18n";
 
 const authStore = useAuthorizationStore();
-const { t } = useI18n();
+const {t} = useI18n();
 const emit = defineEmits(["file-uploaded"]);
 
 const uploadApiURL = computed(() => {
@@ -32,16 +32,18 @@ const onUpload = (event: FileUploadUploadEvent) => {
 </script>
 
 <template>
-  <FileUpload
-    mode="basic"
-    class="inline-flex shadow p-4 min-w-40 justify-center flex-nowrap items-center text-sm font-medium bg-white border-2 border-indigo-500 text-black hover:bg-indigo-500 hover:text-white rounded-md disabled:bg-slate-50 disabled:text-slate-500 transition duration-200"
-    name="image"
-    :url="uploadApiURL"
-    accept="image/*"
-    :max-file-size="1000000"
-    :auto="true"
-    :choose-label="chooseLabel"
-    @upload="onUpload"
-    @before-send="beforeSend"
-  />
+  <div class="flex items-start justify-items-start">
+    <FileUpload
+        mode="basic"
+        class="shadow p-4 min-w-40 bg-white border-2 border-indigo-500 text-black hover:bg-indigo-500 hover:text-white rounded-md disabled:bg-slate-50 disabled:text-slate-500 transition duration-200"
+        name="image"
+        :url="uploadApiURL"
+        accept="image/*"
+        :max-file-size="1000000"
+        :auto="true"
+        :choose-label="chooseLabel"
+        @upload="onUpload"
+        @before-send="beforeSend"
+    />
+  </div>
 </template>

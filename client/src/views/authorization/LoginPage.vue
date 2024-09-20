@@ -59,7 +59,7 @@ async function goToRegistration() {
       <div class="flex w-full justify-center items-center">
         <div class="flex flex-col gap-4 w-full">
           <div>
-            <label class="block text-sm font-medium mb-1" for="email">
+            <label class="block font-medium mb-1" for="email">
               {{ t("EMAIL") }}
             </label>
             <InputText
@@ -71,7 +71,7 @@ async function goToRegistration() {
           </div>
 
           <div id="password-panel" class="w-full">
-            <label class="block text-sm font-medium mb-1" for="password">
+            <label class="block font-medium mb-1" for="password">
               {{ t("PASSWORD") }}
             </label>
             <Password

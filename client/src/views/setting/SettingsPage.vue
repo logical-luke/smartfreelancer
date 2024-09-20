@@ -6,6 +6,6 @@ const { t } = useI18n();
 
 <template>
   <div class="flex mb-8">
-    <h3 class="text-xl font-bold">{{ t("Settings") }}</h3>
+    <h3 class=" text-2xl font-bold">{{ t("Settings") }}</h3>
   </div>
 </template>

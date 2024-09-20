@@ -63,59 +63,50 @@ const submitForm = async () => {
 
 <template>
   <div>
-    <div class="w-full md:w-1/2" @keyup.enter="submitForm">
-      <label class="flex flex-col gap-2 text-sm font-semibold" for="name">
-        {{ t("Name") }}
-        <InputGroup>
-          <InputGroupAddon></InputGroupAddon>
-          <InputText
-              id="name"
-              v-model="client.name"
-              name="name"
-              placeholder="John Doe"
-              :invalid="!nameValid"
-              @focusout="updateNameValid"
-          />
-        </InputGroup>
+    <div class="w-full md:w-1/2 mb-4" @keyup.enter="submitForm">
+      <label class="flex flex-col gap-2 font-semibold" for="name">
+        <span> {{ t("Name") }} <span class="text-red-500">*</span> </span>
+        <InputText
+            id="name"
+            v-model="client.name"
+            name="name"
+            placeholder="John Doe"
+            :invalid="!nameValid"
+            @focusout="updateNameValid"
+        />
       </label>
     </div>
 
-    <div class="w-full md:w-1/2" @keyup.enter="submitForm">
-      <label class="flex flex-col gap-2 text-sm font-semibold" for="email">
+    <div class="w-full md:w-1/2 mb-4" @keyup.enter="submitForm">
+      <label class="flex flex-col gap-2 font-semibold" for="email">
         {{ t("Email") }}
-        <InputGroup>
-          <InputGroupAddon></InputGroupAddon>
-          <InputText
-              id="email"
-              v-model="client.email"
-              name="email"
-              placeholder="john.doe@domain.com"
-              :invalid="!emailValid"
-              @focusout="updateEmailValid"
-          />
-        </InputGroup>
+        <InputText
+            id="email"
+            v-model="client.email"
+            name="email"
+            placeholder="john.doe@domain.com"
+            :invalid="!emailValid"
+            @focusout="updateEmailValid"
+        />
       </label>
     </div>
 
-    <div class="w-full md:w-1/2" @keyup.enter="submitForm">
-      <label class="flex flex-col gap-2 text-sm font-semibold" for="phone">
+    <div class="w-full md:w-1/2 mb-4" @keyup.enter="submitForm">
+      <label class="flex flex-col gap-2 font-semibold" for="phone">
         {{ t("Phone") }}
-        <InputGroup>
-          <InputGroupAddon></InputGroupAddon>
-          <InputText
-              id="phone"
-              v-model="client.phone"
-              name="phone"
-              placeholder="+1 561-555-7689"
-              :invalid="!phoneValid"
-              @focusout="updatePhoneValid"
-          />
-        </InputGroup>
+        <InputText
+            id="phone"
+            v-model="client.phone"
+            name="phone"
+            placeholder="+1 561-555-7689"
+            :invalid="!phoneValid"
+            @focusout="updatePhoneValid"
+        />
       </label>
     </div>
 
-    <div class="w-full md:w-1/2" @keyup.enter="submitForm">
-      <label class="flex flex-col gap-2 text-sm font-semibold" for="photo">
+    <div class="w-full md:w-1/2 mb-8" @keyup.enter="submitForm">
+      <label class="flex flex-col gap-2 font-semibold" for="photo">
         {{ t("Photo") }}
         <ImageUploadInput
             v-if="!hasAvatar()"

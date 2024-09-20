@@ -72,7 +72,7 @@ const redirectToLogin = () => {
       <div class="flex w-full justify-center items-center">
         <div class="flex flex-col gap-4 w-full">
           <div>
-            <label class="block text-sm font-medium mb-1" for="email">
+            <label class="block font-medium mb-1" for="email">
               {{ t("EMAIL") }}
             </label>
             <InputText
@@ -90,7 +90,7 @@ const redirectToLogin = () => {
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1" for="password">
+            <label class="block font-medium mb-1" for="password">
               {{ t("PASSWORD") }}
             </label>
             <Password
@@ -122,7 +122,7 @@ const redirectToLogin = () => {
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1" for="confirm-password">
+            <label class="block font-medium mb-1" for="confirm-password">
               {{ t("CONFIRM PASSWORD") }}
             </label>
             <Password

@@ -19,7 +19,7 @@ const toggle = () => {
   open.value = !open.value;
 };
 
-watch(() => route, () => {
+watch(() => route.fullPath, () => {
   open.value = false;
 });
 </script>
@@ -59,7 +59,7 @@ watch(() => route, () => {
             </div>
           </div>
           <div class="px-4 pb-8">
-            <ul class="mb-8 text-sm font-medium">
+            <ul class="mb-8 font-medium">
               <SidebarItem go-to="/">
                 {{ t("Deep Work Hub") }}
                 <template #icon>

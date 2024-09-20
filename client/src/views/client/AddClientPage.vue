@@ -10,7 +10,7 @@ const title = ref('Add Client');
 <template>
   <div class="flex mb-8">
     <div>
-      <h3 class="text-xl font-bold">{{ t(title) }}</h3>
+      <h3 class=" text-2xl font-bold">{{ t(title) }}</h3>
     </div>
   </div>
   <div class="flex container">
