@@ -4,6 +4,8 @@ import { defineProps } from 'vue';
 const props = defineProps<{
   goTo: string;
 }>();
+
+const goTo = props.goTo || '';
 </script>
 
 <template>

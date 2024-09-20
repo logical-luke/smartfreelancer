@@ -4,7 +4,7 @@ const messages = {};
 
 const i18n = createI18n({
   legacy: false,
-  locale: "en",
+  locale: "en-US",
   messages: messages,
   silentTranslationWarn: true
 });

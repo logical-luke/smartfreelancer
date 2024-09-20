@@ -4,7 +4,6 @@ import SidebarNav from "@/components/navigation/SidebarNav.vue";
 import ConfirmDialog from "primevue/confirmdialog";
 import Toast from "primevue/toast";
 import { useRoute } from "vue-router";
-import RandomLoadingText from "./components/RandomLoadingText.vue";
 import { useAuthorizationStore } from "@/stores/auth";
 
 const route = useRoute();
@@ -26,7 +25,7 @@ onMounted(async () => {
       <div class="flex flex-col items-center justify-center">
         <div></div>
         <div class="flex items-center justify-center mt-4 p-4">
-          <span class="text-center"><random-loading-text /></span>
+          <span class="text-center"></span>
         </div>
       </div>
     </div>

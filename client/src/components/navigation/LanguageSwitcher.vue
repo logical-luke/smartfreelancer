@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from "vue";
+import { ref, reactive } from "vue";
 import Select from "primevue/select";
-import i18n from "@/services/locale/i18n"; // Import the i18n instance
 
 interface Language {
   name: string;
@@ -23,22 +22,6 @@ const languages = reactive<Language[]>([
   { name: "Polski", code: "pl" },
   { name: "українська мова", code: "uk" },
 ]);
-
-const getLocale = computed<string>(() => 'en');
-
-onMounted(() => {
-  const locale = getLocale.value;
-  const selectedLanguage = languages.find((lang) => lang.code === locale);
-  if (selectedLanguage) {
-    selected.value = selectedLanguage;
-  }
-  i18n.global.locale = locale; // Use the i18n instance
-});
-
-function setLanguage(language: Language) {
-  const code = language.code;
-  i18n.global.locale = code; // Use the i18n instance
-}
 </script>
 
 <template>
@@ -47,6 +30,5 @@ function setLanguage(language: Language) {
       :options="languages"
       option-label="name"
       class="w-full"
-      @update:model-value="setLanguage"
   />
 </template>

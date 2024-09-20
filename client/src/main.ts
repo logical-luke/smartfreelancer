@@ -1,23 +1,24 @@
 import {createApp} from "vue";
 import App from "./App.vue";
-
+import i18n from "@/services/locale/i18n";
 import router from "./router";
+import {VueCookieNext} from 'vue-cookie-next'
 import {createPinia} from "pinia";
 import "./tailwind/tailwind.css";
 import "primeicons/primeicons.css";
 import Aura from '@primevue/themes/aura';
 import Tooltip from "primevue/tooltip";
 
-import i18n from "@/services/locale/i18n";
 
 import PrimeVue from "primevue/config";
 import ConfirmationService from "primevue/confirmationservice";
 import ToastService from "primevue/toastservice";
-import { definePreset } from '@primevue/themes';
+import {definePreset} from '@primevue/themes';
 
 const app = createApp(App);
 
 app.use(i18n);
+app.use(VueCookieNext);
 app.use(createPinia());
 app.use(router);
 

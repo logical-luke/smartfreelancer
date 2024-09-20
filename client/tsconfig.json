@@ -1,21 +1,29 @@
 {
   "compilerOptions": {
+    "noEmit": true,
+
     "target": "esnext",
     "module": "esnext",
+
+    "noImplicitThis": true,
     "strict": true,
+
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+
     "jsx": "preserve",
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
+    "jsxImportSource": "vue",
+
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+
     "forceConsistentCasingInFileNames": true,
+
     "useDefineForClassFields": true,
-    "sourceMap": true,
-    "baseUrl": ".",
-    "types": [
-      "webpack-env"
-    ],
+
+    "verbatimModuleSyntax": true,
+
+
     "paths": {
       "@/*": [
         "src/*"

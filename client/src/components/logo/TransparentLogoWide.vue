@@ -10,7 +10,6 @@ const props = defineProps<{
 }>();
 
 const size = props.size || "w-40";
-const textColor = props.textColor || "white";
 const iconOnly = props.iconOnly || false;
 const viewBox = props.viewBox || "-33.81501770019531 94.489990234375 642.6300048828125 387.3600082397461";
 </script>

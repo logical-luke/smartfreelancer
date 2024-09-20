@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-const { t } = useI18n;
+const { t } = useI18n();
 import { ref } from 'vue';
 import AddClientForm from '@/components/client/AddClientForm.vue';
 
@@ -15,7 +15,7 @@ const title = ref('Add Client');
   </div>
   <div class="flex container">
     <div class="flex flex-col gap-4 w-full">
-      <add-client-form />
+      <AddClientForm />
     </div>
   </div>
 </template>

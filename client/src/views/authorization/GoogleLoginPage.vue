@@ -13,7 +13,6 @@ import ActionButton from "@/components/form/ActionButton.vue";
 import MainActionButton from "@/components/form/MainActionButton.vue";
 import { useAuthorizationStore } from "@/stores/auth";
 import api from "@/services/api";
-import i18n from "@/services/locale/i18n";
 
 const router = useRouter();
 const toast = useToast();
@@ -21,22 +20,21 @@ const authorizationStore = useAuthorizationStore();
 
 const email = ref<string>("");
 const password = ref<string>("");
-const buttonTitle = ref<string>("Log in");
 
 async function login() {
   try {
     toast.removeAllGroups();
     await authorizationStore.login(email.value, password.value);
     await router.push("/");
-  } catch (err: any) {
+  } catch (err: unknown) {
     password.value = "";
-    let message = i18n.global.t("Unknown error") + ". " + i18n.global.t("Please try again");
-    if (err.message === "Invalid username or password") {
-      message = i18n.global.t("Invalid email or password");
+    let message = t("Unknown error") + ". " + t("Please try again");
+    if (err instanceof Error && err.message === "Invalid username or password") {
+      message = t("Invalid email or password");
     }
     toast.add({
       severity: "error",
-      summary: i18n.global.t("Unable to sign in"),
+      summary: t("Unable to sign in"),
       detail: message,
       life: 5000,
     });

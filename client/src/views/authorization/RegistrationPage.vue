@@ -12,6 +12,9 @@ import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Divider from "primevue/divider";
 import api from "@/services/api";
+import {useToast} from "primevue/usetoast";
+
+const toast = useToast();
 
 const email = ref("");
 const password = ref("");
@@ -38,16 +41,17 @@ const register = async () => {
   }
   if (password.value !== confirmPassword.value) {
     confirmPassword.value = "";
-    // Add toast notification for password mismatch
+    toast.add({
+      severity: "error",
+      summary: t("Passwords do not match"),
+      detail: t("Please try again"),
+      life: 5000,
+    });
     return;
   }
-  try {
-    await authStore.register(email.value, password.value, confirmPassword.value);
-    await authStore.login(email.value, password.value);
-    await router.push("/");
-  } catch (err) {
-    // Handle registration error
-  }
+  await authStore.register(email.value, password.value, confirmPassword.value);
+  await authStore.login(email.value, password.value);
+  await router.push("/");
 };
 
 const loginWithGoogle = async () => {

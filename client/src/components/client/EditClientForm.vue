@@ -127,6 +127,7 @@ onMounted(async () => {
       />
       <span v-else class="flex flex-row items-center gap-2">
         <img :src="client.avatar" alt="avatar" class="w-20 h-20 rounded-full" />
+        <i class="pi pi-times-circle text-red-500 cursor-pointer" @click="clearAvatar"></i>
       </span>
     </label>
   </div>

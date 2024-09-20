@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import FileUpload from "primevue/fileupload";
+import FileUpload, {type FileUploadBeforeSendEvent, type FileUploadUploadEvent} from "primevue/fileupload";
 import { useAuthorizationStore } from "@/stores/auth";
 import { useI18n } from "vue-i18n";
 
@@ -16,13 +16,14 @@ const chooseLabel = computed(() => {
   return t("Browse");
 });
 
-const beforeSend = (request: any) => {
+const beforeSend = (event: FileUploadBeforeSendEvent) => {
   const token = authStore.getToken;
-  request.xhr.setRequestHeader("Authorization", "Bearer " + token);
-  return request;
+  event.xhr.setRequestHeader("Authorization", "Bearer " + token);
+
+  return event;
 };
 
-const onUpload = (event: any) => {
+const onUpload = (event: FileUploadUploadEvent) => {
   const response = JSON.parse(event.xhr.response);
   if (response.filename) {
     emit("file-uploaded", response.filename);
@@ -31,7 +32,7 @@ const onUpload = (event: any) => {
 </script>
 
 <template>
-  <file-upload
+  <FileUpload
     mode="basic"
     class="inline-flex shadow p-4 min-w-40 justify-center flex-nowrap items-center text-sm font-medium bg-white border-2 border-indigo-500 text-black hover:bg-indigo-500 hover:text-white rounded-md disabled:bg-slate-50 disabled:text-slate-500 transition duration-200"
     name="image"
