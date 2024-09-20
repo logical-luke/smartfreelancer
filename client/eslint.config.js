@@ -13,5 +13,8 @@ export default [
                 ...globals.node
             }
         }
+    },
+    {
+        ignores: ["node_modules/", "dist/", "public/", "tools/"],
     }
 ];
