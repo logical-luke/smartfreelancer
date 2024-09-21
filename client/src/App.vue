@@ -18,8 +18,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Toast />
   <ConfirmDialog />
+  <Toast />
   <div class="h-screen" :class="{ 'mx-auto lg:ml-80': isAuthorizedPage }">
     <SidebarNav v-if="isAuthorizedPage" />
     <RouterView v-slot="{ Component }">
@@ -69,5 +69,9 @@ onMounted(async () => {
 .slide-leave-to {
   transform: translateX(100%);
   opacity: 0;
+}
+
+.p-toast {
+  max-width: calc(100vw - 40px);
 }
 </style>
