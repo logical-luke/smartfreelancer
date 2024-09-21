@@ -15,9 +15,9 @@ const fullWidth = props.fullWidth || false;
     :type="buttonType"
     :class="{
       '': fullWidth,
-      'md:min-w-40': !fullWidth,
+      'md:min-w-40 md:w-fit': !fullWidth,
     }"
-    class="w-full md:w-fit inline-flex shadow p-4 justify-center flex-nowrap items-center font-medium bg-white border-2 border-indigo-500 text-black hover:bg-indigo-500 hover:text-white rounded-md disabled:bg-slate-50 disabled:text-slate-500 transition duration-200"
+    class="w-full inline-flex shadow p-4 justify-center flex-nowrap items-center font-medium bg-white border-2 border-indigo-500 text-black hover:bg-indigo-500 hover:text-white rounded-md disabled:bg-slate-50 disabled:text-slate-500 transition duration-200"
   >
     <span>
       <slot></slot>
