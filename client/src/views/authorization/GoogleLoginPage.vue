@@ -51,10 +51,10 @@ async function goToRegistration() {
 </script>
 
 <template>
-  <div class="flex flex-col justify-center items-center h-full p-4 overflow-auto">
+  <div class="flex flex-col justify-center items-center h-full md: min-h-screen p-4 overflow-auto">
     <div class="md:border-2 rounded-md p-8 md:shadow w-full max-w-sm md:max-w-lg lg:max-w-xl">
-      <div class="flex justify-center w-full mb-4">
-        <TransparentLogoWide size="w-60" text-color="#410B01" />
+      <div class="flex justify-cNenter w-full mb-4">
+        <TransparentLogoWide />
       </div>
       <div class="flex w-full justify-center items-center">
         <div class="flex flex-col gap-4 w-full">

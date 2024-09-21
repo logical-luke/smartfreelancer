@@ -8,8 +8,6 @@ import MainActionButton from '@/components/form/MainActionButton.vue';
 import ActionButton from '@/components/form/ActionButton.vue';
 import ImageUploadInput from '@/components/form/ImageUploadInput.vue';
 import { useRouter } from 'vue-router';
-import InputGroupAddon from "primevue/inputgroupaddon";
-import InputGroup from "primevue/inputgroup";
 
 const clientsStore = useClientsStore();
 const router = useRouter();

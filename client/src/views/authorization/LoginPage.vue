@@ -9,7 +9,6 @@ import LanguageSwitcher from "@/components/navigation/LanguageSwitcher.vue";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Divider from "primevue/divider";
-import Fluid from "primevue/fluid";
 import ActionButton from "@/components/form/ActionButton.vue";
 import MainActionButton from "@/components/form/MainActionButton.vue";
 import { useAuthorizationStore } from "@/stores/auth";
@@ -52,10 +51,10 @@ async function goToRegistration() {
 </script>
 
 <template>
-  <div class="flex flex-col justify-center items-center h-full p-4 overflow-auto">
-    <div class="md:border-2 rounded-md p-8 md:shadow w-full max-w-sm md:max-w-lg lg:max-w-xl">
+  <div class="flex flex-col justify-center items-center h-full md:min-h-screen">
+    <div class="md:border-2 rounded-md p-4 md:p-8 md:shadow w-full max-w-sm md:max-w-lg lg:max-w-xl">
       <div class="flex justify-center w-full mb-4">
-        <TransparentLogoWide size="w-60" text-color="#410B01" />
+        <TransparentLogoWide />
       </div>
       <div class="flex w-full justify-center items-center">
         <div class="flex flex-col gap-4 w-full">
@@ -91,7 +90,7 @@ async function goToRegistration() {
             {{ t("Log In") }}
           </MainActionButton>
 
-          <Divider align="center" class="py-2">
+          <Divider align="center">
             <span>{{ t("OR") }}</span>
           </Divider>
 

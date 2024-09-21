@@ -5,15 +5,15 @@ import { useAuthorizationStore } from "@/stores/auth";
 axios.defaults.withCredentials = true;
 
 export default {
-    async get(
+    async get<T = unknown>(
         url: string,
         params: Record<string, string> = {},
         headers: Record<string, string> = {},
         repeated = 0
-    ): Promise<AxiosResponse<any>> {
+    ): Promise<AxiosResponse<T>> {
         const authStore = useAuthorizationStore();
         try {
-            const response = await axios.get(process.env.API_BASE_URL + url, {
+            const response = await axios.get<T>(process.env.API_BASE_URL + url, {
                 params: params,
                 headers: {
                     Authorization: `Bearer ${authStore.getToken}`,
@@ -21,13 +21,13 @@ export default {
             });
 
             if (response.status === 404) {
-                return { data: {}, status: 404 } as AxiosResponse<any>;
+                return { data: {} as T, status: 404 } as AxiosResponse<T>;
             }
 
             if (response.status === 401) {
                 if (repeated > 0) {
                     await authStore.logout();
-                    return { data: {}, status: 401 } as AxiosResponse<any>;
+                    return { data: {} as T, status: 401 } as AxiosResponse<T>;
                 }
 
                 await this.refreshToken();
@@ -37,15 +37,15 @@ export default {
             }
 
             return response;
-        } catch (err: any) {
-            if (err.response?.status === 404) {
-                return { data: {}, status: 404 } as AxiosResponse<any>;
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err) && err.response?.status === 404) {
+                return { data: {} as T, status: 404 } as AxiosResponse<T>;
             }
 
-            if (err.response?.status === 401) {
+            if (axios.isAxiosError(err) && err.response?.status === 401) {
                 if (repeated > 0) {
                     await authStore.logout();
-                    return { data: {}, status: 401 } as AxiosResponse<any>;
+                    return { data: {} as T, status: 401 } as AxiosResponse<T>;
                 }
 
                 await this.refreshToken();
@@ -63,15 +63,15 @@ export default {
 
         return this.get(url, params, headers, repeated);
     },
-    async post(
+    async post<T = unknown>(
         url: string,
-        data: Record<string, any> = {},
-        headers: Record<string, any> = {},
+        data: Record<string, unknown> = {},
+        headers: Record<string, string> = {},
         repeated = 0
-    ): Promise<AxiosResponse<any>> {
+    ): Promise<AxiosResponse<T>> {
         const authStore = useAuthorizationStore();
         try {
-            const response = await axios.post(process.env.API_BASE_URL + url, data, {
+            const response = await axios.post<T>(process.env.API_BASE_URL + url, data, {
                 headers: {
                     Authorization: `Bearer ${authStore.getToken}`,
                 },
@@ -80,7 +80,7 @@ export default {
             if (response.status === 401) {
                 if (repeated > 0) {
                     await authStore.logout();
-                    return { data: {}, status: 401 } as AxiosResponse<any>;
+                    return { data: {} as T, status: 401 } as AxiosResponse<T>;
                 }
                 await this.refreshToken();
 
@@ -89,11 +89,11 @@ export default {
             }
 
             return response;
-        } catch (err: any) {
-            if (err.response?.status === 401) {
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err) && err.response?.status === 401) {
                 if (repeated > 0) {
                     await authStore.logout();
-                    return { data: {}, status: 401 } as AxiosResponse<any>;
+                    return { data: {} as T, status: 401 } as AxiosResponse<T>;
                 }
                 await this.refreshToken();
 
@@ -109,15 +109,15 @@ export default {
         repeated++;
         return this.post(url, data, headers, repeated);
     },
-    async put(
+    async put<T = unknown>(
         url: string,
-        data: Record<string, any> = {},
-        headers: Record<string, any> = {},
+        data: Record<string, unknown> = {},
+        headers: Record<string, string> = {},
         repeated = 0
-    ): Promise<AxiosResponse<any>> {
+    ): Promise<AxiosResponse<T>> {
         const authStore = useAuthorizationStore();
         try {
-            const response = await axios.put(process.env.API_BASE_URL + url, data, {
+            const response = await axios.put<T>(process.env.API_BASE_URL + url, data, {
                 headers: {
                     Authorization: `Bearer ${authStore.getToken}`,
                 },
@@ -126,7 +126,7 @@ export default {
             if (response.status === 401) {
                 if (repeated > 0) {
                     await authStore.logout();
-                    return { data: {}, status: 401 } as AxiosResponse<any>;
+                    return { data: {} as T, status: 401 } as AxiosResponse<T>;
                 }
                 await this.refreshToken();
 
@@ -135,11 +135,11 @@ export default {
             }
 
             return response;
-        } catch (err: any) {
-            if (err.response?.status === 401) {
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err) && err.response?.status === 401) {
                 if (repeated > 0) {
                     await authStore.logout();
-                    return { data: {}, status: 401 } as AxiosResponse<any>;
+                    return { data: {} as T, status: 401 } as AxiosResponse<T>;
                 }
                 await this.refreshToken();
 
@@ -155,14 +155,14 @@ export default {
         repeated++;
         return this.put(url, data, headers, repeated);
     },
-    async delete(
+    async delete<T = unknown>(
         url: string,
-        headers: Record<string, any> = {},
+        headers: Record<string, string> = {},
         repeated = 0
-    ): Promise<AxiosResponse<any>> {
+    ): Promise<AxiosResponse<T>> {
         const authStore = useAuthorizationStore();
         try {
-            const response = await axios.delete(process.env.API_BASE_URL + url, {
+            const response = await axios.delete<T>(process.env.API_BASE_URL + url, {
                 headers: {
                     Authorization: `Bearer ${authStore.getToken}`,
                 },
@@ -179,11 +179,11 @@ export default {
             }
 
             return response;
-        } catch (err: any) {
-            if (err.response?.status === 401) {
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err) && err.response?.status === 401) {
                 if (repeated > 0) {
                     await authStore.logout();
-                    return { data: {}, status: 401 } as AxiosResponse<any>;
+                    return { data: {} as T, status: 401 } as AxiosResponse<T>;
                 }
                 await this.refreshToken();
 
@@ -201,24 +201,29 @@ export default {
     },
     async refreshToken(): Promise<void> {
         const authStore = useAuthorizationStore();
-        let response: AxiosResponse<any> | false = false;
         if (authStore.getRefreshToken) {
             try {
-                response = await axios.post(process.env.API_BASE_URL + "/token/refresh", {
+                const response = await axios.post(process.env.API_BASE_URL + "/token/refresh", {
                     refresh_token: authStore.getRefreshToken,
                 });
+
+                if (response && response.status === 200) {
+                    await authStore.authorize(
+                        response.data.token,
+                        response.data.refresh_token
+                    );
+
+                    return;
+                }
             } catch (err: unknown) {
+                if (err instanceof Error) {
+                    console.error(err.message);
+                }
                 await authStore.logout();
                 return;
             }
-            if (response && response.status === 200) {
-                await authStore.authorize(
-                    response.data.token,
-                    response.data.refresh_token
-                );
-                return;
-            }
         }
+
         await authStore.logout();
     },
 }

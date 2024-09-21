@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 
 axios.defaults.withCredentials = true;
 
@@ -16,9 +16,11 @@ export default {
                     refreshToken: response.data.refresh_token,
                 };
             }
-        } catch (e: any) {
-            if (e.response && e.response.status === 401) {
-                throw new Error("Invalid username or password");
+        } catch (e: unknown) {
+            if (e instanceof AxiosError) {
+                if (e.response && e.response.status === 401) {
+                    throw new Error("Invalid username or password");
+                }
             }
         }
 
@@ -40,9 +42,10 @@ export default {
                 token: response.data.token,
                 refreshToken: response.data.refresh_token,
             };
-        } catch (e: any) {
+        } catch (e: unknown) {
             if (
-                e.response &&
+                e instanceof AxiosError
+                && e.response &&
                 (e.response.status === 400 || e.response.status === 409)
             ) {
                 throw new Error("Invalid email or password");
@@ -50,25 +53,5 @@ export default {
         }
 
         throw new Error("Unable to sign in. Please try again later.");
-    },
-
-    async postGoogleStart(): Promise<string> {
-        const response = await axios.post(
-            process.env.API_BASE_URL + "/google/connect"
-        );
-
-        return response.data.targetUrl;
-    },
-
-    async postGoogleCheck(payload: { code: string; state: string }): Promise<any> {
-        const response = await axios.post(
-            process.env.API_BASE_URL + "/google/connect/check",
-            {
-                code: payload.code,
-                state: payload.state,
-            }
-        );
-
-        return response.data;
     },
 }

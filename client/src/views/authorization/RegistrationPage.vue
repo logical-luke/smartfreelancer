@@ -64,10 +64,10 @@ const redirectToLogin = () => {
 </script>
 
 <template>
-  <div class="flex flex-col justify-center items-center h-full p-4 overflow-auto">
+  <div class="flex flex-col justify-center items-center h-full md:min-h-screen p-4 overflow-auto">
     <div class="md:border-2 rounded-md p-8 md:shadow w-full max-w-sm md:max-w-lg lg:max-w-xl">
       <div class="flex justify-center w-full mb-4">
-        <TransparentLogoWide size="w-60" text-color="#410B01" />
+        <TransparentLogoWide />
       </div>
       <div class="flex w-full justify-center items-center">
         <div class="flex flex-col gap-4 w-full">
@@ -135,7 +135,11 @@ const redirectToLogin = () => {
             />
           </div>
 
-          <MainActionButton :disabled="isFormValid === false" @click="register">
+          <MainActionButton
+              :full-width="true"
+              :disabled="isFormValid === false"
+              @click="register"
+          >
             {{ t("Sign Up") }}
           </MainActionButton>
 
@@ -143,11 +147,17 @@ const redirectToLogin = () => {
             <span>{{ t("OR") }}</span>
           </Divider>
 
-          <MainActionButton @click="loginWithGoogle">
+          <MainActionButton
+              :full-width="true"
+              @click="loginWithGoogle"
+          >
             {{ t("Sign Up with Google") }}
           </MainActionButton>
 
-          <ActionButton @click="redirectToLogin">
+          <ActionButton
+              :full-width="true"
+              @click="redirectToLogin"
+          >
             {{ t("Log In to Your Account") }}
           </ActionButton>
 

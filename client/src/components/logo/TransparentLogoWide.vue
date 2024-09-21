@@ -1,26 +1,13 @@
 <script setup lang="ts">
-import { defineProps } from 'vue';
 import { RouterLink } from 'vue-router';
-
-const props = defineProps<{
-  size?: string;
-  textColor?: string;
-  iconOnly?: boolean;
-  viewBox?: string;
-}>();
-
-const size = props.size || "w-40";
-const iconOnly = props.iconOnly || false;
-const viewBox = props.viewBox || "-33.81501770019531 94.489990234375 642.6300048828125 387.3600082397461";
 </script>
 
 <template>
   <router-link to="/">
+    <div class="w-48">
     <svg
-        :class="size"
-        class="h-full"
         xmlns="http://www.w3.org/2000/svg"
-        :viewBox="viewBox"
+        viewBox="-33.81501770019531 94.489990234375 642.6300048828125 387.3600082397461"
     >
       <svg
           id="Layer_2_1_"
@@ -248,7 +235,6 @@ const viewBox = props.viewBox || "-33.81501770019531 94.489990234375 642.6300048
         ></path>
       </svg>
       <svg
-          v-if="!iconOnly"
           id="svg1"
           y="363"
           viewBox="1.55 12.34 502.63 48.849998"
@@ -297,5 +283,6 @@ const viewBox = props.viewBox || "-33.81501770019531 94.489990234375 642.6300048
         </g>
       </svg>
     </svg>
+    </div>
   </router-link>
 </template>

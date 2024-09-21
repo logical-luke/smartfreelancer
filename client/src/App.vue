@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import SidebarNav from "@/components/navigation/SidebarNav.vue";
 import ConfirmDialog from "primevue/confirmdialog";
 import Toast from "primevue/toast";
