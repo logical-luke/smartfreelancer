@@ -3,9 +3,11 @@ import {useI18n} from "vue-i18n";
 const { t } = useI18n();
 import { useRouter } from 'vue-router';
 import { useClientsStore } from '@/stores/clients';
-import ActionButton from '@/components/form/ActionButton.vue';
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
+import DestructiveActionButton from "@/components/form/DestructiveActionButton.vue";
+import SecondaryActionButton from "@/components/form/SecondaryActionButton.vue";
+import TaskStatusCard from "@/components/TaskStatusCard.vue";
 
 const props = defineProps<{
   id: string;
@@ -66,82 +68,69 @@ const deleteClient = async () => {
 </script>
 
 <template>
-  <div class="p-8 w-full bg-white shadow rounded">
-    <div class="flex justify-between items-center mb-8">
-      <div class="flex items-center">
-        <img
-          class="w-20 h-20 p-1 mr-4 rounded-full border border-indigo-700"
-          :src="getAvatar()"
-          :alt="name"
-        />
-        <div>
-          <h3 class="font-medium text-lg">{{ name }}</h3>
+  <div class="w-full bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
+    <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-6">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center">
+          <img
+              class="w-20 h-20 rounded-full border-4 border-white shadow-lg transition-transform duration-300 hover:scale-105"
+              :src="getAvatar()"
+              :alt="name"
+          />
+          <div class="ml-4 text-white">
+            <h3 class="font-bold text-2xl">{{ name }}</h3>
+            <p v-if="internal" class="text-blue-100">{{ t("You") }}</p>
+          </div>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <a v-if="hasEmail()" :href="`mailto:${email}`" class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300">
+            <i class="pi pi-envelope mr-2"></i>
+            <span class="text-sm">{{ email }}</span>
+          </a>
+          <a v-if="hasPhone()" :href="`tel:${phone}`" class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300">
+            <i class="pi pi-phone mr-2"></i>
+            <span class="text-sm">{{ phone }}</span>
+          </a>
         </div>
       </div>
     </div>
 
-    <div v-if="hasPhone() || hasEmail()" class="mb-8 p-4 bg-gray-100 rounded">
-      <div
-        v-if="hasEmail()"
-        :class="hasPhone() ? 'mb-4' : ''"
-        class="flex items-center gap-4"
-      >
-        <span>{{ t("Email") }}: {{ email }}</span>
+    <div class="p-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+        <div v-if="!internal" class="bg-blue-50 rounded-lg p-6 flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">{{ t("Revenue") }}</p>
+            <span class="text-3xl font-bold text-blue-700">{{ revenue }} $</span>
+          </div>
+          <i class="pi pi-dollar text-5xl text-blue-300"></i>
+        </div>
+        <div class="bg-green-50 rounded-lg p-6 flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">{{ t("Time Worked") }}</p>
+            <span class="text-3xl font-bold text-green-700">{{ timeWorked }} {{ t("hours") }}</span>
+          </div>
+          <i class="pi pi-clock text-5xl text-green-300"></i>
+        </div>
       </div>
-      <div v-if="hasPhone()" class="flex items-center gap-4">
-        <span>{{ t("Phone") }}: {{ phone }}</span>
-      </div>
-    </div>
 
-    <div class="flex flex-col md:flex-row mb-8 gap-4">
-      <div v-if="!internal" class="p-4 bg-gray-100 rounded w-full md:w-1/2">
-        <div class="flex items-center gap-4 mb-2">
-          <p class="text-xs font-medium">{{ t("Revenue") }}</p>
-        </div>
-        <span>{{ revenue }} $</span>
+      <h4 class="text-xl font-semibold text-gray-700 mb-4">{{ t("Task Overview") }}</h4>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <TaskStatusCard :count="inProgressTasks" :label="t('In Progress')" icon="pi-spin pi-spinner" color="orange" />
+        <TaskStatusCard :count="todoTasks" :label="t('Todo')" icon="pi-list" color="yellow" />
+        <TaskStatusCard :count="blockedTasks" :label="t('Blocked')" icon="pi-ban" color="red" />
+        <TaskStatusCard :count="completedTasks" :label="t('Completed')" icon="pi-check-circle" color="green" />
       </div>
-      <div class="p-4 bg-gray-100 rounded w-full md:w-1/2">
-        <div class="flex items-center gap-4 mb-2">
-          <p class="text-xs font-medium">{{ t("Time Worked") }}</p>
-        </div>
-        <span>{{ timeWorked }} {{ t("hours") }}</span>
-      </div>
-    </div>
 
-    <div class="flex flex-col md:flex-row gap-4 mb-8">
-      <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
-        <div class="flex items-center gap-4 mb-2">
-          <p class="text-xs font-medium">{{ t("Todo Tasks") }}</p>
-        </div>
-        <span>{{ todoTasks }}</span>
+      <div class="flex flex-col sm:flex-row justify-end gap-4">
+        <SecondaryActionButton @click="goToEditClientPage" class="w-full sm:w-auto">
+          <i class="pi pi-pencil mr-2"></i>
+          {{ t("Edit") }}
+        </SecondaryActionButton>
+        <DestructiveActionButton v-if="!internal" @click="confirmDeletion" class="w-full sm:w-auto">
+          <i class="pi pi-trash mr-2"></i>
+          {{ t("Delete") }}
+        </DestructiveActionButton>
       </div>
-      <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
-        <div class="flex items-center gap-4 mb-2">
-          <p class="text-xs font-medium">{{ t("In Progress Tasks") }}</p>
-        </div>
-        <span>{{ inProgressTasks }}</span>
-      </div>
-      <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
-        <div class="flex items-center gap-4 mb-2">
-          <p class="text-xs font-medium">{{ t("Blocked Tasks") }}</p>
-        </div>
-        <span>{{ blockedTasks }}</span>
-      </div>
-      <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
-        <div class="flex items-center gap-4 mb-2">
-          <p class="text-xs font-medium">{{ t("Completed Tasks") }}</p>
-        </div>
-        <span>{{ completedTasks }}</span>
-      </div>
-    </div>
-
-    <div class="flex gap-4 flex-col items-center md:flex-row">
-      <ActionButton @click="goToEditClientPage">
-        {{ t("Edit")
-      }}</ActionButton>
-      <ActionButton v-if="!internal" @click="confirmDeletion">
-        {{ t("Delete") }}
-      </ActionButton>
     </div>
   </div>
 </template>

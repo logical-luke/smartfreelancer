@@ -4,8 +4,8 @@ const { t } = useI18n();
 import { ref } from 'vue';
 import { useClientsStore } from '@/stores/clients';
 import InputText from 'primevue/inputtext';
-import MainActionButton from '@/components/form/MainActionButton.vue';
-import ActionButton from '@/components/form/ActionButton.vue';
+import MainActionButton from '@/components/form/PrimaryActionButton.vue';
+import ActionButton from '@/components/form/SecondaryActionButton.vue';
 import ImageUploadInput from '@/components/form/ImageUploadInput.vue';
 import { useRouter } from 'vue-router';
 
@@ -60,75 +60,88 @@ const submitForm = async () => {
 </script>
 
 <template>
-  <div>
-    <div class="w-full md:w-1/2 mb-4" @keyup.enter="submitForm">
-      <label class="flex flex-col gap-2 font-semibold" for="name">
-        <span> {{ t("Name") }} <span class="text-red-500">*</span> </span>
-        <InputText
-            id="name"
-            v-model="client.name"
-            name="name"
-            placeholder="John Doe"
-            :invalid="!nameValid"
-            @focusout="updateNameValid"
-        />
-      </label>
-    </div>
+  <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+    <div class="p-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2" for="name">
+            {{ t("Name") }} <span class="text-red-500">*</span>
+          </label>
+          <InputText
+              id="name"
+              v-model="client.name"
+              name="name"
+              placeholder="John Doe"
+              :class="{'border-red-500': !nameValid}"
+              class="w-full p-3 rounded-md border focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
+              @focusout="updateNameValid"
+              @keyup.enter="submitForm"
+          />
+        </div>
 
-    <div class="w-full md:w-1/2 mb-4" @keyup.enter="submitForm">
-      <label class="flex flex-col gap-2 font-semibold" for="email">
-        {{ t("Email") }}
-        <InputText
-            id="email"
-            v-model="client.email"
-            name="email"
-            placeholder="john.doe@domain.com"
-            :invalid="!emailValid"
-            @focusout="updateEmailValid"
-        />
-      </label>
-    </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2" for="email">
+            {{ t("Email") }}
+          </label>
+          <InputText
+              id="email"
+              v-model="client.email"
+              name="email"
+              placeholder="john.doe@domain.com"
+              :class="{'border-red-500': !emailValid}"
+              class="w-full p-3 rounded-md border focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
+              @focusout="updateEmailValid"
+              @keyup.enter="submitForm"
+          />
+        </div>
 
-    <div class="w-full md:w-1/2 mb-4" @keyup.enter="submitForm">
-      <label class="flex flex-col gap-2 font-semibold" for="phone">
-        {{ t("Phone") }}
-        <InputText
-            id="phone"
-            v-model="client.phone"
-            name="phone"
-            placeholder="+1 561-555-7689"
-            :invalid="!phoneValid"
-            @focusout="updatePhoneValid"
-        />
-      </label>
-    </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2" for="phone">
+            {{ t("Phone") }}
+          </label>
+          <InputText
+              id="phone"
+              v-model="client.phone"
+              name="phone"
+              placeholder="+1 561-555-7689"
+              :class="{'border-red-500': !phoneValid}"
+              class="w-full p-3 rounded-md border focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
+              @focusout="updatePhoneValid"
+              @keyup.enter="submitForm"
+          />
+        </div>
+      </div>
 
-    <div class="w-full md:w-1/2 mb-8" @keyup.enter="submitForm">
-      <label class="flex flex-col gap-2 font-semibold" for="photo">
-        {{ t("Photo") }}
-        <ImageUploadInput
-            v-if="!hasAvatar()"
-            @file-uploaded="updateAvatar"
-        />
-        <span v-else class="flex flex-row items-center gap-2">
-          <img :src="client.avatar" alt="avatar" class="w-20 h-20 rounded-full" />
-          <i class="pi pi-times-circle text-red-500 cursor-pointer" @click="clearAvatar"></i>
-        </span>
-      </label>
-    </div>
+      <div class="col-span-1 md:col-span-2">
+        <label class="block text-sm font-medium text-gray-700 mb-2" for="photo">
+          {{ t("Photo") }}
+        </label>
+        <div class="flex items-center">
+          <div v-if="hasAvatar()" class="mr-4 relative">
+            <img :src="client.avatar" alt="avatar" class="w-20 h-20 rounded-full border-4 border-indigo-200" />
+            <button @click="clearAvatar" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors duration-200">
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+          <ImageUploadInput
+              v-if="!hasAvatar()"
+              @file-uploaded="updateAvatar"
+              class="flex-grow"
+          />
+        </div>
+      </div>
 
-    <div class="flex gap-4 flex-col md:flex-row justify-center md:justify-start w-full md:w-1/2">
-      <MainActionButton
-          :disabled="!canSubmitForm() || client.name.length === 0"
-          class="w-full md:w-auto"
-          @keyup.enter="submitForm"
-          @click="submitForm"
-      >
-        {{ t("Add") }}
-      </MainActionButton>
-      <router-link :to="cancelPageRoute">
-        <ActionButton class="w-full md:w-auto">{{ t("Cancel") }}</ActionButton>
-      </router-link>
+      <div class="flex flex-col sm:flex-row justify-end gap-4 mt-8">
+        <router-link :to="cancelPageRoute">
+          <ActionButton>{{ t("Cancel") }}</ActionButton>
+        </router-link>
+        <MainActionButton
+            :disabled="!canSubmitForm() || client.name.length === 0"
+            @click="submitForm"
+        >
+          {{ t("Add Client") }}
+        </MainActionButton>
+      </div>
     </div>
   </div>
 </template>

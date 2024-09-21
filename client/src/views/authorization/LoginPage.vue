@@ -9,8 +9,8 @@ import LanguageSwitcher from "@/components/navigation/LanguageSwitcher.vue";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Divider from "primevue/divider";
-import ActionButton from "@/components/form/ActionButton.vue";
-import MainActionButton from "@/components/form/MainActionButton.vue";
+import ActionButton from "@/components/form/SecondaryActionButton.vue";
+import MainActionButton from "@/components/form/PrimaryActionButton.vue";
 import { useAuthorizationStore } from "@/stores/auth";
 import api from "@/services/api";
 

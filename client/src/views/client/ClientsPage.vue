@@ -5,7 +5,7 @@ import { computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useClientsStore } from '@/stores/clients';
 import ClientItem from '@/components/client/ClientItem.vue';
-import MainActionButton from '@/components/form/MainActionButton.vue';
+import MainActionButton from '@/components/form/PrimaryActionButton.vue';
 
 const clientsStore = useClientsStore();
 const router = useRouter();
