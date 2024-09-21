@@ -8,8 +8,6 @@ import { useAuthorizationStore } from "@/stores/auth";
 
 const route = useRoute();
 
-const isInitialLoaded = ref<boolean>(true);
-
 const path = computed<string | undefined>(() => route.name as string | undefined);
 const isAuthorizedPage = computed<boolean>(() => route.meta && route.meta.requiresAuth === true);
 
@@ -20,34 +18,18 @@ onMounted(async () => {
 </script>
 
 <template>
-  <transition name="initial">
-    <div v-if="!isInitialLoaded" class="flex h-screen items-center justify-center">
-      <div class="flex flex-col items-center justify-center">
-        <div></div>
-        <div class="flex items-center justify-center mt-4 p-4">
-          <span class="text-center"></span>
+  <Toast />
+  <ConfirmDialog />
+  <div class="h-screen" :class="{ 'mx-auto lg:ml-80': isAuthorizedPage }">
+    <SidebarNav v-if="isAuthorizedPage" />
+    <RouterView v-slot="{ Component }">
+      <Transition name="fade" mode="out-in">
+        <div :key="path" :class="isAuthorizedPage ? 'py-8 px-8' : ''">
+          <Component :is="Component"></Component>
         </div>
-      </div>
-    </div>
-    <div v-else>
-      <div class="h-screen" :class="{ 'mx-auto lg:ml-80': isAuthorizedPage }">
-        <toast
-            :breakpoints="{ '920px': { width: '100%', right: '0', left: '0' } }"
-            :close-button-props="{ style: { 'box-shadow': 'none' } }"
-            error-icon="pi pi-minus-circle"
-        />
-        <confirm-dialog />
-        <sidebar-nav v-if="isAuthorizedPage" />
-        <router-view v-slot="{ Component }">
-          <transition name="fade" mode="out-in">
-            <div :key="path" :class="isAuthorizedPage ? 'py-8 px-8' : ''">
-              <component :is="Component"></component>
-            </div>
-          </transition>
-        </router-view>
-      </div>
-    </div>
-  </transition>
+      </Transition>
+    </RouterView>
+  </div>
 </template>
 
 <style>

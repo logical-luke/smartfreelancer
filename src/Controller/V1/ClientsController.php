@@ -60,8 +60,16 @@ class ClientsController extends AbstractController
     }
 
     #[Route('/{id}', name: 'read', methods: ['GET'])]
-    public function read(): JsonResponse
+    public function read(Client $client): JsonResponse
     {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($user->getId() !== $client->getOwner()->getId()) {
+            return $this->json(['error' => ExceptionErrors::FORBIDDEN_ACTION], 403);
+        }
+
+        return $this->json(ClientDto::fromClient($client, 0, 0, 0, 0, 0, 0));
     }
 
     #[Route('/{id}', name: 'update', methods: ['PUT'])]
@@ -72,7 +80,7 @@ class ClientsController extends AbstractController
 
         try {
             $client = ($updater)
-            (UpdateClientPayload::from(json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR), $user));
+            (UpdateClientPayload::from($client, json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR), $user));
         } catch (InvalidPayloadException $e) {
             return $this->json(['error' => $e->getMessage()], 400);
         } catch (JsonException $e) {

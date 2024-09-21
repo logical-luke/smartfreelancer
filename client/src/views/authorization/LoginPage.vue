@@ -9,6 +9,7 @@ import LanguageSwitcher from "@/components/navigation/LanguageSwitcher.vue";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Divider from "primevue/divider";
+import Fluid from "primevue/fluid";
 import ActionButton from "@/components/form/ActionButton.vue";
 import MainActionButton from "@/components/form/MainActionButton.vue";
 import { useAuthorizationStore } from "@/stores/auth";
@@ -75,17 +76,17 @@ async function goToRegistration() {
               {{ t("PASSWORD") }}
             </label>
             <Password
-                id="password-input"
                 v-model="password"
                 :toggle-mask="true"
                 autocomplete="current-password"
                 :feedback="false"
-                input-class="w-full"
+                fluid
             />
           </div>
 
           <MainActionButton
               :disabled="email === '' || password === ''"
+              :full-width="true"
               @click="login">
             {{ t("Log In") }}
           </MainActionButton>
@@ -94,9 +95,9 @@ async function goToRegistration() {
             <span>{{ t("OR") }}</span>
           </Divider>
 
-          <MainActionButton @click="loginWithGoogle">{{ t("Log In with Google") }}</MainActionButton>
+          <MainActionButton :full-width="true" @click="loginWithGoogle">{{ t("Log In with Google") }}</MainActionButton>
 
-          <ActionButton @click="goToRegistration">{{ t("Sign Up for an Account") }}</ActionButton>
+          <ActionButton :full-width="true" @click="goToRegistration">{{ t("Sign Up for an Account") }}</ActionButton>
 
           <div class="flex justify-center mt-4">
             <LanguageSwitcher />
@@ -107,12 +108,3 @@ async function goToRegistration() {
   </div>
 </template>
 
-<style scoped>
-#password-panel {
-  width: inherit;
-}
-
-#password-input {
-  width: inherit;
-}
-</style>

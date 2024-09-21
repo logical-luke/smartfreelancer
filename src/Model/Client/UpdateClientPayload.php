@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model\Client;
 
+use App\Entity\Client;
 use App\Entity\User;
 use App\Exception\MissingPayloadFieldException;
 use Symfony\Component\Uid\Uuid;
@@ -20,18 +21,14 @@ readonly class UpdateClientPayload
     ) {
     }
 
-    public static function from(array $payload, User $user): self
+    public static function from(Client $client, array $payload, User $user): self
     {
-        if (!isset($payload['id'])) {
-            throw new MissingPayloadFieldException('id');
-        }
-
         if (!isset($payload['name'])) {
             throw new MissingPayloadFieldException('name');
         }
 
         return new self(
-            Uuid::fromString($payload['id']),
+            $client->getId(),
             $user->getId(),
             $payload['name'],
             !isset($payload['phone']) || $payload['phone'] === '' ? null : $payload['phone'],

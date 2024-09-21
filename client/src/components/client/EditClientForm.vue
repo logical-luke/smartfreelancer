@@ -2,21 +2,22 @@
 import {useI18n} from 'vue-i18n';
 
 const {t} = useI18n();
-import {ref, onMounted} from 'vue';
+import {ref, onMounted, type Ref} from 'vue';
 import {useRouter, useRoute} from 'vue-router';
 import {useClientsStore} from '@/stores/clients';
 import InputText from 'primevue/inputtext';
-import InputGroup from 'primevue/inputgroup';
-import InputGroupAddon from 'primevue/inputgroupaddon';
 import MainActionButton from '@/components/form/MainActionButton.vue';
 import ActionButton from '@/components/form/ActionButton.vue';
 import ImageUploadInput from '@/components/form/ImageUploadInput.vue';
+import type ClientForm from "@/interfaces/clientForm";
+import api from "@/services/api";
+import type Client from "@/interfaces/client";
 
 const clientsStore = useClientsStore();
 const router = useRouter();
 const route = useRoute();
-const client = ref({
-  id: null,
+const id = String(route.params.id) as string;
+const client: Ref<ClientForm> = ref({
   name: '',
   avatar: '',
   email: '',
@@ -38,12 +39,12 @@ const clearAvatar = () => {
 
 const updateEmailValid = () => {
   const emailRegex = /^\S+@\S+\.\S+$/;
-  emailValid.value = client.value.email.length === 0 || emailRegex.test(client.value.email);
+  emailValid.value = client.value.email === null || client.value.email.length === 0 || emailRegex.test(client.value.email);
 };
 
 const updatePhoneValid = () => {
   const phoneRegex = /^\+?[0-9]{1,4}[0-9]{6,14}$/;
-  phoneValid.value = client.value.phone.length === 0 || phoneRegex.test(client.value.phone);
+  phoneValid.value = client.value.phone === null || client.value.phone.length === 0 || phoneRegex.test(client.value.phone);
 };
 
 const updateNameValid = () => {
@@ -59,17 +60,30 @@ const submitForm = async () => {
     return;
   }
 
-  await clientsStore.update(client.value);
-  router.push(afterSavePageRoute.value);
+  console.log(id);
+
+  await clientsStore.update(id, client.value);
+  await router.push(afterSavePageRoute.value);
+};
+
+const clientToClientForm = (client: Client): ClientForm => {
+  return {
+    name: client.name,
+    avatar: client.avatar,
+    email: client.email,
+    phone: client.phone,
+  };
 };
 
 onMounted(async () => {
-  await clientsStore.load();
-  const clientObject = clientsStore.clients.find(c => c.id === route.params.id);
-  if (!clientObject) {
-    await router.push({name: 'NotFoundPage'});
+  if (!id || id === '') {
+    return router.push({name: 'NotFoundPage'});
   }
-  client.value = clientObject;
+  const clientObject = await api.clients.get(id);
+  if (!clientObject) {
+    return await router.push({name: 'NotFoundPage'});
+  }
+  client.value = clientToClientForm(clientObject);
 });
 </script>
 
@@ -125,7 +139,7 @@ onMounted(async () => {
             @file-uploaded="updateAvatar"
         />
         <span v-else class="flex flex-row items-center gap-2">
-        <img :src="client.avatar" alt="avatar" class="w-20 h-20 rounded-full"/>
+          <img :src="client.avatar !== null ? client.avatar : ''" alt="avatar" class="w-20 h-20 rounded-full"/>
         <i class="pi pi-times-circle text-red-500 cursor-pointer" @click="clearAvatar"></i>
       </span>
       </label>

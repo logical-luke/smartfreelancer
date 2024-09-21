@@ -25,7 +25,7 @@ watch(() => route.fullPath, () => {
 </script>
 
 <template>
-  <transition name="fade" mode="in-out">
+  <Transition name="fade" mode="in-out">
     <div v-if="isAuthorized" class="relative z-50">
       <nav class="lg:hidden py-6 px-4 bg-gray-800">
         <div class="flex flex-row items-center justify-between mr-2">
@@ -34,10 +34,10 @@ watch(() => route.fullPath, () => {
           </div>
           <div class="flex-row flex items-center justify-end gap-2">
             <button
-              class="navbar-burger p-2 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
+              class="navbar-burger p-4 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
               @click="toggle"
             >
-              <i class="pi pi-bars"></i>
+              <i class="text-xl pi pi-bars"></i>
             </button>
           </div>
         </div>
@@ -51,10 +51,10 @@ watch(() => route.fullPath, () => {
             </div>
             <div class="flex flex-row items-center justify-end gap-2">
               <button
-                class="lg:hidden navbar-burger p-2 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
+                class="lg:hidden navbar-burger p-4 bg-indigo-500 text-white flex items-center rounded focus:outline-none"
                 @click="toggle"
               >
-                <i class="pi pi-bars"></i>
+                <i class="text-xl pi pi-bars"></i>
               </button>
             </div>
           </div>
@@ -127,5 +127,5 @@ watch(() => route.fullPath, () => {
         </nav>
       </div>
     </div>
-  </transition>
+  </Transition>
 </template>

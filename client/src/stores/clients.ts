@@ -1,24 +1,30 @@
 import {defineStore} from "pinia";
 import api from "@/services/api";
+import type Client from "@/interfaces/client";
+import type ClientForm from "@/interfaces/clientForm";
+
+interface State {
+    clients: Client[];
+}
 
 export const useClientsStore = defineStore("clients", {
-    state: () => ({
+    state: (): State => ({
         clients: [],
     }),
     actions: {
-        async load() {
-            this.clients = await api.clients.get();
+        async load(): Promise<void> {
+            this.clients = await api.clients.list();
         },
-        async create(client) {
+        async create(client: ClientForm): Promise<void> {
             const newClient = await api.clients.create(client);
             this.clients.push(newClient);
         },
-        async delete(id) {
+        async delete(id: string) {
             await api.clients.delete(id);
             this.clients = this.clients.filter((client) => client.id !== id);
         },
-        async update(client) {
-            const updatedClient = await api.clients.update(client);
+        async update(id:string, client: ClientForm) {
+            const updatedClient = await api.clients.update(id, client);
             this.clients = this.clients.map((c) => (c.id === updatedClient.id ? updatedClient : c));
         },
     },
