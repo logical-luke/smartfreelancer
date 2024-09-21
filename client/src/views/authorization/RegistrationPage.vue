@@ -13,6 +13,7 @@ import InputText from "primevue/inputtext";
 import Divider from "primevue/divider";
 import api from "@/services/api";
 import { useToast } from "primevue/usetoast";
+import isValidEmail from "@/services/isValidEmail";
 
 const toast = useToast();
 
@@ -26,10 +27,6 @@ const authStore = useAuthorizationStore();
 const showEmailValidationFailure = computed(() => {
   return !emailFocused.value && email.value !== "" && !isValidEmail(email.value);
 });
-
-const isValidEmail = (email: string) => {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-};
 
 const isFormValid = computed(() => {
   return isValidEmail(email.value) && password.value !== "" && confirmPassword.value !== "";
@@ -49,13 +46,32 @@ const register = async () => {
     });
     return;
   }
-  await authStore.register(email.value, password.value, confirmPassword.value);
-  await authStore.login(email.value, password.value);
-  await router.push("/");
+  try {
+    await authStore.register(email.value, password.value, confirmPassword.value);
+    await authStore.login(email.value, password.value);
+    await router.push("/");
+  } catch (err: unknown) {
+    let message = t("Unknown error") + ". " + t("Please try again");
+    if (err instanceof Error && err.message === "Invalid username or password") {
+      message = t("Invalid email or password");
+      password.value = "";
+      confirmPassword.value = "";
+    }
+    if (err instanceof Error && err.message === "Account with that email already exists") {
+      message = t("Account with that email already exists");
+      password.value = "";
+      confirmPassword.value = "";
+    }
+    toast.add({
+      severity: "error",
+      summary: t("Unable to sign up"),
+      detail: message,
+      life: 5000,
+    });
+  }
 };
 
 const loginWithGoogle = async () => {
-  window.location.href = await api.postGoogleStart();
 };
 
 const redirectToLogin = () => {
@@ -151,16 +167,11 @@ const redirectToLogin = () => {
           {{ t("Sign Up") }}
         </MainActionButton>
 
-        <div class="relative">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-300"></div>
-          </div>
-          <div class="relative flex justify-center text-sm">
+        <Divider>
             <span class="px-2 bg-white text-gray-500">
               {{ t("OR") }}
             </span>
-          </div>
-        </div>
+        </Divider>
 
         <MainActionButton :full-width="true" @click="loginWithGoogle" type="button">
           <i class="pi pi-google mr-2"></i>

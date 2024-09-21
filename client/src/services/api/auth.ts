@@ -46,9 +46,17 @@ export default {
             if (
                 e instanceof AxiosError
                 && e.response &&
-                (e.response.status === 400 || e.response.status === 409)
+                e.response.status === 400
             ) {
-                throw new Error("Invalid email or password");
+                throw new Error("Invalid request made.");
+            }
+
+            if (
+                e instanceof AxiosError
+                && e.response &&
+                e.response.status === 409
+            ) {
+                throw new Error("Account with that email already exists");
             }
         }
 

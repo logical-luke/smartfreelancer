@@ -13,6 +13,7 @@ import ActionButton from "@/components/form/SecondaryActionButton.vue";
 import MainActionButton from "@/components/form/PrimaryActionButton.vue";
 import { useAuthorizationStore } from "@/stores/auth";
 import api from "@/services/api";
+import isValidEmail from "@/services/isValidEmail";
 
 const router = useRouter();
 const toast = useToast();
@@ -29,7 +30,7 @@ async function login() {
   } catch (err: unknown) {
     password.value = "";
     let message = t("Unknown error") + ". " + t("Please try again");
-    if (err.message === "Invalid username or password") {
+    if (err instanceof Error && err.message === "Invalid username or password") {
       message = t("Invalid email or password");
     }
     toast.add({
@@ -90,22 +91,17 @@ async function goToRegistration() {
 
         <MainActionButton
             type="submit"
-            :disabled="email === '' || password === ''"
+            :disabled="email === '' || password === '' || (email.length > 0 && !isValidEmail(email))"
             :full-width="true"
         >
           {{ t("Log In") }}
         </MainActionButton>
 
-        <div class="relative">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-300"></div>
-          </div>
-          <div class="relative flex justify-center text-sm">
+        <Divider>
             <span class="px-2 bg-white text-gray-500">
               {{ t("OR") }}
             </span>
-          </div>
-        </div>
+        </Divider>
 
         <MainActionButton :full-width="true" @click="loginWithGoogle" type="button">
           <i class="pi pi-google mr-2"></i>
