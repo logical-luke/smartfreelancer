@@ -25,7 +25,7 @@ const progress = totalTasks > 0 ? (props.completedTasks / totalTasks) * 100 : 0;
 
 <template>
   <div class="w-full bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
-    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-4">
+    <div class="bg-gradient-to-r from-indigo-400 to-indigo-600 p-4">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
         <h3 class="text-xl sm:text-2xl font-bold text-white flex items-center">
           <i class="pi pi-folder-open mr-2"></i>

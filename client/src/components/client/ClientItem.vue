@@ -69,7 +69,7 @@ const deleteClient = async () => {
 
 <template>
   <div class="w-full bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
-    <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-6">
+    <div class="bg-gradient-to-r from-indigo-400 to-indigo-600 p-6">
       <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
         <div class="flex items-center">
           <img

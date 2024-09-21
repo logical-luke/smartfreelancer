@@ -90,6 +90,12 @@ watch(() => route.fullPath, () => {
                   <i class="pi pi-user"></i>
                 </template>
               </SidebarItem>
+              <SidebarItem go-to="/planning">
+                {{ t("Planning") }}
+                <template #icon>
+                  <i class="pi pi-map"></i>
+                </template>
+              </SidebarItem>
               <SidebarItem go-to="/reports">
                 {{ t("Reports") }}
                 <template #icon>
