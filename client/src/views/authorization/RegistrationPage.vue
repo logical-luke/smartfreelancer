@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {useI18n} from "vue-i18n";
+import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
@@ -12,7 +12,7 @@ import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Divider from "primevue/divider";
 import api from "@/services/api";
-import {useToast} from "primevue/usetoast";
+import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
 
@@ -64,126 +64,117 @@ const redirectToLogin = () => {
 </script>
 
 <template>
-  <div class="flex flex-col justify-center items-center h-full md:min-h-screen p-4 overflow-auto">
-    <div class="md:border-2 rounded-md p-8 md:shadow w-full max-w-sm md:max-w-lg lg:max-w-xl">
-      <div class="flex justify-center w-full mb-4">
+  <div class="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 p-4">
+    <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
+      <div class="flex justify-center w-full mb-8">
         <TransparentLogoWide />
       </div>
-      <div class="flex w-full justify-center items-center">
-        <div class="flex flex-col gap-4 w-full">
-          <div>
-            <label class="block font-medium mb-1" for="email">
-              {{ t("EMAIL") }}
-            </label>
-            <InputText
+
+      <form @submit.prevent="register" class="space-y-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1" for="email">
+            {{ t("EMAIL") }}
+          </label>
+          <InputText
               v-model="email"
-              class="w-full"
+              id="email"
+              class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
               type="email"
               autocomplete="email"
+              required
               :invalid="showEmailValidationFailure"
               @focusout="emailFocused = false"
               @focusin="emailFocused = true"
-            />
-            <p v-if="showEmailValidationFailure" class="text-red-500 font-bold">
-              {{ t("Invalid email") }}
-            </p>
-          </div>
+          />
+          <p v-if="showEmailValidationFailure" class="text-red-500 font-bold">
+            {{ t("Invalid email") }}
+          </p>
+        </div>
 
-          <div>
-            <label class="block font-medium mb-1" for="password">
-              {{ t("PASSWORD") }}
-            </label>
-            <Password
-              id="password-panel"
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1" for="password">
+            {{ t("PASSWORD") }}
+          </label>
+          <Password
               v-model="password"
-              input-id="password-input"
+              id="password"
               :toggle-mask="true"
               autocomplete="new-password"
               prompt-label=" "
               :weak-label="t('Weak password')"
               :medium-label="t('Medium password')"
               :strong-label="t('Strong password')"
-            >
-              <template #header>
-                <p class="mb-1">{{ t("Enter a password") }}</p>
-              </template>
-              <template #footer="sp">
-                {{ sp.level }}
-                <Divider />
-                <p class="mt-2">{{ t("Recommendations") }}:</p>
-                <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
-                  <li>{{ t("At least one lowercase") }}</li>
-                  <li>{{ t("At least one uppercase") }}</li>
-                  <li>{{ t("At least one numeric") }}</li>
-                  <li>{{ t("Minimum 8 characters") }}</li>
-                </ul>
-              </template>
-            </Password>
-          </div>
+              class="w-full"
+              inputClass="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+              required
+              fluid
+          >
+            <template #header>
+              <p class="mb-1">{{ t("Enter a password") }}</p>
+            </template>
+            <template #footer="sp">
+              {{ sp.level }}
+              <Divider />
+              <p class="mt-2">{{ t("Recommendations") }}:</p>
+              <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+                <li>{{ t("At least one lowercase") }}</li>
+                <li>{{ t("At least one uppercase") }}</li>
+                <li>{{ t("At least one numeric") }}</li>
+                <li>{{ t("Minimum 8 characters") }}</li>
+              </ul>
+            </template>
+          </Password>
+        </div>
 
-          <div>
-            <label class="block font-medium mb-1" for="confirm-password">
-              {{ t("CONFIRM PASSWORD") }}
-            </label>
-            <Password
-              id="confirm-password-panel"
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1" for="confirm-password">
+            {{ t("CONFIRM PASSWORD") }}
+          </label>
+          <Password
               v-model="confirmPassword"
-              input-id="confirm-password-input"
+              id="confirm-password"
               :toggle-mask="true"
               autocomplete="new-password"
               :feedback="false"
-            />
+              class="w-full"
+              inputClass="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+              required
+              fluid
+          />
+        </div>
+
+        <MainActionButton
+            type="submit"
+            :disabled="!isFormValid"
+            :full-width="true"
+        >
+          {{ t("Sign Up") }}
+        </MainActionButton>
+
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300"></div>
           </div>
-
-          <MainActionButton
-              :full-width="true"
-              :disabled="isFormValid === false"
-              @click="register"
-          >
-            {{ t("Sign Up") }}
-          </MainActionButton>
-
-          <Divider align="center" class="py-2">
-            <span>{{ t("OR") }}</span>
-          </Divider>
-
-          <MainActionButton
-              :full-width="true"
-              @click="loginWithGoogle"
-          >
-            {{ t("Sign Up with Google") }}
-          </MainActionButton>
-
-          <ActionButton
-              :full-width="true"
-              @click="redirectToLogin"
-          >
-            {{ t("Log In to Your Account") }}
-          </ActionButton>
-
-          <div class="flex justify-center mt-4">
-            <LanguageSwitcher />
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-white text-gray-500">
+              {{ t("OR") }}
+            </span>
           </div>
         </div>
+
+        <MainActionButton :full-width="true" @click="loginWithGoogle" type="button">
+          <i class="pi pi-google mr-2"></i>
+          {{ t("Sign Up with Google") }}
+        </MainActionButton>
+
+        <ActionButton :full-width="true" @click="redirectToLogin" type="button">
+          {{ t("Log In to Your Account") }}
+        </ActionButton>
+      </form>
+
+      <div class="flex justify-center mt-6">
+        <LanguageSwitcher />
       </div>
     </div>
   </div>
 </template>
-
-<style>
-#password-panel {
-  width: 100%;
-}
-
-#password-input {
-  width: 100%;
-}
-
-#confirm-password-panel {
-  width: 100%;
-}
-
-#confirm-password-input {
-  width: 100%;
-}
-</style>

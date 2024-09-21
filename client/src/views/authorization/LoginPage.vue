@@ -51,59 +51,77 @@ async function goToRegistration() {
 </script>
 
 <template>
-  <div class="flex flex-col justify-center items-center h-full md:min-h-screen">
-    <div class="md:border-2 rounded-md p-4 md:p-8 md:shadow w-full max-w-sm md:max-w-lg lg:max-w-xl">
-      <div class="flex justify-center w-full mb-4">
+  <div class="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 p-4">
+    <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
+      <div class="flex justify-center w-full mb-8">
         <TransparentLogoWide />
       </div>
-      <div class="flex w-full justify-center items-center">
-        <div class="flex flex-col gap-4 w-full">
-          <div>
-            <label class="block font-medium mb-1" for="email">
-              {{ t("EMAIL") }}
-            </label>
-            <InputText
-                v-model="email"
-                class="w-full"
-                type="email"
-                autocomplete="email"
-            />
+
+      <form @submit.prevent="login" class="space-y-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1" for="email">
+            {{ t("EMAIL") }}
+          </label>
+          <InputText
+              v-model="email"
+              id="email"
+              class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+              type="email"
+              autocomplete="email"
+              required
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1" for="password">
+            {{ t("PASSWORD") }}
+          </label>
+          <Password
+              v-model="password"
+              id="password"
+              :toggle-mask="true"
+              autocomplete="current-password"
+              :feedback="false"
+              class="w-full"
+              inputClass="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+              required
+          />
+        </div>
+
+        <MainActionButton
+            type="submit"
+            :disabled="email === '' || password === ''"
+            :full-width="true"
+        >
+          {{ t("Log In") }}
+        </MainActionButton>
+
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300"></div>
           </div>
-
-          <div id="password-panel" class="w-full">
-            <label class="block font-medium mb-1" for="password">
-              {{ t("PASSWORD") }}
-            </label>
-            <Password
-                v-model="password"
-                :toggle-mask="true"
-                autocomplete="current-password"
-                :feedback="false"
-                fluid
-            />
-          </div>
-
-          <MainActionButton
-              :disabled="email === '' || password === ''"
-              :full-width="true"
-              @click="login">
-            {{ t("Log In") }}
-          </MainActionButton>
-
-          <Divider align="center">
-            <span>{{ t("OR") }}</span>
-          </Divider>
-
-          <MainActionButton :full-width="true" @click="loginWithGoogle">{{ t("Log In with Google") }}</MainActionButton>
-
-          <ActionButton :full-width="true" @click="goToRegistration">{{ t("Sign Up for an Account") }}</ActionButton>
-
-          <div class="flex justify-center mt-4">
-            <LanguageSwitcher />
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-white text-gray-500">
+              {{ t("OR") }}
+            </span>
           </div>
         </div>
+
+        <MainActionButton :full-width="true" @click="loginWithGoogle" type="button">
+          <i class="pi pi-google mr-2"></i>
+          {{ t("Log In with Google") }}
+        </MainActionButton>
+
+        <ActionButton :full-width="true" @click="goToRegistration" type="button">
+          {{ t("Sign Up for an Account") }}
+        </ActionButton>
+      </form>
+
+      <div class="flex justify-center mt-6">
+        <LanguageSwitcher />
       </div>
     </div>
   </div>
 </template>
+
 
