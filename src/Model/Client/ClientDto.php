@@ -18,10 +18,11 @@ readonly class ClientDto implements \JsonSerializable
         private int $createdAt,
         private int $revenue,
         private int $timeWorked,
-        private int $ongoingTasks,
-        private int $plannedTasks,
-        private int $finishedTasks,
+        private int $todoTasks,
+        private int $inProgressTasks,
         private int $blockedTasks,
+        private int $completedTasks,
+        private bool $internal,
     ) {
     }
 
@@ -29,10 +30,11 @@ readonly class ClientDto implements \JsonSerializable
         Client $client,
         int $revenue,
         int $timeWorked,
-        int $ongoingTasks,
-        int $plannedTasks,
-        int $finishedTasks,
+        int $todoTasks,
+        int $inProgressTasks,
         int $blockedTasks,
+        int $completedTasks,
+        bool $internal,
     ): self {
         return new self(
             $client->getId()?->toRfc4122(),
@@ -42,12 +44,13 @@ readonly class ClientDto implements \JsonSerializable
             $client->getPhone(),
             $client->getEmail(),
             $client->getCreatedAt()->getTimestamp(),
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            $revenue,
+            $timeWorked,
+            $todoTasks,
+            $inProgressTasks,
+            $blockedTasks,
+            $completedTasks,
+            $client->isInternal(),
         );
     }
 
@@ -63,10 +66,11 @@ readonly class ClientDto implements \JsonSerializable
             'createdAt' => $this->createdAt,
             'revenue' => $this->revenue,
             'timeWorked' => $this->timeWorked,
-            'ongoingTasks' => $this->ongoingTasks,
-            'plannedTasks' => $this->plannedTasks,
-            'finishedTasks' => $this->finishedTasks,
+            'todoTasks' => $this->todoTasks,
+            'inProgressTasks' => $this->inProgressTasks,
             'blockedTasks' => $this->blockedTasks,
+            'completedTasks' => $this->completedTasks,
+            'internal' => $this->internal,
         ];
     }
 }

@@ -41,10 +41,11 @@ onMounted(() => {
           :avatar="client.avatar"
           :revenue="client.revenue"
           :time-worked="client.timeWorked"
-          :ongoing-tasks="client.ongoingTasks"
-          :planned-tasks="client.plannedTasks"
-          :finished-tasks="client.finishedTasks"
+          :todo-tasks="client.todoTasks"
+          :in-progress-tasks="client.inProgressTasks"
           :blocked-tasks="client.blockedTasks"
+          :completed-tasks="client.completedTasks"
+          :internal="client.internal"
         />
       </transition-group>
     </div>

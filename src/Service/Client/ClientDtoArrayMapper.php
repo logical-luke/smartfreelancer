@@ -10,8 +10,9 @@ use Doctrine\Common\Collections\Collection;
 
 readonly class ClientDtoArrayMapper
 {
-    public function __construct()
-    {
+    public function __construct(
+        private ClientDtoFactory $clientDtoFactory
+    ) {
     }
 
     public function map(Collection $clients): array
@@ -22,8 +23,8 @@ readonly class ClientDtoArrayMapper
             return $a->getCreatedAt() < $b->getCreatedAt();
         });
 
-        return array_map(static function (Client $client) {
-            return (ClientDto::fromClient($client, 0, 0, 0, 0, 0, 0));
+        return array_map(function (Client $client) {
+            return (($this->clientDtoFactory)($client));
         }, $clientsArray);
     }
 }

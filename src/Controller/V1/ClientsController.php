@@ -16,6 +16,7 @@ use App\Model\Client\DeleteClientPayload;
 use App\Model\Client\UpdateClientPayload;
 use App\Repository\ClientRepository;
 use App\Service\Client\ClientDtoArrayMapper;
+use App\Service\Client\ClientDtoFactory;
 use App\Service\Client\Creator;
 use App\Service\Client\Deleter;
 use App\Service\Client\Updater;
@@ -40,7 +41,7 @@ class ClientsController extends AbstractController
     }
 
     #[Route('', name: 'create', methods: ['POST'])]
-    public function create(Creator $clientCreator, Request $request): JsonResponse
+    public function create(Creator $clientCreator, Request $request, ClientDtoFactory $clientDtoFactory): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -56,11 +57,11 @@ class ClientsController extends AbstractController
             return $this->json(['error' => ExceptionErrors::UNABLE_TO_PARSE_JSON], 400);
         }
 
-        return $this->json(ClientDto::fromClient($client, 0, 0, 0, 0, 0, 0));
+        return $this->json($clientDtoFactory($client));
     }
 
     #[Route('/{id}', name: 'read', methods: ['GET'])]
-    public function read(Client $client): JsonResponse
+    public function read(Client $client, ClientDtoFactory $clientDtoFactory): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -69,11 +70,11 @@ class ClientsController extends AbstractController
             return $this->json(['error' => ExceptionErrors::FORBIDDEN_ACTION], 403);
         }
 
-        return $this->json(ClientDto::fromClient($client, 0, 0, 0, 0, 0, 0));
+        return $this->json($clientDtoFactory($client));
     }
 
     #[Route('/{id}', name: 'update', methods: ['PUT'])]
-    public function update(Client $client, Updater $updater, Request $request): JsonResponse
+    public function update(Client $client, Updater $updater, Request $request, ClientDtoFactory $clientDtoFactory): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -91,7 +92,7 @@ class ClientsController extends AbstractController
             return $this->json(['error' => $e->getMessage()], 403);
         }
 
-        return $this->json(ClientDto::fromClient($client, 0, 0, 0, 0, 0, 0));
+        return $this->json($clientDtoFactory($client));
     }
 
     #[Route('/{id}', name: 'delete', methods: ['DELETE'])]

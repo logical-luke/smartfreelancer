@@ -10,15 +10,16 @@ import { useToast } from "primevue/usetoast";
 const props = defineProps<{
   id: string;
   name: string;
-  email?: string;
-  phone?: string;
-  avatar?: string;
-  revenue?: number;
-  timeWorked?: number;
-  ongoingTasks?: number;
-  plannedTasks?: number;
-  finishedTasks?: number;
-  blockedTasks?: number;
+  email: string|null;
+  phone: string|null;
+  avatar: string|null;
+  revenue: number;
+  timeWorked: number;
+  todoTasks: number;
+  inProgressTasks: number;
+  blockedTasks: number;
+  completedTasks: number;
+  internal: boolean;
 }>();
 
 const router = useRouter();
@@ -36,22 +37,21 @@ const goToEditClientPage = async () => {
 
 const confirmDeletion = async () => {
   confirm.require({
-    message: 'Do you want to delete this client?',
-    header: 'Danger Zone',
+    message: t(`This action cannot be undone.`),
+    header: t('Delete client?'),
     icon: 'pi pi-info-circle',
-    rejectLabel: 'Cancel',
     rejectProps: {
-      label: 'Cancel',
+      label: t('Cancel'),
       severity: 'secondary',
       outlined: true
     },
     acceptProps: {
-      label: 'Delete',
+      label: t('Delete'),
       severity: 'danger'
     },
     accept: () => {
       deleteClient();
-      toast.add({ severity: 'info', summary: 'Deleted', detail: 'Client deleted', life: 3000 });
+      toast.add({ severity: 'info', summary: t('Deleted'), detail: t('Client deleted'), life: 3000 });
     }
   })
 };
@@ -94,7 +94,7 @@ const deleteClient = async () => {
     </div>
 
     <div class="flex flex-col md:flex-row mb-8 gap-4">
-      <div class="p-4 bg-gray-100 rounded w-full md:w-1/2">
+      <div v-if="!internal" class="p-4 bg-gray-100 rounded w-full md:w-1/2">
         <div class="flex items-center gap-4 mb-2">
           <p class="text-xs font-medium">{{ t("Revenue") }}</p>
         </div>
@@ -111,21 +111,15 @@ const deleteClient = async () => {
     <div class="flex flex-col md:flex-row gap-4 mb-8">
       <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
         <div class="flex items-center gap-4 mb-2">
-          <p class="text-xs font-medium">{{ t("Ongoing Tasks") }}</p>
+          <p class="text-xs font-medium">{{ t("Todo Tasks") }}</p>
         </div>
-        <span>{{ ongoingTasks }}</span>
+        <span>{{ todoTasks }}</span>
       </div>
       <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
         <div class="flex items-center gap-4 mb-2">
-          <p class="text-xs font-medium">{{ t("Planned Tasks") }}</p>
+          <p class="text-xs font-medium">{{ t("In Progress Tasks") }}</p>
         </div>
-        <span>{{ plannedTasks }}</span>
-      </div>
-      <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
-        <div class="flex items-center gap-4 mb-2">
-          <p class="text-xs font-medium">{{ t("Finished Tasks") }}</p>
-        </div>
-        <span>{{ finishedTasks }}</span>
+        <span>{{ inProgressTasks }}</span>
       </div>
       <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
         <div class="flex items-center gap-4 mb-2">
@@ -133,13 +127,21 @@ const deleteClient = async () => {
         </div>
         <span>{{ blockedTasks }}</span>
       </div>
+      <div class="p-4 bg-gray-100 rounded w-full md:w-1/4">
+        <div class="flex items-center gap-4 mb-2">
+          <p class="text-xs font-medium">{{ t("Completed Tasks") }}</p>
+        </div>
+        <span>{{ completedTasks }}</span>
+      </div>
     </div>
 
     <div class="flex gap-4 flex-col items-center md:flex-row">
-      <ActionButton @click="goToEditClientPage">{{
-        t("Edit")
+      <ActionButton @click="goToEditClientPage">
+        {{ t("Edit")
       }}</ActionButton>
-      <ActionButton @click="confirmDeletion">{{ t("Delete") }}</ActionButton>
+      <ActionButton v-if="!internal" @click="confirmDeletion">
+        {{ t("Delete") }}
+      </ActionButton>
     </div>
   </div>
 </template>

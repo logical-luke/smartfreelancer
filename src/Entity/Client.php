@@ -49,6 +49,9 @@ class Client
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
 
+    #[ORM\Column]
+    private bool $internal = false;
+
     protected function __construct(User $owner, string $name)
     {
         $this->id = Uuid::v7();
@@ -245,5 +248,17 @@ class Client
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    public function isInternal(): bool
+    {
+        return $this->internal;
+    }
+
+    public function setInternal(bool $internal): static
+    {
+        $this->internal = $internal;
+
+        return $this;
     }
 }

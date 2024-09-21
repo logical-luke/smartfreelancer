@@ -8,8 +8,9 @@ export default interface Client {
     createdAt: number;
     revenue: number;
     timeWorked: number;
-    ongoingTasks: number;
-    plannedTasks: number;
-    finishedTasks: number;
+    todoTasks: number;
+    inProgressTasks: number;
     blockedTasks: number;
+    completedTasks: number;
+    internal: boolean;
 }
