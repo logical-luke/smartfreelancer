@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
-import { computed, ref, onMounted, nextTick } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useClientsStore } from '@/stores/clients';
-import ClientItem from '@/components/client/ClientItem.vue';
-import DraftClientItem from '@/components/client/DraftClientItem.vue';
+import ClientCard from '@/components/client/ClientCard.vue';
 
 const clientsStore = useClientsStore();
 const clients = computed(() => clientsStore.clients);
@@ -33,25 +32,17 @@ onMounted(() => {
   <transition name="slide">
     <div v-if="clients.length > 0 || showDraftClient" class="flex container flex-wrap gap-8 mb-8">
       <transition-group name="slide">
-        <ClientItem
+        <ClientCard
             v-for="client in clients"
             :key="client.id"
-            :id="client.id"
-            :name="client.name"
-            :email="client.email"
-            :phone="client.phone"
-            :avatar="client.avatar"
-            :revenue="client.revenue"
-            :time-worked="client.timeWorked"
-            :todo-tasks="client.todoTasks"
-            :in-progress-tasks="client.inProgressTasks"
-            :blocked-tasks="client.blockedTasks"
-            :completed-tasks="client.completedTasks"
-            :internal="client.internal"
+            :client="client"
+            :isDraft="false"
         />
-        <DraftClientItem
+        <ClientCard
             v-if="showDraftClient"
             key="draft"
+            :client="{ id: '', ownerId: '', name: '', avatar: null, phone: null, email: null, createdAt: Date.now(), revenue: 0, timeWorked: 0, todoTasks: 0, inProgressTasks: 0, blockedTasks: 0, completedTasks: 0, internal: false }"
+            :isDraft="true"
             @save="removeDraftClient"
             @discard="removeDraftClient"
         />
@@ -60,7 +51,7 @@ onMounted(() => {
   </transition>
   <button
       @click="addDraftClient"
-      class="fixed bottom-6 right-6 w-16 h-16 bg-indigo-500 text-white rounded-full shadow-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-300 flex items-center justify-center"
+      class="fixed bottom-6 right-6 w-16 h-16 bg-indigo-500 text-white rounded-full shadow hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-300 flex items-center justify-center"
   >
     <i class="pi pi-plus text-2xl"></i>
   </button>

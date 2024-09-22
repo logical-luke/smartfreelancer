@@ -61,7 +61,7 @@ function toggleTimeTracking() {
 
 <template>
   <div :class="[
-    'task-item rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 mb-4 p-4 sm:p-6',
+    'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-4 p-4 sm:p-6',
     { 'border-l-4': true },
     { 'border-yellow-300 bg-white': task.status === 'Todo' },
     { 'border-orange-300 bg-white': task.status === 'In Progress' },

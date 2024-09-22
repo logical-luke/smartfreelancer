@@ -5,7 +5,7 @@ const {t} = useI18n();
 import {defineProps} from 'vue';
 import SecondaryActionButton from "@/components/form/SecondaryActionButton.vue";
 import DestructiveActionButton from "@/components/form/DestructiveActionButton.vue";
-import TaskStatusCard from "@/components/TaskStatusCard.vue";
+import TaskStatusCard from "@/components/task/TaskStatusCard.vue";
 
 const props = defineProps<{
   id: string;
@@ -24,7 +24,7 @@ const progress = totalTasks > 0 ? (props.completedTasks / totalTasks) * 100 : 0;
 </script>
 
 <template>
-  <div class="w-full bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
+  <div class="w-full bg-white shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow">
     <div class="bg-gradient-to-r from-indigo-400 to-indigo-600 p-4">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
         <h3 class="text-xl sm:text-2xl font-bold text-white flex items-center">

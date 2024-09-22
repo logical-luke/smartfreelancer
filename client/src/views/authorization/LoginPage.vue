@@ -53,7 +53,7 @@ async function goToRegistration() {
 
 <template>
   <div class="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 p-4">
-    <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
+    <div class="bg-white rounded-lg shadow p-8 w-full max-w-md">
       <div class="flex justify-center w-full mb-8">
         <TransparentLogoWide />
       </div>

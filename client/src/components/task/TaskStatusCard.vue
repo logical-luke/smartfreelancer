@@ -46,7 +46,7 @@ const { bg, textMedium, textSemiBold, textBold } = getClass(color);
 </script>
 
 <template>
-  <div :class="`${bg} rounded-lg p-3 flex flex-col items-center justify-center transition-all duration-300 hover:shadow-md`">
+  <div :class="`${bg} rounded-lg p-3 flex flex-col items-center justify-center transition-all duration-300 hover:shadow`">
     <i :class="`pi ${icon} ${textMedium} text-xl mb-2`"></i>
     <span :class="`text-2xl font-bold ${textBold}`">{{ count }}</span>
     <p :class="`text-xs font-medium ${textSemiBold} text-center`">{{ label }}</p>
