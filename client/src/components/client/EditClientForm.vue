@@ -154,9 +154,9 @@ onMounted(async () => {
       >
         {{ t("Save") }}
       </MainActionButton>
-      <router-link :to="cancelPageRoute">
+      <RouterLink :to="cancelPageRoute">
         <ActionButton class="w-full md:w-auto">{{ t("Cancel") }}</ActionButton>
-      </router-link>
+      </RouterLink>
     </div>
   </div>
 </template>

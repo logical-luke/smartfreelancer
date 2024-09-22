@@ -5,7 +5,7 @@ import router from "./router";
 import {createPinia} from "pinia";
 import "./tailwind/tailwind.css";
 import "primeicons/primeicons.css";
-import Aura from '@primevue/themes/aura';
+import Lara from '@primevue/themes/lara';
 import Tooltip from "primevue/tooltip";
 
 
@@ -20,7 +20,7 @@ app.use(i18n);
 app.use(createPinia());
 app.use(router);
 
-const AuraIndigo = definePreset(Aura, {
+const LaraIndigo = definePreset(Lara, {
     semantic: {
         primary: {
             50: '{indigo.50}',
@@ -40,7 +40,7 @@ const AuraIndigo = definePreset(Aura, {
 
 app.use(PrimeVue, {
     theme: {
-        preset: AuraIndigo,
+        preset: LaraIndigo,
         options: {
             cssLayer: {
                 name: 'primevue',

@@ -8,6 +8,9 @@ import MainActionButton from '@/components/form/PrimaryActionButton.vue';
 import ActionButton from '@/components/form/SecondaryActionButton.vue';
 import ImageUploadInput from '@/components/form/ImageUploadInput.vue';
 import { useRouter } from 'vue-router';
+import Avatar from 'primevue/avatar';
+import OverlayBadge from 'primevue/overlaybadge';
+import AvatarGroup from 'primevue/avatargroup';
 
 const clientsStore = useClientsStore();
 const router = useRouter();
@@ -118,10 +121,16 @@ const submitForm = async () => {
         </label>
         <div class="flex items-center">
           <div v-if="hasAvatar()" class="mr-4 relative">
-            <img :src="client.avatar" alt="avatar" class="w-20 h-20 rounded-full border-4 border-indigo-200" />
-            <button @click="clearAvatar" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors duration-200">
-              <i class="pi pi-times"></i>
-            </button>
+            <AvatarGroup>
+              <OverlayBadge @click="clearAvatar" value="X" severity="danger" class="inline-flex">
+                <Avatar
+                    class="p-overlay-badge"
+                    :image="client.avatar"
+                    size="xlarge"
+                    shape="circle"
+                    :alt="client.name" />
+              </OverlayBadge>
+            </AvatarGroup>
           </div>
           <ImageUploadInput
               v-if="!hasAvatar()"
@@ -132,9 +141,9 @@ const submitForm = async () => {
       </div>
 
       <div class="flex flex-col sm:flex-row justify-end gap-4 mt-8">
-        <router-link :to="cancelPageRoute">
+        <RouterLink :to="cancelPageRoute">
           <ActionButton>{{ t("Cancel") }}</ActionButton>
-        </router-link>
+        </RouterLink>
         <MainActionButton
             :disabled="!canSubmitForm() || client.name.length === 0"
             @click="submitForm"

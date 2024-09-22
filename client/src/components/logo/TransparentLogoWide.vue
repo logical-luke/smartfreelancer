@@ -3,7 +3,7 @@ import { RouterLink } from 'vue-router';
 </script>
 
 <template>
-  <router-link to="/">
+  <RouterLink to="/">
     <div class="w-48">
     <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -284,5 +284,5 @@ import { RouterLink } from 'vue-router';
       </svg>
     </svg>
     </div>
-  </router-link>
+  </RouterLink>
 </template>

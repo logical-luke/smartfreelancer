@@ -20,7 +20,7 @@ readonly class ClientDtoArrayMapper
         $clientsArray = $clients->toArray();
 
         usort($clientsArray, static function ($a, $b) {
-            return $a->getCreatedAt() < $b->getCreatedAt();
+            return $a->getCreatedAt() > $b->getCreatedAt();
         });
 
         return array_map(function (Client $client) {

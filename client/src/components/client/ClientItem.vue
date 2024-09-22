@@ -8,6 +8,8 @@ import { useToast } from "primevue/usetoast";
 import DestructiveActionButton from "@/components/form/DestructiveActionButton.vue";
 import SecondaryActionButton from "@/components/form/SecondaryActionButton.vue";
 import TaskStatusCard from "@/components/TaskStatusCard.vue";
+import Avatar from "primevue/avatar";
+import AvatarGroup from "primevue/avatargroup";
 
 const props = defineProps<{
   id: string;
@@ -31,7 +33,6 @@ const toast = useToast();
 
 const hasPhone = () => !!props.phone;
 const hasEmail = () => !!props.email;
-const getAvatar = () => (props.avatar && props.avatar !== '' ? props.avatar : '/client-placeholder.png');
 
 const goToEditClientPage = async () => {
   await router.push({ name: 'EditClientPage', params: { id: props.id } });
@@ -72,11 +73,24 @@ const deleteClient = async () => {
     <div class="bg-gradient-to-r from-indigo-400 to-indigo-600 p-6">
       <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
         <div class="flex items-center">
-          <img
-              class="w-20 h-20 rounded-full border-4 border-white shadow-lg transition-transform duration-300 hover:scale-105"
-              :src="getAvatar()"
+          <AvatarGroup>
+          <Avatar
+              v-if="!props.avatar || props.avatar === ''"
+              icon="pi pi-user"
+              class="mr-2 transition-transform duration-300 hover:scale-105"
+              shape="circle"
+              size="xlarge"
               :alt="name"
           />
+          <Avatar
+              v-else
+              class="mr-2 transition-transform duration-300 hover:scale-105"
+              shape="circle"
+              :image="props.avatar"
+              size="xlarge"
+              :alt="name"
+          />
+          </AvatarGroup>
           <div class="ml-4 text-white">
             <h3 class="font-bold text-2xl">{{ name }}</h3>
             <p v-if="internal" class="text-blue-100">{{ t("You") }}</p>

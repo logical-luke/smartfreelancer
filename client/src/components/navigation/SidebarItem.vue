@@ -10,7 +10,7 @@ const goTo = props.goTo || '';
 
 <template>
   <li>
-    <router-link
+    <RouterLink
       class="flex items-center pl-3 py-4 pr-4 hover:bg-gray-900 text-gray-50 rounded"
       :to="goTo"
       active-class="bg-indigo-500"
@@ -20,7 +20,7 @@ const goTo = props.goTo || '';
         <slot name="icon"></slot>
       </span>
       <span><slot></slot></span>
-    </router-link>
+    </RouterLink>
   </li>
 </template>
 
