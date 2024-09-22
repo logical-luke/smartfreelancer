@@ -8,6 +8,7 @@ import ActionButton from '@/components/form/SecondaryActionButton.vue';
 import DestructiveActionButton from "@/components/form/DestructiveActionButton.vue";
 import TaskStatusCard from "@/components/task/TaskStatusCard.vue";
 import UploadAvatar from "@/components/form/UploadAvatar.vue";
+import Tag from "primevue/tag";
 import {defineProps, defineEmits} from 'vue';
 import Avatar from "primevue/avatar";
 import AvatarGroup from "primevue/avatargroup";
@@ -32,8 +33,8 @@ const emit = defineEmits(['save', 'discard']);
 const isEditing = ref(props.isDraft);
 const client = ref({...props.client});
 
-const emailRegex = /^\S+@\S+\.\S+$/;
-const phoneRegex = /^\+?[0-9]{1,4}[0-9]{6,14}$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const phoneRegex = /^\+?[0-9]{1,4}[-.\s]?[0-9]{3}[-.\s]?[0-9]{3,4}[-.\s]?[0-9]{3,4}$/;
 
 const nameError = ref('');
 const emailError = ref('');
@@ -58,23 +59,20 @@ onMounted(() => {
 });
 
 const validateName = () => {
-  console.log('validateName');
   if (!client.value.name || client.value.name === '') {
-    nameError.value = t('Name is required');
+    nameError.value = t('Name cannot be empty');
   } else {
     nameError.value = '';
   }
 };
 
 const revalidateName = () => {
-  console.log('revalidateName');
   if (nameError.value && nameError.value !== '') {
     validateName();
   }
 };
 
 const validateEmail = () => {
-  console.log('validateEmail');
   if (client.value.email && client.value.email !== '' && !emailRegex.test(client.value.email)) {
     emailError.value = t('Invalid email format');
   } else {
@@ -83,7 +81,6 @@ const validateEmail = () => {
 };
 
 const revalidateEmail = () => {
-  console.log('revalidateEmail');
   if (emailError.value && emailError.value !== '') {
     validateEmail();
   }
@@ -107,9 +104,11 @@ const saveClient = async () => {
   if (isValid.value) {
     if (props.isDraft) {
       await clientsStore.create(client.value);
+      toast.add({severity: 'success', summary: t('Created'), detail: t('Client created'), life: 3000});
       emit('save');
     } else {
       await clientsStore.update(client.value.id, client.value);
+      toast.add({severity: 'success', summary: t('Saved'), detail: t('Client saved'), life: 3000});
       isEditing.value = false;
     }
   }
@@ -137,7 +136,7 @@ const confirmDeletion = async () => {
     },
     accept: () => {
       deleteClient();
-      toast.add({severity: 'info', summary: t('Deleted'), detail: t('Client deleted'), life: 3000});
+      toast.add({severity: 'error', summary: t('Deleted'), detail: t('Client deleted'), life: 3000});
     }
   })
 };
@@ -168,127 +167,143 @@ watch(() => props.client, (newClient) => {
 <template>
   <div class="w-full bg-white shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow">
     <div class="bg-gradient-to-r from-indigo-400 to-indigo-500 p-6">
-      <div class="flex flex-col lg:flex-row justify-between items-center gap-4">
-        <div class="flex flex-col lg:flex-row items-center">
-          <UploadAvatar
-              v-if="isEditing && (!client.avatar || client.avatar === '')"
-              @update:avatar="updateAvatar"
-              class="mb-4 lg:mb-0"
-          />
-          <AvatarGroup v-else class="mb-4 lg:mb-0">
-            <Avatar
-                v-if="!client.avatar || client.avatar === ''"
-                icon="pi pi-user"
-                class="mr-2 transition-transform duration-300 hover:scale-105"
-                shape="circle"
-                size="xlarge"
-                :alt="client.name"
-            />
-            <Avatar
-                v-else
-                class="mr-2 transition-transform duration-300 hover:scale-105"
-                shape="circle"
-                :image="client.avatar"
-                size="xlarge"
-                :alt="client.name"
-            />
-          </AvatarGroup>
-          <div class="ml-0 lg:ml-4 text-white">
-            <div v-if="isEditing" class="flex flex-col gap-2">
-              <InputText
-                  id="editNameInput"
-                  v-model="client.name"
-                  :placeholder="t('John Doe')"
-                  class="text-2xl font-bold w-full"
-                  :invalid="isNameInvalid"
-                  @blur="validateName"
-                  @update:model-value="revalidateName"
-                  @keydown="handleKeyDown"
+      <div :class="['flex flex-col lg:flex-row items-center lg:items-center gap-4', { 'justify-center lg:justify-between': !client.email && !client.phone, 'justify-between': client.email || client.phone }]">
+        <div class="flex flex-col lg:flex-row items-center lg:items-center w-full lg:w-auto">
+          <div class="flex items-center w-full lg:w-auto">
+            <div class="flex items-center">
+              <UploadAvatar
+                  v-if="isEditing && (!client.avatar || client.avatar === '')"
+                  @update:avatar="updateAvatar"
+                  class="mb-4 lg:mb-0"
               />
-              <small id="name-help" class="text-white" v-if="isNameInvalid">{{ t('Name is required') }}</small>
+              <AvatarGroup v-else>
+                <Avatar
+                    v-if="!client.avatar || client.avatar === ''"
+                    icon="pi pi-user"
+                    class="mr-2 transition-transform duration-300 hover:scale-105"
+                    shape="circle"
+                    size="xlarge"
+                    :alt="client.name"
+                />
+                <Avatar
+                    v-else
+                    class="mr-2 transition-transform duration-300 hover:scale-105"
+                    shape="circle"
+                    :image="client.avatar"
+                    size="xlarge"
+                    :alt="client.name"
+                />
+              </AvatarGroup>
             </div>
-            <h3 v-else class="font-bold text-2xl">{{ client.name }}</h3>
-            <p v-if="client.internal" class="text-blue-100">{{ t("You") }}</p>
+            <div class="ml-4 text-white w-full lg:w-auto flex items-center">
+              <div v-if="isEditing" class="flex flex-col gap-2 w-full">
+                <label class="block text-sm font-medium text-white mb-1">{{ t("NAME") }}</label>
+                <InputText
+                    id="editNameInput"
+                    v-model="client.name"
+                    :placeholder="t('John Doe')"
+                    class="w-full"
+                    :invalid="isNameInvalid"
+                    aria-describedby="name-help"
+                    @blur="validateName"
+                    @update:model-value="revalidateName"
+                    @keydown="handleKeyDown"
+                />
+                <Tag severity="danger" class="w-full" v-if="isNameInvalid" :value="nameError"/>
+                <small id="name-help" class="text-white">{{ t("Name is required") }}</small>
+              </div>
+              <h3 v-else class="font-bold text-2xl">{{ client.name }}</h3>
+              <p v-if="client.internal" class="text-blue-100">{{ t("You") }}</p>
+            </div>
           </div>
         </div>
-        <div class="flex flex-col lg:flex-row gap-2 items-center justify-center h-full">
+        <div v-if="isEditing || client.email || client.phone" class="flex flex-col lg:flex-row gap-2 items-center justify-center h-full w-full lg:w-auto">
           <template v-if="isEditing">
-            <div class="flex flex-col gap-2 items-center justify-center h-full w-full lg:w-auto">
-              <IconField>
+            <div class="flex flex-col gap-2 items-start justify-center h-full w-full">
+              <label class="block text-sm font-medium text-white mb-1">{{ t("EMAIL") }}</label>
+              <IconField class="w-full">
                 <InputIcon class="pi pi-envelope"/>
                 <InputText
                     v-model="client.email"
-                    placeholder="john.doe@company.com"
-                    class="rounded-full transition-colors duration-300 w-full lg:w-auto"
+                    :placeholder="t('example@example.com')"
+                    class="w-full"
                     :invalid="isEmailInvalid"
+                    aria-describedby="email-help"
                     @blur="validateEmail"
                     @update:model-value="revalidateEmail"
-                    @keydown="handleKeyDown"
                 />
               </IconField>
-              <small id="email-help" class="text-white" v-if="isEmailInvalid">{{ t('Invalid email format') }}</small>
+              <Tag severity="danger" class="w-full" v-if="isEmailInvalid" :value="emailError"/>
+              <small id="email-help" class="text-white">{{ t('Format: example@example.com') }}</small>
             </div>
-            <div class="flex flex-col gap-2 items-center justify-center h-full w-full lg:w-auto">
-              <IconField>
+            <div class="flex flex-col gap-2 items-start justify-center h-full w-full">
+              <label class="block text-sm font-medium text-white mb-1">{{ t("PHONE") }}</label>
+              <IconField class="w-full">
                 <InputIcon class="pi pi-phone"/>
                 <InputText
                     v-model="client.phone"
-                    placeholder="+48 123 456 789"
-                    class="rounded-full transition-colors duration-300 w-full lg:w-auto"
+                    :placeholder="t('+123-456-7890')"
+                    class="w-full"
                     :invalid="isPhoneInvalid"
+                    aria-describedby="phone-help"
                     @blur="validatePhone"
                     @update:model-value="revalidatePhone"
-                    @keydown="handleKeyDown"
                 />
               </IconField>
-              <small id="phone-help" class="text-white" v-if="isPhoneInvalid">{{ t('Invalid phone format') }}</small>
+              <Tag severity="danger" class="w-full" v-if="isPhoneInvalid" :value="phoneError"/>
+              <small id="phone-help" class="text-white">{{ t('Expected format: +123-456-7890') }}</small>
             </div>
           </template>
           <template v-else>
-            <a v-if="client.email" :href="`mailto:${client.email}`"
-               class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full lg:w-auto">
-              <i class="pi pi-envelope mr-2"></i>
-              <span class="text-sm">{{ client.email }}</span>
-            </a>
-            <a v-if="client.phone" :href="`tel:${client.phone}`"
-               class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full lg:w-auto">
-              <i class="pi pi-phone mr-2"></i>
-              <span class="text-sm">{{ client.phone }}</span>
-            </a>
+            <div class="flex flex-col gap-2 items-end justify-center h-full w-full lg:w-auto">
+              <a v-if="client.email" :href="`mailto:${client.email}`"
+                 class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full lg:w-auto">
+                <i class="pi pi-envelope mr-2"></i>
+                <span class="text-sm">{{ client.email }}</span>
+              </a>
+            </div>
+            <div class="flex flex-col gap-2 items-end justify-center h-full w-full lg:w-auto">
+              <a v-if="client.phone" :href="`tel:${client.phone}`"
+                 class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full lg:w-auto">
+                <i class="pi pi-phone mr-2"></i>
+                <span class="text-sm">{{ client.phone }}</span>
+              </a>
+            </div>
           </template>
         </div>
       </div>
     </div>
 
     <div class="p-6">
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-        <div v-if="!client.internal"
-             class="bg-blue-50 rounded-lg p-6 flex items-center justify-between transition-all duration-300 hover:shadow">
-          <div>
-            <p class="text-sm font-medium text-gray-600">{{ t("Revenue") }}</p>
-            <span class="text-3xl font-bold text-blue-700">{{ client.revenue }} $</span>
+      <template v-if="!isEditing">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+          <div v-if="!client.internal"
+               class="bg-blue-50 rounded-lg p-6 flex items-center justify-between transition-all duration-300 hover:shadow">
+            <div>
+              <p class="text-sm font-medium text-gray-600">{{ t("Revenue") }}</p>
+              <span class="text-3xl font-bold text-blue-700">{{ client.revenue }} $</span>
+            </div>
+            <i class="pi pi-dollar text-5xl text-blue-300"></i>
           </div>
-          <i class="pi pi-dollar text-5xl text-blue-300"></i>
-        </div>
-        <div
-            class="bg-green-50 rounded-lg p-6 flex items-center justify-between transition-all duration-300 hover:shadow">
-          <div>
-            <p class="text-sm font-medium text-gray-600">{{ t("Time Worked") }}</p>
-            <span class="text-3xl font-bold text-green-700">{{ client.timeWorked }} {{ t("hours") }}</span>
+          <div
+              class="bg-green-50 rounded-lg p-6 flex items-center justify-between transition-all duration-300 hover:shadow">
+            <div>
+              <p class="text-sm font-medium text-gray-600">{{ t("Time Worked") }}</p>
+              <span class="text-3xl font-bold text-green-700">{{ client.timeWorked }} {{ t("hours") }}</span>
+            </div>
+            <i class="pi pi-clock text-5xl text-green-300"></i>
           </div>
-          <i class="pi pi-clock text-5xl text-green-300"></i>
         </div>
-      </div>
 
-      <h4 class="text-xl font-semibold text-gray-700 mb-4">{{ t("Task Overview") }}</h4>
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-        <TaskStatusCard :count="client.inProgressTasks" :label="t('In Progress')" icon="pi-spin pi-spinner"
-                        color="orange"/>
-        <TaskStatusCard :count="client.todoTasks" :label="t('Todo')" icon="pi-list" color="yellow"/>
-        <TaskStatusCard :count="client.blockedTasks" :label="t('Blocked')" icon="pi-ban" color="red"/>
-        <TaskStatusCard :count="client.completedTasks" :label="t('Completed')" icon="pi-check-circle" color="green"/>
-      </div>
-
+        <h4 class="text-xl font-semibold text-gray-700 mb-4">{{ t("Task Overview") }}</h4>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+          <TaskStatusCard :count="client.inProgressTasks" :label="t('In Progress')" icon="pi-spin pi-spinner"
+                          color="orange"/>
+          <TaskStatusCard :count="client.todoTasks" :label="t('Todo')" icon="pi-list" color="yellow"/>
+          <TaskStatusCard :count="client.blockedTasks" :label="t('Blocked')" icon="pi-ban" color="red"/>
+          <TaskStatusCard :count="client.completedTasks" :label="t('Completed')" icon="pi-check-circle" color="green"/>
+        </div>
+      </template>
       <div class="flex flex-col sm:flex-row justify-end gap-4">
         <template v-if="isEditing">
           <ActionButton @click="discardClient">
