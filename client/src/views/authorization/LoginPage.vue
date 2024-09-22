@@ -58,14 +58,14 @@ async function goToRegistration() {
         <TransparentLogoWide />
       </div>
 
-      <form @submit.prevent="login" class="space-y-6">
+      <form class="space-y-6" @submit.prevent="login">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1" for="email">
             {{ t("EMAIL") }}
           </label>
           <InputText
-              v-model="email"
               id="email"
+              v-model="email"
               class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
               type="email"
               autocomplete="email"
@@ -78,13 +78,13 @@ async function goToRegistration() {
             {{ t("PASSWORD") }}
           </label>
           <Password
-              v-model="password"
               id="password"
+              v-model="password"
               :toggle-mask="true"
               autocomplete="current-password"
               :feedback="false"
               class="w-full"
-              inputClass="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+              input-class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
               required
           />
         </div>
@@ -103,12 +103,12 @@ async function goToRegistration() {
             </span>
         </Divider>
 
-        <MainActionButton :full-width="true" @click="loginWithGoogle" type="button">
+        <MainActionButton :full-width="true" type="button" @click="loginWithGoogle">
           <i class="pi pi-google mr-2"></i>
           {{ t("Log In with Google") }}
         </MainActionButton>
 
-        <ActionButton :full-width="true" @click="goToRegistration" type="button">
+        <ActionButton :full-width="true" type="button" @click="goToRegistration">
           {{ t("Sign Up for an Account") }}
         </ActionButton>
       </form>

@@ -11,7 +11,6 @@ import LanguageSwitcher from "@/components/navigation/LanguageSwitcher.vue";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Divider from "primevue/divider";
-import api from "@/services/api";
 import { useToast } from "primevue/usetoast";
 import isValidEmail from "@/services/isValidEmail";
 
@@ -86,14 +85,14 @@ const redirectToLogin = () => {
         <TransparentLogoWide />
       </div>
 
-      <form @submit.prevent="register" class="space-y-6">
+      <form class="space-y-6" @submit.prevent="register">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1" for="email">
             {{ t("EMAIL") }}
           </label>
           <InputText
-              v-model="email"
               id="email"
+              v-model="email"
               class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
               type="email"
               autocomplete="email"
@@ -112,8 +111,8 @@ const redirectToLogin = () => {
             {{ t("PASSWORD") }}
           </label>
           <Password
-              v-model="password"
               id="password"
+              v-model="password"
               :toggle-mask="true"
               autocomplete="new-password"
               prompt-label=" "
@@ -121,7 +120,7 @@ const redirectToLogin = () => {
               :medium-label="t('Medium password')"
               :strong-label="t('Strong password')"
               class="w-full"
-              inputClass="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+              input-class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
               required
               fluid
           >
@@ -147,13 +146,13 @@ const redirectToLogin = () => {
             {{ t("CONFIRM PASSWORD") }}
           </label>
           <Password
-              v-model="confirmPassword"
               id="confirm-password"
+              v-model="confirmPassword"
               :toggle-mask="true"
               autocomplete="new-password"
               :feedback="false"
               class="w-full"
-              inputClass="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+              input-class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
               required
               fluid
           />
@@ -173,12 +172,12 @@ const redirectToLogin = () => {
             </span>
         </Divider>
 
-        <MainActionButton :full-width="true" @click="loginWithGoogle" type="button">
+        <MainActionButton :full-width="true" type="button" @click="loginWithGoogle">
           <i class="pi pi-google mr-2"></i>
           {{ t("Sign Up with Google") }}
         </MainActionButton>
 
-        <ActionButton :full-width="true" @click="redirectToLogin" type="button">
+        <ActionButton :full-width="true" type="button" @click="redirectToLogin">
           {{ t("Log In to Your Account") }}
         </ActionButton>
       </form>

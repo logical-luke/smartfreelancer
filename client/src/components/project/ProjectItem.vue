@@ -46,7 +46,8 @@ const progress = totalTasks > 0 ? (props.completedTasks / totalTasks) * 100 : 0;
           <span class="text-sm font-bold text-indigo-600">{{ progress.toFixed(2) }}%</span>
         </div>
         <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-          <div class="h-full bg-indigo-500 rounded-full transition-all duration-300 ease-in-out"
+          <div
+class="h-full bg-indigo-500 rounded-full transition-all duration-300 ease-in-out"
                :style="{ width: progress + '%' }"></div>
         </div>
       </div>

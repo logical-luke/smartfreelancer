@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useI18n } from 'vue-i18n';
 import Avatar from 'primevue/avatar';
 import AvatarGroup from 'primevue/avatargroup';
 import { useAuthorizationStore } from "@/stores/auth";
 
-const { t } = useI18n();
 const authStore = useAuthorizationStore();
 
 const emit = defineEmits(['update:avatar']);

@@ -173,8 +173,8 @@ watch(() => props.client, (newClient) => {
             <div class="flex items-center">
               <UploadAvatar
                   v-if="isEditing && (!client.avatar || client.avatar === '')"
-                  @update:avatar="updateAvatar"
                   class="mb-4 lg:mb-0"
+                  @update:avatar="updateAvatar"
               />
               <AvatarGroup v-else>
                 <Avatar
@@ -209,7 +209,7 @@ watch(() => props.client, (newClient) => {
                     @update:model-value="revalidateName"
                     @keydown="handleKeyDown"
                 />
-                <Tag severity="danger" class="w-full" v-if="isNameInvalid" :value="nameError"/>
+                <Tag v-if="isNameInvalid" severity="danger" class="w-full" :value="nameError"/>
                 <small id="name-help" class="text-white">{{ t("Name is required") }}</small>
               </div>
               <h3 v-else class="font-bold text-2xl">{{ client.name }}</h3>
@@ -233,7 +233,7 @@ watch(() => props.client, (newClient) => {
                     @update:model-value="revalidateEmail"
                 />
               </IconField>
-              <Tag severity="danger" class="w-full" v-if="isEmailInvalid" :value="emailError"/>
+              <Tag v-if="isEmailInvalid" severity="danger" class="w-full" :value="emailError"/>
               <small id="email-help" class="text-white">{{ t('Format: example@example.com') }}</small>
             </div>
             <div class="flex flex-col gap-2 items-start justify-center h-full w-full">
@@ -250,20 +250,22 @@ watch(() => props.client, (newClient) => {
                     @update:model-value="revalidatePhone"
                 />
               </IconField>
-              <Tag severity="danger" class="w-full" v-if="isPhoneInvalid" :value="phoneError"/>
+              <Tag v-if="isPhoneInvalid" severity="danger" class="w-full" :value="phoneError"/>
               <small id="phone-help" class="text-white">{{ t('Expected format: +123-456-7890') }}</small>
             </div>
           </template>
           <template v-else>
             <div class="flex flex-col gap-2 items-end justify-center h-full w-full lg:w-auto">
-              <a v-if="client.email" :href="`mailto:${client.email}`"
+              <a
+v-if="client.email" :href="`mailto:${client.email}`"
                  class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full lg:w-auto">
                 <i class="pi pi-envelope mr-2"></i>
                 <span class="text-sm">{{ client.email }}</span>
               </a>
             </div>
             <div class="flex flex-col gap-2 items-end justify-center h-full w-full lg:w-auto">
-              <a v-if="client.phone" :href="`tel:${client.phone}`"
+              <a
+v-if="client.phone" :href="`tel:${client.phone}`"
                  class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full lg:w-auto">
                 <i class="pi pi-phone mr-2"></i>
                 <span class="text-sm">{{ client.phone }}</span>
@@ -277,7 +279,8 @@ watch(() => props.client, (newClient) => {
     <div class="p-6">
       <template v-if="!isEditing">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-          <div v-if="!client.internal"
+          <div
+v-if="!client.internal"
                class="bg-blue-50 rounded-lg p-6 flex items-center justify-between transition-all duration-300 hover:shadow">
             <div>
               <p class="text-sm font-medium text-gray-600">{{ t("Revenue") }}</p>
@@ -297,7 +300,8 @@ watch(() => props.client, (newClient) => {
 
         <h4 class="text-xl font-semibold text-gray-700 mb-4">{{ t("Task Overview") }}</h4>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-          <TaskStatusCard :count="client.inProgressTasks" :label="t('In Progress')" icon="pi-spin pi-spinner"
+          <TaskStatusCard
+:count="client.inProgressTasks" :label="t('In Progress')" icon="pi-spin pi-spinner"
                           color="orange"/>
           <TaskStatusCard :count="client.todoTasks" :label="t('Todo')" icon="pi-list" color="yellow"/>
           <TaskStatusCard :count="client.blockedTasks" :label="t('Blocked')" icon="pi-ban" color="red"/>

@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import {computed, ref} from 'vue';
 import Checkbox from 'primevue/checkbox';
-import Tag from 'primevue/tag';
-import Button from 'primevue/button';
 
 interface Task {
   id: number;
@@ -60,7 +58,8 @@ function toggleTimeTracking() {
 </script>
 
 <template>
-  <div :class="[
+  <div
+:class="[
     'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-4 p-4 sm:p-6',
     { 'border-l-4': true },
     { 'border-yellow-300 bg-white': task.status === 'Todo' },
@@ -69,20 +68,22 @@ function toggleTimeTracking() {
     { 'border-red-300 bg-white': task.status === 'Blocked' },
   ]">
     <div class="flex">
-      <Checkbox v-model="task.completed" :binary="true" class="mt-1 mr-3 flex-shrink-0" @change="toggleComplete" />
+      <Checkbox value="task.completed" :binary="true" class="mt-1 mr-3 flex-shrink-0" @change="toggleComplete" />
       <div class="flex-grow">
         <div class="flex flex-wrap items-start mb-3">
           <h3 :class="['text-lg font-semibold mr-2 break-words', { 'line-through': task.completed }]">
             {{ task.title }}
           </h3>
-          <span :class="[
+          <span
+:class="[
             'text-xs font-medium px-2 py-1 rounded flex items-center',
             { 'bg-yellow-100 text-yellow-800': task.status === 'Todo' },
             { 'bg-orange-100 text-orange-800': task.status === 'In Progress' },
             { 'bg-green-100 text-green-800': task.status === 'Completed' },
             { 'bg-red-100 text-red-800': task.status === 'Blocked' },
           ]">
-            <i :class="[
+            <i
+:class="[
               'mr-1',
               { 'pi pi-list': task.status === 'Todo' },
               { 'pi pi-spin pi-spinner': task.status === 'In Progress' },
@@ -93,10 +94,10 @@ function toggleTimeTracking() {
           </span>
         </div>
         <div class="text-sm text-gray-600 flex flex-wrap gap-3 items-center">
-          <span v-if="task.project" class="flex items-center" v-tooltip.top="'Project'">
+          <span v-if="task.project" v-tooltip.top="'Project'" class="flex items-center">
             <i class="pi pi-folder mr-1"></i>{{ task.project }}
           </span>
-          <span v-if="task.client" class="flex items-center" v-tooltip.top="'Client'">
+          <span v-if="task.client" v-tooltip.top="'Client'" class="flex items-center">
             <i class="pi pi-user mr-1"></i>{{ task.client }}
           </span>
           <span v-if="task.dueDate" :class="{ 'text-red-500': isOverdue }" class="flex items-center">
