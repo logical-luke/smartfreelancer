@@ -1,6 +1,5 @@
 import {createRouter, createWebHistory} from "vue-router";
 import LoginPage from "@/views/authorization/LoginPage.vue";
-import AddClientPage from "@/views/client/AddClientPage.vue";
 import DeepWorkHubPage from "@/views/deepWorkHub/DeepWorkHubPage.vue";
 import ReportsPage from "@/views/report/ReportsPage.vue";
 import RegistrationPage from "@/views/authorization/RegistrationPage.vue";
@@ -14,7 +13,6 @@ import InvoicesPage from "@/views/invoice/InvoicesPage.vue";
 import ClientsPage from "../views/client/ClientsPage.vue";
 import ProjectsPage from "../views/project/ProjectsPage.vue";
 import TasksPage from "../views/task/TasksPage.vue";
-import EditClientPage from "@/views/client/EditClientPage.vue";
 import {useAuthorizationStore} from "@/stores/auth";
 
 const router = createRouter({
@@ -53,14 +51,6 @@ const router = createRouter({
             meta: {
                 requiresAuth: true,
             },
-        },
-        {
-            path: "/client/add",
-            name: "AddClientPage",
-            meta: {
-                requiresAuth: true,
-            },
-            component: AddClientPage,
         },
         {
             path: "/automations",
@@ -125,14 +115,6 @@ const router = createRouter({
                 requiresAuth: true,
             },
             component: TasksPage,
-        },
-        {
-            path: "/client/edit/:id",
-            name: "EditClientPage",
-            meta: {
-                requiresAuth: true,
-            },
-            component: EditClientPage,
         },
         {
             path: "/:pathMatch(.*)*",
