@@ -153,6 +153,10 @@ const updateAvatar = (avatar: string) => {
   client.value.avatar = avatar;
 };
 
+const clearAvatar = () => {
+  client.value.avatar = '';
+};
+
 const handleKeyDown = (event: KeyboardEvent) => {
   if (event.key === 'Enter') {
     saveClient();

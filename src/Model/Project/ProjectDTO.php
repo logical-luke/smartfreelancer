@@ -11,9 +11,9 @@ readonly class ProjectDTO
     protected function __construct(
         public string $id,
         public string $ownerId,
+        public string $clientId,
         public ?string $name,
         public ?string $description,
-        public ?string $clientId,
     ) {
     }
 
@@ -22,9 +22,9 @@ readonly class ProjectDTO
         return new self(
             $project->getId()?->toRfc4122(),
             $project->getOwner()?->getId()?->toRfc4122(),
+            $project->getClient()?->getId()?->toRfc4122(),
             $project->getName(),
             $project->getDescription(),
-            $project->getClient()?->getId()?->toRfc4122(),
         );
     }
 }

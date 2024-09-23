@@ -7,6 +7,13 @@ import { useAuthorizationStore } from "@/stores/auth";
 const authStore = useAuthorizationStore();
 
 const emit = defineEmits(['update:avatar']);
+const props = defineProps({
+  avatar: String,
+  placeholderIcon: {
+    type: String,
+    default: 'pi pi-user'
+  }
+});
 
 const uploadApiURL = computed(() => {
   return process.env.API_BASE_URL + "/upload/image";
@@ -25,7 +32,7 @@ const uploadFile = async (event: Event) => {
   }
 
   const formData = new FormData();
-  formData.append('image', file);  // Changed 'file' to 'image'
+  formData.append('image', file);
 
   try {
     const response = await fetch(uploadApiURL.value, {
@@ -66,7 +73,15 @@ const triggerFileInput = () => {
     />
     <AvatarGroup @click="triggerFileInput">
       <Avatar
-          icon="pi pi-user"
+          v-if="avatar"
+          :image="avatar"
+          size="xlarge"
+          class="mr-2 transition-transform duration-300 hover:scale-105 cursor-pointer"
+          shape="circle"
+      />
+      <Avatar
+          v-else
+          :icon="placeholderIcon"
           size="xlarge"
           class="mr-2 transition-transform duration-300 hover:scale-105 cursor-pointer"
           shape="circle"

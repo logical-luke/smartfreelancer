@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProjectRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,12 +24,19 @@ class Project
     #[ORM\Column(length: 10000, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'projects')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $owner;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $dueDate = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $avatar = null;
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
-    private ?Client $client = null;
+    #[ORM\JoinColumn(nullable: false)]
+    private User $owner;
+
+    #[ORM\ManyToOne(inversedBy: 'projects')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Client $client;
 
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: Task::class)]
     private Collection $tasks;
@@ -39,16 +47,24 @@ class Project
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: TimeEntry::class)]
     private Collection $timeEntries;
 
-    protected function __construct(User $owner, Uuid $id, string $name)
+    #[ORM\Column]
+    private DateTimeImmutable $createdAt;
+
+
+    protected function __construct(User $owner, string $name, Client $client)
     {
+        $this->id = Uuid::v7();
         $this->owner = $owner;
+        $this->name = $name;
+        $this->client = $client;
+        $this->createdAt = new DateTimeImmutable();
         $this->timeEntries = new ArrayCollection();
         $this->tasks = new ArrayCollection();
     }
 
-    public static function fromUser(User $owner, Uuid $id, string $name): self
+    public static function from(User $owner, string $name, Client $client): self
     {
-        return new self($owner, $id, $name);
+        return new self($owner, $name, $client);
     }
 
     public function getId(): Uuid
@@ -80,7 +96,31 @@ class Project
         return $this;
     }
 
-    public function getOwner(): ?User
+    public function getDueDate(): ?string
+    {
+        return $this->dueDate;
+    }
+
+    public function setDueDate(?string $dueDate): self
+    {
+        $this->dueDate = $dueDate;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): self
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    public function getOwner(): User
     {
         return $this->owner;
     }
@@ -92,12 +132,12 @@ class Project
         return $this;
     }
 
-    public function getClient(): ?Client
+    public function getClient(): Client
     {
         return $this->client;
     }
 
-    public function setClient(?Client $client): self
+    public function setClient(Client $client): self
     {
         $this->client = $client;
 
@@ -184,5 +224,10 @@ class Project
         }
 
         return $this;
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
     }
 }
