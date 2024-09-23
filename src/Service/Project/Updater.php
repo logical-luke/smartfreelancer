@@ -8,6 +8,7 @@ use App\Entity\Project;
 use App\Exception\ForbiddenActionException;
 use App\Exception\ResourceNotFoundException;
 use App\Model\Project\UpdateProjectPayload;
+use App\Repository\ClientRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\UserRepository;
 
@@ -16,6 +17,7 @@ readonly class Updater
     public function __construct(
         private UserRepository $userRepository,
         private ProjectRepository $projectRepository,
+        private ClientRepository $clientRepository,
     ) {
     }
 
@@ -28,12 +30,17 @@ readonly class Updater
             throw new ResourceNotFoundException('project', $payload->getProjectId());
         }
 
+        if (!$client = $this->clientRepository->find($payload->getClientId())) {
+            throw new ResourceNotFoundException('client', $payload->getClientId());
+        }
+
         if ($project->getOwner() !== $user) {
             throw new ForbiddenActionException('update', 'project', $project->getId());
         }
 
         $project
             ->setName($payload->getName())
+            ->setClient($client)
             ->setDescription($payload->getDescription())
             ->setDueDate($payload->getDueDate())
             ->setAvatar($payload->getAvatar());

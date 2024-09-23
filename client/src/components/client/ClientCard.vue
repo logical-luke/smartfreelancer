@@ -8,6 +8,7 @@ import ActionButton from '@/components/form/SecondaryActionButton.vue';
 import DestructiveActionButton from "@/components/form/DestructiveActionButton.vue";
 import TaskStatusCard from "@/components/task/TaskStatusCard.vue";
 import UploadAvatar from "@/components/form/UploadAvatar.vue";
+import OverlayBadge from "primevue/overlaybadge";
 import Tag from "primevue/tag";
 import {defineProps, defineEmits} from 'vue';
 import Avatar from "primevue/avatar";
@@ -157,6 +158,8 @@ const clearAvatar = () => {
   client.value.avatar = '';
 };
 
+const hasAvatar = computed(() => client.value.avatar && client.value.avatar !== '');
+
 const handleKeyDown = (event: KeyboardEvent) => {
   if (event.key === 'Enter') {
     saveClient();
@@ -171,18 +174,18 @@ watch(() => props.client, (newClient) => {
 <template>
   <div class="w-full bg-white shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow">
     <div class="bg-gradient-to-r from-indigo-400 to-indigo-500 p-6">
-      <div :class="['flex flex-col lg:flex-row items-center lg:items-center gap-4', { 'justify-center lg:justify-between': !client.email && !client.phone, 'justify-between': client.email || client.phone }]">
+      <div
+          :class="['flex flex-col lg:flex-row items-center lg:items-center gap-4', { 'justify-center lg:justify-between': !client.email && !client.phone, 'justify-between': client.email || client.phone }]">
         <div class="flex flex-col lg:flex-row items-center lg:items-center w-full lg:w-auto">
           <div class="flex items-center w-full lg:w-auto">
-            <div class="flex items-center">
+            <div class="flex items-center relative">
               <UploadAvatar
-                  v-if="isEditing && (!client.avatar || client.avatar === '')"
-                  class="mb-4 lg:mb-0"
+                  v-if="isEditing && !hasAvatar"
                   @update:avatar="updateAvatar"
               />
               <AvatarGroup v-else>
                 <Avatar
-                    v-if="!client.avatar || client.avatar === ''"
+                    v-if="!hasAvatar"
                     icon="pi pi-user"
                     class="mr-2 transition-transform duration-300 hover:scale-105"
                     shape="circle"
@@ -197,6 +200,8 @@ watch(() => props.client, (newClient) => {
                     size="xlarge"
                     :alt="client.name"
                 />
+                <i v-if="isEditing && hasAvatar" @click="clearAvatar"
+                   class="pi pi-times-circle text-white bg-red-500 rounded-full absolute top-0 right-0 text-xl"></i>
               </AvatarGroup>
             </div>
             <div class="ml-4 text-white w-full lg:w-auto flex items-center">
@@ -221,7 +226,8 @@ watch(() => props.client, (newClient) => {
             </div>
           </div>
         </div>
-        <div v-if="isEditing || client.email || client.phone" class="flex flex-col lg:flex-row gap-2 items-center justify-center h-full w-full lg:w-auto">
+        <div v-if="isEditing || client.email || client.phone"
+             class="flex flex-col lg:flex-row gap-2 items-center justify-center h-full w-full lg:w-auto">
           <template v-if="isEditing">
             <div class="flex flex-col gap-2 items-start justify-center h-full w-full">
               <label class="block text-sm font-medium text-white mb-1">{{ t("EMAIL") }}</label>
@@ -261,16 +267,16 @@ watch(() => props.client, (newClient) => {
           <template v-else>
             <div class="flex flex-col gap-2 items-end justify-center h-full w-full lg:w-auto">
               <a
-v-if="client.email" :href="`mailto:${client.email}`"
-                 class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full lg:w-auto">
+                  v-if="client.email" :href="`mailto:${client.email}`"
+                  class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full lg:w-auto">
                 <i class="pi pi-envelope mr-2"></i>
                 <span class="text-sm">{{ client.email }}</span>
               </a>
             </div>
             <div class="flex flex-col gap-2 items-end justify-center h-full w-full lg:w-auto">
               <a
-v-if="client.phone" :href="`tel:${client.phone}`"
-                 class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full lg:w-auto">
+                  v-if="client.phone" :href="`tel:${client.phone}`"
+                  class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full lg:w-auto">
                 <i class="pi pi-phone mr-2"></i>
                 <span class="text-sm">{{ client.phone }}</span>
               </a>
@@ -284,8 +290,8 @@ v-if="client.phone" :href="`tel:${client.phone}`"
       <template v-if="!isEditing">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
           <div
-v-if="!client.internal"
-               class="bg-blue-50 rounded-lg p-6 flex items-center justify-between transition-all duration-300 hover:shadow">
+              v-if="!client.internal"
+              class="bg-blue-50 rounded-lg p-6 flex items-center justify-between transition-all duration-300 hover:shadow">
             <div>
               <p class="text-sm font-medium text-gray-600">{{ t("Revenue") }}</p>
               <span class="text-3xl font-bold text-blue-700">{{ client.revenue }} $</span>
@@ -305,8 +311,8 @@ v-if="!client.internal"
         <h4 class="text-xl font-semibold text-gray-700 mb-4">{{ t("Task Overview") }}</h4>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
           <TaskStatusCard
-:count="client.inProgressTasks" :label="t('In Progress')" icon="pi-spin pi-spinner"
-                          color="orange"/>
+              :count="client.inProgressTasks" :label="t('In Progress')" icon="pi-spin pi-spinner"
+              color="orange"/>
           <TaskStatusCard :count="client.todoTasks" :label="t('Todo')" icon="pi-list" color="yellow"/>
           <TaskStatusCard :count="client.blockedTasks" :label="t('Blocked')" icon="pi-ban" color="red"/>
           <TaskStatusCard :count="client.completedTasks" :label="t('Completed')" icon="pi-check-circle" color="green"/>

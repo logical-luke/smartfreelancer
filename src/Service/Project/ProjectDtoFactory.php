@@ -11,6 +11,6 @@ class ProjectDtoFactory
 {
     public function __invoke(Project $project): ProjectDto
     {
-        return ProjectDto::fromProject($project);
+        return ProjectDto::fromProject($project, 0, 0, 0, 0, 0, 0);
     }
 }

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, computed, nextTick, onMounted, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { useProjectsStore } from '@/stores/projects';
-import { useClientsStore } from '@/stores/clients';
+import {ref, computed, nextTick, onMounted, watch} from 'vue';
+import {useI18n} from 'vue-i18n';
+import {useProjectsStore} from '@/stores/projects';
+import {useClientsStore} from '@/stores/clients';
 import InputText from 'primevue/inputtext';
 import DatePicker from 'primevue/datepicker';
 import Select from 'primevue/select';
@@ -10,26 +10,38 @@ import DestructiveActionButton from "@/components/form/DestructiveActionButton.v
 import TaskStatusCard from '@/components/task/TaskStatusCard.vue';
 import ProgressBar from 'primevue/progressbar';
 import UploadAvatar from '@/components/form/UploadAvatar.vue';
-import { defineProps, defineEmits } from 'vue';
+import {defineProps, defineEmits} from 'vue';
 import type Project from '@/interfaces/project';
 import PrimaryActionButton from "@/components/form/PrimaryActionButton.vue";
 import SecondaryActionButton from "@/components/form/SecondaryActionButton.vue";
+import Avatar from 'primevue/avatar';
+import AvatarGroup from 'primevue/avatargroup';
+import Tag from 'primevue/tag';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import Textarea from 'primevue/textarea';
 
 const props = defineProps<{
   project: Project;
   isDraft: boolean;
 }>();
 
-const { t } = useI18n();
+const {t} = useI18n();
 const projectsStore = useProjectsStore();
 const clientsStore = useClientsStore();
 const emit = defineEmits(['save', 'discard']);
 
 const isEditing = ref(props.isDraft);
-const project = ref({ ...props.project });
+const project = ref({...props.project});
+
+const nameError = ref('');
+const clientError = ref('');
+
+const isNameInvalid = computed(() => nameError.value !== '');
+const isClientInvalid = computed(() => clientError.value !== '');
 
 const isValid = computed(() => {
-  return project.value.name && project.value.client;
+  return project.value.name && project.value.clientId && !nameError.value && !clientError.value;
 });
 
 const focusNameInput = async () => {
@@ -40,30 +52,67 @@ const focusNameInput = async () => {
 
 onMounted(() => {
   if (props.isDraft) focusNameInput();
+  clientsStore.load();
 });
 
+watch(() => clientsStore.clients, (newClients) => {
+  if (project.value.clientId) {
+    const client = newClients.find(client => client.id === project.value.clientId);
+    if (client) {
+      project.value.clientId = client.id;
+    }
+  }
+});
+
+const validateName = () => {
+  if (!project.value.name || project.value.name === '') {
+    nameError.value = t('Name cannot be empty');
+  } else {
+    nameError.value = '';
+  }
+};
+
+const revalidateName = () => {
+  if (nameError.value && nameError.value !== '') {
+    validateName();
+  }
+};
+
+const validateClient = () => {
+  if (!project.value.clientId || project.value.clientId === '') {
+    clientError.value = t('Client must be selected');
+  } else {
+    clientError.value = '';
+  }
+};
+
+const revalidateClient = () => {
+  if (clientError.value && clientError.value !== '') {
+    validateClient();
+  }
+};
+
 const saveProject = async () => {
+  validateName();
+  validateClient();
   if (isValid.value) {
     const projectPayload = {
       ...project.value,
-      clientId: project.value.client.id,
+      clientId: project.value.clientId,
     };
-    delete projectPayload.client;
-    delete projectPayload.timeWorked;
-    delete projectPayload.internal;
 
     if (props.isDraft) {
       await projectsStore.create(projectPayload);
-      emit('save');
     } else {
       await projectsStore.update(project.value.id, projectPayload);
-      isEditing.value = false;
     }
+    emit('save');
+    isEditing.value = false;
   }
 };
 
 const discardProject = () => {
-  project.value = { ...props.project };
+  project.value = {...props.project};
   isEditing.value = false;
   emit('discard');
 };
@@ -76,77 +125,150 @@ const updateAvatar = (avatar: string) => {
   project.value.avatar = avatar;
 };
 
-watch(() => props.project, (newProject) => {
-  project.value = { ...newProject };
-});
+const clearAvatar = () => {
+  project.value.avatar = '';
+};
 
-onMounted(() => {
-  clientsStore.load();
+const hasAvatar = computed(() => project.value.avatar && project.value.avatar !== '');
+
+watch(() => props.project, (newProject) => {
+  project.value = {...newProject};
+  if (project.value.clientId) {
+    const client = clientsStore.clients.find(client => client.id === project.value.clientId);
+    if (client) {
+      project.value.clientId = client.id;
+    }
+  }
 });
 
 const totalTasks = computed(() => project.value.todoTasks + project.value.inProgressTasks + project.value.blockedTasks + project.value.completedTasks);
 const progress = computed(() => totalTasks.value > 0 ? (project.value.completedTasks / totalTasks.value) * 100 : 0);
+
+const selectedClient = computed(() => {
+  return clientsStore.clients.find(client => client.id === project.value.clientId);
+});
 </script>
+
 <template>
   <div class="w-full bg-white shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow">
     <div class="bg-gradient-to-r from-indigo-400 to-indigo-600 p-4">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
-        <div class="flex items-center">
-          <UploadAvatar v-if="isEditing" :avatar="project.avatar" @update:avatar="updateAvatar" placeholder-icon="pi pi-folder" />
-          <h3 class="text-xl sm:text-2xl font-bold text-white flex items-center ml-4">
-            <span v-if="!isEditing" class="truncate max-w-[200px] sm:max-w-[300px]">{{ project.name }}</span>
-            <InputText v-else id="editNameInput" v-model="project.name" placeholder="Project Name" class="w-full sm:w-auto" />
-          </h3>
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div class="flex items-center w-full md:w-auto">
+          <div class="flex items-center relative">
+            <UploadAvatar
+                v-if="isEditing && !hasAvatar"
+                placeholder-icon="pi pi-folder"
+                @update:avatar="updateAvatar"
+            />
+            <AvatarGroup v-else>
+              <Avatar
+                  v-if="!hasAvatar"
+                  icon="pi pi-folder"
+                  class="mr-2 transition-transform duration-300 hover:scale-105"
+                  shape="circle"
+                  size="xlarge"
+                  :alt="project.name"
+              />
+              <Avatar
+                  v-else
+                  class="mr-2 transition-transform duration-300 hover:scale-105"
+                  :image="project.avatar"
+                  shape="circle"
+                  size="xlarge"
+                  :alt="project.name"
+              />
+              <i v-if="isEditing && hasAvatar" @click="clearAvatar"
+                 class="pi pi-times-circle text-white bg-red-500 rounded-full absolute top-0 right-0 text-xl"></i>
+            </AvatarGroup>
+          </div>
+          <div class="ml-4 text-white w-full md:w-auto">
+            <div v-if="isEditing" class="flex flex-col gap-2 w-full">
+              <label class="block text-sm font-medium text-white mb-1">{{ t("NAME") }}</label>
+              <InputText id="editNameInput" v-model="project.name" :placeholder="t('Project Name')" class="w-full"
+                         :invalid="isNameInvalid" @blur="validateName" @update:model-value="revalidateName"/>
+              <Tag v-if="isNameInvalid" severity="danger" class="w-full" :value="nameError"/>
+              <small class="text-white">{{ t("Name is required") }}</small>
+            </div>
+            <h3 v-else class="font-bold text-2xl">{{ project.name }}</h3>
+          </div>
         </div>
-        <span v-if="!isEditing" class="text-sm font-medium px-3 py-1 bg-white bg-opacity-20 text-white rounded-full whitespace-nowrap">
-          {{ project.client }}
-        </span>
-        <Select v-else v-model="project.client" :options="clientsStore.clients" optionLabel="name" placeholder="Select Client" class="w-full sm:w-auto" />
+        <div class="flex flex-col md:flex-row gap-4 items-center justify-center h-full w-full md:w-auto">
+          <div v-if="isEditing" class="flex flex-col gap-2 items-start justify-center h-full w-full">
+            <label class="block text-sm font-medium text-white mb-1">{{ t("CLIENT") }}</label>
+            <IconField class="w-full">
+              <InputIcon class="pi pi-user"/>
+              <Select v-model="project.clientId" :options="clientsStore.clients" optionLabel="name" optionValue="id"
+                      class="w-full" :invalid="isClientInvalid" @blur="validateClient"
+                      @update:model-value="revalidateClient"/>
+            </IconField>
+            <Tag v-if="isClientInvalid" severity="danger" class="w-full" :value="clientError"/>
+            <small class="text-white">{{ t("Client must be selected") }}</small>
+          </div>
+          <div v-else
+               class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full md:w-auto">
+            <i class="pi pi-user mr-2"></i>
+            <span class="text-sm">{{ selectedClient?.name }}</span>
+          </div>
+          <div v-if="isEditing" class="flex flex-col gap-2 items-start justify-center h-full w-full">
+            <label class="block text-sm font-medium text-white mb-1">{{ t("DUE DATE") }}</label>
+            <DatePicker
+                v-model="project.dueDate"
+                class="w-full"
+                :showButtonBar="true"
+            />
+            <small class="text-white">{{ t("Select a due date") }}</small>
+          </div>
+          <div v-else-if="project.dueDate && project.dueDate !== ''"
+               class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full md:w-auto">
+            <i class="pi pi-calendar mr-2"></i>
+            <span class="text-sm">{{ project.dueDate }}</span>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="p-4 sm:p-6">
-      <p v-if="!isEditing" class="text-gray-700 mb-6">{{ project.description }}</p>
-      <InputText v-else v-model="project.description" placeholder="Project Description" class="w-full mb-6" />
+    <div class="p-4 md:p-6">
+      <div v-if="isEditing" class="flex flex-col gap-2 items-start justify-center h-full w-full mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ t("DESCRIPTION") }}</label>
+        <Textarea v-model="project.description" :placeholder="t('Project Description')" class="w-full"/>
+        <small class="text-gray-700">{{ t("Select a due date") }}</small>
+      </div>
+      <p v-else class="text-gray-700 mb-6">{{ project.description }}</p>
 
       <div v-if="!isEditing" class="mb-6">
         <div class="flex justify-between items-center mb-2">
           <span class="text-sm font-medium text-gray-600">{{ t("Progress") }}</span>
-          <span class="text-sm fonPrimaryActionButtont-bold text-indigo-600">{{ progress.toFixed(2) }}%</span>
+          <span class="text-sm font-medium text-gray-600">{{ progress.toFixed(2) }}%</span>
         </div>
-        <ProgressBar :value="progress" />
+        <ProgressBar :value="progress"/>
       </div>
-      <DatePicker v-else v-model="project.dueDate" placeholder="Due Date" class="w-full mb-6" />
 
       <div v-if="!isEditing" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <TaskStatusCard :count="project.inProgressTasks" :label="t('In Progress')" icon="pi-spin pi-spinner" color="orange" />
-        <TaskStatusCard :count="project.todoTasks" :label="t('Todo')" icon="pi-list" color="yellow" />
-        <TaskStatusCard :count="project.blockedTasks" :label="t('Blocked')" icon="pi-ban" color="red" />
-        <TaskStatusCard :count="project.completedTasks" :label="t('Completed')" icon="pi-check-circle" color="green" />
+        <TaskStatusCard :count="project.inProgressTasks" :label="t('In Progress')" icon="pi-spin pi-spinner"
+                        color="orange"/>
+        <TaskStatusCard :count="project.todoTasks" :label="t('Todo')" icon="pi pi-list" color="yellow"/>
+        <TaskStatusCard :count="project.blockedTasks" :label="t('Blocked')" icon="pi pi-ban" color="red"/>
+        <TaskStatusCard :count="project.completedTasks" :label="t('Completed')" icon="pi pi-check-circle"
+                        color="green"/>
       </div>
 
-      <div class="flex flex-col gap-4">
-        <div v-if="!isEditing" class="flex items-center">
-          <span  class="text-sm text-gray-600">{{ project.dueDate }}</span>
-        </div>
-        <div class="flex flex-col sm:flex-row gap-2 w-full">
-          <SecondaryActionButton v-if="!isEditing" @click="isEditing = true">
-            <i class="pi pi-pencil mr-2"></i>
-            {{ t("Edit") }}
-          </SecondaryActionButton>
-          <DestructiveActionButton v-if="!isEditing" @click="confirmDeletion">
-            <i class="pi pi-trash mr-2"></i>
-            {{ t("Delete") }}
-          </DestructiveActionButton>
-          <PrimaryActionButton v-else @click="saveProject" :disabled="!isValid">
-            <i class="pi pi-check mr-2"></i>
-            {{ t("Save Project") }}
-          </PrimaryActionButton>
-          <SecondaryActionButton v-if="isEditing" @click="discardProject">
-            <i class="pi pi-times mr-2"></i>
-            {{ t("Discard") }}
-          </SecondaryActionButton>
-        </div>
+      <div class="flex flex-col md:flex-row justify-end gap-4">
+        <SecondaryActionButton v-if="!isEditing" @click="isEditing = true">
+          <i class="pi pi-pencil mr-2"></i>
+          {{ t("Edit") }}
+        </SecondaryActionButton>
+        <DestructiveActionButton v-if="!isEditing" @click="confirmDeletion">
+          <i class="pi pi-trash mr-2"></i>
+          {{ t("Delete") }}
+        </DestructiveActionButton>
+        <PrimaryActionButton v-else :disabled="!isValid" @click="saveProject">
+          <i class="pi pi-check mr-2"></i>
+          {{ t("Save Project") }}
+        </PrimaryActionButton>
+        <SecondaryActionButton v-if="isEditing" @click="discardProject">
+          <i class="pi pi-times mr-2"></i>
+          {{ t("Discard") }}
+        </SecondaryActionButton>
       </div>
     </div>
   </div>
