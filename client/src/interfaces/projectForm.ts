@@ -2,7 +2,7 @@
 export default interface ProjectForm {
   name: string;
   description: string | null;
-  client: string;
+  clientId: string;
   todoTasks: number;
   inProgressTasks: number;
   blockedTasks: number;

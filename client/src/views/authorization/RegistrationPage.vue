@@ -79,21 +79,21 @@ const redirectToLogin = () => {
 </script>
 
 <template>
-  <div class="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 p-4">
-    <div class="bg-white rounded-lg shadow p-8 w-full max-w-md">
+  <div class="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-8 w-full max-w-md">
       <div class="flex justify-center w-full mb-8">
         <TransparentLogoWide />
       </div>
 
       <form class="space-y-6" @submit.prevent="register">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" for="email">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="email">
             {{ t("EMAIL") }}
           </label>
           <InputText
               id="email"
               v-model="email"
-              class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+              class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               type="email"
               autocomplete="email"
               required
@@ -101,13 +101,13 @@ const redirectToLogin = () => {
               @focusout="emailFocused = false"
               @focusin="emailFocused = true"
           />
-          <p v-if="showEmailValidationFailure" class="text-red-500 font-bold">
+          <p v-if="showEmailValidationFailure" class="text-red-500 dark:text-red-400 font-bold">
             {{ t("Invalid email") }}
           </p>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" for="password">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="password">
             {{ t("PASSWORD") }}
           </label>
           <Password
@@ -120,18 +120,18 @@ const redirectToLogin = () => {
               :medium-label="t('Medium password')"
               :strong-label="t('Strong password')"
               class="w-full"
-              input-class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+              input-class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               required
               fluid
           >
             <template #header>
-              <p class="mb-1">{{ t("Enter a password") }}</p>
+              <p class="mb-1 dark:text-gray-300">{{ t("Enter a password") }}</p>
             </template>
             <template #footer="sp">
               {{ sp.level }}
               <Divider />
-              <p class="mt-2">{{ t("Recommendations") }}:</p>
-              <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+              <p class="mt-2 dark:text-gray-300">{{ t("Recommendations") }}:</p>
+              <ul class="pl-2 ml-2 mt-0 dark:text-gray-300" style="line-height: 1.5">
                 <li>{{ t("At least one lowercase") }}</li>
                 <li>{{ t("At least one uppercase") }}</li>
                 <li>{{ t("At least one numeric") }}</li>
@@ -142,7 +142,7 @@ const redirectToLogin = () => {
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" for="confirm-password">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="confirm-password">
             {{ t("CONFIRM PASSWORD") }}
           </label>
           <Password
@@ -152,7 +152,7 @@ const redirectToLogin = () => {
               autocomplete="new-password"
               :feedback="false"
               class="w-full"
-              input-class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+              input-class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               required
               fluid
           />
@@ -167,7 +167,7 @@ const redirectToLogin = () => {
         </MainActionButton>
 
         <Divider>
-            <span class="px-2 bg-white text-gray-500">
+            <span class="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
               {{ t("OR") }}
             </span>
         </Divider>
@@ -188,3 +188,17 @@ const redirectToLogin = () => {
     </div>
   </div>
 </template>
+
+<style>
+.p-divider.p-divider-horizontal {
+  @apply bg-white dark:bg-gray-800;
+}
+
+.p-divider.p-divider-horizontal:before {
+  @apply border-gray-300 dark:border-gray-700;
+}
+
+.p-divider .p-divider-content {
+  @apply bg-white dark:bg-gray-800;
+}
+</style>

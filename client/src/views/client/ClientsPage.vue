@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
-import { computed, ref, onMounted } from 'vue';
+import {computed, ref, onMounted, nextTick} from 'vue';
 import { useClientsStore } from '@/stores/clients';
 import ClientCard from '@/components/client/ClientCard.vue';
 
@@ -10,8 +10,11 @@ const clients = computed(() => clientsStore.clients);
 
 const showDraftClient = ref(false);
 
-const addDraftClient = () => {
+const addDraftClient = async () => {
   showDraftClient.value = true;
+  await nextTick();
+  const nameInput = document.getElementById('editNameInput');
+  if (nameInput) nameInput.scrollIntoView();
 };
 
 const removeDraftClient = () => {

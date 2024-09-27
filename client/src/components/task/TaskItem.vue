@@ -59,48 +59,51 @@ function toggleTimeTracking() {
 
 <template>
   <div
-:class="[
-    'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-4 p-4 sm:p-6',
-    { 'border-l-4': true },
-    { 'border-yellow-300 bg-white': task.status === 'Todo' },
-    { 'border-orange-300 bg-white': task.status === 'In Progress' },
-    { 'border-green-300 bg-gray-100': task.status === 'Completed' },
-    { 'border-red-300 bg-white': task.status === 'Blocked' },
-  ]">
+    :class="[
+      'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-4 p-4 sm:p-6',
+      { 'border-l-4': true },
+      { 'border-yellow-300 bg-white dark:bg-gray-800': task.status === 'Todo' },
+      { 'border-orange-300 bg-white dark:bg-gray-800': task.status === 'In Progress' },
+      { 'border-green-300 bg-gray-100 dark:bg-gray-700': task.status === 'Completed' },
+      { 'border-red-300 bg-white dark:bg-gray-800': task.status === 'Blocked' },
+    ]"
+  >
     <div class="flex">
       <Checkbox value="task.completed" :binary="true" class="mt-1 mr-3 flex-shrink-0" @change="toggleComplete" />
       <div class="flex-grow">
         <div class="flex flex-wrap items-start mb-3">
-          <h3 :class="['text-lg font-semibold mr-2 break-words', { 'line-through': task.completed }]">
+          <h3 :class="['text-lg font-semibold mr-2 break-words dark:text-white', { 'line-through': task.completed }]">
             {{ task.title }}
           </h3>
           <span
-:class="[
-            'text-xs font-medium px-2 py-1 rounded flex items-center',
-            { 'bg-yellow-100 text-yellow-800': task.status === 'Todo' },
-            { 'bg-orange-100 text-orange-800': task.status === 'In Progress' },
-            { 'bg-green-100 text-green-800': task.status === 'Completed' },
-            { 'bg-red-100 text-red-800': task.status === 'Blocked' },
-          ]">
+            :class="[
+              'text-xs font-medium px-2 py-1 rounded flex items-center',
+              { 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100': task.status === 'Todo' },
+              { 'bg-orange-100 text-orange-800 dark:bg-orange-800 dark:text-orange-100': task.status === 'In Progress' },
+              { 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100': task.status === 'Completed' },
+              { 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100': task.status === 'Blocked' },
+            ]"
+          >
             <i
-:class="[
-              'mr-1',
-              { 'pi pi-list': task.status === 'Todo' },
-              { 'pi pi-spin pi-spinner': task.status === 'In Progress' },
-              { 'pi pi-check': task.status === 'Completed' },
-              { 'pi pi-ban': task.status === 'Blocked' },
-            ]"></i>
+              :class="[
+                'mr-1',
+                { 'pi pi-list': task.status === 'Todo' },
+                { 'pi pi-spin pi-spinner': task.status === 'In Progress' },
+                { 'pi pi-check': task.status === 'Completed' },
+                { 'pi pi-ban': task.status === 'Blocked' },
+              ]"
+            ></i>
             {{ task.status }}
           </span>
         </div>
-        <div class="text-sm text-gray-600 flex flex-wrap gap-3 items-center">
+        <div class="text-sm text-gray-600 dark:text-gray-300 flex flex-wrap gap-3 items-center">
           <span v-if="task.project" v-tooltip.top="'Project'" class="flex items-center">
             <i class="pi pi-folder mr-1"></i>{{ task.project }}
           </span>
           <span v-if="task.client" v-tooltip.top="'Client'" class="flex items-center">
             <i class="pi pi-user mr-1"></i>{{ task.client }}
           </span>
-          <span v-if="task.dueDate" :class="{ 'text-red-500': isOverdue }" class="flex items-center">
+          <span v-if="task.dueDate" :class="{ 'text-red-500 dark:text-red-400': isOverdue }" class="flex items-center">
             <i class="pi pi-calendar-times mr-1"></i>Due: {{ formatDate(task.dueDate) }}
           </span>
           <span v-if="task.scheduledDate" class="flex items-center">
@@ -116,13 +119,13 @@ function toggleTimeTracking() {
             <i class="pi pi-dollar mr-1"></i>Est. Revenue: {{ formatCurrency(task.estimatedRevenue) }}
           </span>
           <button
-              :class="[
+            :class="[
               'text-xs px-2 py-1 rounded transition-colors duration-200 flex items-center',
               isTracking
-                ? 'bg-red-100 text-red-800 hover:bg-red-200'
-                : 'bg-green-100 text-green-800 hover:bg-green-200'
+                ? 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100 hover:bg-red-200 dark:hover:bg-red-700'
+                : 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100 hover:bg-green-200 dark:hover:bg-green-700'
             ]"
-              @click="toggleTimeTracking"
+            @click="toggleTimeTracking"
           >
             <i :class="['mr-1', isTracking ? 'pi pi-pause' : 'pi pi-play']"></i>
             {{ isTracking ? 'Stop' : 'Start' }} Tracking
@@ -130,18 +133,17 @@ function toggleTimeTracking() {
         </div>
       </div>
     </div>
-    <div v-if="task.subtasks && task.subtasks.length > 0" class="pl-4 sm:pl-8 pr-4 pb-4 mt-4 border-t border-gray-100">
-      <h4 class="text-sm font-semibold text-gray-500 mb-2 mt-2">Subtasks:</h4>
+    <div v-if="task.subtasks && task.subtasks.length > 0" class="pl-4 sm:pl-8 pr-4 pb-4 mt-4 border-t border-gray-100 dark:border-gray-700">
+      <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 mt-2">Subtasks:</h4>
       <TaskItem
-          v-for="subtask in task.subtasks"
-          :key="subtask.id"
-          :task="subtask"
-          class="mt-2"
+        v-for="subtask in task.subtasks"
+        :key="subtask.id"
+        :task="subtask"
+        class="mt-2"
       />
     </div>
   </div>
 </template>
-
 
 
 

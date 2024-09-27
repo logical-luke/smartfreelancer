@@ -29,6 +29,6 @@ const languages = reactive<Language[]>([
       v-model="selected"
       :options="languages"
       option-label="name"
-      class="w-full"
+      class="w-full dark:bg-gray-700 dark:text-white"
   />
 </template>

@@ -9,17 +9,16 @@ import Select from 'primevue/select';
 import DestructiveActionButton from "@/components/form/DestructiveActionButton.vue";
 import TaskStatusCard from '@/components/task/TaskStatusCard.vue';
 import ProgressBar from 'primevue/progressbar';
-import UploadAvatar from '@/components/form/UploadAvatar.vue';
+import Avatar from '@/components/form/Avatar.vue';
 import {defineProps, defineEmits} from 'vue';
 import type Project from '@/interfaces/project';
 import PrimaryActionButton from "@/components/form/PrimaryActionButton.vue";
 import SecondaryActionButton from "@/components/form/SecondaryActionButton.vue";
-import Avatar from 'primevue/avatar';
-import AvatarGroup from 'primevue/avatargroup';
 import Tag from 'primevue/tag';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import Textarea from 'primevue/textarea';
+import type ProjectForm from "@/interfaces/projectForm";
 
 const props = defineProps<{
   project: Project;
@@ -44,14 +43,7 @@ const isValid = computed(() => {
   return project.value.name && project.value.clientId && !nameError.value && !clientError.value;
 });
 
-const focusNameInput = async () => {
-  await nextTick();
-  const nameInput = document.getElementById('editNameInput');
-  if (nameInput) nameInput.focus();
-};
-
 onMounted(() => {
-  if (props.isDraft) focusNameInput();
   clientsStore.load();
 });
 
@@ -96,7 +88,7 @@ const saveProject = async () => {
   validateName();
   validateClient();
   if (isValid.value) {
-    const projectPayload = {
+    const projectPayload: ProjectForm = {
       ...project.value,
       clientId: project.value.clientId,
     };
@@ -150,41 +142,22 @@ const selectedClient = computed(() => {
 </script>
 
 <template>
-  <div class="w-full bg-white shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow">
-    <div class="bg-gradient-to-r from-indigo-400 to-indigo-600 p-4">
+  <div class="w-full bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow">
+    <div class="bg-gradient-to-r from-indigo-400 to-indigo-600 dark:from-indigo-600 dark:to-indigo-800 p-6">
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div class="flex items-center w-full md:w-auto">
           <div class="flex items-center relative">
-            <UploadAvatar
-                v-if="isEditing && !hasAvatar"
-                placeholder-icon="pi pi-folder"
-                @update:avatar="updateAvatar"
+            <Avatar
+              v-model:avatarPath="project.avatar"
+              :placeholder-icon="'pi pi-folder'"
+              :is-editing="isEditing"
+              :alt="project.name"
             />
-            <AvatarGroup v-else>
-              <Avatar
-                  v-if="!hasAvatar"
-                  icon="pi pi-folder"
-                  class="mr-2 transition-transform duration-300 hover:scale-105"
-                  shape="circle"
-                  size="xlarge"
-                  :alt="project.name"
-              />
-              <Avatar
-                  v-else
-                  class="mr-2 transition-transform duration-300 hover:scale-105"
-                  :image="project.avatar"
-                  shape="circle"
-                  size="xlarge"
-                  :alt="project.name"
-              />
-              <i v-if="isEditing && hasAvatar" @click="clearAvatar"
-                 class="pi pi-times-circle text-white bg-red-500 rounded-full absolute top-0 right-0 text-xl"></i>
-            </AvatarGroup>
           </div>
           <div class="ml-4 text-white w-full md:w-auto">
             <div v-if="isEditing" class="flex flex-col gap-2 w-full">
               <label class="block text-sm font-medium text-white mb-1">{{ t("NAME") }}</label>
-              <InputText id="editNameInput" v-model="project.name" :placeholder="t('Project Name')" class="w-full"
+              <InputText id="editNameInput" v-model="project.name" :placeholder="t('Awesome Idea')" class="w-full dark:bg-gray-700 dark:text-white"
                          :invalid="isNameInvalid" @blur="validateName" @update:model-value="revalidateName"/>
               <Tag v-if="isNameInvalid" severity="danger" class="w-full" :value="nameError"/>
               <small class="text-white">{{ t("Name is required") }}</small>
@@ -198,14 +171,14 @@ const selectedClient = computed(() => {
             <IconField class="w-full">
               <InputIcon class="pi pi-user"/>
               <Select v-model="project.clientId" :options="clientsStore.clients" optionLabel="name" optionValue="id"
-                      class="w-full" :invalid="isClientInvalid" @blur="validateClient"
+                      class="w-full dark:bg-gray-700 dark:text-white" :invalid="isClientInvalid" @blur="validateClient"
                       @update:model-value="revalidateClient"/>
             </IconField>
             <Tag v-if="isClientInvalid" severity="danger" class="w-full" :value="clientError"/>
             <small class="text-white">{{ t("Client must be selected") }}</small>
           </div>
           <div v-else
-               class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full md:w-auto">
+               class="bg-white dark:bg-gray-700 bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full md:w-auto">
             <i class="pi pi-user mr-2"></i>
             <span class="text-sm">{{ selectedClient?.name }}</span>
           </div>
@@ -213,13 +186,14 @@ const selectedClient = computed(() => {
             <label class="block text-sm font-medium text-white mb-1">{{ t("DUE DATE") }}</label>
             <DatePicker
                 v-model="project.dueDate"
-                class="w-full"
+                class="w-full dark:bg-gray-700 dark:text-white"
                 :showButtonBar="true"
+                inputClass="w-full dark:bg-gray-700 dark:text-white"
             />
             <small class="text-white">{{ t("Select a due date") }}</small>
           </div>
           <div v-else-if="project.dueDate && project.dueDate !== ''"
-               class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full md:w-auto">
+               class="bg-white dark:bg-gray-700 bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full md:w-auto">
             <i class="pi pi-calendar mr-2"></i>
             <span class="text-sm">{{ project.dueDate }}</span>
           </div>
@@ -229,16 +203,16 @@ const selectedClient = computed(() => {
 
     <div class="p-4 md:p-6">
       <div v-if="isEditing" class="flex flex-col gap-2 items-start justify-center h-full w-full mb-4">
-        <label class="block text-sm font-medium text-gray-700 mb-1">{{ t("DESCRIPTION") }}</label>
-        <Textarea v-model="project.description" :placeholder="t('Project Description')" class="w-full"/>
-        <small class="text-gray-700">{{ t("Select a due date") }}</small>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ t("DESCRIPTION") }}</label>
+        <Textarea v-model="project.description" :placeholder="t('We want to enable customers to be awesome')" class="w-full dark:bg-gray-700 dark:text-white"/>
+        <small class="text-gray-700 dark:text-gray-300">{{ t("Describe the project") }}</small>
       </div>
-      <p v-else class="text-gray-700 mb-6">{{ project.description }}</p>
+      <p v-else class="text-gray-700 dark:text-gray-300 mb-6">{{ project.description }}</p>
 
       <div v-if="!isEditing" class="mb-6">
         <div class="flex justify-between items-center mb-2">
-          <span class="text-sm font-medium text-gray-600">{{ t("Progress") }}</span>
-          <span class="text-sm font-medium text-gray-600">{{ progress.toFixed(2) }}%</span>
+          <span class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ t("Progress") }}</span>
+          <span class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ progress.toFixed(2) }}%</span>
         </div>
         <ProgressBar :value="progress"/>
       </div>

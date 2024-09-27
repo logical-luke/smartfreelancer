@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { computed, ref, onMounted } from 'vue';
+import {computed, ref, onMounted, nextTick} from 'vue';
 import { useProjectsStore } from '@/stores/projects';
 import ProjectCard from '@/components/project/ProjectCard.vue';
 
@@ -10,8 +10,11 @@ const projects = computed(() => projectsStore.projects);
 
 const showDraftProject = ref(false);
 
-const addDraftProject = () => {
+const addDraftProject = async () => {
   showDraftProject.value = true;
+  await nextTick();
+  const nameInput = document.getElementById('editNameInput');
+  if (nameInput) nameInput.scrollIntoView();
 };
 
 const removeDraftProject = () => {

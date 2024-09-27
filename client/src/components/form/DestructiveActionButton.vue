@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import {defineProps} from 'vue';
 
 const props = defineProps<{
   type?: string;
@@ -12,12 +12,19 @@ const fullWidth = props.fullWidth || false;
 
 <template>
   <button
-    :type="buttonType"
-    :class="{
-      '': fullWidth,
-      'md:min-w-40 md:w-fit': !fullWidth,
-    }"
-    class="w-full inline-flex shadow p-4 justify-center flex-nowrap items-center font-medium text-white bg-red-500 hover:bg-red-700 rounded-md transition disabled:bg-slate-50 disabled:text-slate-500 duration-200"
+      :type="buttonType"
+      :class="{
+    '': fullWidth,
+    'md:min-w-40 md:w-fit': !fullWidth,
+  }"
+      class="w-full inline-flex shadow p-4 justify-center flex-nowrap items-center font-medium
+         text-white
+         bg-red-500 hover:bg-red-700
+         dark:bg-red-600 dark:hover:bg-red-800
+         rounded-md transition
+         disabled:bg-slate-50 dark:disabled:bg-slate-700
+         disabled:text-slate-500 dark:disabled:text-slate-400
+         duration-200"
   >
     <span>
       <slot></slot>

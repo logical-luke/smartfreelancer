@@ -11,9 +11,9 @@ const goTo = props.goTo || '';
 <template>
   <li>
     <RouterLink
-      class="flex items-center pl-3 py-4 pr-4 hover:bg-gray-900 text-gray-50 rounded"
+      class="flex items-center pl-3 py-4 pr-4 hover:bg-gray-900 dark:hover:bg-gray-700 text-gray-50 rounded"
       :to="goTo"
-      active-class="bg-indigo-500"
+      active-class="bg-indigo-500 dark:bg-indigo-600"
       exact
     >
       <span class="flex justify-center items-center mr-3">

@@ -52,21 +52,21 @@ async function goToRegistration() {
 </script>
 
 <template>
-  <div class="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 p-4">
-    <div class="bg-white rounded-lg shadow p-8 w-full max-w-md">
+  <div class="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-8 w-full max-w-md">
       <div class="flex justify-center w-full mb-8">
         <TransparentLogoWide />
       </div>
 
       <form class="space-y-6" @submit.prevent="login">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" for="email">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="email">
             {{ t("EMAIL") }}
           </label>
           <InputText
               id="email"
               v-model="email"
-              class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+              class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               type="email"
               autocomplete="email"
               required
@@ -74,7 +74,7 @@ async function goToRegistration() {
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" for="password">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="password">
             {{ t("PASSWORD") }}
           </label>
           <Password
@@ -84,7 +84,7 @@ async function goToRegistration() {
               autocomplete="current-password"
               :feedback="false"
               class="w-full"
-              input-class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+              input-class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               required
           />
         </div>
@@ -97,11 +97,11 @@ async function goToRegistration() {
           {{ t("Log In") }}
         </MainActionButton>
 
-        <Divider>
-            <span class="px-2 bg-white text-gray-500">
+          <Divider>
+            <span class="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
               {{ t("OR") }}
             </span>
-        </Divider>
+          </Divider>
 
         <MainActionButton :full-width="true" type="button" @click="loginWithGoogle">
           <i class="pi pi-google mr-2"></i>
@@ -120,4 +120,17 @@ async function goToRegistration() {
   </div>
 </template>
 
+<style>
+.p-divider.p-divider-horizontal {
+  @apply bg-white dark:bg-gray-800;
+}
+
+.p-divider.p-divider-horizontal:before {
+  @apply border-gray-300 dark:border-gray-700;
+}
+
+.p-divider .p-divider-content {
+  @apply bg-white dark:bg-gray-800;
+}
+</style>
 

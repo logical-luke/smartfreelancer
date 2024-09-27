@@ -7,18 +7,14 @@ import MainActionButton from '@/components/form/PrimaryActionButton.vue';
 import ActionButton from '@/components/form/SecondaryActionButton.vue';
 import DestructiveActionButton from "@/components/form/DestructiveActionButton.vue";
 import TaskStatusCard from "@/components/task/TaskStatusCard.vue";
-import UploadAvatar from "@/components/form/UploadAvatar.vue";
-import OverlayBadge from "primevue/overlaybadge";
 import Tag from "primevue/tag";
 import {defineProps, defineEmits} from 'vue';
-import Avatar from "primevue/avatar";
-import AvatarGroup from "primevue/avatargroup";
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
 import type Client from '@/interfaces/client';
 import {useConfirm} from "primevue/useconfirm";
 import {useToast} from "primevue/usetoast";
-
+import Avatar from "@/components/form/Avatar.vue";
 const props = defineProps<{
   client: Client;
   isDraft: boolean;
@@ -47,16 +43,6 @@ const isPhoneInvalid = computed(() => phoneError.value !== '');
 
 const isValid = computed(() => {
   return client.value.name && !nameError.value && !emailError.value && !phoneError.value;
-});
-
-const focusNameInput = async () => {
-  await nextTick();
-  const nameInput = document.getElementById('editNameInput');
-  if (nameInput) nameInput.focus();
-};
-
-onMounted(() => {
-  if (props.isDraft) focusNameInput();
 });
 
 const validateName = () => {
@@ -172,37 +158,19 @@ watch(() => props.client, (newClient) => {
 </script>
 
 <template>
-  <div class="w-full bg-white shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow">
-    <div class="bg-gradient-to-r from-indigo-400 to-indigo-500 p-6">
+  <div class="w-full bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow">
+    <div class="bg-gradient-to-r from-indigo-400 to-indigo-500 dark:from-indigo-600 dark:to-indigo-700 p-6">
       <div
           :class="['flex flex-col lg:flex-row items-center lg:items-center gap-4', { 'justify-center lg:justify-between': !client.email && !client.phone, 'justify-between': client.email || client.phone }]">
         <div class="flex flex-col lg:flex-row items-center lg:items-center w-full lg:w-auto">
           <div class="flex items-center w-full lg:w-auto">
             <div class="flex items-center relative">
-              <UploadAvatar
-                  v-if="isEditing && !hasAvatar"
-                  @update:avatar="updateAvatar"
+              <Avatar
+                v-model:avatarPath="client.avatar"
+                :placeholder-icon="'pi pi-user'"
+                :is-editing="isEditing"
+                :alt="client.name"
               />
-              <AvatarGroup v-else>
-                <Avatar
-                    v-if="!hasAvatar"
-                    icon="pi pi-user"
-                    class="mr-2 transition-transform duration-300 hover:scale-105"
-                    shape="circle"
-                    size="xlarge"
-                    :alt="client.name"
-                />
-                <Avatar
-                    v-else
-                    class="mr-2 transition-transform duration-300 hover:scale-105"
-                    shape="circle"
-                    :image="client.avatar"
-                    size="xlarge"
-                    :alt="client.name"
-                />
-                <i v-if="isEditing && hasAvatar" @click="clearAvatar"
-                   class="pi pi-times-circle text-white bg-red-500 rounded-full absolute top-0 right-0 text-xl"></i>
-              </AvatarGroup>
             </div>
             <div class="ml-4 text-white w-full lg:w-auto flex items-center">
               <div v-if="isEditing" class="flex flex-col gap-2 w-full">
@@ -211,7 +179,7 @@ watch(() => props.client, (newClient) => {
                     id="editNameInput"
                     v-model="client.name"
                     :placeholder="t('John Doe')"
-                    class="w-full"
+                    class="w-full dark:bg-gray-700 dark:text-white"
                     :invalid="isNameInvalid"
                     aria-describedby="name-help"
                     @blur="validateName"
@@ -222,7 +190,7 @@ watch(() => props.client, (newClient) => {
                 <small id="name-help" class="text-white">{{ t("Name is required") }}</small>
               </div>
               <h3 v-else class="font-bold text-2xl">{{ client.name }}</h3>
-              <p v-if="client.internal" class="text-blue-100">{{ t("You") }}</p>
+              <p v-if="client.internal" class="text-blue-100 dark:text-blue-200">{{ t("You") }}</p>
             </div>
           </div>
         </div>
@@ -236,7 +204,7 @@ watch(() => props.client, (newClient) => {
                 <InputText
                     v-model="client.email"
                     :placeholder="t('example@example.com')"
-                    class="w-full"
+                    class="w-full dark:bg-gray-700 dark:text-white"
                     :invalid="isEmailInvalid"
                     aria-describedby="email-help"
                     @blur="validateEmail"
@@ -253,7 +221,7 @@ watch(() => props.client, (newClient) => {
                 <InputText
                     v-model="client.phone"
                     :placeholder="t('+123-456-7890')"
-                    class="w-full"
+                    class="w-full dark:bg-gray-700 dark:text-white"
                     :invalid="isPhoneInvalid"
                     aria-describedby="phone-help"
                     @blur="validatePhone"
@@ -268,7 +236,7 @@ watch(() => props.client, (newClient) => {
             <div class="flex flex-col gap-2 items-end justify-center h-full w-full lg:w-auto">
               <a
                   v-if="client.email" :href="`mailto:${client.email}`"
-                  class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full lg:w-auto">
+                  class="bg-white dark:bg-gray-700 bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full lg:w-auto">
                 <i class="pi pi-envelope mr-2"></i>
                 <span class="text-sm">{{ client.email }}</span>
               </a>
@@ -276,7 +244,7 @@ watch(() => props.client, (newClient) => {
             <div class="flex flex-col gap-2 items-end justify-center h-full w-full lg:w-auto">
               <a
                   v-if="client.phone" :href="`tel:${client.phone}`"
-                  class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full lg:w-auto">
+                  class="bg-white dark:bg-gray-700 bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full lg:w-auto">
                 <i class="pi pi-phone mr-2"></i>
                 <span class="text-sm">{{ client.phone }}</span>
               </a>
@@ -291,24 +259,24 @@ watch(() => props.client, (newClient) => {
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
           <div
               v-if="!client.internal"
-              class="bg-blue-50 rounded-lg p-6 flex items-center justify-between transition-all duration-300 hover:shadow">
+              class="bg-blue-50 dark:bg-blue-900 rounded-lg p-6 flex items-center justify-between transition-all duration-300 hover:shadow">
             <div>
-              <p class="text-sm font-medium text-gray-600">{{ t("Revenue") }}</p>
-              <span class="text-3xl font-bold text-blue-700">{{ client.revenue }} $</span>
+              <p class="text-sm font-medium text-gray-600 dark:text-gray-300">{{ t("Revenue") }}</p>
+              <span class="text-3xl font-bold text-blue-700 dark:text-blue-300">{{ client.revenue }} $</span>
             </div>
-            <i class="pi pi-dollar text-5xl text-blue-300"></i>
+            <i class="pi pi-dollar text-5xl text-blue-300 dark:text-blue-500"></i>
           </div>
           <div
-              class="bg-green-50 rounded-lg p-6 flex items-center justify-between transition-all duration-300 hover:shadow">
+              class="bg-green-50 dark:bg-green-900 rounded-lg p-6 flex items-center justify-between transition-all duration-300 hover:shadow">
             <div>
-              <p class="text-sm font-medium text-gray-600">{{ t("Time Worked") }}</p>
-              <span class="text-3xl font-bold text-green-700">{{ client.timeWorked }} {{ t("hours") }}</span>
+              <p class="text-sm font-medium text-gray-600 dark:text-gray-300">{{ t("Time Worked") }}</p>
+              <span class="text-3xl font-bold text-green-700 dark:text-green-300">{{ client.timeWorked }} {{ t("hours") }}</span>
             </div>
-            <i class="pi pi-clock text-5xl text-green-300"></i>
+            <i class="pi pi-clock text-5xl text-green-300 dark:text-green-500"></i>
           </div>
         </div>
 
-        <h4 class="text-xl font-semibold text-gray-700 mb-4">{{ t("Task Overview") }}</h4>
+        <h4 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">{{ t("Task Overview") }}</h4>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
           <TaskStatusCard
               :count="client.inProgressTasks" :label="t('In Progress')" icon="pi-spin pi-spinner"
