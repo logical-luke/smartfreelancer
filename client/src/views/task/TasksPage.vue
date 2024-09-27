@@ -1,21 +1,10 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+
 import {ref} from 'vue';
 import TaskItem from "@/components/task/TaskItem.vue";
-
-interface Task {
-  id: number;
-  title: string;
-  completed: boolean;
-  dueDate?: string;
-  scheduledDate?: string;
-  project?: string;
-  client: string;
-  status: 'Todo' | 'In Progress' | 'Blocked' | 'Completed';
-  timeEstimate?: number;
-  trackedTime?: number;
-  estimatedRevenue?: number;
-  subtasks?: Task[];
-}
+import type Task from "@/interfaces/task";
 
 const tasks = ref<Task[]>([
   {
@@ -127,9 +116,12 @@ function updateTask(updatedTask: Task) {
 </script>
 
 <template>
-  <div class="tasks-page p-4">
-    <h1 class="text-2xl font-bold mb-6">Tasks</h1>
-
+  <div class="flex mb-8">
+    <div>
+      <h3 class="text-2xl font-bold">{{ t("Tasks") }}</h3>
+    </div>
+  </div>
+  <div>
     <div class="tasks-list">
       <TaskItem
           v-for="task in tasks"

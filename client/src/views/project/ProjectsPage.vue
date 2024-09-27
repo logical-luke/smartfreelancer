@@ -3,6 +3,7 @@ import { useI18n } from 'vue-i18n';
 import {computed, ref, onMounted, nextTick} from 'vue';
 import { useProjectsStore } from '@/stores/projects';
 import ProjectCard from '@/components/project/ProjectCard.vue';
+import AddItemFloatingButton from "@/components/navigation/AddItemFloatingButton.vue";
 
 const { t } = useI18n();
 const projectsStore = useProjectsStore();
@@ -50,10 +51,5 @@ onMounted(() => {
       </transition-group>
     </div>
   </transition>
-  <button
-    class="fixed bottom-6 right-6 w-16 h-16 bg-indigo-500 text-white rounded-full shadow hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-300 flex items-center justify-center"
-    @click="addDraftProject"
-  >
-    <i class="pi pi-plus text-2xl"></i>
-  </button>
+  <AddItemFloatingButton v-if="!showDraftProject" @click="addDraftProject" />
 </template>

@@ -18,11 +18,17 @@ readonly class ClientDto implements \JsonSerializable
         private int $createdAt,
         private int $revenue,
         private int $timeWorked,
+        private int $timeEstimated,
         private int $todoTasks,
         private int $inProgressTasks,
         private int $blockedTasks,
         private int $completedTasks,
         private bool $internal,
+        private int $income,
+        private int $expenses,
+        private int $invoiced,
+        private int $paid,
+        private int $incomeEstimated,
     ) {
     }
 
@@ -30,11 +36,16 @@ readonly class ClientDto implements \JsonSerializable
         Client $client,
         int $revenue,
         int $timeWorked,
+        int $timeEstimated,
         int $todoTasks,
         int $inProgressTasks,
         int $blockedTasks,
         int $completedTasks,
-        bool $internal,
+        int $income,
+        int $expenses,
+        int $invoiced,
+        int $paid,
+        int $incomeEstimated,
     ): self {
         return new self(
             $client->getId()?->toRfc4122(),
@@ -46,11 +57,17 @@ readonly class ClientDto implements \JsonSerializable
             $client->getCreatedAt()->getTimestamp(),
             $revenue,
             $timeWorked,
+            $timeEstimated,
             $todoTasks,
             $inProgressTasks,
             $blockedTasks,
             $completedTasks,
             $client->isInternal(),
+            $income,
+            $expenses,
+            $invoiced,
+            $paid,
+            $incomeEstimated,
         );
     }
 
@@ -66,11 +83,17 @@ readonly class ClientDto implements \JsonSerializable
             'createdAt' => $this->createdAt,
             'revenue' => $this->revenue,
             'timeWorked' => $this->timeWorked,
+            'timeEstimated' => $this->timeEstimated,
             'todoTasks' => $this->todoTasks,
             'inProgressTasks' => $this->inProgressTasks,
             'blockedTasks' => $this->blockedTasks,
             'completedTasks' => $this->completedTasks,
             'internal' => $this->internal,
+            'income' => $this->income,
+            'expenses' => $this->expenses,
+            'invoiced' => $this->invoiced,
+            'paid' => $this->paid,
+            'incomeEstimated' => $this->incomeEstimated,
         ];
     }
 }

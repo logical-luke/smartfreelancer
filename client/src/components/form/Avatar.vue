@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import ExternalAvatar from 'primevue/avatar';
-import ExternalAvatarGroup from "primevue/avatargroup";
-
-import {ref} from 'vue';
+import { ref, computed } from 'vue';
+import { useAuthorizationStore } from "@/stores/auth";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
   avatarPath: {
-    type: String,
+    type: [String, null],
     default: '',
   },
   placeholderIcon: {
@@ -25,7 +25,14 @@ const props = defineProps({
 
 const emit = defineEmits(['update:avatarPath']);
 
+const authStore = useAuthorizationStore();
+const { t } = useI18n();
+
 const fileInput = ref<HTMLInputElement | null>(null);
+
+const uploadApiURL = computed(() => {
+  return process.env.API_BASE_URL + "/upload/image";
+});
 
 const triggerFileInput = () => {
   if (props.isEditing) {
@@ -33,25 +40,48 @@ const triggerFileInput = () => {
   }
 };
 
-const uploadFile = (event: Event) => {
+const uploadFile = async (event: Event) => {
   const target = event.target as HTMLInputElement;
   if (target.files && target.files.length > 0) {
     const file = target.files[0];
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      emit('update:avatarPath', e.target?.result as string);
-    };
-    reader.readAsDataURL(file);
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const response = await fetch(uploadApiURL.value, {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + authStore.getToken,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const data = await response.json();
+      if (data.filename) {
+        emit('update:avatarPath', data.filename);
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      // Handle error (e.g., show error message to user)
+    }
   }
 };
 
 const clearAvatar = () => {
   emit('update:avatarPath', '');
 };
+
+const avatarSize = computed(() => {
+  return { width: '4rem', height: '4rem' };
+});
 </script>
 
 <template>
-  <div class="relative group custom-avatar">
+  <div class="relative inline-block group">
     <input
       v-if="isEditing"
       ref="fileInput"
@@ -60,41 +90,36 @@ const clearAvatar = () => {
       class="hidden"
       @change="uploadFile"
     />
-    <ExternalAvatarGroup @click="triggerFileInput" class="custom-avatar-group">
-      <ExternalAvatar
-        :image="avatarPath"
-        :icon="!avatarPath ? placeholderIcon : undefined"
-        size="xlarge"
-        class="mr-2 transition-transform duration-300 hover:scale-105 cursor-pointer"
-        shape="circle"
-        :alt="alt"
-        :style="{ color: 'white', borderColor: 'white' }"
-      />
-      <div
-        v-if="isEditing"
-        class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full"
-        :style="{ width: '4rem', height: '4rem' }"
-      >
-        <i class="pi pi-camera text-white text-2xl"></i>
-      </div>
-    </ExternalAvatarGroup>
+    <ExternalAvatar
+      :image="avatarPath"
+      :icon="!avatarPath ? placeholderIcon : undefined"
+      size="xlarge"
+      :style="avatarSize"
+      class="transition-all duration-300 hover:scale-105 cursor-pointer flex items-center justify-center"
+      :class="[
+        avatarPath ? 'bg-transparent' : 'bg-gray-200 dark:bg-gray-700',
+        'text-gray-600 dark:text-gray-200'
+      ]"
+      shape="circle"
+      :alt="alt"
+    >
+      <i v-if="!avatarPath" :class="[placeholderIcon, 'text-2xl']"></i>
+    </ExternalAvatar>
+    <div
+      v-if="isEditing"
+      @click="triggerFileInput"
+      class="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300"
+      :style="avatarSize"
+    >
+      <i class="pi pi-camera text-white text-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></i>
+    </div>
     <button
       v-if="isEditing && avatarPath"
+      class="absolute top-0 right-0 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center transition-colors duration-200 shadow-md"
+      style="transform: translate(25%, -25%);"
       @click="clearAvatar"
-      class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800 text-white rounded-full w-6 h-6 flex items-center justify-center transition-colors duration-200 border border-white"
-      style="transform: translate(50%, -50%);"
     >
       <i class="pi pi-times text-sm"></i>
     </button>
   </div>
 </template>
-
-<style scoped>
-.custom-avatar-group :deep(.p-avatar-group) {
-  @apply border-white;
-}
-
-.custom-avatar :deep(.p-avatar) {
-  @apply border-white;
-}
-</style>

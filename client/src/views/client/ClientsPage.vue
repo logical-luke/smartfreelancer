@@ -4,6 +4,7 @@ const { t } = useI18n();
 import {computed, ref, onMounted, nextTick} from 'vue';
 import { useClientsStore } from '@/stores/clients';
 import ClientCard from '@/components/client/ClientCard.vue';
+import AddItemFloatingButton from "@/components/navigation/AddItemFloatingButton.vue";
 
 const clientsStore = useClientsStore();
 const clients = computed(() => clientsStore.clients);
@@ -52,10 +53,5 @@ onMounted(() => {
       </transition-group>
     </div>
   </transition>
-  <button
-      class="fixed bottom-6 right-6 w-16 h-16 bg-indigo-500 text-white rounded-full shadow hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-300 flex items-center justify-center"
-      @click="addDraftClient"
-  >
-    <i class="pi pi-plus text-2xl"></i>
-  </button>
+  <AddItemFloatingButton v-if="!showDraftClient" @click="addDraftClient" />
 </template>

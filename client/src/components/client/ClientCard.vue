@@ -6,7 +6,6 @@ import InputText from 'primevue/inputtext';
 import MainActionButton from '@/components/form/PrimaryActionButton.vue';
 import ActionButton from '@/components/form/SecondaryActionButton.vue';
 import DestructiveActionButton from "@/components/form/DestructiveActionButton.vue";
-import TaskStatusCard from "@/components/task/TaskStatusCard.vue";
 import Tag from "primevue/tag";
 import {defineProps, defineEmits} from 'vue';
 import IconField from "primevue/iconfield";
@@ -15,6 +14,10 @@ import type Client from '@/interfaces/client';
 import {useConfirm} from "primevue/useconfirm";
 import {useToast} from "primevue/usetoast";
 import Avatar from "@/components/form/Avatar.vue";
+import TaskOverviewGrid from "@/components/report/TaskOverviewGrid.vue";
+import TimeOverviewGrid from "@/components/report/TimeOverviewGrid.vue";
+import RevenueOverviewGrid from "@/components/report/RevenueOverviewGrid.vue";
+
 const props = defineProps<{
   client: Client;
   isDraft: boolean;
@@ -158,7 +161,8 @@ watch(() => props.client, (newClient) => {
 </script>
 
 <template>
-  <div class="w-full bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow">
+  <div
+      class="w-full bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow">
     <div class="bg-gradient-to-r from-indigo-400 to-indigo-500 dark:from-indigo-600 dark:to-indigo-700 p-6">
       <div
           :class="['flex flex-col lg:flex-row items-center lg:items-center gap-4', { 'justify-center lg:justify-between': !client.email && !client.phone, 'justify-between': client.email || client.phone }]">
@@ -166,10 +170,10 @@ watch(() => props.client, (newClient) => {
           <div class="flex items-center w-full lg:w-auto">
             <div class="flex items-center relative">
               <Avatar
-                v-model:avatarPath="client.avatar"
-                :placeholder-icon="'pi pi-user'"
-                :is-editing="isEditing"
-                :alt="client.name"
+                  v-model:avatar-path="client.avatar"
+                  :placeholder-icon="'pi pi-user'"
+                  :is-editing="isEditing"
+                  :alt="client.name"
               />
             </div>
             <div class="ml-4 text-white w-full lg:w-auto flex items-center">
@@ -194,7 +198,8 @@ watch(() => props.client, (newClient) => {
             </div>
           </div>
         </div>
-        <div v-if="isEditing || client.email || client.phone"
+        <div
+v-if="isEditing || client.email || client.phone"
              class="flex flex-col lg:flex-row gap-2 items-center justify-center h-full w-full lg:w-auto">
           <template v-if="isEditing">
             <div class="flex flex-col gap-2 items-start justify-center h-full w-full">
@@ -256,35 +261,25 @@ watch(() => props.client, (newClient) => {
 
     <div class="p-6">
       <template v-if="!isEditing">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-          <div
-              v-if="!client.internal"
-              class="bg-blue-50 dark:bg-blue-900 rounded-lg p-6 flex items-center justify-between transition-all duration-300 hover:shadow">
-            <div>
-              <p class="text-sm font-medium text-gray-600 dark:text-gray-300">{{ t("Revenue") }}</p>
-              <span class="text-3xl font-bold text-blue-700 dark:text-blue-300">{{ client.revenue }} $</span>
-            </div>
-            <i class="pi pi-dollar text-5xl text-blue-300 dark:text-blue-500"></i>
-          </div>
-          <div
-              class="bg-green-50 dark:bg-green-900 rounded-lg p-6 flex items-center justify-between transition-all duration-300 hover:shadow">
-            <div>
-              <p class="text-sm font-medium text-gray-600 dark:text-gray-300">{{ t("Time Worked") }}</p>
-              <span class="text-3xl font-bold text-green-700 dark:text-green-300">{{ client.timeWorked }} {{ t("hours") }}</span>
-            </div>
-            <i class="pi pi-clock text-5xl text-green-300 dark:text-green-500"></i>
-          </div>
-        </div>
-
-        <h4 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">{{ t("Task Overview") }}</h4>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-          <TaskStatusCard
-              :count="client.inProgressTasks" :label="t('In Progress')" icon="pi-spin pi-spinner"
-              color="orange"/>
-          <TaskStatusCard :count="client.todoTasks" :label="t('Todo')" icon="pi-list" color="yellow"/>
-          <TaskStatusCard :count="client.blockedTasks" :label="t('Blocked')" icon="pi-ban" color="red"/>
-          <TaskStatusCard :count="client.completedTasks" :label="t('Completed')" icon="pi-check-circle" color="green"/>
-        </div>
+        <TimeOverviewGrid
+            :time-worked="client.timeWorked"
+            :time-estimated="client.timeEstimated"
+            :time-left="client.timeLeft"
+        />
+        <RevenueOverviewGrid
+            :income="client.income"
+            :expenses="client.expenses"
+            :revenue="client.revenue"
+            :invoiced="client.invoiced"
+            :paid="client.paid"
+            :estimated="client.estimated"
+        />
+        <TaskOverviewGrid
+            :in-progress-tasks="client.inProgressTasks"
+            :todo-tasks="client.todoTasks"
+            :blocked-tasks="client.blockedTasks"
+            :completed-tasks="client.completedTasks"
+        />
       </template>
       <div class="flex flex-col sm:flex-row justify-end gap-4">
         <template v-if="isEditing">

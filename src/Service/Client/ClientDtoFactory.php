@@ -11,6 +11,20 @@ class ClientDtoFactory
 {
     public function __invoke(Client $client): ClientDto
     {
-        return ClientDto::fromClient($client, 0, 0, 0, 0, 0, 0, $client->isInternal());
+        return ClientDto::fromClient(
+            $client,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+        );
     }
 }
