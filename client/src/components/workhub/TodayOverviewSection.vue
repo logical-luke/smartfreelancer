@@ -61,7 +61,7 @@ function formatTime(minutes: number): string {
 </script>
 
 <template>
-  <Card class="shadow hover:shadow-md transition-shadow duration-300 overflow-hidden">
+  <Card class="w-full bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow">
     <template #title>
       <div class="bg-gradient-to-r from-indigo-400 to-indigo-500 dark:from-indigo-600 dark:to-indigo-700 p-6 -mx-6 -mt-6 mb-6">
         <div class="flex items-center space-x-2 text-white">

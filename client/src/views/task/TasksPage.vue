@@ -121,8 +121,8 @@ function updateTask(updatedTask: Task) {
       <h3 class="text-2xl font-bold">{{ t("Tasks") }}</h3>
     </div>
   </div>
-  <div>
-    <div class="tasks-list">
+  <div class="flex container flex-wrap gap-8 mb-8">
+    <div class="tasks-list w-full">
       <TaskItem
           v-for="task in tasks"
           :key="task.id"

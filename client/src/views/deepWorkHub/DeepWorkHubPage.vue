@@ -177,7 +177,7 @@ function formatTime(minutes: number): string {
         <h3 class="text-2xl font-bold">{{ t("Deep Work Hub") }}</h3>
       </div>
     </div>
-    <div class="space-y-6">
+    <div class="flex container flex-wrap gap-8 mb-8">
       <CurrentFocusSection
         :current-focus="currentFocus"
         :focus-notes="focusNotes"
