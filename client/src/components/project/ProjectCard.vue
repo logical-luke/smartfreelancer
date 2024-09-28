@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import {ref, computed, nextTick, onMounted, watch} from 'vue';
 import {useI18n} from 'vue-i18n';
+
+const {t} = useI18n();
+import {ref, computed, nextTick, onMounted, watch} from 'vue';
 import {useProjectsStore} from '@/stores/projects';
 import {useClientsStore} from '@/stores/clients';
 import InputText from 'primevue/inputtext';
 import DatePicker from 'primevue/datepicker';
 import Select from 'primevue/select';
 import DestructiveActionButton from "@/components/form/DestructiveActionButton.vue";
-import ProgressBar from 'primevue/progressbar';
 import Avatar from '@/components/form/Avatar.vue';
 import {defineProps, defineEmits} from 'vue';
 import type {Project, ProjectForm} from "@/interfaces/Project";
@@ -20,13 +21,15 @@ import Textarea from 'primevue/textarea';
 import TaskOverviewGrid from "@/components/report/TaskOverviewGrid.vue";
 import TimeOverviewGrid from "@/components/report/TimeOverviewGrid.vue";
 import RevenueOverviewGrid from "@/components/report/RevenueOverviewGrid.vue";
+import projectToProjectForm from "@/services/mappers/projectToProjectForm";
+
+import {useToast} from "primevue/usetoast";
 
 const props = defineProps<{
   project: Project;
   isDraft: boolean;
 }>();
-
-const {t} = useI18n();
+const toast = useToast();
 const projectsStore = useProjectsStore();
 const clientsStore = useClientsStore();
 const emit = defineEmits(['save', 'discard']);
@@ -89,15 +92,13 @@ const saveProject = async () => {
   validateName();
   validateClient();
   if (isValid.value) {
-    const projectPayload: ProjectForm = {
-      ...project.value,
-      clientId: project.value.clientId,
-    };
-
+    const projectPayload = projectToProjectForm(project.value);
     if (props.isDraft) {
       await projectsStore.create(projectPayload);
+      toast.add({severity: 'success', summary: t('Created'), detail: t('Project created'), life: 3000});
     } else {
       await projectsStore.update(project.value.id, projectPayload);
+      toast.add({severity: 'success', summary: t('Saved'), detail: t('Project saved'), life: 3000});
     }
     emit('save');
     isEditing.value = false;
@@ -114,16 +115,6 @@ const confirmDeletion = async () => {
   await projectsStore.delete(project.value.id);
 };
 
-const updateAvatar = (avatar: string) => {
-  project.value.avatar = avatar;
-};
-
-const clearAvatar = () => {
-  project.value.avatar = '';
-};
-
-const hasAvatar = computed(() => project.value.avatar && project.value.avatar !== '');
-
 watch(() => props.project, (newProject) => {
   project.value = {...newProject};
   if (project.value.clientId) {
@@ -133,9 +124,6 @@ watch(() => props.project, (newProject) => {
     }
   }
 });
-
-const totalTasks = computed(() => project.value.todoTasks + project.value.inProgressTasks + project.value.blockedTasks + project.value.completedTasks);
-const progress = computed(() => totalTasks.value > 0 ? (project.value.completedTasks / totalTasks.value) * 100 : 0);
 
 const selectedClient = computed(() => {
   return clientsStore.clients.find(client => client.id === project.value.clientId);

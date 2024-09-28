@@ -10,13 +10,14 @@ import Tag from "primevue/tag";
 import {defineProps, defineEmits} from 'vue';
 import IconField from "primevue/iconfield";
 import InputIcon from "primevue/inputicon";
-import type Client from '@/interfaces/client';
+import type {Client} from '@/interfaces/Client';
 import {useConfirm} from "primevue/useconfirm";
 import {useToast} from "primevue/usetoast";
 import Avatar from "@/components/form/Avatar.vue";
 import TaskOverviewGrid from "@/components/report/TaskOverviewGrid.vue";
 import TimeOverviewGrid from "@/components/report/TimeOverviewGrid.vue";
 import RevenueOverviewGrid from "@/components/report/RevenueOverviewGrid.vue";
+import clientToClientForm from "@/services/mappers/clientToClientForm";
 
 const props = defineProps<{
   client: Client;
@@ -91,16 +92,20 @@ const revalidatePhone = () => {
 };
 
 const saveClient = async () => {
+  validateName();
+  validateEmail();
+  validatePhone();
   if (isValid.value) {
+    const clientPayload = clientToClientForm(client.value);
     if (props.isDraft) {
-      await clientsStore.create(client.value);
+      await clientsStore.create(clientPayload);
       toast.add({severity: 'success', summary: t('Created'), detail: t('Client created'), life: 3000});
-      emit('save');
     } else {
-      await clientsStore.update(client.value.id, client.value);
+      await clientsStore.update(client.value.id, clientPayload);
       toast.add({severity: 'success', summary: t('Saved'), detail: t('Client saved'), life: 3000});
-      isEditing.value = false;
     }
+    emit('save');
+    isEditing.value = false;
   }
 };
 
@@ -138,16 +143,6 @@ const deleteClient = async () => {
     console.error(e);
   }
 };
-
-const updateAvatar = (avatar: string) => {
-  client.value.avatar = avatar;
-};
-
-const clearAvatar = () => {
-  client.value.avatar = '';
-};
-
-const hasAvatar = computed(() => client.value.avatar && client.value.avatar !== '');
 
 const handleKeyDown = (event: KeyboardEvent) => {
   if (event.key === 'Enter') {
@@ -199,8 +194,8 @@ watch(() => props.client, (newClient) => {
           </div>
         </div>
         <div
-v-if="isEditing || client.email || client.phone"
-             class="flex flex-col lg:flex-row gap-2 items-center justify-center h-full w-full lg:w-auto">
+            v-if="isEditing || client.email || client.phone"
+            class="flex flex-col lg:flex-row gap-2 items-center justify-center h-full w-full lg:w-auto">
           <template v-if="isEditing">
             <div class="flex flex-col gap-2 items-start justify-center h-full w-full">
               <label class="block text-sm font-medium text-white mb-1">{{ t("EMAIL") }}</label>
@@ -264,7 +259,6 @@ v-if="isEditing || client.email || client.phone"
         <TimeOverviewGrid
             :time-worked="client.timeWorked"
             :time-estimated="client.timeEstimated"
-            :time-left="client.timeLeft"
         />
         <RevenueOverviewGrid
             :income="client.income"
@@ -272,7 +266,7 @@ v-if="isEditing || client.email || client.phone"
             :revenue="client.revenue"
             :invoiced="client.invoiced"
             :paid="client.paid"
-            :estimated="client.estimated"
+            :estimated="client.incomeEstimated"
         />
         <TaskOverviewGrid
             :in-progress-tasks="client.inProgressTasks"

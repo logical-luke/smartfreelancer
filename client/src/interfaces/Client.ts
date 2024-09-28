@@ -1,7 +1,7 @@
 interface Client {
     id: string;
     ownerId: string;
-    name: string | null;
+    name: string;
     avatar: string | null;
     phone: string | null;
     email: string | null;

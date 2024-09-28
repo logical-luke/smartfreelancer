@@ -22,6 +22,14 @@ readonly class ProjectDTO implements \JsonSerializable
         private int $inProgressTasks,
         private int $blockedTasks,
         private int $completedTasks,
+        private int $income,
+        private int $expenses,
+        private int $invoiced,
+        private int $paid,
+        private int $estimated,
+        private int $timeEstimated,
+        private int $timeLeft,
+        private ?int $dueDate,
     ) {
     }
 
@@ -33,6 +41,13 @@ readonly class ProjectDTO implements \JsonSerializable
         int $inProgressTasks,
         int $blockedTasks,
         int $completedTasks,
+        int $income,
+        int $expenses,
+        int $invoiced,
+        int $paid,
+        int $estimated,
+        int $timeEstimated,
+        int $timeLeft,
     ): self
     {
         return new self(
@@ -49,10 +64,18 @@ readonly class ProjectDTO implements \JsonSerializable
             $inProgressTasks,
             $blockedTasks,
             $completedTasks,
+            $income,
+            $expenses,
+            $invoiced,
+            $paid,
+            $estimated,
+            $timeEstimated,
+            $timeLeft,
+            $project->getDueDate(),
         );
     }
 
-    public function jsonSerialize(): mixed
+    public function jsonSerialize(): array
     {
         return [
             'id' => $this->id,
@@ -68,6 +91,14 @@ readonly class ProjectDTO implements \JsonSerializable
             'inProgressTasks' => $this->inProgressTasks,
             'blockedTasks' => $this->blockedTasks,
             'completedTasks' => $this->completedTasks,
+            'income' => $this->income,
+            'expenses' => $this->expenses,
+            'invoiced' => $this->invoiced,
+            'paid' => $this->paid,
+            'estimated' => $this->estimated,
+            'timeEstimated' => $this->timeEstimated,
+            'timeLeft' => $this->timeLeft,
+            'dueDate' => $this->dueDate,
         ];
     }
 }
