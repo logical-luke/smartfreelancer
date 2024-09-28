@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import Checkbox from 'primevue/checkbox';
 import InputText from 'primevue/inputtext';
@@ -25,11 +25,13 @@ const emit = defineEmits<{
   (e: 'delete:task', taskId: number): void;
   (e: 'add-task-before'): void;
   (e: 'add-task-after'): void;
-  (e: 'add-subtask'): void;
+  (e: 'add-subtask', taskId: number): void;
 }>();
 
 const editedTask = ref({ ...props.task });
 const isTracking = ref(false);
+const nameError = ref('');
+const titleInput = ref<InstanceType<typeof InputText> | null>(null);
 
 const isOverdue = computed(() => {
   if (!editedTask.value.dueDate || editedTask.value.completed) return false;
@@ -72,19 +74,43 @@ function confirmDeletion() {
 }
 
 function saveTask() {
-  if (isValid.value) {
+  if (editedTask.value.title) {
+    nameError.value = '';
     emit('update:task', editedTask.value);
+  } else {
+    nameError.value = t('Name is required');
   }
 }
+
+function handleKeyDown(event: KeyboardEvent) {
+  if (event.key === 'Enter') {
+    saveTask();
+    if (titleInput.value) titleInput.value.$el.blur();
+  }
+}
+
+function handleBlur() {
+  saveTask();
+}
+
+function addSubtask() {
+  emit('add-subtask', editedTask.value.id);
+}
+
+onMounted(() => {
+  if (!props.task.title && titleInput.value) {
+    titleInput.value.$el.focus();
+  }
+});
 </script>
 
 <template>
   <div class="relative">
-    <Button v-if="showAddButtons" icon="pi pi-plus" class="absolute -top-4 left-1/2 transform -translate-x-1/2 rounded-full p-button-sm z-10" @click="$emit('add-task-before')" />
+    <Button v-if="showAddButtons" icon="pi pi-plus" class="absolute -top-6 left-1/2 transform -translate-x-1/2 rounded-full p-button-sm z-10 w-10 h-10" @click="$emit('add-task-before')" />
 
     <div
       :class="[
-        'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-8 p-4 relative',
+        'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-16 p-4 relative',
         { 'border-l-4': true },
         { 'border-yellow-300 bg-white dark:bg-gray-800': editedTask.status === 'Todo' },
         { 'border-orange-300 bg-white dark:bg-gray-800': editedTask.status === 'In Progress' },
@@ -93,13 +119,16 @@ function saveTask() {
       ]"
     >
       <div class="flex flex-wrap items-center justify-between mb-2">
-        <div class="flex items-center">
+        <div class="flex items-center flex-grow">
           <Checkbox v-model="editedTask.completed" :binary="true" class="mr-3 flex-shrink-0" @change="toggleComplete" />
           <InputText
+            ref="titleInput"
             v-model="editedTask.title"
             class="text-lg font-semibold mr-2 break-words dark:text-white p-0 border-none bg-transparent flex-grow"
-            :class="{ 'line-through': editedTask.completed }"
-            @blur="updateField('title', editedTask.title)"
+            :class="{ 'line-through': editedTask.completed, 'p-invalid': nameError }"
+            @blur="handleBlur"
+            @keydown="handleKeyDown"
+            style="word-break: break-word;"
           />
         </div>
         <div class="flex items-center gap-2 mt-2 sm:mt-0">
@@ -109,9 +138,10 @@ function saveTask() {
             :class="['p-button-sm', isTracking ? 'p-button-warning' : 'p-button-success']"
             @click="toggleTimeTracking"
           />
-          <Button icon="pi pi-trash" class="p-button-danger p-button-sm" @click="confirmDeletion" />
+          <Button icon="pi pi-trash" label="Delete" class="p-button-danger p-button-sm" @click="confirmDeletion" />
         </div>
       </div>
+      <small v-if="nameError" class="p-error">{{ nameError }}</small>
 
       <div class="text-sm text-gray-600 dark:text-gray-300 flex flex-wrap gap-2">
         <span
@@ -213,12 +243,15 @@ function saveTask() {
           :projects="projects"
           :show-add-buttons="showAddButtons"
           class="mt-2"
+          @update:task="(updatedSubtask) => updateField('subtasks', editedTask.subtasks!.map(st => st.id === updatedSubtask.id ? updatedSubtask : st))"
+          @delete:task="(deletedSubtaskId) => updateField('subtasks', editedTask.subtasks!.filter(st => st.id !== deletedSubtaskId))"
+          @add-subtask="$emit('add-subtask', $event)"
         />
       </div>
 
-      <Button v-if="showAddButtons" icon="pi pi-plus" label="Add Subtask" class="mt-2 p-button-sm p-button-text" @click="$emit('add-subtask')" />
+      <Button v-if="showAddButtons" icon="pi pi-plus" label="Add Subtask" class="mt-2 p-button-sm p-button-text" @click="addSubtask" />
     </div>
 
-    <Button v-if="showAddButtons" icon="pi pi-plus" class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 rounded-full p-button-sm z-10" @click="$emit('add-task-after')" />
+    <Button v-if="showAddButtons" icon="pi pi-plus" class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 rounded-full p-button-sm z-10 w-10 h-10" @click="$emit('add-task-after')" />
   </div>
 </template>

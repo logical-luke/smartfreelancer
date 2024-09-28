@@ -4,7 +4,7 @@ const { t } = useI18n();
 
 import { ref, computed } from 'vue';
 import TaskItem from "@/components/task/TaskItem.vue";
-import type Task from "@/interfaces/task";
+import type { Task } from "@/interfaces/Task";
 import PageHeader from "@/components/page/PageHeader.vue";
 import AddItemFloatingButton from "@/components/navigation/AddItemFloatingButton.vue";
 import { useToast } from "primevue/usetoast";
@@ -126,32 +126,21 @@ const projects = ref([
   { label: 'Mobile App', value: 'Mobile App' },
 ]);
 
-function addTaskAtPosition(position: number, parentId: number | null = null) {
+function addTaskAtPosition(position: number) {
   const newTask: Task = {
     id: Date.now(),
     title: '',
     client: 'Internal',
     status: 'Todo',
-    completed: false,
-    parentId: parentId
+    completed: false
   };
-  if (parentId) {
-    const parentIndex = tasks.value.findIndex(t => t.id === parentId);
-    if (parentIndex !== -1) {
-      if (!tasks.value[parentIndex].subtasks) {
-        tasks.value[parentIndex].subtasks = [];
-      }
-      tasks.value[parentIndex].subtasks!.splice(position, 0, newTask);
-    }
-  } else {
-    tasks.value.splice(position, 0, newTask);
-  }
+  tasks.value.splice(position, 0, newTask);
 }
 
-function saveTask(task: Task) {
-  const index = tasks.value.findIndex(t => t.id === task.id);
+function saveTask(updatedTask: Task) {
+  const index = tasks.value.findIndex(t => t.id === updatedTask.id);
   if (index !== -1) {
-    tasks.value[index] = task;
+    tasks.value[index] = updatedTask;
     toast.add({ severity: 'success', summary: t('Saved'), detail: t('Task saved'), life: 3000 });
   }
 }
@@ -169,47 +158,51 @@ function deleteTask(taskId: number) {
 }
 
 function addSubtask(parentId: number) {
-  const newTask: Task = {
+  const newSubtask: Task = {
     id: Date.now(),
     title: '',
     client: 'Internal',
     status: 'Todo',
-    completed: false,
-    parentId: parentId
+    completed: false
   };
-  const parentIndex = tasks.value.findIndex(t => t.id === parentId);
-  if (parentIndex !== -1) {
-    if (!tasks.value[parentIndex].subtasks) {
-      tasks.value[parentIndex].subtasks = [];
-    }
-    tasks.value[parentIndex].subtasks!.push(newTask);
-  }
-}
 
-const sortedTasks = computed(() => {
-  return [...tasks.value].sort((a, b) => b.id - a.id);
-});
+  function addSubtaskRecursive(tasks: Task[]): boolean {
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i].id === parentId) {
+        if (!tasks[i].subtasks) {
+          tasks[i].subtasks = [];
+        }
+        tasks[i].subtasks.push(newSubtask);
+        return true;
+      }
+      if (tasks[i].subtasks && addSubtaskRecursive(tasks[i].subtasks)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  addSubtaskRecursive(tasks.value);
+}
 </script>
 
 <template>
   <PageHeader title="Tasks" icon="pi-check-circle" />
   <div class="flex container flex-wrap gap-8 mb-8">
     <div class="tasks-list w-full">
-      <transition-group name="slide">
-        <template v-for="(task, index) in sortedTasks" :key="task.id">
-          <TaskItem
-            :task="task"
-            :clients="clients"
-            :projects="projects"
-            :show-add-buttons="true"
-            @update:task="saveTask"
-            @delete:task="deleteTask"
-            @add-task-before="addTaskAtPosition(index)"
-            @add-task-after="addTaskAtPosition(index + 1)"
-            @add-subtask="addSubtask(task.id)"
-          />
-        </template>
-      </transition-group>
+      <TaskItem
+        v-for="(task, index) in tasks"
+        :key="task.id"
+        :task="task"
+        :clients="clients"
+        :projects="projects"
+        :show-add-buttons="true"
+        @update:task="saveTask"
+        @delete:task="deleteTask"
+        @add-task-before="addTaskAtPosition(index)"
+        @add-task-after="addTaskAtPosition(index + 1)"
+        @add-subtask="addSubtask"
+      />
     </div>
   </div>
 </template>
