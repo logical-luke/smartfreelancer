@@ -1,26 +1,46 @@
 <script setup lang="ts">
-import {computed, ref} from 'vue';
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import Checkbox from 'primevue/checkbox';
-import type {Task} from "@/interfaces/Task";
+import InputText from 'primevue/inputtext';
+import Datepicker from 'primevue/datepicker';
+import Select from 'primevue/select';
+import InputNumber from 'primevue/inputnumber';
+import Button from 'primevue/button';
+import Popover from 'primevue/popover';
+import type { Task } from "@/interfaces/Task";
+
+const { t } = useI18n();
 
 const props = defineProps<{
   task: Task;
+  clients: { label: string; value: string }[];
+  projects: { label: string; value: string }[];
+  showAddButtons?: boolean;
 }>();
 
 const emit = defineEmits<{
   (e: 'update:task', task: Task): void;
   (e: 'toggleTimeTracking', task: Task): void;
+  (e: 'delete:task', taskId: number): void;
+  (e: 'add-task-before'): void;
+  (e: 'add-task-after'): void;
+  (e: 'add-subtask'): void;
 }>();
 
+const editedTask = ref({ ...props.task });
 const isTracking = ref(false);
 
 const isOverdue = computed(() => {
-  if (!props.task.dueDate || props.task.completed) return false;
-  return new Date(props.task.dueDate) < new Date();
+  if (!editedTask.value.dueDate || editedTask.value.completed) return false;
+  return new Date(editedTask.value.dueDate) < new Date();
 });
 
+const isValid = computed(() => editedTask.value.title && editedTask.value.client);
+
 function toggleComplete() {
-  emit('update:task', { ...props.task, completed: !props.task.completed });
+  editedTask.value.completed = !editedTask.value.completed;
+  emit('update:task', editedTask.value);
 }
 
 function formatDate(date: string): string {
@@ -39,98 +59,166 @@ function formatCurrency(amount: number): string {
 
 function toggleTimeTracking() {
   isTracking.value = !isTracking.value;
-  emit('toggleTimeTracking', props.task);
+  emit('toggleTimeTracking', editedTask.value);
+}
+
+function updateField(field: keyof Task, value: any) {
+  editedTask.value[field] = value;
+  emit('update:task', editedTask.value);
+}
+
+function confirmDeletion() {
+  emit('delete:task', editedTask.value.id);
+}
+
+function saveTask() {
+  if (isValid.value) {
+    emit('update:task', editedTask.value);
+  }
 }
 </script>
 
 <template>
-  <div
-    :class="[
-      'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-4 p-4 sm:p-6',
-      { 'border-l-4': true },
-      { 'border-yellow-300 bg-white dark:bg-gray-800': task.status === 'Todo' },
-      { 'border-orange-300 bg-white dark:bg-gray-800': task.status === 'In Progress' },
-      { 'border-green-300 bg-gray-100 dark:bg-gray-700': task.status === 'Completed' },
-      { 'border-red-300 bg-white dark:bg-gray-800': task.status === 'Blocked' },
-    ]"
-  >
-    <div class="flex">
-      <Checkbox value="task.completed" :binary="true" class="mt-1 mr-3 flex-shrink-0" @change="toggleComplete" />
-      <div class="flex-grow">
-        <div class="flex flex-wrap items-start mb-3">
-          <h3 :class="['text-lg font-semibold mr-2 break-words dark:text-white', { 'line-through': task.completed }]">
-            {{ task.title }}
-          </h3>
-          <span
-            :class="[
-              'text-xs font-medium px-2 py-1 rounded flex items-center',
-              { 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100': task.status === 'Todo' },
-              { 'bg-orange-100 text-orange-800 dark:bg-orange-800 dark:text-orange-100': task.status === 'In Progress' },
-              { 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100': task.status === 'Completed' },
-              { 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100': task.status === 'Blocked' },
-            ]"
-          >
-            <i
-              :class="[
-                'mr-1',
-                { 'pi pi-list': task.status === 'Todo' },
-                { 'pi pi-spin pi-spinner': task.status === 'In Progress' },
-                { 'pi pi-check': task.status === 'Completed' },
-                { 'pi pi-ban': task.status === 'Blocked' },
-              ]"
-            ></i>
-            {{ task.status }}
-          </span>
+  <div class="relative">
+    <Button v-if="showAddButtons" icon="pi pi-plus" class="absolute -top-4 left-1/2 transform -translate-x-1/2 rounded-full p-button-sm z-10" @click="$emit('add-task-before')" />
+
+    <div
+      :class="[
+        'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-8 p-4 relative',
+        { 'border-l-4': true },
+        { 'border-yellow-300 bg-white dark:bg-gray-800': editedTask.status === 'Todo' },
+        { 'border-orange-300 bg-white dark:bg-gray-800': editedTask.status === 'In Progress' },
+        { 'border-green-300 bg-gray-100 dark:bg-gray-700': editedTask.status === 'Completed' },
+        { 'border-red-300 bg-white dark:bg-gray-800': editedTask.status === 'Blocked' },
+      ]"
+    >
+      <div class="flex flex-wrap items-center justify-between mb-2">
+        <div class="flex items-center">
+          <Checkbox v-model="editedTask.completed" :binary="true" class="mr-3 flex-shrink-0" @change="toggleComplete" />
+          <InputText
+            v-model="editedTask.title"
+            class="text-lg font-semibold mr-2 break-words dark:text-white p-0 border-none bg-transparent flex-grow"
+            :class="{ 'line-through': editedTask.completed }"
+            @blur="updateField('title', editedTask.title)"
+          />
         </div>
-        <div class="text-sm text-gray-600 dark:text-gray-300 flex flex-wrap gap-3 items-center">
-          <span v-if="task.project" v-tooltip.top="'Project'" class="flex items-center">
-            <i class="pi pi-folder mr-1"></i>{{ task.project }}
-          </span>
-          <span v-if="task.client" v-tooltip.top="'Client'" class="flex items-center">
-            <i class="pi pi-user mr-1"></i>{{ task.client }}
-          </span>
-          <span v-if="task.dueDate" :class="{ 'text-red-500 dark:text-red-400': isOverdue }" class="flex items-center">
-            <i class="pi pi-calendar-times mr-1"></i>Due: {{ formatDate(task.dueDate) }}
-          </span>
-          <span v-if="task.scheduledDate" class="flex items-center">
-            <i class="pi pi-calendar mr-1"></i>Scheduled: {{ formatDate(task.scheduledDate) }}
-          </span>
-          <span v-if="task.timeEstimate" class="flex items-center">
-            <i class="pi pi-clock mr-1"></i>Est: {{ formatTime(task.timeEstimate) }}
-          </span>
-          <span v-if="task.trackedTime" class="flex items-center">
-            <i class="pi pi-stopwatch mr-1"></i>Tracked: {{ formatTime(task.trackedTime) }}
-          </span>
-          <span v-if="task.estimatedRevenue" class="flex items-center">
-            <i class="pi pi-dollar mr-1"></i>Est. Revenue: {{ formatCurrency(task.estimatedRevenue) }}
-          </span>
-          <button
-            :class="[
-              'text-xs px-2 py-1 rounded transition-colors duration-200 flex items-center',
-              isTracking
-                ? 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100 hover:bg-red-200 dark:hover:bg-red-700'
-                : 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100 hover:bg-green-200 dark:hover:bg-green-700'
-            ]"
+        <div class="flex items-center gap-2 mt-2 sm:mt-0">
+          <Button
+            :label="isTracking ? 'Pause' : 'Start'"
+            :icon="isTracking ? 'pi pi-pause' : 'pi pi-play'"
+            :class="['p-button-sm', isTracking ? 'p-button-warning' : 'p-button-success']"
             @click="toggleTimeTracking"
-          >
-            <i :class="['mr-1', isTracking ? 'pi pi-pause' : 'pi pi-play']"></i>
-            {{ isTracking ? 'Stop' : 'Start' }} Tracking
-          </button>
+          />
+          <Button icon="pi pi-trash" class="p-button-danger p-button-sm" @click="confirmDeletion" />
         </div>
       </div>
+
+      <div class="text-sm text-gray-600 dark:text-gray-300 flex flex-wrap gap-2">
+        <span
+          :class="[
+            'cursor-pointer px-2 py-1 rounded-full text-xs font-medium inline-flex items-center',
+            { 'bg-yellow-100 text-yellow-800': editedTask.status === 'Todo' },
+            { 'bg-blue-100 text-blue-800': editedTask.status === 'In Progress' },
+            { 'bg-green-100 text-green-800': editedTask.status === 'Completed' },
+            { 'bg-red-100 text-red-800': editedTask.status === 'Blocked' },
+          ]"
+          @click="(event) => $refs.statusPopover.toggle(event)"
+        >
+          {{ editedTask.status }}
+        </span>
+        <Popover ref="statusPopover" appendTo="body">
+          <Select
+            v-model="editedTask.status"
+            :options="['Todo', 'In Progress', 'Completed', 'Blocked']"
+            @change="updateField('status', editedTask.status)"
+          />
+        </Popover>
+
+        <span class="cursor-pointer flex items-center" @click="(event) => $refs.clientPopover.toggle(event)">
+          <i class="pi pi-user mr-1"></i>{{ editedTask.client || 'Select Client' }}
+        </span>
+        <Popover ref="clientPopover" appendTo="body">
+          <Select
+            v-model="editedTask.client"
+            :options="clients"
+            optionLabel="label"
+            optionValue="value"
+            @change="updateField('client', editedTask.client)"
+          />
+        </Popover>
+
+        <span class="cursor-pointer flex items-center" @click="(event) => $refs.projectPopover.toggle(event)">
+          <i class="pi pi-folder mr-1"></i>{{ editedTask.project || 'Select Project' }}
+        </span>
+        <Popover ref="projectPopover" appendTo="body">
+          <Select
+            v-model="editedTask.project"
+            :options="projects"
+            optionLabel="label"
+            optionValue="value"
+            @change="updateField('project', editedTask.project)"
+          />
+        </Popover>
+
+        <span :class="['cursor-pointer flex items-center', { 'text-red-500': isOverdue }]" @click="(event) => $refs.dueDatePopover.toggle(event)">
+          <i class="pi pi-calendar-times mr-1"></i>{{ editedTask.dueDate ? formatDate(editedTask.dueDate) : 'Set Due Date' }}
+        </span>
+        <Popover ref="dueDatePopover" appendTo="body">
+          <Datepicker v-model="editedTask.dueDate" @date-select="updateField('dueDate', editedTask.dueDate)" />
+        </Popover>
+
+        <span class="cursor-pointer flex items-center" @click="(event) => $refs.scheduledDatePopover.toggle(event)">
+          <i class="pi pi-calendar mr-1"></i>{{ editedTask.scheduledDate ? formatDate(editedTask.scheduledDate) : 'Set Schedule' }}
+        </span>
+        <Popover ref="scheduledDatePopover" appendTo="body">
+          <Datepicker v-model="editedTask.scheduledDate" @date-select="updateField('scheduledDate', editedTask.scheduledDate)" />
+        </Popover>
+
+        <span class="cursor-pointer flex items-center" @click="(event) => $refs.timeEstimatePopover.toggle(event)">
+          <i class="pi pi-clock mr-1"></i>{{ editedTask.timeEstimate ? formatTime(editedTask.timeEstimate) : 'Set Estimate' }}
+        </span>
+        <Popover ref="timeEstimatePopover" appendTo="body">
+          <InputNumber
+            v-model="editedTask.timeEstimate"
+            placeholder="Minutes"
+            @blur="updateField('timeEstimate', editedTask.timeEstimate)"
+          />
+        </Popover>
+
+        <span v-if="editedTask.trackedTime" class="flex items-center">
+          <i class="pi pi-stopwatch mr-1"></i>Tracked: {{ formatTime(editedTask.trackedTime) }}
+        </span>
+
+        <span class="cursor-pointer flex items-center" @click="(event) => $refs.revenuePopover.toggle(event)">
+          <i class="pi pi-dollar mr-1"></i>{{ editedTask.estimatedRevenue ? formatCurrency(editedTask.estimatedRevenue) : 'Set Revenue' }}
+        </span>
+        <Popover ref="revenuePopover" appendTo="body">
+          <InputNumber
+            v-model="editedTask.estimatedRevenue"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            @blur="updateField('estimatedRevenue', editedTask.estimatedRevenue)"
+          />
+        </Popover>
+      </div>
+
+      <div v-if="editedTask.subtasks && editedTask.subtasks.length > 0" class="pl-4 pr-4 pb-4 mt-4 border-t border-gray-100 dark:border-gray-700">
+        <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 mt-2">Subtasks:</h4>
+        <TaskItem
+          v-for="subtask in editedTask.subtasks"
+          :key="subtask.id"
+          :task="subtask"
+          :clients="clients"
+          :projects="projects"
+          :show-add-buttons="showAddButtons"
+          class="mt-2"
+        />
+      </div>
+
+      <Button v-if="showAddButtons" icon="pi pi-plus" label="Add Subtask" class="mt-2 p-button-sm p-button-text" @click="$emit('add-subtask')" />
     </div>
-    <div v-if="task.subtasks && task.subtasks.length > 0" class="pl-4 sm:pl-8 pr-4 pb-4 mt-4 border-t border-gray-100 dark:border-gray-700">
-      <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 mt-2">Subtasks:</h4>
-      <TaskItem
-        v-for="subtask in task.subtasks"
-        :key="subtask.id"
-        :task="subtask"
-        class="mt-2"
-      />
-    </div>
+
+    <Button v-if="showAddButtons" icon="pi pi-plus" class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 rounded-full p-button-sm z-10" @click="$emit('add-task-after')" />
   </div>
 </template>
-
-
-
-

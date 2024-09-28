@@ -3,8 +3,8 @@ import {ref, computed, nextTick, onMounted, watch} from 'vue';
 import {useI18n} from 'vue-i18n';
 import {useClientsStore} from '@/stores/clients';
 import InputText from 'primevue/inputtext';
-import MainActionButton from '@/components/form/PrimaryActionButton.vue';
-import ActionButton from '@/components/form/SecondaryActionButton.vue';
+import PrimaryActionButton from '@/components/form/PrimaryActionButton.vue';
+import SecondaryActionButton from '@/components/form/SecondaryActionButton.vue';
 import DestructiveActionButton from "@/components/form/DestructiveActionButton.vue";
 import Tag from "primevue/tag";
 import {defineProps, defineEmits} from 'vue';
@@ -277,23 +277,23 @@ watch(() => props.client, (newClient) => {
       </template>
       <div class="flex flex-col sm:flex-row justify-end gap-4">
         <template v-if="isEditing">
-          <ActionButton @click="discardClient">
+          <SecondaryActionButton @click="discardClient">
             <i class="pi pi-times mr-2"></i>
             {{ t("Discard") }}
-          </ActionButton>
-          <MainActionButton
+          </SecondaryActionButton>
+          <PrimaryActionButton
               :disabled="!isValid"
               @click="saveClient"
           >
             <i class="pi pi-check mr-2"></i>
             {{ t("Save Client") }}
-          </MainActionButton>
+          </PrimaryActionButton>
         </template>
         <template v-else>
-          <ActionButton @click="isEditing = true">
+          <SecondaryActionButton @click="isEditing = true">
             <i class="pi pi-pencil mr-2"></i>
             {{ t("Edit") }}
-          </ActionButton>
+          </SecondaryActionButton>
           <DestructiveActionButton v-if="!client.internal" @click="confirmDeletion">
             <i class="pi pi-trash mr-2"></i>
             {{ t("Delete") }}
