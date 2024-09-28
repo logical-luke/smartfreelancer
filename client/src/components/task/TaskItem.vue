@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue';
-import { useI18n } from 'vue-i18n';
+import {computed, ref, onMounted} from 'vue';
+import {useI18n} from 'vue-i18n';
 import Checkbox from 'primevue/checkbox';
 import InputText from 'primevue/inputtext';
 import Datepicker from 'primevue/datepicker';
@@ -8,9 +8,10 @@ import Select from 'primevue/select';
 import InputNumber from 'primevue/inputnumber';
 import Button from 'primevue/button';
 import Popover from 'primevue/popover';
-import type { Task } from "@/interfaces/Task";
+import Tag from 'primevue/tag';
+import type {Task} from "@/interfaces/Task";
 
-const { t } = useI18n();
+const {t} = useI18n();
 
 const props = defineProps<{
   task: Task;
@@ -28,7 +29,7 @@ const emit = defineEmits<{
   (e: 'add-subtask', taskId: number): void;
 }>();
 
-const editedTask = ref({ ...props.task });
+const editedTask = ref({...props.task});
 const isTracking = ref(false);
 const nameError = ref('');
 const titleInput = ref<InstanceType<typeof InputText> | null>(null);
@@ -56,7 +57,7 @@ function formatTime(minutes: number): string {
 }
 
 function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+  return new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(amount);
 }
 
 function toggleTimeTracking() {
@@ -66,7 +67,9 @@ function toggleTimeTracking() {
 
 function updateField(field: keyof Task, value: any) {
   editedTask.value[field] = value;
-  emit('update:task', editedTask.value);
+  if (isValid.value) {
+    emit('update:task', editedTask.value);
+  }
 }
 
 function confirmDeletion() {
@@ -74,7 +77,7 @@ function confirmDeletion() {
 }
 
 function saveTask() {
-  if (editedTask.value.title) {
+  if (isValid.value) {
     nameError.value = '';
     emit('update:task', editedTask.value);
   } else {
@@ -84,13 +87,18 @@ function saveTask() {
 
 function handleKeyDown(event: KeyboardEvent) {
   if (event.key === 'Enter') {
+    event.preventDefault(); // Prevent default to avoid triggering blur
     saveTask();
     if (titleInput.value) titleInput.value.$el.blur();
   }
 }
 
 function handleBlur() {
-  saveTask();
+  if (editedTask.value.title) {
+    saveTask();
+  } else {
+    nameError.value = t('Name is required');
+  }
 }
 
 function addSubtask() {
@@ -106,10 +114,12 @@ onMounted(() => {
 
 <template>
   <div class="relative">
-    <Button v-if="showAddButtons" icon="pi pi-plus" class="absolute -top-6 left-1/2 transform -translate-x-1/2 rounded-full p-button-sm z-10 w-10 h-10" @click="$emit('add-task-before')" />
+    <Button v-if="showAddButtons" icon="pi pi-plus"
+            class="absolute -top-6 left-1/2 transform -translate-x-1/2 rounded-full p-button-sm z-10 w-10 h-10"
+            @click="$emit('add-task-before')"/>
 
     <div
-      :class="[
+        :class="[
         'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-16 p-4 relative',
         { 'border-l-4': true },
         { 'border-yellow-300 bg-white dark:bg-gray-800': editedTask.status === 'Todo' },
@@ -133,34 +143,34 @@ onMounted(() => {
         </div>
         <div class="flex items-center gap-2 mt-2 sm:mt-0">
           <Button
-            :label="isTracking ? 'Pause' : 'Start'"
-            :icon="isTracking ? 'pi pi-pause' : 'pi pi-play'"
-            :class="['p-button-sm', isTracking ? 'p-button-warning' : 'p-button-success']"
-            @click="toggleTimeTracking"
+              :label="isTracking ? 'Pause' : 'Start'"
+              :icon="isTracking ? 'pi pi-pause' : 'pi pi-play'"
+              :class="['p-button-sm', isTracking ? 'p-button-warning' : 'p-button-success']"
+              @click="toggleTimeTracking"
           />
-          <Button icon="pi pi-trash" label="Delete" class="p-button-danger p-button-sm" @click="confirmDeletion" />
+          <Button icon="pi pi-trash" label="Delete" class="p-button-danger p-button-sm" @click="confirmDeletion"/>
         </div>
       </div>
-      <small v-if="nameError" class="p-error">{{ nameError }}</small>
+      <Tag v-if="nameError" severity="danger" class="w-full mb-2" :value="nameError"/>
 
       <div class="text-sm text-gray-600 dark:text-gray-300 flex flex-wrap gap-2">
         <span
-          :class="[
+            :class="[
             'cursor-pointer px-2 py-1 rounded-full text-xs font-medium inline-flex items-center',
             { 'bg-yellow-100 text-yellow-800': editedTask.status === 'Todo' },
             { 'bg-blue-100 text-blue-800': editedTask.status === 'In Progress' },
             { 'bg-green-100 text-green-800': editedTask.status === 'Completed' },
             { 'bg-red-100 text-red-800': editedTask.status === 'Blocked' },
           ]"
-          @click="(event) => $refs.statusPopover.toggle(event)"
+            @click="(event) => $refs.statusPopover.toggle(event)"
         >
           {{ editedTask.status }}
         </span>
         <Popover ref="statusPopover" appendTo="body">
           <Select
-            v-model="editedTask.status"
-            :options="['Todo', 'In Progress', 'Completed', 'Blocked']"
-            @change="updateField('status', editedTask.status)"
+              v-model="editedTask.status"
+              :options="['Todo', 'In Progress', 'Completed', 'Blocked']"
+              @change="updateField('status', editedTask.status)"
           />
         </Popover>
 
@@ -169,11 +179,11 @@ onMounted(() => {
         </span>
         <Popover ref="clientPopover" appendTo="body">
           <Select
-            v-model="editedTask.client"
-            :options="clients"
-            optionLabel="label"
-            optionValue="value"
-            @change="updateField('client', editedTask.client)"
+              v-model="editedTask.client"
+              :options="clients"
+              optionLabel="label"
+              optionValue="value"
+              @change="updateField('client', editedTask.client)"
           />
         </Popover>
 
@@ -182,36 +192,44 @@ onMounted(() => {
         </span>
         <Popover ref="projectPopover" appendTo="body">
           <Select
-            v-model="editedTask.project"
-            :options="projects"
-            optionLabel="label"
-            optionValue="value"
-            @change="updateField('project', editedTask.project)"
+              v-model="editedTask.project"
+              :options="projects"
+              optionLabel="label"
+              optionValue="value"
+              @change="updateField('project', editedTask.project)"
           />
         </Popover>
 
-        <span :class="['cursor-pointer flex items-center', { 'text-red-500': isOverdue }]" @click="(event) => $refs.dueDatePopover.toggle(event)">
-          <i class="pi pi-calendar-times mr-1"></i>{{ editedTask.dueDate ? formatDate(editedTask.dueDate) : 'Set Due Date' }}
+        <span :class="['cursor-pointer flex items-center', { 'text-red-500': isOverdue }]"
+              @click="(event) => $refs.dueDatePopover.toggle(event)">
+          <i class="pi pi-calendar-times mr-1"></i>{{
+            editedTask.dueDate ? formatDate(editedTask.dueDate) : 'Set Due Date'
+          }}
         </span>
         <Popover ref="dueDatePopover" appendTo="body">
-          <Datepicker v-model="editedTask.dueDate" @date-select="updateField('dueDate', editedTask.dueDate)" />
+          <Datepicker v-model="editedTask.dueDate" @date-select="updateField('dueDate', editedTask.dueDate)"/>
         </Popover>
 
         <span class="cursor-pointer flex items-center" @click="(event) => $refs.scheduledDatePopover.toggle(event)">
-          <i class="pi pi-calendar mr-1"></i>{{ editedTask.scheduledDate ? formatDate(editedTask.scheduledDate) : 'Set Schedule' }}
+          <i class="pi pi-calendar mr-1"></i>{{
+            editedTask.scheduledDate ? formatDate(editedTask.scheduledDate) : 'Set Schedule'
+          }}
         </span>
         <Popover ref="scheduledDatePopover" appendTo="body">
-          <Datepicker v-model="editedTask.scheduledDate" @date-select="updateField('scheduledDate', editedTask.scheduledDate)" />
+          <Datepicker v-model="editedTask.scheduledDate"
+                      @date-select="updateField('scheduledDate', editedTask.scheduledDate)"/>
         </Popover>
 
         <span class="cursor-pointer flex items-center" @click="(event) => $refs.timeEstimatePopover.toggle(event)">
-          <i class="pi pi-clock mr-1"></i>{{ editedTask.timeEstimate ? formatTime(editedTask.timeEstimate) : 'Set Estimate' }}
+          <i class="pi pi-clock mr-1"></i>{{
+            editedTask.timeEstimate ? formatTime(editedTask.timeEstimate) : 'Set Estimate'
+          }}
         </span>
         <Popover ref="timeEstimatePopover" appendTo="body">
           <InputNumber
-            v-model="editedTask.timeEstimate"
-            placeholder="Minutes"
-            @blur="updateField('timeEstimate', editedTask.timeEstimate)"
+              v-model="editedTask.timeEstimate"
+              placeholder="Minutes"
+              @blur="updateField('timeEstimate', editedTask.timeEstimate)"
           />
         </Popover>
 
@@ -220,38 +238,46 @@ onMounted(() => {
         </span>
 
         <span class="cursor-pointer flex items-center" @click="(event) => $refs.revenuePopover.toggle(event)">
-          <i class="pi pi-dollar mr-1"></i>{{ editedTask.estimatedRevenue ? formatCurrency(editedTask.estimatedRevenue) : 'Set Revenue' }}
+          <i class="pi pi-dollar mr-1"></i>{{
+            editedTask.estimatedRevenue ? formatCurrency(editedTask.estimatedRevenue) : 'Set Revenue'
+          }}
         </span>
         <Popover ref="revenuePopover" appendTo="body">
           <InputNumber
-            v-model="editedTask.estimatedRevenue"
-            mode="currency"
-            currency="USD"
-            locale="en-US"
-            @blur="updateField('estimatedRevenue', editedTask.estimatedRevenue)"
+              v-model="editedTask.estimatedRevenue"
+              mode="currency"
+              currency="USD"
+              locale="en-US"
+              @blur="updateField('estimatedRevenue', editedTask.estimatedRevenue)"
           />
         </Popover>
       </div>
 
-      <div v-if="editedTask.subtasks && editedTask.subtasks.length > 0" class="pl-4 pr-4 pb-4 mt-4 border-t border-gray-100 dark:border-gray-700">
+      <div v-if="editedTask.subtasks && editedTask.subtasks.length > 0"
+           class="pl-4 pr-4 pb-4 mt-4 border-t border-gray-100 dark:border-gray-700">
         <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 mt-2">Subtasks:</h4>
         <TaskItem
-          v-for="subtask in editedTask.subtasks"
-          :key="subtask.id"
-          :task="subtask"
-          :clients="clients"
-          :projects="projects"
-          :show-add-buttons="showAddButtons"
-          class="mt-2"
-          @update:task="(updatedSubtask) => updateField('subtasks', editedTask.subtasks!.map(st => st.id === updatedSubtask.id ? updatedSubtask : st))"
-          @delete:task="(deletedSubtaskId) => updateField('subtasks', editedTask.subtasks!.filter(st => st.id !== deletedSubtaskId))"
-          @add-subtask="$emit('add-subtask', $event)"
+            v-for="subtask in editedTask.subtasks"
+            :key="subtask.id"
+            :task="subtask"
+            :clients="clients"
+            :projects="projects"
+            :show-add-buttons="showAddButtons"
+            class="mt-2"
+            @update:task="(updatedSubtask) => updateField('subtasks', editedTask.subtasks!.map(st => st.id === updatedSubtask.id ? updatedSubtask : st))"
+            @delete:task="(deletedSubtaskId) => updateField('subtasks', editedTask.subtasks!.filter(st => st.id !== deletedSubtaskId))"
+            @add-subtask="$emit('add-subtask', $event)"
+            @add-task-before="$emit('add-subtask', editedTask.id)"
+            @add-task-after="$emit('add-subtask', editedTask.id)"
         />
       </div>
 
-      <Button v-if="showAddButtons" icon="pi pi-plus" label="Add Subtask" class="mt-2 p-button-sm p-button-text" @click="addSubtask" />
+      <Button v-if="showAddButtons" icon="pi pi-plus" label="Add Subtask" class="mt-2 p-button-sm p-button-text"
+              @click="addSubtask"/>
     </div>
 
-    <Button v-if="showAddButtons" icon="pi pi-plus" class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 rounded-full p-button-sm z-10 w-10 h-10" @click="$emit('add-task-after')" />
+    <Button v-if="showAddButtons" icon="pi pi-plus"
+            class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 rounded-full p-button-sm z-10 w-10 h-10"
+            @click="$emit('add-task-after')"/>
   </div>
 </template>

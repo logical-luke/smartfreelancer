@@ -156,7 +156,6 @@ function deleteTask(taskId: number) {
     }
   });
 }
-
 function addSubtask(parentId: number) {
   const newSubtask: Task = {
     id: Date.now(),
@@ -182,7 +181,9 @@ function addSubtask(parentId: number) {
     return false;
   }
 
-  addSubtaskRecursive(tasks.value);
+  if (!addSubtaskRecursive(tasks.value)) {
+    console.error('Parent task not found');
+  }
 }
 </script>
 
