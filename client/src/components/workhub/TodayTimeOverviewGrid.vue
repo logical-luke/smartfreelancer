@@ -45,7 +45,7 @@ const eventsProgressPercentage = computed(() => {
       <div class="w-full md:w-1/2 px-2 mb-4">
         <div class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-between transition-all duration-300 hover:shadow-md">
           <div>
-            <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ t("Tasks Time") }}</p>
+            <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ t("Remaining Tasks") }}</p>
             <span class="text-lg font-bold text-green-600 dark:text-green-400">{{ formatTime(props.totalEstimatedTime) }}</span>
           </div>
           <i class="pi pi-list text-xl text-green-500"></i>
@@ -62,10 +62,10 @@ const eventsProgressPercentage = computed(() => {
       <div class="w-full md:w-1/2 px-2 mb-4">
         <div class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-between transition-all duration-300 hover:shadow-md">
           <div>
-            <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ t("Events Time") }}</p>
+            <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ t("Remaining Events") }}</p>
             <span class="text-lg font-bold text-yellow-600 dark:text-yellow-400">{{ formatTime(props.eventsTime) }}</span>
           </div>
-          <i class="pi pi-calendar-times text-xl text-yellow-500"></i>
+          <i class="pi pi-calendar-clock text-xl text-yellow-500"></i>
         </div>
         <div class="mt-2">
           <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">

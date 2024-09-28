@@ -47,7 +47,7 @@ const getColorClass = (color: string) => {
     <h3 class="text-lg font-semibold text-purple-800 dark:text-purple-200 mb-3 flex items-center">
       <i class="pi pi-list mr-2"></i>{{ t("Task Overview") }}
     </h3>
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
       <div v-for="(item, index) in items" :key="index"
            class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
         <div :class="['h-1 bg-gradient-to-r', getColorClass(item.color)]"></div>

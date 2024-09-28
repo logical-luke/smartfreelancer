@@ -1,21 +1,7 @@
 <script setup lang="ts">
 import {computed, ref} from 'vue';
 import Checkbox from 'primevue/checkbox';
-
-interface Task {
-  id: number;
-  title: string;
-  completed: boolean;
-  dueDate?: string;
-  scheduledDate?: string;
-  project?: string;
-  client: string;
-  timeEstimate?: number;
-  trackedTime?: number;
-  status: 'Todo' | 'In Progress' | 'Blocked' | 'Completed';
-  estimatedRevenue?: number;
-  subtasks?: Task[];
-}
+import type {Task} from "@/interfaces/Task";
 
 const props = defineProps<{
   task: Task;
