@@ -111,7 +111,7 @@ watch(() => route.fullPath, () => {
               <SidebarItem go-to="/expenses">
                 {{ t("Expenses") }}
                 <template #icon>
-                  <i class="pi pi-money-bill"></i>
+                  <i class="pi pi-wallet"></i>
                 </template>
               </SidebarItem>
               <SidebarItem go-to="/automations">

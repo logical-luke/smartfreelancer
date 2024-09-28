@@ -1,6 +1,5 @@
 import httpClient from "@/services/api/httpClient";
-import type Project from "@/interfaces/project";
-import type ProjectForm from "@/interfaces/projectForm";
+import type {Project, ProjectForm} from "@/interfaces/Project";
 
 export default {
     async delete(id: string): Promise<void> {

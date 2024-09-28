@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import type Task from "@/interfaces/task";
+import type { Task } from "@/interfaces/Task";
 import CurrentFocusSection from "@/components/workhub/CurrentFocusSection.vue";
 import TodayOverviewSection from "@/components/workhub/TodayOverviewSection.vue";
+import PageHeader from "@/components/page/PageHeader.vue";
 
 const { t } = useI18n();
 
@@ -172,11 +173,7 @@ function formatTime(minutes: number): string {
 
 <template>
   <div>
-    <div class="flex mb-8">
-      <div>
-        <h3 class="text-2xl font-bold">{{ t("Deep Work Hub") }}</h3>
-      </div>
-    </div>
+    <PageHeader icon="pi-bullseye" title="Deep Work Hub" />
     <div class="flex container flex-wrap gap-8 mb-8">
       <CurrentFocusSection
         :current-focus="currentFocus"

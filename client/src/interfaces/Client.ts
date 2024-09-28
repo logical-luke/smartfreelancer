@@ -1,4 +1,4 @@
-export default interface Client {
+interface Client {
     id: string;
     ownerId: string;
     name: string | null;
@@ -20,3 +20,12 @@ export default interface Client {
     paid: number;
     incomeEstimated: number;
 }
+
+interface ClientForm {
+    name: string;
+    avatar: string|null;
+    phone: string|null;
+    email: string|null;
+}
+
+export type {Client, ClientForm};

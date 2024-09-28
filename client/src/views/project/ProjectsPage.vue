@@ -4,6 +4,7 @@ import {computed, ref, onMounted, nextTick} from 'vue';
 import { useProjectsStore } from '@/stores/projects';
 import ProjectCard from '@/components/project/ProjectCard.vue';
 import AddItemFloatingButton from "@/components/navigation/AddItemFloatingButton.vue";
+import PageHeader from "@/components/page/PageHeader.vue";
 
 const { t } = useI18n();
 const projectsStore = useProjectsStore();
@@ -28,9 +29,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex mb-8">
-    <h3 class="text-2xl font-bold">{{ t("Projects") }}</h3>
-  </div>
+  <PageHeader title="Projects" icon="pi-folder" />
   <transition name="slide">
     <div v-if="projects.length > 0 || showDraftProject" class="flex container flex-wrap gap-8 mb-8">
       <transition-group name="slide">

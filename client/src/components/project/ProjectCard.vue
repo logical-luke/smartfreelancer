@@ -10,14 +10,13 @@ import DestructiveActionButton from "@/components/form/DestructiveActionButton.v
 import ProgressBar from 'primevue/progressbar';
 import Avatar from '@/components/form/Avatar.vue';
 import {defineProps, defineEmits} from 'vue';
-import type Project from '@/interfaces/project';
+import type {Project, ProjectForm} from "@/interfaces/Project";
 import PrimaryActionButton from "@/components/form/PrimaryActionButton.vue";
 import SecondaryActionButton from "@/components/form/SecondaryActionButton.vue";
 import Tag from 'primevue/tag';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import Textarea from 'primevue/textarea';
-import type ProjectForm from "@/interfaces/projectForm";
 import TaskOverviewGrid from "@/components/report/TaskOverviewGrid.vue";
 import TimeOverviewGrid from "@/components/report/TimeOverviewGrid.vue";
 import RevenueOverviewGrid from "@/components/report/RevenueOverviewGrid.vue";

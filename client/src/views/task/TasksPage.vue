@@ -5,6 +5,7 @@ const { t } = useI18n();
 import {ref} from 'vue';
 import TaskItem from "@/components/task/TaskItem.vue";
 import type Task from "@/interfaces/task";
+import PageHeader from "@/components/page/PageHeader.vue";
 
 const tasks = ref<Task[]>([
   {
@@ -116,11 +117,7 @@ function updateTask(updatedTask: Task) {
 </script>
 
 <template>
-  <div class="flex mb-8">
-    <div>
-      <h3 class="text-2xl font-bold">{{ t("Tasks") }}</h3>
-    </div>
-  </div>
+  <PageHeader title="Tasks" icon="pi-check-circle" />
   <div class="flex container flex-wrap gap-8 mb-8">
     <div class="tasks-list w-full">
       <TaskItem

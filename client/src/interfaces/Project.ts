@@ -1,4 +1,4 @@
-export default interface Project {
+interface Project {
   id: string;
   name: string;
   description: string | null;
@@ -19,3 +19,17 @@ export default interface Project {
   timeEstimated: number;
   timeLeft: number;
 }
+
+interface ProjectForm {
+  name: string;
+  description: string | null;
+  clientId: string;
+  todoTasks: number;
+  inProgressTasks: number;
+  blockedTasks: number;
+  completedTasks: number;
+  dueDate: string;
+  avatar: string | null;
+}
+
+export type { Project, ProjectForm };

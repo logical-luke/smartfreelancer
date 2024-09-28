@@ -1,4 +1,4 @@
-export default interface Task {
+interface Task {
   id: number;
   title: string;
   completed: boolean;
@@ -12,3 +12,5 @@ export default interface Task {
   estimatedRevenue?: number;
   subtasks?: Task[];
 }
+
+export type { Task };

@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import api from "@/services/api";
-import type Project from "@/interfaces/project";
-import type ProjectForm from "@/interfaces/projectForm";
+import type { Project, ProjectForm } from "@/interfaces/Project";
 
 interface State {
   projects: Project[];

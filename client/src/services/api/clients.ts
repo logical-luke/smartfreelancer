@@ -1,10 +1,9 @@
 import httpClient from "@/services/api/httpClient";
-import type Client from "@/interfaces/Client";
-import type ClientForm from "@/interfaces/clientForm";
 import type {AxiosResponse} from "axios";
 import {clientMapperConfig} from "@/services/api/mappers/clientMapperConfig";
 import {mapApiData} from "@/services/api/mappers/apiDataMapper";
 import {toAxiosData} from "@/services/api/mappers/axiosRecordMapper";
+import type {Client, ClientForm} from "@/interfaces/Client";
 
 export default {
     async delete(id: string): Promise<void> {

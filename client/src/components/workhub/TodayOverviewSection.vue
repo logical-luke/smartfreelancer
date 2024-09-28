@@ -72,13 +72,15 @@ function formatTime(minutes: number): string {
     </template>
     <template #content>
       <div class="space-y-6">
-        <WorkdayOverviewSection
-          :workday-start-time="props.workdayStartTime"
-          :workday-end-time="props.workdayEndTime"
-          :time-left-in-workday="props.timeLeftInWorkday"
-          :workday-progress="props.workdayProgress"
-          :is-overplanned="props.isOverplanned"
-        />
+        <WorkdayOverviewSection :workday-settings="{
+          monday: { start: '09:00', end: '17:00' },
+          tuesday: { start: '09:00', end: '17:00' },
+          wednesday: { start: '09:00', end: '17:00' },
+          thursday: { start: '09:00', end: '17:00' },
+          friday: { start: '09:00', end: '16:00' },
+          saturday: { start: '06:00', end: '07:00' },
+          sunday: { start: '', end: '' }
+        }" />
 
         <TodayTimeOverviewGrid
           :total-estimated-time="props.totalEstimatedTime"

@@ -1,7 +1,6 @@
 import {defineStore} from "pinia";
 import api from "@/services/api";
-import type Client from "@/interfaces/client";
-import type ClientForm from "@/interfaces/clientForm";
+import type {Client, ClientForm} from "@/interfaces/Client";
 
 interface State {
     clients: Client[];
@@ -23,7 +22,7 @@ export const useClientsStore = defineStore("clients", {
             await api.clients.delete(id);
             this.clients = this.clients.filter((client) => client.id !== id);
         },
-        async update(id:string, client: ClientForm) {
+        async update(id: string, client: ClientForm) {
             const updatedClient = await api.clients.update(id, client);
             this.clients = this.clients.map((c) => (c.id === updatedClient.id ? updatedClient : c));
         },

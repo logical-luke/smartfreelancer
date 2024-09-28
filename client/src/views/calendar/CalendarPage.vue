@@ -1,13 +1,7 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n';
-
-const { t } = useI18n();
+import PageHeader from "@/components/page/PageHeader.vue";
 </script>
 
 <template>
-  <div class="flex mb-8">
-    <h3 class=" text-2xl font-bold">{{ t("Calendar") }}</h3>
-  </div>
+  <PageHeader title="Calendar" icon="pi-calendar" />
 </template>
-
-<style scoped></style>

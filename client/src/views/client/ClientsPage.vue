@@ -5,6 +5,7 @@ import {computed, ref, onMounted, nextTick} from 'vue';
 import { useClientsStore } from '@/stores/clients';
 import ClientCard from '@/components/client/ClientCard.vue';
 import AddItemFloatingButton from "@/components/navigation/AddItemFloatingButton.vue";
+import PageHeader from "@/components/page/PageHeader.vue";
 
 const clientsStore = useClientsStore();
 const clients = computed(() => clientsStore.clients);
@@ -28,11 +29,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex mb-8">
-    <div>
-      <h3 class="text-2xl font-bold">{{ t("Clients") }}</h3>
-    </div>
-  </div>
+  <PageHeader title="Clients" icon="pi-user" />
   <transition name="slide">
     <div v-if="clients.length > 0 || showDraftClient" class="flex container flex-wrap gap-8 mb-8">
       <transition-group name="slide">
