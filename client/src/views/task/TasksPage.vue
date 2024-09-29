@@ -6,10 +6,8 @@ import { ref, computed } from 'vue';
 import TaskItem from "@/components/task/TaskItem.vue";
 import type { Task } from "@/interfaces/Task";
 import PageHeader from "@/components/page/PageHeader.vue";
-import AddItemFloatingButton from "@/components/navigation/AddItemFloatingButton.vue";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
-import Button from 'primevue/button';
 
 const toast = useToast();
 const confirm = useConfirm();
@@ -133,7 +131,8 @@ function addTaskAtPosition(position: number) {
     client: 'Internal',
     status: 'Todo',
     completed: false,
-    isNewTask: true
+    isNewTask: true,
+    subtasks: []
   };
   tasks.value.splice(position, 0, newTask);
 }
@@ -141,22 +140,35 @@ function addTaskAtPosition(position: number) {
 function saveTask(updatedTask: Task) {
   const index = tasks.value.findIndex(t => t.id === updatedTask.id);
   if (index !== -1) {
-    tasks.value[index] = { ...updatedTask, isNewTask: false };
-    toast.add({ severity: 'success', summary: t('Saved'), detail: t('Task saved'), life: 3000 });
+    if (updatedTask.title.trim()) {
+      tasks.value[index] = { ...updatedTask, isNewTask: false };
+      toast.add({ severity: 'success', summary: t('Saved'), detail: t('Task saved'), life: 3000 });
+    } else if (tasks.value[index].isNewTask) {
+      tasks.value.splice(index, 1);
+    } else {
+      // Existing task with empty name, revert to previous state
+      updatedTask.title = tasks.value[index].title;
+      tasks.value[index] = updatedTask;
+      toast.add({ severity: 'error', summary: t('Error'), detail: t('Task name cannot be empty'), life: 3000 });
+    }
   }
-
 }
 
 function deleteTask(taskId: number) {
-  confirm.require({
-    message: t('Are you sure you want to delete this task?'),
-    header: t('Confirm Deletion'),
-    icon: 'pi pi-exclamation-triangle',
-    accept: () => {
-      tasks.value = tasks.value.filter(t => t.id !== taskId);
-      toast.add({ severity: 'error', summary: t('Deleted'), detail: t('Task deleted'), life: 3000 });
-    }
-  });
+  const index = tasks.value.findIndex(t => t.id === taskId);
+  if (index !== -1 && tasks.value[index].isNewTask) {
+    tasks.value.splice(index, 1);
+  } else {
+    confirm.require({
+      message: t('Are you sure you want to delete this task?'),
+      header: t('Confirm Deletion'),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        tasks.value = tasks.value.filter(t => t.id !== taskId);
+        toast.add({ severity: 'error', summary: t('Deleted'), detail: t('Task deleted'), life: 3000 });
+      }
+    });
+  }
 }
 
 function addSubtask({ parentId, position }: { parentId: number, position: number }) {
@@ -177,7 +189,8 @@ function addSubtask({ parentId, position }: { parentId: number, position: number
         }
         tasks[i].subtasks.splice(position, 0, newSubtask);
         return true;
-      } if (tasks[i].subtasks && addSubtaskRecursive(tasks[i].subtasks)) {
+      }
+      if (tasks[i].subtasks && addSubtaskRecursive(tasks[i].subtasks)) {
         return true;
       }
     }
@@ -187,6 +200,7 @@ function addSubtask({ parentId, position }: { parentId: number, position: number
   if (!addSubtaskRecursive(tasks.value)) {
     console.error('Parent task not found');
   }
+  tasks.value = [...tasks.value];
 }
 </script>
 

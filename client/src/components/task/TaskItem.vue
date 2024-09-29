@@ -27,7 +27,7 @@ const emit = defineEmits<{
   (e: 'delete:task', taskId: number): void;
   (e: 'add-task-before'): void;
   (e: 'add-task-after'): void;
-  (e: 'add-subtask', taskId: number): void;
+  (e: 'add-subtask', event: { parentId: number, position: number }): void;
 }>();
 
 const editedTask = ref({...props.task});
@@ -77,41 +77,40 @@ function confirmDeletion() {
   emit('delete:task', editedTask.value.id);
 }
 
-function saveTask() {
-  if (props.isNewTask) {
-    if (editedTask.value.title.trim()) {
-      emit('update:task', editedTask.value);
-    } else {
-      emit('delete:task', editedTask.value.id);
-    }
-  } else if (isValid.value) {
-    nameError.value = '';
-    emit('update:task', editedTask.value);
+function handleNewTaskSave() {
+  if (editedTask.value.title.trim()) {
+    emit('update:task', { ...editedTask.value, isNewTask: false });
+  } else if (props.isNewTask) {
+    emit('delete:task', editedTask.value.id);
   } else {
     nameError.value = t('Name is required');
   }
 }
 
-function handleKeyDown(event: KeyboardEvent) {
-  if (event.key === 'Enter') {
-    event.preventDefault(); // Prevent default to avoid triggering blur
-    saveTask();
-    if (titleInput.value) titleInput.value.$el.blur();
-  }
+function saveTask() {
+  handleNewTaskSave();
 }
 
 function handleBlur() {
-  if (props.isNewTask) {
+  if (props.isNewTask && !editedTask.value.title.trim()) {
+    emit('delete:task', editedTask.value.id);
+  } else {
     saveTask();
-  } else if (editedTask.value.title) {
+  }
+}
+
+function handleKeyDown(event: KeyboardEvent) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
     saveTask();
-  } else if (!props.isNewTask) {
-    nameError.value = t('Name is required');
+    if (titleInput.value) {
+      titleInput.value.$el.blur();
+    }
   }
 }
 
 function addSubtask() {
-  emit('add-subtask', editedTask.value.id);
+  emit('add-subtask', { parentId: editedTask.value.id, position: editedTask.value.subtasks ? editedTask.value.subtasks.length : 0 });
 }
 
 onMounted(() => {
@@ -129,8 +128,8 @@ onMounted(() => {
 
     <div
         :class="[
-        'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-16 p-4 relative', { 'border-l-4': !isNewTask },
-        { 'border-l-4': true },
+        'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-16 p-4 relative',
+        { 'border-l-4': !isNewTask },
         { 'border-yellow-300 bg-white dark:bg-gray-800': editedTask.status === 'Todo' },
         { 'border-orange-300 bg-white dark:bg-gray-800': editedTask.status === 'In Progress' },
         { 'border-green-300 bg-gray-100 dark:bg-gray-700': editedTask.status === 'Completed' },
@@ -150,7 +149,7 @@ onMounted(() => {
             style="word-break: break-word;"
           />
         </div>
-        <div class="flex items-center gap-2 mt-2 sm:mt-0">
+        <div v-if="!isNewTask" class="flex items-center gap-2 mt-2 w-full sm:w-auto">
           <Button
               :label="isTracking ? 'Pause' : 'Start'"
               :icon="isTracking ? 'pi pi-pause' : 'pi pi-play'"
@@ -162,7 +161,7 @@ onMounted(() => {
       </div>
       <Tag v-if="nameError" severity="danger" class="w-full mb-2" :value="nameError"/>
 
-      <div class="text-sm text-gray-600 dark:text-gray-300 flex flex-wrap gap-2">
+      <div v-if="!isNewTask" class="text-sm text-gray-600 dark:text-gray-300 flex flex-wrap gap-2">
         <span
             :class="[
             'cursor-pointer px-2 py-1 rounded-full text-xs font-medium inline-flex items-center',
@@ -266,7 +265,7 @@ onMounted(() => {
            class="pl-4 pr-4 pb-4 mt-4 border-t border-gray-100 dark:border-gray-700">
         <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 mt-2">Subtasks:</h4>
         <TaskItem
-            v-for="subtask in editedTask.subtasks"
+            v-for="(subtask, index) in editedTask.subtasks"
             :key="subtask.id"
             :task="subtask"
             :clients="clients"
@@ -276,14 +275,15 @@ onMounted(() => {
             class="mt-2"
             @update:task="(updatedSubtask) => updateField('subtasks', editedTask.subtasks!.map(st => st.id === updatedSubtask.id ? updatedSubtask : st))"
             @delete:task="(deletedSubtaskId) => updateField('subtasks', editedTask.subtasks!.filter(st => st.id !== deletedSubtaskId))"
-            @add-subtask="$emit('add-subtask', $event)"
-            @add-task-before="$emit('add-subtask', editedTask.id)"
-            @add-task-after="$emit('add-subtask', editedTask.id)"
+            @add-subtask="(event) => $emit('add-subtask', event)"
+            @add-task-before="$emit('add-subtask', { parentId: editedTask.id, position: index })"
+            @add-task-after="$emit('add-subtask', { parentId: editedTask.id, position: index + 1 })"
         />
       </div>
 
-      <Button v-if="showAddButtons && !isNewTask" icon="pi pi-plus" label="Add Subtask" class="mt-2 p-button-sm p-button-text"
-              @click="$emit('add-subtask', { parentId: editedTask.id, position: editedTask.subtasks ? editedTask.subtasks.length : 0 })"/>
+      <Button v-if="showAddButtons && !isNewTask" icon="pi pi-plus" label="Add Subtask"
+              class="mt-2 p-button-sm p-button-text"
+              @click="addSubtask"/>
     </div>
 
     <Button v-if="showAddButtons && !isNewTask" icon="pi pi-plus"
