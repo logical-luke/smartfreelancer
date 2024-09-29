@@ -18,6 +18,7 @@ const props = defineProps<{
   clients: { label: string; value: string }[];
   projects: { label: string; value: string }[];
   showAddButtons?: boolean;
+  isNewTask?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -77,7 +78,13 @@ function confirmDeletion() {
 }
 
 function saveTask() {
-  if (isValid.value) {
+  if (props.isNewTask) {
+    if (editedTask.value.title.trim()) {
+      emit('update:task', editedTask.value);
+    } else {
+      emit('delete:task', editedTask.value.id);
+    }
+  } else if (isValid.value) {
     nameError.value = '';
     emit('update:task', editedTask.value);
   } else {
@@ -94,9 +101,11 @@ function handleKeyDown(event: KeyboardEvent) {
 }
 
 function handleBlur() {
-  if (editedTask.value.title) {
+  if (props.isNewTask) {
     saveTask();
-  } else {
+  } else if (editedTask.value.title) {
+    saveTask();
+  } else if (!props.isNewTask) {
     nameError.value = t('Name is required');
   }
 }
@@ -114,13 +123,13 @@ onMounted(() => {
 
 <template>
   <div class="relative">
-    <Button v-if="showAddButtons" icon="pi pi-plus"
+    <Button v-if="showAddButtons && !isNewTask" icon="pi pi-plus"
             class="absolute -top-6 left-1/2 transform -translate-x-1/2 rounded-full p-button-sm z-10 w-10 h-10"
             @click="$emit('add-task-before')"/>
 
     <div
         :class="[
-        'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-16 p-4 relative',
+        'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-16 p-4 relative', { 'border-l-4': !isNewTask },
         { 'border-l-4': true },
         { 'border-yellow-300 bg-white dark:bg-gray-800': editedTask.status === 'Todo' },
         { 'border-orange-300 bg-white dark:bg-gray-800': editedTask.status === 'In Progress' },
@@ -130,7 +139,7 @@ onMounted(() => {
     >
       <div class="flex flex-wrap items-center justify-between mb-2">
         <div class="flex items-center flex-grow">
-          <Checkbox v-model="editedTask.completed" :binary="true" class="mr-3 flex-shrink-0" @change="toggleComplete" />
+          <Checkbox v-if="!isNewTask" v-model="editedTask.completed" :binary="true" class="mr-3 flex-shrink-0" @change="toggleComplete" />
           <InputText
             ref="titleInput"
             v-model="editedTask.title"
@@ -263,6 +272,7 @@ onMounted(() => {
             :clients="clients"
             :projects="projects"
             :show-add-buttons="showAddButtons"
+            :is-new-task="subtask.isNewTask"
             class="mt-2"
             @update:task="(updatedSubtask) => updateField('subtasks', editedTask.subtasks!.map(st => st.id === updatedSubtask.id ? updatedSubtask : st))"
             @delete:task="(deletedSubtaskId) => updateField('subtasks', editedTask.subtasks!.filter(st => st.id !== deletedSubtaskId))"
@@ -272,11 +282,11 @@ onMounted(() => {
         />
       </div>
 
-      <Button v-if="showAddButtons" icon="pi pi-plus" label="Add Subtask" class="mt-2 p-button-sm p-button-text"
-              @click="addSubtask"/>
+      <Button v-if="showAddButtons && !isNewTask" icon="pi pi-plus" label="Add Subtask" class="mt-2 p-button-sm p-button-text"
+              @click="$emit('add-subtask', { parentId: editedTask.id, position: editedTask.subtasks ? editedTask.subtasks.length : 0 })"/>
     </div>
 
-    <Button v-if="showAddButtons" icon="pi pi-plus"
+    <Button v-if="showAddButtons && !isNewTask" icon="pi pi-plus"
             class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 rounded-full p-button-sm z-10 w-10 h-10"
             @click="$emit('add-task-after')"/>
   </div>

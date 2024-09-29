@@ -132,7 +132,8 @@ function addTaskAtPosition(position: number) {
     title: '',
     client: 'Internal',
     status: 'Todo',
-    completed: false
+    completed: false,
+    isNewTask: true
   };
   tasks.value.splice(position, 0, newTask);
 }
@@ -140,9 +141,10 @@ function addTaskAtPosition(position: number) {
 function saveTask(updatedTask: Task) {
   const index = tasks.value.findIndex(t => t.id === updatedTask.id);
   if (index !== -1) {
-    tasks.value[index] = updatedTask;
+    tasks.value[index] = { ...updatedTask, isNewTask: false };
     toast.add({ severity: 'success', summary: t('Saved'), detail: t('Task saved'), life: 3000 });
   }
+
 }
 
 function deleteTask(taskId: number) {
@@ -156,13 +158,15 @@ function deleteTask(taskId: number) {
     }
   });
 }
-function addSubtask(parentId: number) {
+
+function addSubtask({ parentId, position }: { parentId: number, position: number }) {
   const newSubtask: Task = {
     id: Date.now(),
     title: '',
     client: 'Internal',
     status: 'Todo',
-    completed: false
+    completed: false,
+    isNewTask: true
   };
 
   function addSubtaskRecursive(tasks: Task[]): boolean {
@@ -171,10 +175,9 @@ function addSubtask(parentId: number) {
         if (!tasks[i].subtasks) {
           tasks[i].subtasks = [];
         }
-        tasks[i].subtasks.push(newSubtask);
+        tasks[i].subtasks.splice(position, 0, newSubtask);
         return true;
-      }
-      if (tasks[i].subtasks && addSubtaskRecursive(tasks[i].subtasks)) {
+      } if (tasks[i].subtasks && addSubtaskRecursive(tasks[i].subtasks)) {
         return true;
       }
     }
@@ -198,6 +201,7 @@ function addSubtask(parentId: number) {
         :clients="clients"
         :projects="projects"
         :show-add-buttons="true"
+        :is-new-task="task.isNewTask"
         @update:task="saveTask"
         @delete:task="deleteTask"
         @add-task-before="addTaskAtPosition(index)"
