@@ -2,7 +2,7 @@
 import { useI18n } from 'vue-i18n';
 import Card from 'primevue/card';
 import type { Task } from "@/interfaces/Task";
-import CurrentTaskSection from "@/components/workhub/CurrentTaskSection.vue";
+import CurrentTaskSection from "@/components/workhub/TrackedTaskSection.vue";
 import TimeOverviewGrid from "@/components/report/TimeOverviewGrid.vue";
 import TaskNoteSection from "@/components/workhub/TaskNoteSection.vue";
 

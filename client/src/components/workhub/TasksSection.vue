@@ -33,14 +33,13 @@ function toggleTimeTracking(task: Task) {
     <h3 class="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-3">
       <i class="pi pi-list mr-2"></i>{{ t("Tasks") }}
     </h3>
-    <div v-if="hasDailyTasks" class="space-y-2">
+    <div v-if="hasDailyTasks">
       <TaskItem
         v-for="task in dailyTasks"
         :key="task.id"
         :task="task"
         @update:task="updateTask"
         @toggleTimeTracking="toggleTimeTracking"
-        class="bg-white dark:bg-gray-700 p-2 rounded"
       />
     </div>
     <p v-else class="text-gray-500 dark:text-gray-400 py-2">

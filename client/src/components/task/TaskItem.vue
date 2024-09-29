@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, ref, onMounted} from 'vue';
+import {computed, onMounted, ref, watch} from 'vue';
 import {useI18n} from 'vue-i18n';
 import Checkbox from 'primevue/checkbox';
 import InputText from 'primevue/inputtext';
@@ -34,6 +34,10 @@ const editedTask = ref({...props.task});
 const isTracking = ref(false);
 const nameError = ref('');
 const titleInput = ref<InstanceType<typeof InputText> | null>(null);
+
+watch(() => props.task, (newTask) => {
+  editedTask.value = {...newTask};
+}, {deep: true});
 
 const isOverdue = computed(() => {
   if (!editedTask.value.dueDate || editedTask.value.completed) return false;
@@ -79,24 +83,25 @@ function confirmDeletion() {
 
 function handleNewTaskSave() {
   if (editedTask.value.title.trim()) {
-    emit('update:task', { ...editedTask.value, isNewTask: false });
-  } else if (props.isNewTask) {
+    emit('update:task', {...editedTask.value, isNewTask: false});
+  } else {
     emit('delete:task', editedTask.value.id);
+  }
+}
+
+function saveTask() {
+  if (props.isNewTask) {
+    handleNewTaskSave();
+  } else if (isValid.value) {
+    nameError.value = '';
+    emit('update:task', editedTask.value);
   } else {
     nameError.value = t('Name is required');
   }
 }
 
-function saveTask() {
-  handleNewTaskSave();
-}
-
 function handleBlur() {
-  if (props.isNewTask && !editedTask.value.title.trim()) {
-    emit('delete:task', editedTask.value.id);
-  } else {
-    saveTask();
-  }
+  saveTask();
 }
 
 function handleKeyDown(event: KeyboardEvent) {
@@ -110,7 +115,8 @@ function handleKeyDown(event: KeyboardEvent) {
 }
 
 function addSubtask() {
-  emit('add-subtask', { parentId: editedTask.value.id, position: editedTask.value.subtasks ? editedTask.value.subtasks.length : 0 });
+  console.log('addSubtask called in TaskItem', editedTask.value.id);
+  emit('add-subtask', {parentId: editedTask.value.id, position: editedTask.value.subtasks?.length || 0});
 }
 
 onMounted(() => {
@@ -126,36 +132,27 @@ onMounted(() => {
             class="absolute -top-6 left-1/2 transform -translate-x-1/2 rounded-full p-button-sm z-10 w-10 h-10"
             @click="$emit('add-task-before')"/>
 
-    <div
-        :class="[
-        'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-16 p-4 relative',
-        { 'border-l-4': !isNewTask },
-        { 'border-yellow-300 bg-white dark:bg-gray-800': editedTask.status === 'Todo' },
-        { 'border-orange-300 bg-white dark:bg-gray-800': editedTask.status === 'In Progress' },
-        { 'border-green-300 bg-gray-100 dark:bg-gray-700': editedTask.status === 'Completed' },
-        { 'border-red-300 bg-white dark:bg-gray-800': editedTask.status === 'Blocked' },
-      ]"
-    >
-      <div class="flex flex-wrap items-center justify-between mb-2">
-        <div class="flex items-center flex-grow">
-          <Checkbox v-if="!isNewTask" v-model="editedTask.completed" :binary="true" class="mr-3 flex-shrink-0" @change="toggleComplete" />
-          <InputText
-            ref="titleInput"
-            v-model="editedTask.title"
-            class="text-lg font-semibold mr-2 break-words dark:text-white p-0 border-none bg-transparent flex-grow"
-            :class="{ 'line-through': editedTask.completed, 'p-invalid': nameError }"
-            @blur="handleBlur"
-            @keydown="handleKeyDown"
-            style="word-break: break-word;"
-          />
+    <div :class="[
+      'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-16 p-4 relative',
+      { 'border-l-4': !isNewTask },
+      { 'border-yellow-300 bg-white dark:bg-gray-800': editedTask.status === 'Todo' },
+      { 'border-orange-300 bg-white dark:bg-gray-800': editedTask.status === 'In Progress' },
+      { 'border-green-300 bg-gray-100 dark:bg-gray-700': editedTask.status === 'Completed' },
+      { 'border-red-300 bg-white dark:bg-gray-800': editedTask.status === 'Blocked' },
+    ]">
+      <div class="flex flex-wrap items-center justify-between mb-2 w-full">
+        <div class="flex items-center w-full">
+          <Checkbox v-if="!isNewTask" v-model="editedTask.completed" :binary="true" class="mr-3 flex-shrink-0"
+                    @change="toggleComplete"/>
+          <InputText ref="titleInput" v-model="editedTask.title"
+                     class="text-lg font-semibold mr-2 break-words dark:text-white p-0 border-none bg-transparent w-full"
+                     :class="{ 'line-through': editedTask.completed, 'p-invalid': nameError }" @blur="handleBlur"
+                     @keydown="handleKeyDown" style="word-break: break-word; min-width: 0;"/>
         </div>
         <div v-if="!isNewTask" class="flex items-center gap-2 mt-2 w-full sm:w-auto">
-          <Button
-              :label="isTracking ? 'Pause' : 'Start'"
-              :icon="isTracking ? 'pi pi-pause' : 'pi pi-play'"
-              :class="['p-button-sm', isTracking ? 'p-button-warning' : 'p-button-success']"
-              @click="toggleTimeTracking"
-          />
+          <Button :label="isTracking ? 'Pause' : 'Start'" :icon="isTracking ? 'pi pi-pause' : 'pi pi-play'"
+                  :class="['p-button-sm', isTracking ? 'p-button-warning' : 'p-button-success']"
+                  @click="toggleTimeTracking"/>
           <Button icon="pi pi-trash" label="Delete" class="p-button-danger p-button-sm" @click="confirmDeletion"/>
         </div>
       </div>
@@ -261,29 +258,23 @@ onMounted(() => {
         </Popover>
       </div>
 
-      <div v-if="editedTask.subtasks && editedTask.subtasks.length > 0"
-           class="pl-4 pr-4 pb-4 mt-4 border-t border-gray-100 dark:border-gray-700">
-        <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 mt-2">Subtasks:</h4>
-        <TaskItem
-            v-for="(subtask, index) in editedTask.subtasks"
-            :key="subtask.id"
-            :task="subtask"
-            :clients="clients"
-            :projects="projects"
-            :show-add-buttons="showAddButtons"
-            :is-new-task="subtask.isNewTask"
-            class="mt-2"
-            @update:task="(updatedSubtask) => updateField('subtasks', editedTask.subtasks!.map(st => st.id === updatedSubtask.id ? updatedSubtask : st))"
-            @delete:task="(deletedSubtaskId) => updateField('subtasks', editedTask.subtasks!.filter(st => st.id !== deletedSubtaskId))"
-            @add-subtask="(event) => $emit('add-subtask', event)"
-            @add-task-before="$emit('add-subtask', { parentId: editedTask.id, position: index })"
-            @add-task-after="$emit('add-subtask', { parentId: editedTask.id, position: index + 1 })"
-        />
-      </div>
+      <div v-if="!isNewTask" class="mt-4">
+        <div v-if="editedTask.subtasks && editedTask.subtasks.length > 0"
+             class="pl-4 pr-4 pb-4 border-t border-gray-100 dark:border-gray-700">
+          <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 mt-2">Subtasks:</h4>
+          <TaskItem v-for="(subtask, index) in editedTask.subtasks" :key="subtask.id" :task="subtask" :clients="clients"
+                    :projects="projects" :show-add-buttons="showAddButtons" :is-new-task="subtask.isNewTask"
+                    class="mt-2"
+                    @update:task="(updatedSubtask) => updateField('subtasks', editedTask.subtasks!.map(st => st.id === updatedSubtask.id ? updatedSubtask : st))"
+                    @delete:task="(deletedSubtaskId) => updateField('subtasks', editedTask.subtasks!.filter(st => st.id !== deletedSubtaskId))"
+                    @add-subtask="$emit('add-subtask', $event)"
+                    @add-task-before="$emit('add-subtask', { parentId: editedTask.id, position: index })"
+                    @add-task-after="$emit('add-subtask', { parentId: editedTask.id, position: index + 1 })"/>
+        </div>
 
-      <Button v-if="showAddButtons && !isNewTask" icon="pi pi-plus" label="Add Subtask"
-              class="mt-2 p-button-sm p-button-text"
-              @click="addSubtask"/>
+        <Button v-if="showAddButtons" icon="pi pi-plus" label="Add Subtask" class="mt-2 p-button-sm p-button-text"
+                @click="addSubtask"/>
+      </div>
     </div>
 
     <Button v-if="showAddButtons && !isNewTask" icon="pi pi-plus"
@@ -291,3 +282,10 @@ onMounted(() => {
             @click="$emit('add-task-after')"/>
   </div>
 </template>
+
+<style scoped>
+.task-item {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+</style>

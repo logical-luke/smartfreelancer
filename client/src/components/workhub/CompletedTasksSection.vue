@@ -28,13 +28,12 @@ function updateTask(updatedTask: Task) {
     <h3 class="text-lg font-semibold text-green-800 dark:text-green-200 mb-3">
       <i class="pi pi-check-circle mr-2"></i>{{ t("Completed Tasks") }}
     </h3>
-    <div v-if="hasCompletedTasks" class="space-y-2">
+    <div v-if="hasCompletedTasks">
       <TaskItem
         v-for="task in completedTasks"
         :key="task.id"
         :task="task"
         @update:task="updateTask"
-        class="bg-white dark:bg-gray-700 p-2 rounded"
       />
     </div>
     <p v-else class="text-gray-500 dark:text-gray-400 py-2">
