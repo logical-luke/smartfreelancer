@@ -6,6 +6,7 @@ import type { Task } from "@/interfaces/Task";
 import PageHeader from "@/components/page/PageHeader.vue";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
+import AddItemFloatingButton from "@/components/navigation/AddItemFloatingButton.vue";
 
 const { t } = useI18n();
 const toast = useToast();
@@ -174,4 +175,5 @@ function addSubtask({ parentId, position }: { parentId: number, position: number
       />
     </div>
   </div>
+  <AddItemFloatingButton @click="addTaskAtPosition(tasks.length)" />
 </template>

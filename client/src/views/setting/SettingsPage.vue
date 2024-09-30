@@ -1,30 +1,38 @@
 <script setup lang="ts">
 import PageHeader from "@/components/page/PageHeader.vue";
-import PrimaryActionButton from "@/components/form/PrimaryActionButton.vue";
-import SecondaryActionButton from "@/components/form/SecondaryActionButton.vue";
-import DestructiveActionButton from "@/components/form/DestructiveActionButton.vue";
+import SectionWrapper from "@/components/SectionWrapper.vue";
 import Select from 'primevue/select';
 import ToggleButton from 'primevue/togglebutton';
+import InputText from 'primevue/inputtext';
 import { ref } from 'vue';
+import ActionButton from "@/components/form/ActionButton.vue";
 
 const generalSettings = ref({
   language: 'English',
   timezone: 'UTC',
+  dateFormat: 'MM/DD/YYYY',
+  theme: 'Light',
 });
 
 const notificationSettings = ref({
   emailNotifications: true,
   smsNotifications: false,
+  pushNotifications: true,
+  notificationFrequency: 'Daily',
 });
 
 const privacySettings = ref({
   profileVisibility: 'Public',
   dataSharing: false,
+  twoFactorAuth: true,
 });
 
-const languages = ['English', 'Spanish', 'French'];
-const timezones = ['UTC', 'GMT', 'PST'];
-const visibilityOptions = ['Public', 'Private'];
+const languages = ['English', 'Spanish', 'French', 'German', 'Chinese'];
+const timezones = ['UTC', 'GMT', 'PST', 'EST', 'CST'];
+const dateFormats = ['MM/DD/YYYY', 'DD/MM/YYYY', 'YYYY-MM-DD'];
+const themes = ['Light', 'Dark', 'System'];
+const visibilityOptions = ['Public', 'Private', 'Friends Only'];
+const notificationFrequencies = ['Immediately', 'Daily', 'Weekly', 'Monthly'];
 
 function saveSettings() {
   // Implement save logic here
@@ -38,57 +46,71 @@ function resetSettings() {
 </script>
 
 <template>
-  <PageHeader title="Settings" icon="pi-cog" />
+  <PageHeader title="Settings" icon="pi pi-cog" />
 
   <div class="container mt-4">
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 mb-6">
-      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">
-        <i class="pi pi-cog mr-2"></i>General Settings
-      </h3>
-      <div class="mb-4">
-        <label class="block text-gray-700 dark:text-gray-300">Language</label>
-        <Select v-model="generalSettings.language" :options="languages" class="w-full p-2 border rounded" />
+    <SectionWrapper title="General Settings" icon="pi pi-cog" color="blue">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-gray-700 dark:text-gray-300">Language</label>
+          <Select v-model="generalSettings.language" :options="languages" class="w-full" />
+        </div>
+        <div>
+          <label class="block text-gray-700 dark:text-gray-300">Timezone</label>
+          <Select v-model="generalSettings.timezone" :options="timezones" class="w-full" />
+        </div>
+        <div>
+          <label class="block text-gray-700 dark:text-gray-300">Date Format</label>
+          <Select v-model="generalSettings.dateFormat" :options="dateFormats" class="w-full" />
+        </div>
+        <div>
+          <label class="block text-gray-700 dark:text-gray-300">Theme</label>
+          <Select v-model="generalSettings.theme" :options="themes" class="w-full" />
+        </div>
       </div>
-      <div class="mb-4">
-        <label class="block text-gray-700 dark:text-gray-300">Timezone</label>
-        <Select v-model="generalSettings.timezone" :options="timezones" class="w-full p-2 border rounded" />
-      </div>
-    </div>
+    </SectionWrapper>
 
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 mb-6">
-      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">
-        <i class="pi pi-bell mr-2"></i>Notification Settings
-      </h3>
-      <div class="mb-4">
-        <label class="block text-gray-700 dark:text-gray-300">Email Notifications</label>
-        <ToggleButton v-model="notificationSettings.emailNotifications" class="mr-2" />
-        Enable
+    <SectionWrapper title="Notification Settings" icon="pi pi-bell" color="green">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex items-center">
+          <ToggleButton v-model="notificationSettings.emailNotifications" class="mr-2" />
+          <label>Email Notifications</label>
+        </div>
+        <div class="flex items-center">
+          <ToggleButton v-model="notificationSettings.smsNotifications" class="mr-2" />
+          <label>SMS Notifications</label>
+        </div>
+        <div class="flex items-center">
+          <ToggleButton v-model="notificationSettings.pushNotifications" class="mr-2" />
+          <label>Push Notifications</label>
+        </div>
+        <div>
+          <label class="block text-gray-700 dark:text-gray-300">Notification Frequency</label>
+          <Select v-model="notificationSettings.notificationFrequency" :options="notificationFrequencies" class="w-full" />
+        </div>
       </div>
-      <div class="mb-4">
-        <label class="block text-gray-700 dark:text-gray-300">SMS Notifications</label>
-        <ToggleButton v-model="notificationSettings.smsNotifications" class="mr-2" />
-        Enable
-      </div>
-    </div>
+    </SectionWrapper>
 
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 mb-6">
-      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">
-        <i class="pi pi-lock mr-2"></i>Privacy Settings
-      </h3>
-      <div class="mb-4">
-        <label class="block text-gray-700 dark:text-gray-300">Profile Visibility</label>
-        <Select v-model="privacySettings.profileVisibility" :options="visibilityOptions" class="w-full p-2 border rounded" />
+    <SectionWrapper title="Privacy Settings" icon="pi pi-lock" color="purple">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-gray-700 dark:text-gray-300">Profile Visibility</label>
+          <Select v-model="privacySettings.profileVisibility" :options="visibilityOptions" class="w-full" />
+        </div>
+        <div class="flex items-center">
+          <ToggleButton v-model="privacySettings.dataSharing" class="mr-2" />
+          <label>Data Sharing</label>
+        </div>
+        <div class="flex items-center">
+          <ToggleButton v-model="privacySettings.twoFactorAuth" class="mr-2" />
+          <label>Two-Factor Authentication</label>
+        </div>
       </div>
-      <div class="mb-4">
-        <label class="block text-gray-700 dark:text-gray-300">Data Sharing</label>
-        <ToggleButton v-model="privacySettings.dataSharing" class="mr-2" />
-        Enable
-      </div>
-    </div>
+    </SectionWrapper>
 
-    <div class="flex justify-end space-x-2">
-      <PrimaryActionButton @click="saveSettings">Save</PrimaryActionButton>
-      <SecondaryActionButton @click="resetSettings">Reset</SecondaryActionButton>
+    <div class="flex justify-end space-x-2 mt-6">
+      <ActionButton type="secondary" @click="resetSettings">Reset to Default</ActionButton>
+      <ActionButton @click="saveSettings">Save Settings</ActionButton>
     </div>
   </div>
 </template>

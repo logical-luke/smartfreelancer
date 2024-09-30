@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineProps, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import SectionWrapper from "@/components/SectionWrapper.vue";
 
 const props = withDefaults(defineProps<{
   income?: number;
@@ -71,13 +72,10 @@ const getColorClass = (color: string, type: 'bg' | 'text', intensity: number) =>
 </script>
 
 <template>
-  <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 rounded-xl shadow p-4 mb-6">
-    <h3 class="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-3 flex items-center">
-      <i class="pi pi-dollar mr-2"></i>{{ t("Revenue Overview") }}
-    </h3>
+  <SectionWrapper :title="t('Revenue Overview')" icon="pi pi-dollar" color="purple">
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
       <div v-for="item in items" :key="item.label"
-           class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-between transition-all duration-300 hover:shadow-md">
+           class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-between shadow hover:shadow-md transition-all duration-300">
         <div class="flex items-center">
           <div :class="[getColorClass(item.color, 'bg', 1), 'w-10 h-10 rounded-full flex items-center justify-center']">
             <i :class="['pi', item.icon, getColorClass(item.color, 'text', 2), 'text-lg']"></i>
@@ -91,5 +89,5 @@ const getColorClass = (color: string, type: 'bg' | 'text', intensity: number) =>
         </div>
       </div>
     </div>
-  </div>
+  </SectionWrapper>
 </template>

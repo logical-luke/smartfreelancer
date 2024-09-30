@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineProps, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import SectionWrapper from "@/components/SectionWrapper.vue";
 
 const props = withDefaults(defineProps<{
   timeWorked: number;
@@ -26,22 +27,19 @@ const formatHours = (hours: number) => {
 </script>
 
 <template>
-  <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 rounded-xl shadow p-4 mb-6">
-    <h3 class="text-lg font-semibold text-green-800 dark:text-green-200 mb-3">
-      <i class="pi pi-clock mr-2"></i>{{ t("Time Overview") }}
-    </h3>
+  <SectionWrapper title="Time Overview" icon="pi pi-clock" color="teal">
     <div class="flex flex-wrap -mx-2">
       <div class="w-full sm:w-1/3 px-2 mb-4 sm:mb-0">
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-between transition-all duration-300 hover:shadow-md">
-          <div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-between shadow hover:shadow-md transition-all duration-300">
+          <div class="border-l-4 border-blue-500 pl-2">
             <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ t("Time Worked") }}</p>
-            <span class="text-lg font-bold text-green-600 dark:text-green-400">{{ formatHours(timeWorked) }}</span>
+            <span class="text-lg font-bold text-blue-600 dark:text-blue-400">{{ formatHours(timeWorked) }}</span>
           </div>
-          <i class="pi pi-stopwatch text-xl text-green-500"></i>
+          <i class="pi pi-stopwatch text-xl text-blue-500"></i>
         </div>
         <div class="mt-2">
           <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
-            <div class="bg-green-600 h-1.5 rounded-full" :style="{ width: `${progressPercentage}%` }"></div>
+            <div class="bg-blue-600 h-1.5 rounded-full" :style="{ width: `${progressPercentage}%` }"></div>
           </div>
           <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
             {{ progressPercentage }}% {{ t("of estimated") }}
@@ -49,8 +47,8 @@ const formatHours = (hours: number) => {
         </div>
       </div>
       <div class="w-full sm:w-1/3 px-2 mb-4 sm:mb-0">
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-between transition-all duration-300 hover:shadow-md">
-          <div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-between shadow hover:shadow-md transition-all duration-300">
+          <div class="border-l-4 border-yellow-500 pl-2">
             <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ t("Time Estimated") }}</p>
             <span class="text-lg font-bold text-yellow-600 dark:text-yellow-400">{{ formatHours(timeEstimated) }}</span>
           </div>
@@ -58,8 +56,8 @@ const formatHours = (hours: number) => {
         </div>
       </div>
       <div class="w-full sm:w-1/3 px-2">
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-between transition-all duration-300 hover:shadow-md">
-          <div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-between shadow hover:shadow-md transition-all duration-300">
+          <div class="border-l-4 border-red-500 pl-2">
             <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ t("Time Left") }}</p>
             <span class="text-lg font-bold text-red-600 dark:text-red-400">{{ formatHours(timeLeft) }}</span>
           </div>
@@ -67,5 +65,5 @@ const formatHours = (hours: number) => {
         </div>
       </div>
     </div>
-  </div>
+  </SectionWrapper>
 </template>

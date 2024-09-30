@@ -2,7 +2,7 @@
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 import { useRouter } from 'vue-router';
-import MainActionButton from "@/components/form/PrimaryActionButton.vue";
+import ActionButton from "@/components/form/ActionButton.vue";
 const router = useRouter();
 
 const returnToHomepage = () => {
@@ -18,10 +18,10 @@ const returnToHomepage = () => {
     <h3>
       {{ t("The page you are looking for does not exist.") }}
     </h3>
-    <MainActionButton
+    <ActionButton
       @click="returnToHomepage"
     >
       {{ t("Return to homepage") }}
-    </MainActionButton>
+    </ActionButton>
   </div>
 </template>

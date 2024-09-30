@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineProps, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import SectionWrapper from "@/components/SectionWrapper.vue";
 
 const props = withDefaults(defineProps<{
   totalEstimatedTime: number;
@@ -37,22 +38,19 @@ const eventsProgressPercentage = computed(() => {
 </script>
 
 <template>
-  <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 rounded-xl shadow p-4 mb-6">
-    <h3 class="text-lg font-semibold text-green-800 dark:text-green-200 mb-3">
-      <i class="pi pi-clock mr-2"></i>{{ t("Today's Time Overview") }}
-    </h3>
+  <SectionWrapper :title="t('Today\'s Time Overview')" icon="pi pi-clock" color="yellow">
     <div class="flex flex-wrap">
       <div class="w-full md:w-1/2 px-2 mb-4">
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-between transition-all duration-300 hover:shadow-md">
-          <div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-between shadow hover:shadow-md transition-all duration-300">
+          <div class="border-l-4 border-blue-500 pl-2">
             <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ t("Remaining Tasks") }}</p>
-            <span class="text-lg font-bold text-green-600 dark:text-green-400">{{ formatTime(props.totalEstimatedTime) }}</span>
+            <span class="text-lg font-bold text-blue-600 dark:text-blue-400">{{ formatTime(props.totalEstimatedTime) }}</span>
           </div>
-          <i class="pi pi-list text-xl text-green-500"></i>
+          <i class="pi pi-list text-xl text-blue-500"></i>
         </div>
         <div class="mt-2">
           <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
-            <div class="bg-green-600 h-1.5 rounded-full" :style="{ width: `${tasksProgressPercentage}%` }"></div>
+            <div class="bg-blue-600 h-1.5 rounded-full" :style="{ width: `${tasksProgressPercentage}%` }"></div>
           </div>
           <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
             {{ tasksProgressPercentage }}% {{ t("of workday left") }}
@@ -60,8 +58,8 @@ const eventsProgressPercentage = computed(() => {
         </div>
       </div>
       <div class="w-full md:w-1/2 px-2 mb-4">
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-between transition-all duration-300 hover:shadow-md">
-          <div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-between shadow hover:shadow-md transition-all duration-300">
+          <div class="border-l-4 border-yellow-500 pl-2">
             <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ t("Remaining Events") }}</p>
             <span class="text-lg font-bold text-yellow-600 dark:text-yellow-400">{{ formatTime(props.eventsTime) }}</span>
           </div>
@@ -77,5 +75,5 @@ const eventsProgressPercentage = computed(() => {
         </div>
       </div>
     </div>
-  </div>
+  </SectionWrapper>
 </template>

@@ -3,6 +3,7 @@ import { useI18n } from 'vue-i18n';
 import TaskItem from "@/components/task/TaskItem.vue";
 import Button from 'primevue/button';
 import type { Task } from "@/interfaces/Task";
+import SectionWrapper from "@/components/SectionWrapper.vue";
 
 const { t } = useI18n();
 
@@ -29,26 +30,28 @@ function toggleTimeTracking(task: Task) {
 </script>
 
 <template>
-  <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900 dark:to-indigo-800 rounded-xl shadow p-4 mb-6">
-    <h3 class="text-lg font-semibold text-indigo-800 dark:text-indigo-200 mb-3">
-      <i class="pi pi-play-circle mr-2"></i>{{ t("Tracked Task") }}
-    </h3>
+  <SectionWrapper :title="t('Tracked Task')" icon="pi pi-play-circle" color="blue">
     <div v-if="currentFocus">
       <TaskItem
         :task="currentFocus"
         @update:task="updateTask"
         @toggleTimeTracking="toggleTimeTracking"
-       :clients="[]" :projects="[]"/>
+        :clients="[]"
+        :projects="[]"
+      />
     </div>
     <div v-else class="py-4">
       <p class="text-gray-500 dark:text-gray-400 mb-4">{{ t("No task currently in focus") }}</p>
       <p v-if="suggestedTask" class="text-gray-700 dark:text-gray-300 mb-4">
         {{ t("Suggested task") }}: {{ suggestedTask.title }}
       </p>
-      <Button @click="emit('setCurrentFocus', suggestedTask)" v-if="suggestedTask"
-              class="p-button-outlined p-button-secondary w-full">
+      <Button
+        v-if="suggestedTask"
+        @click="emit('setCurrentFocus', suggestedTask)"
+        class="p-button-outlined p-button-secondary w-full"
+      >
         {{ t("Start this task") }}
       </Button>
     </div>
-  </div>
+  </SectionWrapper>
 </template>

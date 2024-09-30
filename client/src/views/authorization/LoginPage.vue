@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { useI18n} from "vue-i18n";
-const { t } = useI18n();
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { useToast } from "primevue/usetoast";
+import {useI18n} from "vue-i18n";
+
+const {t} = useI18n();
+import {ref} from "vue";
+import {useRouter} from "vue-router";
+import {useToast} from "primevue/usetoast";
 import TransparentLogoWide from "@/components/logo/TransparentLogoWide.vue";
 import LanguageSwitcher from "@/components/navigation/LanguageSwitcher.vue";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Divider from "primevue/divider";
-import ActionButton from "@/components/form/SecondaryActionButton.vue";
-import MainActionButton from "@/components/form/PrimaryActionButton.vue";
-import { useAuthorizationStore } from "@/stores/auth";
+import {useAuthorizationStore} from "@/stores/auth";
 import api from "@/services/api";
 import isValidEmail from "@/services/isValidEmail";
+import ActionButton from "@/components/form/ActionButton.vue";
 
 const router = useRouter();
 const toast = useToast();
@@ -52,10 +52,11 @@ async function goToRegistration() {
 </script>
 
 <template>
-  <div class="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900 p-4">
+  <div
+      class="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900 p-4">
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-8 w-full max-w-md">
       <div class="flex justify-center w-full mb-8">
-        <TransparentLogoWide />
+        <TransparentLogoWide/>
       </div>
 
       <form class="space-y-6" @submit.prevent="login">
@@ -89,32 +90,41 @@ async function goToRegistration() {
           />
         </div>
 
-        <MainActionButton
-            type="submit"
+        <ActionButton
+            type="primary"
+            :fullWidth="true"
             :disabled="email === '' || password === '' || (email.length > 0 && !isValidEmail(email))"
-            :full-width="true"
+            @click="login"
         >
           {{ t("Log In") }}
-        </MainActionButton>
+        </ActionButton>
 
-          <Divider>
-            <span class="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
-              {{ t("OR") }}
-            </span>
-          </Divider>
+        <Divider>
+          <span class="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+            {{ t("OR") }}
+          </span>
+        </Divider>
 
-        <MainActionButton :full-width="true" type="button" @click="loginWithGoogle">
+        <ActionButton
+            type="secondary"
+            :fullWidth="true"
+            @click="loginWithGoogle"
+        >
           <i class="pi pi-google mr-2"></i>
           {{ t("Log In with Google") }}
-        </MainActionButton>
+        </ActionButton>
 
-        <ActionButton :full-width="true" type="button" @click="goToRegistration">
+        <ActionButton
+            type="tertiary"
+            :fullWidth="true"
+            @click="goToRegistration"
+        >
           {{ t("Sign Up for an Account") }}
         </ActionButton>
       </form>
 
       <div class="flex justify-center mt-6">
-        <LanguageSwitcher />
+        <LanguageSwitcher/>
       </div>
     </div>
   </div>

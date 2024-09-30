@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineProps, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import SectionWrapper from "@/components/SectionWrapper.vue";
 
 const props = withDefaults(defineProps<{
   inProgressTasks: number;
@@ -43,13 +44,10 @@ const getColorClass = (color: string) => {
 </script>
 
 <template>
-  <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 rounded-xl shadow p-4 mb-6">
-    <h3 class="text-lg font-semibold text-purple-800 dark:text-purple-200 mb-3 flex items-center">
-      <i class="pi pi-list mr-2"></i>{{ t("Task Overview") }}
-    </h3>
+  <SectionWrapper :title="t('Task Overview')" icon="pi pi-list" color="blue">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
       <div v-for="(item, index) in items" :key="index"
-           class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+           class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow hover:shadow-md transition-all duration-300">
         <div :class="['h-1 bg-gradient-to-r', getColorClass(item.color)]"></div>
         <div class="p-3 flex items-center">
           <div :class="['w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br', getColorClass(item.color)]">
@@ -72,5 +70,5 @@ const getColorClass = (color: string) => {
         </div>
       </div>
     </div>
-  </div>
+  </SectionWrapper>
 </template>

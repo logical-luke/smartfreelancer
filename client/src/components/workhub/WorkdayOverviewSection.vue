@@ -3,6 +3,7 @@ import {computed} from 'vue';
 import {useI18n} from 'vue-i18n';
 import ProgressBar from 'primevue/progressbar';
 import type {DayOfWeek, WorkdaySettings} from "@/interfaces/Setting";
+import SectionWrapper from "@/components/SectionWrapper.vue";
 
 interface Props {
   workdaySettings: WorkdaySettings;
@@ -65,16 +66,12 @@ function formatTimeString(date: Date | null): string {
 </script>
 
 <template>
-  <div
-      class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 rounded-xl shadow p-4 mb-6">
-    <h3 class="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-3">
-      <i class="pi pi-clock mr-2"></i>{{ t("Workday Overview") }}
-    </h3>
+  <SectionWrapper :title="t('Workday Overview')" icon="pi pi-clock" color="cyan">
     <div class="flex flex-wrap">
       <div class="w-full px-2 mb-4">
         <div v-if="workdayStatus !== 'no-workday'"
-             class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-between transition-all duration-300 hover:shadow-md">
-          <div>
+             class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-between shadow hover:shadow-md transition-all duration-300">
+          <div class="border-l-4 border-blue-500 pl-2">
             <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ t("Workday Time") }}</p>
             <span class="text-lg font-bold text-blue-600 dark:text-blue-400">
               {{ formatTimeString(workdayStart) }} - {{ formatTimeString(workdayEnd) }}
@@ -83,7 +80,7 @@ function formatTimeString(date: Date | null): string {
           <i class="pi pi-calendar text-xl text-blue-500"></i>
         </div>
         <div v-else
-             class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-center transition-all duration-300 hover:shadow-md">
+             class="bg-white dark:bg-gray-800 rounded-lg p-3 flex items-center justify-center shadow hover:shadow-md transition-all duration-300">
           <i class="pi pi-sun text-3xl text-yellow-500 mr-3"></i>
           <span class="text-lg font-bold text-gray-700 dark:text-gray-300">
             {{ t("Today is a rest day. Enjoy your time off!") }}
@@ -107,5 +104,5 @@ function formatTimeString(date: Date | null): string {
         </div>
       </div>
     </div>
-  </div>
+  </SectionWrapper>
 </template>

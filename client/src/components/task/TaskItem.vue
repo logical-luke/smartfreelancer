@@ -10,6 +10,7 @@ import Button from 'primevue/button';
 import Popover from 'primevue/popover';
 import Tag from 'primevue/tag';
 import type {Task} from "@/interfaces/Task";
+import ActionButton from "@/components/form/ActionButton.vue";
 
 const {t} = useI18n();
 
@@ -133,12 +134,12 @@ onMounted(() => {
             @click="$emit('add-task-before')"/>
 
     <div :class="[
-      'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-16 p-4 relative',
+      'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-16 p-4 relative border',
       { 'border-l-4': !isNewTask },
-      { 'border-yellow-300 bg-white dark:bg-gray-800': editedTask.status === 'Todo' },
-      { 'border-orange-300 bg-white dark:bg-gray-800': editedTask.status === 'In Progress' },
-      { 'border-green-300 bg-gray-100 dark:bg-gray-700': editedTask.status === 'Completed' },
-      { 'border-red-300 bg-white dark:bg-gray-800': editedTask.status === 'Blocked' },
+      { 'border-yellow-300 bg-yellow-50 dark:bg-gray-800': editedTask.status === 'Todo' },
+      { 'border-orange-300 bg-orange-50 dark:bg-gray-800': editedTask.status === 'In Progress' },
+      { 'border-green-300 bg-green-50 dark:bg-gray-700': editedTask.status === 'Completed' },
+      { 'border-red-300 bg-red-50 dark:bg-gray-800': editedTask.status === 'Blocked' },
     ]">
       <div class="flex flex-wrap items-center justify-between mb-2 w-full">
         <div class="flex items-center w-full">
@@ -150,10 +151,18 @@ onMounted(() => {
                      @keydown="handleKeyDown" style="word-break: break-word; min-width: 0;"/>
         </div>
         <div v-if="!isNewTask" class="flex items-center gap-2 mt-2 w-full sm:w-auto">
-          <Button :label="isTracking ? 'Pause' : 'Start'" :icon="isTracking ? 'pi pi-pause' : 'pi pi-play'"
-                  :class="['p-button-sm', isTracking ? 'p-button-warning' : 'p-button-success']"
-                  @click="toggleTimeTracking"/>
-          <Button icon="pi pi-trash" label="Delete" class="p-button-danger p-button-sm" @click="confirmDeletion"/>
+          <ActionButton
+              :type="isTracking ? 'warning' : 'success'"
+              :icon="isTracking ? 'pi-pause' : 'pi-play'"
+              :label="isTracking ? 'Pause' : 'Start'"
+              @click="toggleTimeTracking"
+          />
+          <ActionButton
+              type="danger"
+              icon="pi-trash"
+              label="Delete"
+              @click="confirmDeletion"
+          />
         </div>
       </div>
       <Tag v-if="nameError" severity="danger" class="w-full mb-2" :value="nameError"/>

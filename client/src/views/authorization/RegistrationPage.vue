@@ -1,18 +1,18 @@
 <script lang="ts" setup>
-import { useI18n } from "vue-i18n";
-const { t } = useI18n();
-import { ref, computed } from "vue";
-import { useRouter } from "vue-router";
-import { useAuthorizationStore } from "@/stores/auth";
+import {useI18n} from "vue-i18n";
+
+const {t} = useI18n();
+import {ref, computed} from "vue";
+import {useRouter} from "vue-router";
+import {useAuthorizationStore} from "@/stores/auth";
 import TransparentLogoWide from "@/components/logo/TransparentLogoWide.vue";
-import MainActionButton from "@/components/form/PrimaryActionButton.vue";
-import ActionButton from "@/components/form/SecondaryActionButton.vue";
 import LanguageSwitcher from "@/components/navigation/LanguageSwitcher.vue";
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Divider from "primevue/divider";
-import { useToast } from "primevue/usetoast";
+import {useToast} from "primevue/usetoast";
 import isValidEmail from "@/services/isValidEmail";
+import ActionButton from "@/components/form/ActionButton.vue";
 
 const toast = useToast();
 
@@ -79,10 +79,11 @@ const redirectToLogin = () => {
 </script>
 
 <template>
-  <div class="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900 p-4">
+  <div
+      class="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900 p-4">
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-8 w-full max-w-md">
       <div class="flex justify-center w-full mb-8">
-        <TransparentLogoWide />
+        <TransparentLogoWide/>
       </div>
 
       <form class="space-y-6" @submit.prevent="register">
@@ -129,7 +130,7 @@ const redirectToLogin = () => {
             </template>
             <template #footer="sp">
               {{ sp.level }}
-              <Divider />
+              <Divider/>
               <p class="mt-2 dark:text-gray-300">{{ t("Recommendations") }}:</p>
               <ul class="pl-2 ml-2 mt-0 dark:text-gray-300" style="line-height: 1.5">
                 <li>{{ t("At least one lowercase") }}</li>
@@ -158,32 +159,41 @@ const redirectToLogin = () => {
           />
         </div>
 
-        <MainActionButton
-            type="submit"
+        <ActionButton
+            type="primary"
+            :fullWidth="true"
             :disabled="!isFormValid"
-            :full-width="true"
+            @click="register"
         >
           {{ t("Sign Up") }}
-        </MainActionButton>
+        </ActionButton>
 
         <Divider>
-            <span class="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
-              {{ t("OR") }}
-            </span>
+      <span class="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+        {{ t("OR") }}
+      </span>
         </Divider>
 
-        <MainActionButton :full-width="true" type="button" @click="loginWithGoogle">
+        <ActionButton
+            type="secondary"
+            :fullWidth="true"
+            @click="loginWithGoogle"
+        >
           <i class="pi pi-google mr-2"></i>
           {{ t("Sign Up with Google") }}
-        </MainActionButton>
+        </ActionButton>
 
-        <ActionButton :full-width="true" type="button" @click="redirectToLogin">
+        <ActionButton
+            type="tertiary"
+            :fullWidth="true"
+            @click="redirectToLogin"
+        >
           {{ t("Log In to Your Account") }}
         </ActionButton>
       </form>
 
       <div class="flex justify-center mt-6">
-        <LanguageSwitcher />
+        <LanguageSwitcher/>
       </div>
     </div>
   </div>

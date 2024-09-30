@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import {ref} from 'vue';
 import PageHeader from "@/components/page/PageHeader.vue";
 import Chart from 'primevue/chart';
+import SectionWrapper from "@/components/SectionWrapper.vue";
 
 const clientOverviewChartData = ref({
   labels: ['Client A', 'Client B', 'Client C'],
@@ -78,7 +79,7 @@ const chartOptions = ref({
     },
     tooltip: {
       callbacks: {
-        label: function(context) {
+        label: function (context) {
           return context.dataset.label + ': ' + context.raw;
         }
       }
@@ -88,49 +89,36 @@ const chartOptions = ref({
 </script>
 
 <template>
-  <PageHeader title="Reports" icon="pi pi-chart-bar" />
+  <PageHeader title="Reports" icon="pi pi-chart-bar"/>
   <div class="container mt-4">
-    <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 rounded-xl shadow p-4 mb-6">
-      <h3 class="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-3">
-        <i class="pi pi-users mr-2"></i>Client Overview
-      </h3>
+    <SectionWrapper title="Client Overview" icon="pi pi-users" color="blue">
       <p class="text-gray-600 dark:text-gray-400 mb-4">Summary of client activities and engagements.</p>
-      <Chart type="bar" :data="clientOverviewChartData" :options="chartOptions" class="w-full h-64" />
-    </div>
-    <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 rounded-xl shadow p-4 mb-6">
-      <h3 class="text-lg font-semibold text-green-800 dark:text-green-200 mb-3">
-        <i class="pi pi-folder mr-2"></i>Project Progress
-      </h3>
+      <Chart type="bar" :data="clientOverviewChartData" :options="chartOptions" class="w-full h-64"/>
+    </SectionWrapper>
+
+    <SectionWrapper title="Project Progress" icon="pi pi-folder" color="green">
       <p class="text-gray-600 dark:text-gray-400 mb-4">Current status and milestones of ongoing projects.</p>
-      <Chart type="bar" :data="projectProgressChartData" :options="chartOptions" class="w-full h-64" />
-    </div>
-    <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900 dark:to-yellow-800 rounded-xl shadow p-4 mb-6">
-      <h3 class="text-lg font-semibold text-yellow-800 dark:text-yellow-200 mb-3">
-        <i class="pi pi-check-circle mr-2"></i>Task Completion
-      </h3>
+      <Chart type="bar" :data="projectProgressChartData" :options="chartOptions" class="w-full h-64"/>
+    </SectionWrapper>
+
+    <SectionWrapper title="Task Completion" icon="pi pi-check-circle" color="yellow">
       <p class="text-gray-600 dark:text-gray-400 mb-4">Overview of tasks completed and pending.</p>
-      <Chart type="bar" :data="taskCompletionChartData" :options="chartOptions" class="w-full h-64" />
-    </div>
-    <div class="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900 dark:to-red-800 rounded-xl shadow p-4 mb-6">
-      <h3 class="text-lg font-semibold text-red-800 dark:text-red-200 mb-3">
-        <i class="pi pi-dollar mr-2"></i>Expense Report
-      </h3>
+      <Chart type="bar" :data="taskCompletionChartData" :options="chartOptions" class="w-full h-64"/>
+    </SectionWrapper>
+
+    <SectionWrapper title="Expense Report" icon="pi pi-dollar" color="red">
       <p class="text-gray-600 dark:text-gray-400 mb-4">Detailed breakdown of expenses incurred.</p>
-      <Chart type="bar" :data="expenseReportChartData" :options="chartOptions" class="w-full h-64" />
-    </div>
-    <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 rounded-xl shadow p-4 mb-6">
-      <h3 class="text-lg font-semibold text-purple-800 dark:text-purple-200 mb-3">
-        <i class="pi pi-chart-line mr-2"></i>Income Analysis
-      </h3>
+      <Chart type="bar" :data="expenseReportChartData" :options="chartOptions" class="w-full h-64"/>
+    </SectionWrapper>
+
+    <SectionWrapper title="Income Analysis" icon="pi pi-chart-line" color="purple">
       <p class="text-gray-600 dark:text-gray-400 mb-4">Analysis of income generated over the period.</p>
-      <Chart type="bar" :data="incomeAnalysisChartData" :options="chartOptions" class="w-full h-64" />
-    </div>
-    <div class="bg-gradient-to-br from-teal-50 to-teal-100 dark:from-teal-900 dark:to-teal-800 rounded-xl shadow p-4 mb-6">
-      <h3 class="text-lg font-semibold text-teal-800 dark:text-teal-200 mb-3">
-        <i class="pi pi-clock mr-2"></i>Time Tracking
-      </h3>
+      <Chart type="bar" :data="incomeAnalysisChartData" :options="chartOptions" class="w-full h-64"/>
+    </SectionWrapper>
+
+    <SectionWrapper title="Time Tracking" icon="pi pi-clock" color="teal">
       <p class="text-gray-600 dark:text-gray-400 mb-4">Summary of time tracked for various activities.</p>
-      <Chart type="bar" :data="timeTrackingChartData" :options="chartOptions" class="w-full h-64" />
-    </div>
+      <Chart type="bar" :data="timeTrackingChartData" :options="chartOptions" class="w-full h-64"/>
+    </SectionWrapper>
   </div>
 </template>
