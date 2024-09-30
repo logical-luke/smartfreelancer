@@ -55,7 +55,7 @@ function updateDailyNotes(notes: string) {
 </script>
 
 <template>
-  <Card class="w-full bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg">
+  <Card class="w-full bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow-md">
     <template #title>
       <div class="bg-gradient-to-r from-indigo-400 to-indigo-500 dark:from-indigo-600 dark:to-indigo-700 p-6 -mx-6 -mt-6 mb-6">
         <div class="flex items-center space-x-2 text-white">

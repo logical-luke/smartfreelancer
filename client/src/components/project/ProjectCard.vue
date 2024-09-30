@@ -22,6 +22,7 @@ import TaskOverviewGrid from "@/components/report/TaskOverviewGrid.vue";
 import TimeOverviewGrid from "@/components/report/TimeOverviewGrid.vue";
 import RevenueOverviewGrid from "@/components/report/RevenueOverviewGrid.vue";
 import projectToProjectForm from "@/services/mappers/projectToProjectForm";
+import Card from 'primevue/card';
 
 import {useToast} from "primevue/usetoast";
 
@@ -131,123 +132,128 @@ const selectedClient = computed(() => {
 </script>
 
 <template>
-  <div
-      class="w-full bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow">
-    <div class="bg-gradient-to-r from-indigo-400 to-indigo-600 dark:from-indigo-600 dark:to-indigo-800 p-6">
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div class="flex items-center w-full md:w-auto">
-          <div class="flex items-center relative">
-            <Avatar
+  <Card class="w-full bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow-md">
+    <template #title>
+      <div class="bg-gradient-to-r from-indigo-400 to-indigo-600 dark:from-indigo-600 dark:to-indigo-800 p-6 -mx-6 -mt-6 mb-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div class="flex items-center w-full md:w-auto">
+            <div class="flex items-center relative">
+              <Avatar
                 v-model:avatar-path="project.avatar"
                 :placeholder-icon="'pi pi-folder'"
                 :is-editing="isEditing"
                 :alt="project.name"
-            />
-          </div>
-          <div class="ml-4 text-white w-full md:w-auto">
-            <div v-if="isEditing" class="flex flex-col gap-2 w-full">
-              <label class="block text-sm font-medium text-white mb-1">{{ t("NAME") }}</label>
-              <InputText
+              />
+            </div>
+            <div class="ml-4 text-white w-full md:w-auto">
+              <div v-if="isEditing" class="flex flex-col gap-2 w-full">
+                <label class="block text-sm font-medium text-white mb-1">{{ t("NAME") }}</label>
+                <InputText
                   id="editNameInput" v-model="project.name" :placeholder="t('Awesome Idea')"
                   class="w-full dark:bg-gray-700 dark:text-white"
-                  :invalid="isNameInvalid" @blur="validateName" @update:model-value="revalidateName"/>
-              <Tag v-if="isNameInvalid" severity="danger" class="w-full" :value="nameError"/>
-              <small class="text-white">{{ t("Name is required") }}</small>
+                  :invalid="isNameInvalid" @blur="validateName" @update:model-value="revalidateName"
+                />
+                <Tag v-if="isNameInvalid" severity="danger" class="w-full" :value="nameError"/>
+                <small class="text-white">{{ t("Name is required") }}</small>
+              </div>
+              <h3 v-else class="font-bold text-2xl">{{ project.name }}</h3>
             </div>
-            <h3 v-else class="font-bold text-2xl">{{ project.name }}</h3>
           </div>
-        </div>
-        <div class="flex flex-col md:flex-row gap-4 items-center justify-center h-full w-full md:w-auto">
-          <div v-if="isEditing" class="flex flex-col gap-2 items-start justify-center h-full w-full">
-            <label class="block text-sm font-medium text-white mb-1">{{ t("CLIENT") }}</label>
-            <IconField class="w-full">
-              <InputIcon class="pi pi-user"/>
-              <Select
+          <div class="flex flex-col md:flex-row gap-4 items-center justify-center h-full w-full md:w-auto">
+            <div v-if="isEditing" class="flex flex-col gap-2 items-start justify-center h-full w-full">
+              <label class="block text-sm font-medium text-white mb-1">{{ t("CLIENT") }}</label>
+              <IconField class="w-full">
+                <InputIcon class="pi pi-user"/>
+                <Select
                   v-model="project.clientId" :options="clientsStore.clients" option-label="name" option-value="id"
                   class="w-full dark:bg-gray-700 dark:text-white" :invalid="isClientInvalid" @blur="validateClient"
-                  @update:model-value="revalidateClient"/>
-            </IconField>
-            <Tag v-if="isClientInvalid" severity="danger" class="w-full" :value="clientError"/>
-            <small class="text-white">{{ t("Client must be selected") }}</small>
-          </div>
-          <div
+                  @update:model-value="revalidateClient"
+                />
+              </IconField>
+              <Tag v-if="isClientInvalid" severity="danger" class="w-full" :value="clientError"/>
+              <small class="text-white">{{ t("Client must be selected") }}</small>
+            </div>
+            <div
               v-else
-              class="bg-white dark:bg-gray-700 bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full md:w-auto">
-            <i class="pi pi-user mr-2"></i>
-            <span class="text-sm">{{ selectedClient?.name }}</span>
-          </div>
-          <div v-if="isEditing" class="flex flex-col gap-2 items-start justify-center h-full w-full">
-            <label class="block text-sm font-medium text-white mb-1">{{ t("DUE DATE") }}</label>
-            <DatePicker
+              class="bg-white dark:bg-gray-700 bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full md:w-auto"
+            >
+              <i class="pi pi-user mr-2"></i>
+              <span class="text-sm">{{ selectedClient?.name }}</span>
+            </div>
+            <div v-if="isEditing" class="flex flex-col gap-2 items-start justify-center h-full w-full">
+              <label class="block text-sm font-medium text-white mb-1">{{ t("DUE DATE") }}</label>
+              <DatePicker
                 v-model="project.dueDate"
                 class="w-full dark:bg-gray-700 dark:text-white"
                 :show-button-bar="true"
                 input-class="w-full dark:bg-gray-700 dark:text-white"
-            />
-            <small class="text-white">{{ t("Select a due date") }}</small>
-          </div>
-          <div
+              />
+              <small class="text-white">{{ t("Select a due date") }}</small>
+            </div>
+            <div
               v-else-if="project.dueDate && project.dueDate !== ''"
-              class="bg-white dark:bg-gray-700 bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full md:w-auto">
-            <i class="pi pi-calendar mr-2"></i>
-            <span class="text-sm">{{ project.dueDate }}</span>
+              class="bg-white dark:bg-gray-700 bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full md:w-auto"
+            >
+              <i class="pi pi-calendar mr-2"></i>
+              <span class="text-sm">{{ project.dueDate }}</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </template>
+    <template #content>
+      <div class="space-y-6">
+        <div v-if="isEditing" class="flex flex-col gap-2 items-start justify-center h-full w-full mb-4">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ t("DESCRIPTION") }}</label>
+          <Textarea v-model="project.description" :placeholder="t('We want to enable customers to be awesome')"
+                    class="w-full dark:bg-gray-700 dark:text-white"/>
+          <small class="text-gray-700 dark:text-gray-300">{{ t("Describe the project") }}</small>
+        </div>
+        <p v-else class="text-gray-700 dark:text-gray-300 mb-6">{{ project.description }}</p>
 
-    <div class="p-4 md:p-6">
-      <div v-if="isEditing" class="flex flex-col gap-2 items-start justify-center h-full w-full mb-4">
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ t("DESCRIPTION") }}</label>
-        <Textarea v-model="project.description" :placeholder="t('We want to enable customers to be awesome')"
-                  class="w-full dark:bg-gray-700 dark:text-white"/>
-        <small class="text-gray-700 dark:text-gray-300">{{ t("Describe the project") }}</small>
-      </div>
-      <p v-else class="text-gray-700 dark:text-gray-300 mb-6">{{ project.description }}</p>
-
-
-      <template v-if="!isEditing">
-        <TimeOverviewGrid
+        <template v-if="!isEditing">
+          <TimeOverviewGrid
             :time-worked="project.timeWorked"
             :time-estimated="project.timeEstimated"
             :time-left="project.timeLeft"
-        />
+          />
 
-        <RevenueOverviewGrid
+          <RevenueOverviewGrid
             :income="project.income"
             :expenses="project.expenses"
             :revenue="project.revenue"
             :invoiced="project.invoiced"
             :paid="project.paid"
             :estimated="project.estimated"
-        />
+          />
 
-        <TaskOverviewGrid
+          <TaskOverviewGrid
             :in-progress-tasks="project.inProgressTasks"
             :todo-tasks="project.todoTasks"
             :blocked-tasks="project.blockedTasks"
             :completed-tasks="project.completedTasks"
-        />
-      </template>
+          />
+        </template>
 
-      <div class="flex flex-col md:flex-row justify-end gap-4">
-        <SecondaryActionButton v-if="!isEditing" @click="isEditing = true">
-          <i class="pi pi-pencil mr-2"></i>
-          {{ t("Edit") }}
-        </SecondaryActionButton>
-        <DestructiveActionButton v-if="!isEditing" @click="confirmDeletion">
-          <i class="pi pi-trash mr-2"></i>
-          {{ t("Delete") }}
-        </DestructiveActionButton>
-        <PrimaryActionButton v-else :disabled="!isValid" @click="saveProject">
-          <i class="pi pi-check mr-2"></i>
-          {{ t("Save Project") }}
-        </PrimaryActionButton>
-        <SecondaryActionButton v-if="isEditing" @click="discardProject">
-          <i class="pi pi-times mr-2"></i>
-          {{ t("Discard") }}
-        </SecondaryActionButton>
+        <div class="flex flex-col md:flex-row justify-end gap-4">
+          <SecondaryActionButton v-if="!isEditing" @click="isEditing = true">
+            <i class="pi pi-pencil mr-2"></i>
+            {{ t("Edit") }}
+          </SecondaryActionButton>
+          <DestructiveActionButton v-if="!isEditing" @click="confirmDeletion">
+            <i class="pi pi-trash mr-2"></i>
+            {{ t("Delete") }}
+          </DestructiveActionButton>
+          <PrimaryActionButton v-else :disabled="!isValid" @click="saveProject">
+            <i class="pi pi-check mr-2"></i>
+            {{ t("Save Project") }}
+          </PrimaryActionButton>
+          <SecondaryActionButton v-if="isEditing" @click="discardProject">
+            <i class="pi pi-times mr-2"></i>
+            {{ t("Discard") }}
+          </SecondaryActionButton>
+        </div>
       </div>
-    </div>
-  </div>
+    </template>
+  </Card>
 </template>

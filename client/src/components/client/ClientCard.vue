@@ -18,6 +18,7 @@ import TaskOverviewGrid from "@/components/report/TaskOverviewGrid.vue";
 import TimeOverviewGrid from "@/components/report/TimeOverviewGrid.vue";
 import RevenueOverviewGrid from "@/components/report/RevenueOverviewGrid.vue";
 import clientToClientForm from "@/services/mappers/clientToClientForm";
+import Card from "primevue/card";
 
 const props = defineProps<{
   client: Client;
@@ -156,25 +157,24 @@ watch(() => props.client, (newClient) => {
 </script>
 
 <template>
-  <div
-      class="w-full bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow">
-    <div class="bg-gradient-to-r from-indigo-400 to-indigo-500 dark:from-indigo-600 dark:to-indigo-700 p-6">
-      <div
-          :class="['flex flex-col lg:flex-row items-center lg:items-center gap-4', { 'justify-center lg:justify-between': !client.email && !client.phone, 'justify-between': client.email || client.phone }]">
-        <div class="flex flex-col lg:flex-row items-center lg:items-center w-full lg:w-auto">
-          <div class="flex items-center w-full lg:w-auto">
-            <div class="flex items-center relative">
-              <Avatar
+  <Card class="w-full bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden transition-all duration-300 hover:shadow-md">
+    <template #title>
+      <div class="bg-gradient-to-r from-indigo-400 to-indigo-500 dark:from-indigo-600 dark:to-indigo-700 p-6 -mx-6 -mt-6 mb-6">
+        <div :class="['flex flex-col lg:flex-row items-center lg:items-center gap-4', { 'justify-center lg:justify-between': !client.email && !client.phone, 'justify-between': client.email || client.phone }]">
+          <div class="flex flex-col lg:flex-row items-center lg:items-center w-full lg:w-auto">
+            <div class="flex items-center w-full lg:w-auto">
+              <div class="flex items-center relative">
+                <Avatar
                   v-model:avatar-path="client.avatar"
                   :placeholder-icon="'pi pi-user'"
                   :is-editing="isEditing"
                   :alt="client.name"
-              />
-            </div>
-            <div class="ml-4 text-white w-full lg:w-auto flex items-center">
-              <div v-if="isEditing" class="flex flex-col gap-2 w-full">
-                <label class="block text-sm font-medium text-white mb-1">{{ t("NAME") }}</label>
-                <InputText
+                />
+              </div>
+              <div class="ml-4 text-white w-full lg:w-auto flex items-center">
+                <div v-if="isEditing" class="flex flex-col gap-2 w-full">
+                  <label class="block text-sm font-medium text-white mb-1">{{ t("NAME") }}</label>
+                  <InputText
                     id="editNameInput"
                     v-model="client.name"
                     :placeholder="t('John Doe')"
@@ -184,24 +184,24 @@ watch(() => props.client, (newClient) => {
                     @blur="validateName"
                     @update:model-value="revalidateName"
                     @keydown="handleKeyDown"
-                />
-                <Tag v-if="isNameInvalid" severity="danger" class="w-full" :value="nameError"/>
-                <small id="name-help" class="text-white">{{ t("Name is required") }}</small>
+                  />
+                  <Tag v-if="isNameInvalid" severity="danger" class="w-full" :value="nameError"/>
+                  <small id="name-help" class="text-white">{{ t("Name is required") }}</small>
+                </div>
+                <h3 v-else class="font-bold text-2xl">{{ client.name }}</h3>
+                <p v-if="client.internal" class="text-blue-100 dark:text-blue-200">{{ t("You") }}</p>
               </div>
-              <h3 v-else class="font-bold text-2xl">{{ client.name }}</h3>
-              <p v-if="client.internal" class="text-blue-100 dark:text-blue-200">{{ t("You") }}</p>
             </div>
           </div>
-        </div>
-        <div
+          <div
             v-if="isEditing || client.email || client.phone"
             class="flex flex-col lg:flex-row gap-2 items-center justify-center h-full w-full lg:w-auto">
-          <template v-if="isEditing">
-            <div class="flex flex-col gap-2 items-start justify-center h-full w-full">
-              <label class="block text-sm font-medium text-white mb-1">{{ t("EMAIL") }}</label>
-              <IconField class="w-full">
-                <InputIcon class="pi pi-envelope"/>
-                <InputText
+            <template v-if="isEditing">
+              <div class="flex flex-col gap-2 items-start justify-center h-full w-full">
+                <label class="block text-sm font-medium text-white mb-1">{{ t("EMAIL") }}</label>
+                <IconField class="w-full">
+                  <InputIcon class="pi pi-envelope"/>
+                  <InputText
                     v-model="client.email"
                     :placeholder="t('example@example.com')"
                     class="w-full dark:bg-gray-700 dark:text-white"
@@ -209,16 +209,16 @@ watch(() => props.client, (newClient) => {
                     aria-describedby="email-help"
                     @blur="validateEmail"
                     @update:model-value="revalidateEmail"
-                />
-              </IconField>
-              <Tag v-if="isEmailInvalid" severity="danger" class="w-full" :value="emailError"/>
-              <small id="email-help" class="text-white">{{ t('Format: example@example.com') }}</small>
-            </div>
-            <div class="flex flex-col gap-2 items-start justify-center h-full w-full">
-              <label class="block text-sm font-medium text-white mb-1">{{ t("PHONE") }}</label>
-              <IconField class="w-full">
-                <InputIcon class="pi pi-phone"/>
-                <InputText
+                  />
+                </IconField>
+                <Tag v-if="isEmailInvalid" severity="danger" class="w-full" :value="emailError"/>
+                <small id="email-help" class="text-white">{{ t('Format: example@example.com') }}</small>
+              </div>
+              <div class="flex flex-col gap-2 items-start justify-center h-full w-full">
+                <label class="block text-sm font-medium text-white mb-1">{{ t("PHONE") }}</label>
+                <IconField class="w-full">
+                  <InputIcon class="pi pi-phone"/>
+                  <InputText
                     v-model="client.phone"
                     :placeholder="t('+123-456-7890')"
                     class="w-full dark:bg-gray-700 dark:text-white"
@@ -226,80 +226,82 @@ watch(() => props.client, (newClient) => {
                     aria-describedby="phone-help"
                     @blur="validatePhone"
                     @update:model-value="revalidatePhone"
-                />
-              </IconField>
-              <Tag v-if="isPhoneInvalid" severity="danger" class="w-full" :value="phoneError"/>
-              <small id="phone-help" class="text-white">{{ t('Expected format: +123-456-7890') }}</small>
-            </div>
-          </template>
-          <template v-else>
-            <div class="flex flex-col gap-2 items-end justify-center h-full w-full lg:w-auto">
-              <a
+                  />
+                </IconField>
+                <Tag v-if="isPhoneInvalid" severity="danger" class="w-full" :value="phoneError"/>
+                <small id="phone-help" class="text-white">{{ t('Expected format: +123-456-7890') }}</small>
+              </div>
+            </template>
+            <template v-else>
+              <div class="flex flex-col gap-2 items-end justify-center h-full w-full lg:w-auto">
+                <a
                   v-if="client.email" :href="`mailto:${client.email}`"
                   class="bg-white dark:bg-gray-700 bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full lg:w-auto">
-                <i class="pi pi-envelope mr-2"></i>
-                <span class="text-sm">{{ client.email }}</span>
-              </a>
-            </div>
-            <div class="flex flex-col gap-2 items-end justify-center h-full w-full lg:w-auto">
-              <a
+                  <i class="pi pi-envelope mr-2"></i>
+                  <span class="text-sm">{{ client.email }}</span>
+                </a>
+              </div>
+              <div class="flex flex-col gap-2 items-end justify-center h-full w-full lg:w-auto">
+                <a
                   v-if="client.phone" :href="`tel:${client.phone}`"
                   class="bg-white dark:bg-gray-700 bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full flex items-center transition-colors duration-300 w-full lg:w-auto">
-                <i class="pi pi-phone mr-2"></i>
-                <span class="text-sm">{{ client.phone }}</span>
-              </a>
-            </div>
-          </template>
+                  <i class="pi pi-phone mr-2"></i>
+                  <span class="text-sm">{{ client.phone }}</span>
+                </a>
+              </div>
+            </template>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div class="p-6">
-      <template v-if="!isEditing">
-        <TimeOverviewGrid
+    </template>
+    <template #content>
+      <div class="space-y-6">
+        <template v-if="!isEditing">
+          <TimeOverviewGrid
             :time-worked="client.timeWorked"
             :time-estimated="client.timeEstimated"
-        />
-        <RevenueOverviewGrid
+          />
+          <RevenueOverviewGrid
             :income="client.income"
             :expenses="client.expenses"
             :revenue="client.revenue"
             :invoiced="client.invoiced"
             :paid="client.paid"
             :estimated="client.incomeEstimated"
-        />
-        <TaskOverviewGrid
+          />
+          <TaskOverviewGrid
             :in-progress-tasks="client.inProgressTasks"
             :todo-tasks="client.todoTasks"
             :blocked-tasks="client.blockedTasks"
             :completed-tasks="client.completedTasks"
-        />
-      </template>
-      <div class="flex flex-col sm:flex-row justify-end gap-4">
-        <template v-if="isEditing">
-          <SecondaryActionButton @click="discardClient">
-            <i class="pi pi-times mr-2"></i>
-            {{ t("Discard") }}
-          </SecondaryActionButton>
-          <PrimaryActionButton
+          />
+        </template>
+        <div class="flex flex-col sm:flex-row justify-end gap-4">
+          <template v-if="isEditing">
+            <SecondaryActionButton @click="discardClient">
+              <i class="pi pi-times mr-2"></i>
+              {{ t("Discard") }}
+            </SecondaryActionButton>
+            <PrimaryActionButton
               :disabled="!isValid"
               @click="saveClient"
-          >
-            <i class="pi pi-check mr-2"></i>
-            {{ t("Save Client") }}
-          </PrimaryActionButton>
-        </template>
-        <template v-else>
-          <SecondaryActionButton @click="isEditing = true">
-            <i class="pi pi-pencil mr-2"></i>
-            {{ t("Edit") }}
-          </SecondaryActionButton>
-          <DestructiveActionButton v-if="!client.internal" @click="confirmDeletion">
-            <i class="pi pi-trash mr-2"></i>
-            {{ t("Delete") }}
-          </DestructiveActionButton>
-        </template>
+            >
+              <i class="pi pi-check mr-2"></i>
+              {{ t("Save Client") }}
+            </PrimaryActionButton>
+          </template>
+          <template v-else>
+            <SecondaryActionButton @click="isEditing = true">
+              <i class="pi pi-pencil mr-2"></i>
+              {{ t("Edit") }}
+            </SecondaryActionButton>
+            <DestructiveActionButton v-if="!client.internal" @click="confirmDeletion">
+              <i class="pi pi-trash mr-2"></i>
+              {{ t("Delete") }}
+            </DestructiveActionButton>
+          </template>
+        </div>
       </div>
-    </div>
-  </div>
+    </template>
+  </Card>
 </template>
