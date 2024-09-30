@@ -116,7 +116,6 @@ function deleteTask(taskId: number) {
 }
 
 function addSubtask({ parentId, position }: { parentId: number, position: number }) {
-  console.log('addSubtask called in TasksPage', { parentId, position });
   const newSubtask: Task = {
     id: Date.now(),
     title: '',
@@ -172,6 +171,7 @@ function addSubtask({ parentId, position }: { parentId: number, position: number
         @add-task-before="addTaskAtPosition(index)"
         @add-task-after="addTaskAtPosition(index + 1)"
         @add-subtask="addSubtask"
+        :has-next="index < tasks.length - 1"
       />
     </div>
   </div>

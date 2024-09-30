@@ -20,6 +20,7 @@ const props = defineProps<{
   projects: { label: string; value: string }[];
   showAddButtons?: boolean;
   isNewTask?: boolean;
+  hasNext?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -130,11 +131,11 @@ onMounted(() => {
 <template>
   <div class="relative">
     <Button v-if="showAddButtons && !isNewTask" icon="pi pi-plus"
-            class="absolute -top-6 left-1/2 transform -translate-x-1/2 rounded-full p-button-sm z-10 w-10 h-10"
+            class="absolute -top-5 left-1/2 transform -translate-x-1/2 rounded-full p-button-sm z-10 w-10 h-10"
             @click="$emit('add-task-before')"/>
 
     <div :class="[
-      'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 mb-16 p-4 relative border',
+      'task-item rounded-lg shadow-sm hover:shadow transition-shadow duration-200 p-4 relative border',
       { 'border-l-4': !isNewTask },
       { 'border-yellow-300 bg-yellow-50 dark:bg-gray-800': editedTask.status === 'Todo' },
       { 'border-orange-300 bg-orange-50 dark:bg-gray-800': editedTask.status === 'In Progress' },
@@ -277,6 +278,7 @@ onMounted(() => {
                     @update:task="(updatedSubtask) => updateField('subtasks', editedTask.subtasks!.map(st => st.id === updatedSubtask.id ? updatedSubtask : st))"
                     @delete:task="(deletedSubtaskId) => updateField('subtasks', editedTask.subtasks!.filter(st => st.id !== deletedSubtaskId))"
                     @add-subtask="$emit('add-subtask', $event)"
+                    :has-next="index < editedTask.subtasks.length - 1"
                     @add-task-before="$emit('add-subtask', { parentId: editedTask.id, position: index })"
                     @add-task-after="$emit('add-subtask', { parentId: editedTask.id, position: index + 1 })"/>
         </div>
@@ -286,8 +288,8 @@ onMounted(() => {
       </div>
     </div>
 
-    <Button v-if="showAddButtons && !isNewTask" icon="pi pi-plus"
-            class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 rounded-full p-button-sm z-10 w-10 h-10"
+    <Button v-if="showAddButtons && !isNewTask && !hasNext" icon="pi pi-plus"
+            class="absolute -bottom-5 left-1/2 transform -translate-x-1/2 rounded-full p-button-sm z-10 w-10 h-10"
             @click="$emit('add-task-after')"/>
   </div>
 </template>

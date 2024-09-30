@@ -12,7 +12,7 @@ interface Props {
   suggestedTask: Task | null;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const emit = defineEmits<{
   (e: 'update:task', task: Task): void;
