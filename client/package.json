@@ -25,6 +25,7 @@
     "pinia": "^2.2.*",
     "primeicons": "^7.*",
     "primevue": "^4.*",
+    "qalendar": "^3.8.1",
     "tailwind-merge": "^1.9.1",
     "tailwindcss-primeui": "^0.3.4",
     "typescript-eslint": "^8.6.0",
