@@ -30,9 +30,9 @@ onMounted(() => {
 
 <template>
   <PageHeader title="Projects" icon="pi-folder" />
-  <transition name="slide">
+  <transition name="fade">
     <div v-if="projects.length > 0 || showDraftProject" class="flex container flex-wrap gap-8 mb-8">
-      <transition-group name="slide">
+      <transition-group name="fade">
         <ProjectCard
           v-for="project in projects"
           :key="project.id"

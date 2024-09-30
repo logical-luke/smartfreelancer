@@ -43,34 +43,6 @@ onMounted(async () => {
   opacity: 0;
 }
 
-.initial-enter-active {
-  transition: all 0.2s ease-in;
-}
-
-.initial-leave-active {
-  transition: all 0.9s ease-out;
-}
-
-.initial-enter-from,
-.initial-leave-to {
-  opacity: 0;
-}
-
-.slide-enter-active,
-.slide-leave-active {
-  transition: all 0.3s ease-out;
-}
-
-.slide-enter-from {
-  transform: translateX(-100%);
-  opacity: 0;
-}
-
-.slide-leave-to {
-  transform: translateX(100%);
-  opacity: 0;
-}
-
 .p-toast {
   max-width: calc(100vw - 40px);
 }

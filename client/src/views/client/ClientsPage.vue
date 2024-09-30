@@ -30,9 +30,9 @@ onMounted(() => {
 
 <template>
   <PageHeader title="Clients" icon="pi-user" />
-  <transition name="slide">
+  <transition name="fade">
     <div v-if="clients.length > 0 || showDraftClient" class="flex container flex-wrap gap-8 mb-8">
-      <transition-group name="slide">
+      <transition-group name="fade">
         <ClientCard
             v-for="client in clients"
             :key="client.id"
