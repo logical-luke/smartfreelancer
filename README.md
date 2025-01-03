@@ -26,8 +26,8 @@ Smartfreelancer is a project management tool designed for freelancers to manage 
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/your-username/Smartfreelancer.git
-    cd Smartfreelancer
+    git clone https://github.com/logical-luke/smartfreelancer.git
+    cd smartfreelancer
     ```
 
 2. Start the Docker containers:
